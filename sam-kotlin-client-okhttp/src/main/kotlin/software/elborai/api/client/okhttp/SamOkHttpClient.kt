@@ -3,15 +3,12 @@
 package software.elborai.api.client.okhttp
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import com.google.common.collect.Multimap
 import java.net.Proxy
 import java.time.Clock
 import java.time.Duration
-import java.util.Optional
-import software.elborai.api.core.ClientOptions
-import software.elborai.api.core.http.HttpClient
 import software.elborai.api.client.SamClient
 import software.elborai.api.client.SamClientImpl
+import software.elborai.api.core.ClientOptions
 
 class SamOkHttpClient private constructor() {
 
@@ -35,21 +32,15 @@ class SamOkHttpClient private constructor() {
             this.baseUrl = baseUrl
         }
 
-        fun jsonMapper(jsonMapper: JsonMapper) = apply {
-            clientOptions.jsonMapper(jsonMapper)
-        }
+        fun jsonMapper(jsonMapper: JsonMapper) = apply { clientOptions.jsonMapper(jsonMapper) }
 
-        fun clock(clock: Clock) = apply {
-            clientOptions.clock(clock)
-        }
+        fun clock(clock: Clock) = apply { clientOptions.clock(clock) }
 
         fun headers(headers: Map<String, Iterable<String>>) = apply {
             clientOptions.headers(headers)
         }
 
-        fun putHeader(name: String, value: String) = apply {
-            clientOptions.putHeader(name, value)
-        }
+        fun putHeader(name: String, value: String) = apply { clientOptions.putHeader(name, value) }
 
         fun putHeaders(name: String, values: Iterable<String>) = apply {
             clientOptions.putHeaders(name, values)
@@ -59,42 +50,34 @@ class SamOkHttpClient private constructor() {
             clientOptions.putAllHeaders(headers)
         }
 
-        fun removeHeader(name: String) = apply {
-            clientOptions.removeHeader(name)
-        }
+        fun removeHeader(name: String) = apply { clientOptions.removeHeader(name) }
 
-        fun timeout(timeout: Duration) = apply {
-            this.timeout = timeout
-        }
+        fun timeout(timeout: Duration) = apply { this.timeout = timeout }
 
-        fun maxRetries(maxRetries: Int) = apply {
-            clientOptions.maxRetries(maxRetries)
-        }
+        fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
 
-        fun proxy(proxy: Proxy) = apply {
-            this.proxy = proxy
-        }
+        fun proxy(proxy: Proxy) = apply { this.proxy = proxy }
 
         fun responseValidation(responseValidation: Boolean) = apply {
             clientOptions.responseValidation(responseValidation)
         }
 
-        fun authToken(authToken: String?) = apply {
-            clientOptions.authToken(authToken)
-        }
+        fun authToken(authToken: String?) = apply { clientOptions.authToken(authToken) }
 
-        fun fromEnv() = apply {
-            clientOptions.fromEnv()
-        }
+        fun fromEnv() = apply { clientOptions.fromEnv() }
 
         fun build(): SamClient {
-          return SamClientImpl(clientOptions
-              .httpClient(OkHttpClient.builder()
-                  .baseUrl(baseUrl)
-                  .timeout(timeout)
-                  .proxy(proxy)
-                  .build())
-              .build())
+            return SamClientImpl(
+                clientOptions
+                    .httpClient(
+                        OkHttpClient.builder()
+                            .baseUrl(baseUrl)
+                            .timeout(timeout)
+                            .proxy(proxy)
+                            .build()
+                    )
+                    .build()
+            )
         }
     }
 }
