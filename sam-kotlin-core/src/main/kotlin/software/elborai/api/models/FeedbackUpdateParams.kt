@@ -5,50 +5,31 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import org.apache.hc.core5.http.ContentType
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import software.elborai.api.core.BaseDeserializer
-import software.elborai.api.core.BaseSerializer
-import software.elborai.api.core.getOrThrow
+import software.elborai.api.core.Enum
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
-import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.MultipartFormValue
-import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.Enum
-import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class FeedbackUpdateParams constructor(
-  private val feedbackId: String,
-  private val agentId: String,
-  private val ticketMessageId: String,
-  private val id: String?,
-  private val createdBy: CreatedBy?,
-  private val text: String?,
-  private val type: Type?,
-  private val updatedBy: UpdatedBy?,
-  private val additionalQueryParams: Map<String, List<String>>,
-  private val additionalHeaders: Map<String, List<String>>,
-  private val additionalBodyProperties: Map<String, JsonValue>,
-
+class FeedbackUpdateParams
+constructor(
+    private val feedbackId: String,
+    private val agentId: String,
+    private val ticketMessageId: String,
+    private val id: String?,
+    private val createdBy: CreatedBy?,
+    private val text: String?,
+    private val type: Type?,
+    private val updatedBy: UpdatedBy?,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun feedbackId(): String = feedbackId
@@ -68,16 +49,16 @@ class FeedbackUpdateParams constructor(
     fun updatedBy(): UpdatedBy? = updatedBy
 
     internal fun getBody(): FeedbackUpdateBody {
-      return FeedbackUpdateBody(
-          agentId,
-          ticketMessageId,
-          id,
-          createdBy,
-          text,
-          type,
-          updatedBy,
-          additionalBodyProperties,
-      )
+        return FeedbackUpdateBody(
+            agentId,
+            ticketMessageId,
+            id,
+            createdBy,
+            text,
+            type,
+            updatedBy,
+            additionalBodyProperties,
+        )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -85,48 +66,41 @@ class FeedbackUpdateParams constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-      return when (index) {
-          0 -> feedbackId
-          else -> ""
-      }
+        return when (index) {
+            0 -> feedbackId
+            else -> ""
+        }
     }
 
     @JsonDeserialize(builder = FeedbackUpdateBody.Builder::class)
     @NoAutoDetect
-    class FeedbackUpdateBody internal constructor(
-      private val agentId: String?,
-      private val ticketMessageId: String?,
-      private val id: String?,
-      private val createdBy: CreatedBy?,
-      private val text: String?,
-      private val type: Type?,
-      private val updatedBy: UpdatedBy?,
-      private val additionalProperties: Map<String, JsonValue>,
-
+    class FeedbackUpdateBody
+    internal constructor(
+        private val agentId: String?,
+        private val ticketMessageId: String?,
+        private val id: String?,
+        private val createdBy: CreatedBy?,
+        private val text: String?,
+        private val type: Type?,
+        private val updatedBy: UpdatedBy?,
+        private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("agentId")
-        fun agentId(): String? = agentId
+        @JsonProperty("agentId") fun agentId(): String? = agentId
 
-        @JsonProperty("ticketMessageId")
-        fun ticketMessageId(): String? = ticketMessageId
+        @JsonProperty("ticketMessageId") fun ticketMessageId(): String? = ticketMessageId
 
-        @JsonProperty("id")
-        fun id(): String? = id
+        @JsonProperty("id") fun id(): String? = id
 
-        @JsonProperty("createdBy")
-        fun createdBy(): CreatedBy? = createdBy
+        @JsonProperty("createdBy") fun createdBy(): CreatedBy? = createdBy
 
-        @JsonProperty("text")
-        fun text(): String? = text
+        @JsonProperty("text") fun text(): String? = text
 
-        @JsonProperty("type")
-        fun type(): Type? = type
+        @JsonProperty("type") fun type(): Type? = type
 
-        @JsonProperty("updatedBy")
-        fun updatedBy(): UpdatedBy? = updatedBy
+        @JsonProperty("updatedBy") fun updatedBy(): UpdatedBy? = updatedBy
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -135,38 +109,40 @@ class FeedbackUpdateParams constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is FeedbackUpdateBody &&
-              this.agentId == other.agentId &&
-              this.ticketMessageId == other.ticketMessageId &&
-              this.id == other.id &&
-              this.createdBy == other.createdBy &&
-              this.text == other.text &&
-              this.type == other.type &&
-              this.updatedBy == other.updatedBy &&
-              this.additionalProperties == other.additionalProperties
+            return other is FeedbackUpdateBody &&
+                this.agentId == other.agentId &&
+                this.ticketMessageId == other.ticketMessageId &&
+                this.id == other.id &&
+                this.createdBy == other.createdBy &&
+                this.text == other.text &&
+                this.type == other.type &&
+                this.updatedBy == other.updatedBy &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                agentId,
-                ticketMessageId,
-                id,
-                createdBy,
-                text,
-                type,
-                updatedBy,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        agentId,
+                        ticketMessageId,
+                        id,
+                        createdBy,
+                        text,
+                        type,
+                        updatedBy,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "FeedbackUpdateBody{agentId=$agentId, ticketMessageId=$ticketMessageId, id=$id, createdBy=$createdBy, text=$text, type=$type, updatedBy=$updatedBy, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "FeedbackUpdateBody{agentId=$agentId, ticketMessageId=$ticketMessageId, id=$id, createdBy=$createdBy, text=$text, type=$type, updatedBy=$updatedBy, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -195,40 +171,24 @@ class FeedbackUpdateParams constructor(
                 additionalProperties(feedbackUpdateBody.additionalProperties)
             }
 
-            @JsonProperty("agentId")
-            fun agentId(agentId: String) = apply {
-                this.agentId = agentId
-            }
+            @JsonProperty("agentId") fun agentId(agentId: String) = apply { this.agentId = agentId }
 
             @JsonProperty("ticketMessageId")
             fun ticketMessageId(ticketMessageId: String) = apply {
                 this.ticketMessageId = ticketMessageId
             }
 
-            @JsonProperty("id")
-            fun id(id: String) = apply {
-                this.id = id
-            }
+            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
 
             @JsonProperty("createdBy")
-            fun createdBy(createdBy: CreatedBy) = apply {
-                this.createdBy = createdBy
-            }
+            fun createdBy(createdBy: CreatedBy) = apply { this.createdBy = createdBy }
 
-            @JsonProperty("text")
-            fun text(text: String) = apply {
-                this.text = text
-            }
+            @JsonProperty("text") fun text(text: String) = apply { this.text = text }
 
-            @JsonProperty("type")
-            fun type(type: Type) = apply {
-                this.type = type
-            }
+            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
 
             @JsonProperty("updatedBy")
-            fun updatedBy(updatedBy: UpdatedBy) = apply {
-                this.updatedBy = updatedBy
-            }
+            fun updatedBy(updatedBy: UpdatedBy) = apply { this.updatedBy = updatedBy }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -244,20 +204,19 @@ class FeedbackUpdateParams constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): FeedbackUpdateBody = FeedbackUpdateBody(
-                checkNotNull(agentId) {
-                    "`agentId` is required but was not set"
-                },
-                checkNotNull(ticketMessageId) {
-                    "`ticketMessageId` is required but was not set"
-                },
-                id,
-                createdBy,
-                text,
-                type,
-                updatedBy,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): FeedbackUpdateBody =
+                FeedbackUpdateBody(
+                    checkNotNull(agentId) { "`agentId` is required but was not set" },
+                    checkNotNull(ticketMessageId) {
+                        "`ticketMessageId` is required but was not set"
+                    },
+                    id,
+                    createdBy,
+                    text,
+                    type,
+                    updatedBy,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 
@@ -268,41 +227,42 @@ class FeedbackUpdateParams constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is FeedbackUpdateParams &&
-          this.feedbackId == other.feedbackId &&
-          this.agentId == other.agentId &&
-          this.ticketMessageId == other.ticketMessageId &&
-          this.id == other.id &&
-          this.createdBy == other.createdBy &&
-          this.text == other.text &&
-          this.type == other.type &&
-          this.updatedBy == other.updatedBy &&
-          this.additionalQueryParams == other.additionalQueryParams &&
-          this.additionalHeaders == other.additionalHeaders &&
-          this.additionalBodyProperties == other.additionalBodyProperties
+        return other is FeedbackUpdateParams &&
+            this.feedbackId == other.feedbackId &&
+            this.agentId == other.agentId &&
+            this.ticketMessageId == other.ticketMessageId &&
+            this.id == other.id &&
+            this.createdBy == other.createdBy &&
+            this.text == other.text &&
+            this.type == other.type &&
+            this.updatedBy == other.updatedBy &&
+            this.additionalQueryParams == other.additionalQueryParams &&
+            this.additionalHeaders == other.additionalHeaders &&
+            this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-      return Objects.hash(
-          feedbackId,
-          agentId,
-          ticketMessageId,
-          id,
-          createdBy,
-          text,
-          type,
-          updatedBy,
-          additionalQueryParams,
-          additionalHeaders,
-          additionalBodyProperties,
-      )
+        return Objects.hash(
+            feedbackId,
+            agentId,
+            ticketMessageId,
+            id,
+            createdBy,
+            text,
+            type,
+            updatedBy,
+            additionalQueryParams,
+            additionalHeaders,
+            additionalBodyProperties,
+        )
     }
 
-    override fun toString() = "FeedbackUpdateParams{feedbackId=$feedbackId, agentId=$agentId, ticketMessageId=$ticketMessageId, id=$id, createdBy=$createdBy, text=$text, type=$type, updatedBy=$updatedBy, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() =
+        "FeedbackUpdateParams{feedbackId=$feedbackId, agentId=$agentId, ticketMessageId=$ticketMessageId, id=$id, createdBy=$createdBy, text=$text, type=$type, updatedBy=$updatedBy, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -340,37 +300,23 @@ class FeedbackUpdateParams constructor(
             additionalBodyProperties(feedbackUpdateParams.additionalBodyProperties)
         }
 
-        fun feedbackId(feedbackId: String) = apply {
-            this.feedbackId = feedbackId
-        }
+        fun feedbackId(feedbackId: String) = apply { this.feedbackId = feedbackId }
 
-        fun agentId(agentId: String) = apply {
-            this.agentId = agentId
-        }
+        fun agentId(agentId: String) = apply { this.agentId = agentId }
 
         fun ticketMessageId(ticketMessageId: String) = apply {
             this.ticketMessageId = ticketMessageId
         }
 
-        fun id(id: String) = apply {
-            this.id = id
-        }
+        fun id(id: String) = apply { this.id = id }
 
-        fun createdBy(createdBy: CreatedBy) = apply {
-            this.createdBy = createdBy
-        }
+        fun createdBy(createdBy: CreatedBy) = apply { this.createdBy = createdBy }
 
-        fun text(text: String) = apply {
-            this.text = text
-        }
+        fun text(text: String) = apply { this.text = text }
 
-        fun type(type: Type) = apply {
-            this.type = type
-        }
+        fun type(type: Type) = apply { this.type = type }
 
-        fun updatedBy(updatedBy: UpdatedBy) = apply {
-            this.updatedBy = updatedBy
-        }
+        fun updatedBy(updatedBy: UpdatedBy) = apply { this.updatedBy = updatedBy }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -410,9 +356,7 @@ class FeedbackUpdateParams constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply {
-            this.additionalHeaders.put(name, mutableListOf())
-        }
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -423,42 +367,41 @@ class FeedbackUpdateParams constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
 
-        fun build(): FeedbackUpdateParams = FeedbackUpdateParams(
-            checkNotNull(feedbackId) {
-                "`feedbackId` is required but was not set"
-            },
-            checkNotNull(agentId) {
-                "`agentId` is required but was not set"
-            },
-            checkNotNull(ticketMessageId) {
-                "`ticketMessageId` is required but was not set"
-            },
-            id,
-            createdBy,
-            text,
-            type,
-            updatedBy,
-            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalBodyProperties.toUnmodifiable(),
-        )
+        fun build(): FeedbackUpdateParams =
+            FeedbackUpdateParams(
+                checkNotNull(feedbackId) { "`feedbackId` is required but was not set" },
+                checkNotNull(agentId) { "`agentId` is required but was not set" },
+                checkNotNull(ticketMessageId) { "`ticketMessageId` is required but was not set" },
+                id,
+                createdBy,
+                text,
+                type,
+                updatedBy,
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalBodyProperties.toUnmodifiable(),
+            )
     }
 
     @JsonDeserialize(builder = CreatedBy.Builder::class)
     @NoAutoDetect
-    class CreatedBy private constructor(private val id: String?, private val name: String?, private val additionalProperties: Map<String, JsonValue>, ) {
+    class CreatedBy
+    private constructor(
+        private val id: String?,
+        private val name: String?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id")
-        fun id(): String? = id
+        @JsonProperty("id") fun id(): String? = id
 
-        @JsonProperty("name")
-        fun name(): String? = name
+        @JsonProperty("name") fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -467,28 +410,30 @@ class FeedbackUpdateParams constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is CreatedBy &&
-              this.id == other.id &&
-              this.name == other.name &&
-              this.additionalProperties == other.additionalProperties
+            return other is CreatedBy &&
+                this.id == other.id &&
+                this.name == other.name &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                id,
-                name,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        name,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "CreatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "CreatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -507,15 +452,9 @@ class FeedbackUpdateParams constructor(
                 additionalProperties(createdBy.additionalProperties)
             }
 
-            @JsonProperty("id")
-            fun id(id: String) = apply {
-                this.id = id
-            }
+            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
 
-            @JsonProperty("name")
-            fun name(name: String) = apply {
-                this.name = name
-            }
+            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -531,26 +470,29 @@ class FeedbackUpdateParams constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CreatedBy = CreatedBy(
-                id,
-                name,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): CreatedBy =
+                CreatedBy(
+                    id,
+                    name,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 
-    class Type @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+    class Type
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Type &&
-              this.value == other.value
+            return other is Type && this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -581,34 +523,39 @@ class FeedbackUpdateParams constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value = when (this) {
-            THUMBS_UP -> Value.THUMBS_UP
-            THUMBS_DOWN -> Value.THUMBS_DOWN
-            INSERT -> Value.INSERT
-            else -> Value._UNKNOWN
-        }
+        fun value(): Value =
+            when (this) {
+                THUMBS_UP -> Value.THUMBS_UP
+                THUMBS_DOWN -> Value.THUMBS_DOWN
+                INSERT -> Value.INSERT
+                else -> Value._UNKNOWN
+            }
 
-        fun known(): Known = when (this) {
-            THUMBS_UP -> Known.THUMBS_UP
-            THUMBS_DOWN -> Known.THUMBS_DOWN
-            INSERT -> Known.INSERT
-            else -> throw SamInvalidDataException("Unknown Type: $value")
-        }
+        fun known(): Known =
+            when (this) {
+                THUMBS_UP -> Known.THUMBS_UP
+                THUMBS_DOWN -> Known.THUMBS_DOWN
+                INSERT -> Known.INSERT
+                else -> throw SamInvalidDataException("Unknown Type: $value")
+            }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = UpdatedBy.Builder::class)
     @NoAutoDetect
-    class UpdatedBy private constructor(private val id: String?, private val name: String?, private val additionalProperties: Map<String, JsonValue>, ) {
+    class UpdatedBy
+    private constructor(
+        private val id: String?,
+        private val name: String?,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id")
-        fun id(): String? = id
+        @JsonProperty("id") fun id(): String? = id
 
-        @JsonProperty("name")
-        fun name(): String? = name
+        @JsonProperty("name") fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -617,28 +564,30 @@ class FeedbackUpdateParams constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is UpdatedBy &&
-              this.id == other.id &&
-              this.name == other.name &&
-              this.additionalProperties == other.additionalProperties
+            return other is UpdatedBy &&
+                this.id == other.id &&
+                this.name == other.name &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                id,
-                name,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        name,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "UpdatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "UpdatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -657,15 +606,9 @@ class FeedbackUpdateParams constructor(
                 additionalProperties(updatedBy.additionalProperties)
             }
 
-            @JsonProperty("id")
-            fun id(id: String) = apply {
-                this.id = id
-            }
+            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
 
-            @JsonProperty("name")
-            fun name(name: String) = apply {
-                this.name = name
-            }
+            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -681,11 +624,12 @@ class FeedbackUpdateParams constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): UpdatedBy = UpdatedBy(
-                id,
-                name,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): UpdatedBy =
+                UpdatedBy(
+                    id,
+                    name,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 }
