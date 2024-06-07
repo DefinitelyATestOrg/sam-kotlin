@@ -5,30 +5,49 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class MemberUpdateParams
-constructor(
-    private val memberId: String,
-    private val id: String?,
-    private val email: String?,
-    private val name: String?,
-    private val orgId: String?,
-    private val pictureUrl: String?,
-    private val role: Role?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class MemberUpdateParams constructor(
+  private val memberId: String,
+  private val id: String?,
+  private val email: String?,
+  private val name: String?,
+  private val orgId: String?,
+  private val pictureUrl: String?,
+  private val role: Role?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun memberId(): String = memberId
@@ -46,15 +65,15 @@ constructor(
     fun role(): Role? = role
 
     internal fun getBody(): MemberUpdateBody {
-        return MemberUpdateBody(
-            id,
-            email,
-            name,
-            orgId,
-            pictureUrl,
-            role,
-            additionalBodyProperties,
-        )
+      return MemberUpdateBody(
+          id,
+          email,
+          name,
+          orgId,
+          pictureUrl,
+          role,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -62,38 +81,44 @@ constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> memberId
-            else -> ""
-        }
+      return when (index) {
+          0 -> memberId
+          else -> ""
+      }
     }
 
     @JsonDeserialize(builder = MemberUpdateBody.Builder::class)
     @NoAutoDetect
-    class MemberUpdateBody
-    internal constructor(
-        private val id: String?,
-        private val email: String?,
-        private val name: String?,
-        private val orgId: String?,
-        private val pictureUrl: String?,
-        private val role: Role?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class MemberUpdateBody internal constructor(
+      private val id: String?,
+      private val email: String?,
+      private val name: String?,
+      private val orgId: String?,
+      private val pictureUrl: String?,
+      private val role: Role?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id")
+        fun id(): String? = id
 
-        @JsonProperty("email") fun email(): String? = email
+        @JsonProperty("email")
+        fun email(): String? = email
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name")
+        fun name(): String? = name
 
-        @JsonProperty("orgId") fun orgId(): String? = orgId
+        @JsonProperty("orgId")
+        fun orgId(): String? = orgId
 
-        @JsonProperty("pictureUrl") fun pictureUrl(): String? = pictureUrl
+        @JsonProperty("pictureUrl")
+        fun pictureUrl(): String? = pictureUrl
 
-        @JsonProperty("role") fun role(): Role? = role
+        @JsonProperty("role")
+        fun role(): Role? = role
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -102,38 +127,36 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is MemberUpdateBody &&
-                this.id == other.id &&
-                this.email == other.email &&
-                this.name == other.name &&
-                this.orgId == other.orgId &&
-                this.pictureUrl == other.pictureUrl &&
-                this.role == other.role &&
-                this.additionalProperties == other.additionalProperties
+          return other is MemberUpdateBody &&
+              this.id == other.id &&
+              this.email == other.email &&
+              this.name == other.name &&
+              this.orgId == other.orgId &&
+              this.pictureUrl == other.pictureUrl &&
+              this.role == other.role &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        email,
-                        name,
-                        orgId,
-                        pictureUrl,
-                        role,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                email,
+                name,
+                orgId,
+                pictureUrl,
+                role,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "MemberUpdateBody{id=$id, email=$email, name=$name, orgId=$orgId, pictureUrl=$pictureUrl, role=$role, additionalProperties=$additionalProperties}"
+        override fun toString() = "MemberUpdateBody{id=$id, email=$email, name=$name, orgId=$orgId, pictureUrl=$pictureUrl, role=$role, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -160,18 +183,35 @@ constructor(
                 additionalProperties(memberUpdateBody.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: String) = apply {
+                this.id = id
+            }
 
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            @JsonProperty("email")
+            fun email(email: String) = apply {
+                this.email = email
+            }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            @JsonProperty("name")
+            fun name(name: String) = apply {
+                this.name = name
+            }
 
-            @JsonProperty("orgId") fun orgId(orgId: String) = apply { this.orgId = orgId }
+            @JsonProperty("orgId")
+            fun orgId(orgId: String) = apply {
+                this.orgId = orgId
+            }
 
             @JsonProperty("pictureUrl")
-            fun pictureUrl(pictureUrl: String) = apply { this.pictureUrl = pictureUrl }
+            fun pictureUrl(pictureUrl: String) = apply {
+                this.pictureUrl = pictureUrl
+            }
 
-            @JsonProperty("role") fun role(role: Role) = apply { this.role = role }
+            @JsonProperty("role")
+            fun role(role: Role) = apply {
+                this.role = role
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -187,16 +227,15 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): MemberUpdateBody =
-                MemberUpdateBody(
-                    id,
-                    email,
-                    name,
-                    orgId,
-                    pictureUrl,
-                    role,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): MemberUpdateBody = MemberUpdateBody(
+                id,
+                email,
+                name,
+                orgId,
+                pictureUrl,
+                role,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -207,40 +246,39 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is MemberUpdateParams &&
-            this.memberId == other.memberId &&
-            this.id == other.id &&
-            this.email == other.email &&
-            this.name == other.name &&
-            this.orgId == other.orgId &&
-            this.pictureUrl == other.pictureUrl &&
-            this.role == other.role &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is MemberUpdateParams &&
+          this.memberId == other.memberId &&
+          this.id == other.id &&
+          this.email == other.email &&
+          this.name == other.name &&
+          this.orgId == other.orgId &&
+          this.pictureUrl == other.pictureUrl &&
+          this.role == other.role &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            memberId,
-            id,
-            email,
-            name,
-            orgId,
-            pictureUrl,
-            role,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          memberId,
+          id,
+          email,
+          name,
+          orgId,
+          pictureUrl,
+          role,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "MemberUpdateParams{memberId=$memberId, id=$id, email=$email, name=$name, orgId=$orgId, pictureUrl=$pictureUrl, role=$role, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "MemberUpdateParams{memberId=$memberId, id=$id, email=$email, name=$name, orgId=$orgId, pictureUrl=$pictureUrl, role=$role, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -276,19 +314,33 @@ constructor(
             additionalBodyProperties(memberUpdateParams.additionalBodyProperties)
         }
 
-        fun memberId(memberId: String) = apply { this.memberId = memberId }
+        fun memberId(memberId: String) = apply {
+            this.memberId = memberId
+        }
 
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply {
+            this.id = id
+        }
 
-        fun email(email: String) = apply { this.email = email }
+        fun email(email: String) = apply {
+            this.email = email
+        }
 
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply {
+            this.name = name
+        }
 
-        fun orgId(orgId: String) = apply { this.orgId = orgId }
+        fun orgId(orgId: String) = apply {
+            this.orgId = orgId
+        }
 
-        fun pictureUrl(pictureUrl: String) = apply { this.pictureUrl = pictureUrl }
+        fun pictureUrl(pictureUrl: String) = apply {
+            this.pictureUrl = pictureUrl
+        }
 
-        fun role(role: Role) = apply { this.role = role }
+        fun role(role: Role) = apply {
+            this.role = role
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -328,7 +380,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -339,40 +393,38 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): MemberUpdateParams =
-            MemberUpdateParams(
-                checkNotNull(memberId) { "`memberId` is required but was not set" },
-                id,
-                email,
-                name,
-                orgId,
-                pictureUrl,
-                role,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): MemberUpdateParams = MemberUpdateParams(
+            checkNotNull(memberId) {
+                "`memberId` is required but was not set"
+            },
+            id,
+            email,
+            name,
+            orgId,
+            pictureUrl,
+            role,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 
-    class Role
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Role @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Role && this.value == other.value
+          return other is Role &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -403,21 +455,19 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                OWNER -> Value.OWNER
-                ADMIN -> Value.ADMIN
-                READER -> Value.READER
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            OWNER -> Value.OWNER
+            ADMIN -> Value.ADMIN
+            READER -> Value.READER
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                OWNER -> Known.OWNER
-                ADMIN -> Known.ADMIN
-                READER -> Known.READER
-                else -> throw SamInvalidDataException("Unknown Role: $value")
-            }
+        fun known(): Known = when (this) {
+            OWNER -> Known.OWNER
+            ADMIN -> Known.ADMIN
+            READER -> Known.READER
+            else -> throw SamInvalidDataException("Unknown Role: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
