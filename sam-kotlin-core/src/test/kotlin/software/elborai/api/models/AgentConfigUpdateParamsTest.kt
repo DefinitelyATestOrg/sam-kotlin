@@ -2,62 +2,70 @@
 
 package software.elborai.api.models
 
-import org.assertj.core.api.Assertions.assertThat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.apache.hc.core5.http.ContentType
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.models.*
+import software.elborai.api.models.AgentConfigUpdateParams
+import software.elborai.api.models.AgentConfigUpdateParams.AgentConfigUpdateBody
 
 class AgentConfigUpdateParamsTest {
 
     @Test
     fun createAgentConfigUpdateParams() {
-        AgentConfigUpdateParams.builder()
-            .agentId("string")
-            .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
-            .class_("string")
-            .build()
+      AgentConfigUpdateParams.builder()
+          .agentId("string")
+          .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
+          .class_("string")
+          .build()
     }
 
     @Test
     fun getBody() {
-        val params =
-            AgentConfigUpdateParams.builder()
-                .agentId("string")
-                .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
-                .class_("string")
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.class_()).isEqualTo("string")
+      val params = AgentConfigUpdateParams.builder()
+          .agentId("string")
+          .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
+          .class_("string")
+          .build()
+      val body = params.getBody()
+      assertThat(body).isNotNull
+      assertThat(body.class_()).isEqualTo("string")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params =
-            AgentConfigUpdateParams.builder()
-                .agentId("string")
-                .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
-                .class_("string")
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.class_()).isEqualTo("string")
+      val params = AgentConfigUpdateParams.builder()
+          .agentId("string")
+          .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
+          .class_("string")
+          .build()
+      val body = params.getBody()
+      assertThat(body).isNotNull
+      assertThat(body.class_()).isEqualTo("string")
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            AgentConfigUpdateParams.builder()
-                .agentId("string")
-                .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
-                .class_("string")
-                .build()
-        assertThat(params).isNotNull
-        // path param "agentId"
-        assertThat(params.getPathParam(0)).isEqualTo("string")
-        // path param "integration"
-        assertThat(params.getPathParam(1))
-            .isEqualTo(AgentConfigUpdateParams.Integration.SALESFORCE.toString())
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
+      val params = AgentConfigUpdateParams.builder()
+          .agentId("string")
+          .integration(AgentConfigUpdateParams.Integration.SALESFORCE)
+          .class_("string")
+          .build()
+      assertThat(params).isNotNull
+      // path param "agentId"
+      assertThat(params.getPathParam(0)).isEqualTo("string")
+      // path param "integration"
+      assertThat(params.getPathParam(1)).isEqualTo(AgentConfigUpdateParams.Integration.SALESFORCE.toString())
+      // out-of-bound path param
+      assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

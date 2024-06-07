@@ -5,41 +5,59 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class CorporaUpdateParams
-constructor(
-    private val corpusId: String,
-    private val agentId: String,
-    private val name: String,
-    private val active: Boolean?,
-    private val crawlSpec: CrawlSpec?,
-    private val createdBy: CreatedBy?,
-    private val excludeLastUpdatedBefore: OffsetDateTime?,
-    private val htmlTransformer: HtmlTransformer?,
-    private val includedKbArticleIds: List<String>?,
-    private val integration: Integration?,
-    private val integrationCategoryId: String?,
-    private val sourceUrl: String?,
-    private val status: Status?,
-    private val tags: List<String>?,
-    private val type: Type?,
-    private val updatedBy: UpdatedBy?,
-    private val urlExclusionPatterns: List<String>?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class CorporaUpdateParams constructor(
+  private val corpusId: String,
+  private val agentId: String,
+  private val name: String,
+  private val active: Boolean?,
+  private val crawlSpec: CrawlSpec?,
+  private val createdBy: CreatedBy?,
+  private val excludeLastUpdatedBefore: OffsetDateTime?,
+  private val htmlTransformer: HtmlTransformer?,
+  private val includedKbArticleIds: List<String>?,
+  private val integration: Integration?,
+  private val integrationCategoryId: String?,
+  private val sourceUrl: String?,
+  private val status: Status?,
+  private val tags: List<String>?,
+  private val type: Type?,
+  private val updatedBy: UpdatedBy?,
+  private val urlExclusionPatterns: List<String>?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun corpusId(): String = corpusId
@@ -77,25 +95,25 @@ constructor(
     fun urlExclusionPatterns(): List<String>? = urlExclusionPatterns
 
     internal fun getBody(): CorporaUpdateBody {
-        return CorporaUpdateBody(
-            agentId,
-            name,
-            active,
-            crawlSpec,
-            createdBy,
-            excludeLastUpdatedBefore,
-            htmlTransformer,
-            includedKbArticleIds,
-            integration,
-            integrationCategoryId,
-            sourceUrl,
-            status,
-            tags,
-            type,
-            updatedBy,
-            urlExclusionPatterns,
-            additionalBodyProperties,
-        )
+      return CorporaUpdateBody(
+          agentId,
+          name,
+          active,
+          crawlSpec,
+          createdBy,
+          excludeLastUpdatedBefore,
+          htmlTransformer,
+          includedKbArticleIds,
+          integration,
+          integrationCategoryId,
+          sourceUrl,
+          status,
+          tags,
+          type,
+          updatedBy,
+          urlExclusionPatterns,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -103,69 +121,81 @@ constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> corpusId
-            else -> ""
-        }
+      return when (index) {
+          0 -> corpusId
+          else -> ""
+      }
     }
 
     @JsonDeserialize(builder = CorporaUpdateBody.Builder::class)
     @NoAutoDetect
-    class CorporaUpdateBody
-    internal constructor(
-        private val agentId: String?,
-        private val name: String?,
-        private val active: Boolean?,
-        private val crawlSpec: CrawlSpec?,
-        private val createdBy: CreatedBy?,
-        private val excludeLastUpdatedBefore: OffsetDateTime?,
-        private val htmlTransformer: HtmlTransformer?,
-        private val includedKbArticleIds: List<String>?,
-        private val integration: Integration?,
-        private val integrationCategoryId: String?,
-        private val sourceUrl: String?,
-        private val status: Status?,
-        private val tags: List<String>?,
-        private val type: Type?,
-        private val updatedBy: UpdatedBy?,
-        private val urlExclusionPatterns: List<String>?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class CorporaUpdateBody internal constructor(
+      private val agentId: String?,
+      private val name: String?,
+      private val active: Boolean?,
+      private val crawlSpec: CrawlSpec?,
+      private val createdBy: CreatedBy?,
+      private val excludeLastUpdatedBefore: OffsetDateTime?,
+      private val htmlTransformer: HtmlTransformer?,
+      private val includedKbArticleIds: List<String>?,
+      private val integration: Integration?,
+      private val integrationCategoryId: String?,
+      private val sourceUrl: String?,
+      private val status: Status?,
+      private val tags: List<String>?,
+      private val type: Type?,
+      private val updatedBy: UpdatedBy?,
+      private val urlExclusionPatterns: List<String>?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("agentId") fun agentId(): String? = agentId
+        @JsonProperty("agentId")
+        fun agentId(): String? = agentId
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name")
+        fun name(): String? = name
 
-        @JsonProperty("active") fun active(): Boolean? = active
+        @JsonProperty("active")
+        fun active(): Boolean? = active
 
-        @JsonProperty("crawlSpec") fun crawlSpec(): CrawlSpec? = crawlSpec
+        @JsonProperty("crawlSpec")
+        fun crawlSpec(): CrawlSpec? = crawlSpec
 
-        @JsonProperty("createdBy") fun createdBy(): CreatedBy? = createdBy
+        @JsonProperty("createdBy")
+        fun createdBy(): CreatedBy? = createdBy
 
         @JsonProperty("excludeLastUpdatedBefore")
         fun excludeLastUpdatedBefore(): OffsetDateTime? = excludeLastUpdatedBefore
 
-        @JsonProperty("htmlTransformer") fun htmlTransformer(): HtmlTransformer? = htmlTransformer
+        @JsonProperty("htmlTransformer")
+        fun htmlTransformer(): HtmlTransformer? = htmlTransformer
 
         @JsonProperty("includedKbArticleIds")
         fun includedKbArticleIds(): List<String>? = includedKbArticleIds
 
-        @JsonProperty("integration") fun integration(): Integration? = integration
+        @JsonProperty("integration")
+        fun integration(): Integration? = integration
 
         @JsonProperty("integrationCategoryId")
         fun integrationCategoryId(): String? = integrationCategoryId
 
-        @JsonProperty("sourceUrl") fun sourceUrl(): String? = sourceUrl
+        @JsonProperty("sourceUrl")
+        fun sourceUrl(): String? = sourceUrl
 
-        @JsonProperty("status") fun status(): Status? = status
+        @JsonProperty("status")
+        fun status(): Status? = status
 
-        @JsonProperty("tags") fun tags(): List<String>? = tags
+        @JsonProperty("tags")
+        fun tags(): List<String>? = tags
 
-        @JsonProperty("type") fun type(): Type? = type
+        @JsonProperty("type")
+        fun type(): Type? = type
 
-        @JsonProperty("updatedBy") fun updatedBy(): UpdatedBy? = updatedBy
+        @JsonProperty("updatedBy")
+        fun updatedBy(): UpdatedBy? = updatedBy
 
         @JsonProperty("urlExclusionPatterns")
         fun urlExclusionPatterns(): List<String>? = urlExclusionPatterns
@@ -177,58 +207,56 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CorporaUpdateBody &&
-                this.agentId == other.agentId &&
-                this.name == other.name &&
-                this.active == other.active &&
-                this.crawlSpec == other.crawlSpec &&
-                this.createdBy == other.createdBy &&
-                this.excludeLastUpdatedBefore == other.excludeLastUpdatedBefore &&
-                this.htmlTransformer == other.htmlTransformer &&
-                this.includedKbArticleIds == other.includedKbArticleIds &&
-                this.integration == other.integration &&
-                this.integrationCategoryId == other.integrationCategoryId &&
-                this.sourceUrl == other.sourceUrl &&
-                this.status == other.status &&
-                this.tags == other.tags &&
-                this.type == other.type &&
-                this.updatedBy == other.updatedBy &&
-                this.urlExclusionPatterns == other.urlExclusionPatterns &&
-                this.additionalProperties == other.additionalProperties
+          return other is CorporaUpdateBody &&
+              this.agentId == other.agentId &&
+              this.name == other.name &&
+              this.active == other.active &&
+              this.crawlSpec == other.crawlSpec &&
+              this.createdBy == other.createdBy &&
+              this.excludeLastUpdatedBefore == other.excludeLastUpdatedBefore &&
+              this.htmlTransformer == other.htmlTransformer &&
+              this.includedKbArticleIds == other.includedKbArticleIds &&
+              this.integration == other.integration &&
+              this.integrationCategoryId == other.integrationCategoryId &&
+              this.sourceUrl == other.sourceUrl &&
+              this.status == other.status &&
+              this.tags == other.tags &&
+              this.type == other.type &&
+              this.updatedBy == other.updatedBy &&
+              this.urlExclusionPatterns == other.urlExclusionPatterns &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        agentId,
-                        name,
-                        active,
-                        crawlSpec,
-                        createdBy,
-                        excludeLastUpdatedBefore,
-                        htmlTransformer,
-                        includedKbArticleIds,
-                        integration,
-                        integrationCategoryId,
-                        sourceUrl,
-                        status,
-                        tags,
-                        type,
-                        updatedBy,
-                        urlExclusionPatterns,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                agentId,
+                name,
+                active,
+                crawlSpec,
+                createdBy,
+                excludeLastUpdatedBefore,
+                htmlTransformer,
+                includedKbArticleIds,
+                integration,
+                integrationCategoryId,
+                sourceUrl,
+                status,
+                tags,
+                type,
+                updatedBy,
+                urlExclusionPatterns,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "CorporaUpdateBody{agentId=$agentId, name=$name, active=$active, crawlSpec=$crawlSpec, createdBy=$createdBy, excludeLastUpdatedBefore=$excludeLastUpdatedBefore, htmlTransformer=$htmlTransformer, includedKbArticleIds=$includedKbArticleIds, integration=$integration, integrationCategoryId=$integrationCategoryId, sourceUrl=$sourceUrl, status=$status, tags=$tags, type=$type, updatedBy=$updatedBy, urlExclusionPatterns=$urlExclusionPatterns, additionalProperties=$additionalProperties}"
+        override fun toString() = "CorporaUpdateBody{agentId=$agentId, name=$name, active=$active, crawlSpec=$crawlSpec, createdBy=$createdBy, excludeLastUpdatedBefore=$excludeLastUpdatedBefore, htmlTransformer=$htmlTransformer, includedKbArticleIds=$includedKbArticleIds, integration=$integration, integrationCategoryId=$integrationCategoryId, sourceUrl=$sourceUrl, status=$status, tags=$tags, type=$type, updatedBy=$updatedBy, urlExclusionPatterns=$urlExclusionPatterns, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -275,17 +303,30 @@ constructor(
                 additionalProperties(corporaUpdateBody.additionalProperties)
             }
 
-            @JsonProperty("agentId") fun agentId(agentId: String) = apply { this.agentId = agentId }
+            @JsonProperty("agentId")
+            fun agentId(agentId: String) = apply {
+                this.agentId = agentId
+            }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            @JsonProperty("name")
+            fun name(name: String) = apply {
+                this.name = name
+            }
 
-            @JsonProperty("active") fun active(active: Boolean) = apply { this.active = active }
+            @JsonProperty("active")
+            fun active(active: Boolean) = apply {
+                this.active = active
+            }
 
             @JsonProperty("crawlSpec")
-            fun crawlSpec(crawlSpec: CrawlSpec) = apply { this.crawlSpec = crawlSpec }
+            fun crawlSpec(crawlSpec: CrawlSpec) = apply {
+                this.crawlSpec = crawlSpec
+            }
 
             @JsonProperty("createdBy")
-            fun createdBy(createdBy: CreatedBy) = apply { this.createdBy = createdBy }
+            fun createdBy(createdBy: CreatedBy) = apply {
+                this.createdBy = createdBy
+            }
 
             @JsonProperty("excludeLastUpdatedBefore")
             fun excludeLastUpdatedBefore(excludeLastUpdatedBefore: OffsetDateTime) = apply {
@@ -303,7 +344,9 @@ constructor(
             }
 
             @JsonProperty("integration")
-            fun integration(integration: Integration) = apply { this.integration = integration }
+            fun integration(integration: Integration) = apply {
+                this.integration = integration
+            }
 
             @JsonProperty("integrationCategoryId")
             fun integrationCategoryId(integrationCategoryId: String) = apply {
@@ -311,16 +354,29 @@ constructor(
             }
 
             @JsonProperty("sourceUrl")
-            fun sourceUrl(sourceUrl: String) = apply { this.sourceUrl = sourceUrl }
+            fun sourceUrl(sourceUrl: String) = apply {
+                this.sourceUrl = sourceUrl
+            }
 
-            @JsonProperty("status") fun status(status: Status) = apply { this.status = status }
+            @JsonProperty("status")
+            fun status(status: Status) = apply {
+                this.status = status
+            }
 
-            @JsonProperty("tags") fun tags(tags: List<String>) = apply { this.tags = tags }
+            @JsonProperty("tags")
+            fun tags(tags: List<String>) = apply {
+                this.tags = tags
+            }
 
-            @JsonProperty("type") fun type(type: Type) = apply { this.type = type }
+            @JsonProperty("type")
+            fun type(type: Type) = apply {
+                this.type = type
+            }
 
             @JsonProperty("updatedBy")
-            fun updatedBy(updatedBy: UpdatedBy) = apply { this.updatedBy = updatedBy }
+            fun updatedBy(updatedBy: UpdatedBy) = apply {
+                this.updatedBy = updatedBy
+            }
 
             @JsonProperty("urlExclusionPatterns")
             fun urlExclusionPatterns(urlExclusionPatterns: List<String>) = apply {
@@ -341,26 +397,29 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CorporaUpdateBody =
-                CorporaUpdateBody(
-                    checkNotNull(agentId) { "`agentId` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    active,
-                    crawlSpec,
-                    createdBy,
-                    excludeLastUpdatedBefore,
-                    htmlTransformer,
-                    includedKbArticleIds?.toUnmodifiable(),
-                    integration,
-                    integrationCategoryId,
-                    sourceUrl,
-                    status,
-                    tags?.toUnmodifiable(),
-                    type,
-                    updatedBy,
-                    urlExclusionPatterns?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): CorporaUpdateBody = CorporaUpdateBody(
+                checkNotNull(agentId) {
+                    "`agentId` is required but was not set"
+                },
+                checkNotNull(name) {
+                    "`name` is required but was not set"
+                },
+                active,
+                crawlSpec,
+                createdBy,
+                excludeLastUpdatedBefore,
+                htmlTransformer,
+                includedKbArticleIds?.toUnmodifiable(),
+                integration,
+                integrationCategoryId,
+                sourceUrl,
+                status,
+                tags?.toUnmodifiable(),
+                type,
+                updatedBy,
+                urlExclusionPatterns?.toUnmodifiable(),
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -371,60 +430,59 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CorporaUpdateParams &&
-            this.corpusId == other.corpusId &&
-            this.agentId == other.agentId &&
-            this.name == other.name &&
-            this.active == other.active &&
-            this.crawlSpec == other.crawlSpec &&
-            this.createdBy == other.createdBy &&
-            this.excludeLastUpdatedBefore == other.excludeLastUpdatedBefore &&
-            this.htmlTransformer == other.htmlTransformer &&
-            this.includedKbArticleIds == other.includedKbArticleIds &&
-            this.integration == other.integration &&
-            this.integrationCategoryId == other.integrationCategoryId &&
-            this.sourceUrl == other.sourceUrl &&
-            this.status == other.status &&
-            this.tags == other.tags &&
-            this.type == other.type &&
-            this.updatedBy == other.updatedBy &&
-            this.urlExclusionPatterns == other.urlExclusionPatterns &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is CorporaUpdateParams &&
+          this.corpusId == other.corpusId &&
+          this.agentId == other.agentId &&
+          this.name == other.name &&
+          this.active == other.active &&
+          this.crawlSpec == other.crawlSpec &&
+          this.createdBy == other.createdBy &&
+          this.excludeLastUpdatedBefore == other.excludeLastUpdatedBefore &&
+          this.htmlTransformer == other.htmlTransformer &&
+          this.includedKbArticleIds == other.includedKbArticleIds &&
+          this.integration == other.integration &&
+          this.integrationCategoryId == other.integrationCategoryId &&
+          this.sourceUrl == other.sourceUrl &&
+          this.status == other.status &&
+          this.tags == other.tags &&
+          this.type == other.type &&
+          this.updatedBy == other.updatedBy &&
+          this.urlExclusionPatterns == other.urlExclusionPatterns &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            corpusId,
-            agentId,
-            name,
-            active,
-            crawlSpec,
-            createdBy,
-            excludeLastUpdatedBefore,
-            htmlTransformer,
-            includedKbArticleIds,
-            integration,
-            integrationCategoryId,
-            sourceUrl,
-            status,
-            tags,
-            type,
-            updatedBy,
-            urlExclusionPatterns,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          corpusId,
+          agentId,
+          name,
+          active,
+          crawlSpec,
+          createdBy,
+          excludeLastUpdatedBefore,
+          htmlTransformer,
+          includedKbArticleIds,
+          integration,
+          integrationCategoryId,
+          sourceUrl,
+          status,
+          tags,
+          type,
+          updatedBy,
+          urlExclusionPatterns,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "CorporaUpdateParams{corpusId=$corpusId, agentId=$agentId, name=$name, active=$active, crawlSpec=$crawlSpec, createdBy=$createdBy, excludeLastUpdatedBefore=$excludeLastUpdatedBefore, htmlTransformer=$htmlTransformer, includedKbArticleIds=$includedKbArticleIds, integration=$integration, integrationCategoryId=$integrationCategoryId, sourceUrl=$sourceUrl, status=$status, tags=$tags, type=$type, updatedBy=$updatedBy, urlExclusionPatterns=$urlExclusionPatterns, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "CorporaUpdateParams{corpusId=$corpusId, agentId=$agentId, name=$name, active=$active, crawlSpec=$crawlSpec, createdBy=$createdBy, excludeLastUpdatedBefore=$excludeLastUpdatedBefore, htmlTransformer=$htmlTransformer, includedKbArticleIds=$includedKbArticleIds, integration=$integration, integrationCategoryId=$integrationCategoryId, sourceUrl=$sourceUrl, status=$status, tags=$tags, type=$type, updatedBy=$updatedBy, urlExclusionPatterns=$urlExclusionPatterns, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -480,17 +538,29 @@ constructor(
             additionalBodyProperties(corporaUpdateParams.additionalBodyProperties)
         }
 
-        fun corpusId(corpusId: String) = apply { this.corpusId = corpusId }
+        fun corpusId(corpusId: String) = apply {
+            this.corpusId = corpusId
+        }
 
-        fun agentId(agentId: String) = apply { this.agentId = agentId }
+        fun agentId(agentId: String) = apply {
+            this.agentId = agentId
+        }
 
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply {
+            this.name = name
+        }
 
-        fun active(active: Boolean) = apply { this.active = active }
+        fun active(active: Boolean) = apply {
+            this.active = active
+        }
 
-        fun crawlSpec(crawlSpec: CrawlSpec) = apply { this.crawlSpec = crawlSpec }
+        fun crawlSpec(crawlSpec: CrawlSpec) = apply {
+            this.crawlSpec = crawlSpec
+        }
 
-        fun createdBy(createdBy: CreatedBy) = apply { this.createdBy = createdBy }
+        fun createdBy(createdBy: CreatedBy) = apply {
+            this.createdBy = createdBy
+        }
 
         fun excludeLastUpdatedBefore(excludeLastUpdatedBefore: OffsetDateTime) = apply {
             this.excludeLastUpdatedBefore = excludeLastUpdatedBefore
@@ -509,26 +579,38 @@ constructor(
             this.includedKbArticleIds.add(includedKbArticleId)
         }
 
-        fun integration(integration: Integration) = apply { this.integration = integration }
+        fun integration(integration: Integration) = apply {
+            this.integration = integration
+        }
 
         fun integrationCategoryId(integrationCategoryId: String) = apply {
             this.integrationCategoryId = integrationCategoryId
         }
 
-        fun sourceUrl(sourceUrl: String) = apply { this.sourceUrl = sourceUrl }
+        fun sourceUrl(sourceUrl: String) = apply {
+            this.sourceUrl = sourceUrl
+        }
 
-        fun status(status: Status) = apply { this.status = status }
+        fun status(status: Status) = apply {
+            this.status = status
+        }
 
         fun tags(tags: List<String>) = apply {
             this.tags.clear()
             this.tags.addAll(tags)
         }
 
-        fun addTag(tag: String) = apply { this.tags.add(tag) }
+        fun addTag(tag: String) = apply {
+            this.tags.add(tag)
+        }
 
-        fun type(type: Type) = apply { this.type = type }
+        fun type(type: Type) = apply {
+            this.type = type
+        }
 
-        fun updatedBy(updatedBy: UpdatedBy) = apply { this.updatedBy = updatedBy }
+        fun updatedBy(updatedBy: UpdatedBy) = apply {
+            this.updatedBy = updatedBy
+        }
 
         fun urlExclusionPatterns(urlExclusionPatterns: List<String>) = apply {
             this.urlExclusionPatterns.clear()
@@ -577,7 +659,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -588,54 +672,58 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): CorporaUpdateParams =
-            CorporaUpdateParams(
-                checkNotNull(corpusId) { "`corpusId` is required but was not set" },
-                checkNotNull(agentId) { "`agentId` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                active,
-                crawlSpec,
-                createdBy,
-                excludeLastUpdatedBefore,
-                htmlTransformer,
-                if (includedKbArticleIds.size == 0) null else includedKbArticleIds.toUnmodifiable(),
-                integration,
-                integrationCategoryId,
-                sourceUrl,
-                status,
-                if (tags.size == 0) null else tags.toUnmodifiable(),
-                type,
-                updatedBy,
-                if (urlExclusionPatterns.size == 0) null else urlExclusionPatterns.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): CorporaUpdateParams = CorporaUpdateParams(
+            checkNotNull(corpusId) {
+                "`corpusId` is required but was not set"
+            },
+            checkNotNull(agentId) {
+                "`agentId` is required but was not set"
+            },
+            checkNotNull(name) {
+                "`name` is required but was not set"
+            },
+            active,
+            crawlSpec,
+            createdBy,
+            excludeLastUpdatedBefore,
+            htmlTransformer,
+            if(includedKbArticleIds.size == 0) null else includedKbArticleIds.toUnmodifiable(),
+            integration,
+            integrationCategoryId,
+            sourceUrl,
+            status,
+            if(tags.size == 0) null else tags.toUnmodifiable(),
+            type,
+            updatedBy,
+            if(urlExclusionPatterns.size == 0) null else urlExclusionPatterns.toUnmodifiable(),
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 
     @JsonDeserialize(builder = CrawlSpec.Builder::class)
     @NoAutoDetect
-    class CrawlSpec
-    private constructor(
-        private val ingestionWorkflowId: String?,
-        private val startUrls: List<String>?,
-        private val exclusionPatterns: List<String>?,
-        private val htmlTransformer: HtmlTransformer?,
-        private val removeElementsCssSelector: String?,
-        private val maxCrawlDepth: Long?,
-        private val maxCrawlPages: Long?,
-        private val initialConcurrency: Long?,
-        private val maxConcurrency: Long?,
-        private val timeoutSeconds: Long?,
-        private val saveHtml: Boolean?,
-        private val saveMarkdown: Boolean?,
-        private val useSitemaps: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class CrawlSpec private constructor(
+      private val ingestionWorkflowId: String?,
+      private val startUrls: List<String>?,
+      private val exclusionPatterns: List<String>?,
+      private val htmlTransformer: HtmlTransformer?,
+      private val removeElementsCssSelector: String?,
+      private val maxCrawlDepth: Long?,
+      private val maxCrawlPages: Long?,
+      private val initialConcurrency: Long?,
+      private val maxConcurrency: Long?,
+      private val timeoutSeconds: Long?,
+      private val saveHtml: Boolean?,
+      private val saveMarkdown: Boolean?,
+      private val useSitemaps: Boolean?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
@@ -643,31 +731,41 @@ constructor(
         @JsonProperty("ingestionWorkflowId")
         fun ingestionWorkflowId(): String? = ingestionWorkflowId
 
-        @JsonProperty("startUrls") fun startUrls(): List<String>? = startUrls
+        @JsonProperty("startUrls")
+        fun startUrls(): List<String>? = startUrls
 
         @JsonProperty("exclusionPatterns")
         fun exclusionPatterns(): List<String>? = exclusionPatterns
 
-        @JsonProperty("htmlTransformer") fun htmlTransformer(): HtmlTransformer? = htmlTransformer
+        @JsonProperty("htmlTransformer")
+        fun htmlTransformer(): HtmlTransformer? = htmlTransformer
 
         @JsonProperty("removeElementsCssSelector")
         fun removeElementsCssSelector(): String? = removeElementsCssSelector
 
-        @JsonProperty("maxCrawlDepth") fun maxCrawlDepth(): Long? = maxCrawlDepth
+        @JsonProperty("maxCrawlDepth")
+        fun maxCrawlDepth(): Long? = maxCrawlDepth
 
-        @JsonProperty("maxCrawlPages") fun maxCrawlPages(): Long? = maxCrawlPages
+        @JsonProperty("maxCrawlPages")
+        fun maxCrawlPages(): Long? = maxCrawlPages
 
-        @JsonProperty("initialConcurrency") fun initialConcurrency(): Long? = initialConcurrency
+        @JsonProperty("initialConcurrency")
+        fun initialConcurrency(): Long? = initialConcurrency
 
-        @JsonProperty("maxConcurrency") fun maxConcurrency(): Long? = maxConcurrency
+        @JsonProperty("maxConcurrency")
+        fun maxConcurrency(): Long? = maxConcurrency
 
-        @JsonProperty("timeoutSeconds") fun timeoutSeconds(): Long? = timeoutSeconds
+        @JsonProperty("timeoutSeconds")
+        fun timeoutSeconds(): Long? = timeoutSeconds
 
-        @JsonProperty("saveHtml") fun saveHtml(): Boolean? = saveHtml
+        @JsonProperty("saveHtml")
+        fun saveHtml(): Boolean? = saveHtml
 
-        @JsonProperty("saveMarkdown") fun saveMarkdown(): Boolean? = saveMarkdown
+        @JsonProperty("saveMarkdown")
+        fun saveMarkdown(): Boolean? = saveMarkdown
 
-        @JsonProperty("useSitemaps") fun useSitemaps(): Boolean? = useSitemaps
+        @JsonProperty("useSitemaps")
+        fun useSitemaps(): Boolean? = useSitemaps
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -676,52 +774,50 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CrawlSpec &&
-                this.ingestionWorkflowId == other.ingestionWorkflowId &&
-                this.startUrls == other.startUrls &&
-                this.exclusionPatterns == other.exclusionPatterns &&
-                this.htmlTransformer == other.htmlTransformer &&
-                this.removeElementsCssSelector == other.removeElementsCssSelector &&
-                this.maxCrawlDepth == other.maxCrawlDepth &&
-                this.maxCrawlPages == other.maxCrawlPages &&
-                this.initialConcurrency == other.initialConcurrency &&
-                this.maxConcurrency == other.maxConcurrency &&
-                this.timeoutSeconds == other.timeoutSeconds &&
-                this.saveHtml == other.saveHtml &&
-                this.saveMarkdown == other.saveMarkdown &&
-                this.useSitemaps == other.useSitemaps &&
-                this.additionalProperties == other.additionalProperties
+          return other is CrawlSpec &&
+              this.ingestionWorkflowId == other.ingestionWorkflowId &&
+              this.startUrls == other.startUrls &&
+              this.exclusionPatterns == other.exclusionPatterns &&
+              this.htmlTransformer == other.htmlTransformer &&
+              this.removeElementsCssSelector == other.removeElementsCssSelector &&
+              this.maxCrawlDepth == other.maxCrawlDepth &&
+              this.maxCrawlPages == other.maxCrawlPages &&
+              this.initialConcurrency == other.initialConcurrency &&
+              this.maxConcurrency == other.maxConcurrency &&
+              this.timeoutSeconds == other.timeoutSeconds &&
+              this.saveHtml == other.saveHtml &&
+              this.saveMarkdown == other.saveMarkdown &&
+              this.useSitemaps == other.useSitemaps &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        ingestionWorkflowId,
-                        startUrls,
-                        exclusionPatterns,
-                        htmlTransformer,
-                        removeElementsCssSelector,
-                        maxCrawlDepth,
-                        maxCrawlPages,
-                        initialConcurrency,
-                        maxConcurrency,
-                        timeoutSeconds,
-                        saveHtml,
-                        saveMarkdown,
-                        useSitemaps,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                ingestionWorkflowId,
+                startUrls,
+                exclusionPatterns,
+                htmlTransformer,
+                removeElementsCssSelector,
+                maxCrawlDepth,
+                maxCrawlPages,
+                initialConcurrency,
+                maxConcurrency,
+                timeoutSeconds,
+                saveHtml,
+                saveMarkdown,
+                useSitemaps,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "CrawlSpec{ingestionWorkflowId=$ingestionWorkflowId, startUrls=$startUrls, exclusionPatterns=$exclusionPatterns, htmlTransformer=$htmlTransformer, removeElementsCssSelector=$removeElementsCssSelector, maxCrawlDepth=$maxCrawlDepth, maxCrawlPages=$maxCrawlPages, initialConcurrency=$initialConcurrency, maxConcurrency=$maxConcurrency, timeoutSeconds=$timeoutSeconds, saveHtml=$saveHtml, saveMarkdown=$saveMarkdown, useSitemaps=$useSitemaps, additionalProperties=$additionalProperties}"
+        override fun toString() = "CrawlSpec{ingestionWorkflowId=$ingestionWorkflowId, startUrls=$startUrls, exclusionPatterns=$exclusionPatterns, htmlTransformer=$htmlTransformer, removeElementsCssSelector=$removeElementsCssSelector, maxCrawlDepth=$maxCrawlDepth, maxCrawlPages=$maxCrawlPages, initialConcurrency=$initialConcurrency, maxConcurrency=$maxConcurrency, timeoutSeconds=$timeoutSeconds, saveHtml=$saveHtml, saveMarkdown=$saveMarkdown, useSitemaps=$useSitemaps, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -768,7 +864,9 @@ constructor(
             }
 
             @JsonProperty("startUrls")
-            fun startUrls(startUrls: List<String>) = apply { this.startUrls = startUrls }
+            fun startUrls(startUrls: List<String>) = apply {
+                this.startUrls = startUrls
+            }
 
             @JsonProperty("exclusionPatterns")
             fun exclusionPatterns(exclusionPatterns: List<String>) = apply {
@@ -786,10 +884,14 @@ constructor(
             }
 
             @JsonProperty("maxCrawlDepth")
-            fun maxCrawlDepth(maxCrawlDepth: Long) = apply { this.maxCrawlDepth = maxCrawlDepth }
+            fun maxCrawlDepth(maxCrawlDepth: Long) = apply {
+                this.maxCrawlDepth = maxCrawlDepth
+            }
 
             @JsonProperty("maxCrawlPages")
-            fun maxCrawlPages(maxCrawlPages: Long) = apply { this.maxCrawlPages = maxCrawlPages }
+            fun maxCrawlPages(maxCrawlPages: Long) = apply {
+                this.maxCrawlPages = maxCrawlPages
+            }
 
             @JsonProperty("initialConcurrency")
             fun initialConcurrency(initialConcurrency: Long) = apply {
@@ -807,13 +909,19 @@ constructor(
             }
 
             @JsonProperty("saveHtml")
-            fun saveHtml(saveHtml: Boolean) = apply { this.saveHtml = saveHtml }
+            fun saveHtml(saveHtml: Boolean) = apply {
+                this.saveHtml = saveHtml
+            }
 
             @JsonProperty("saveMarkdown")
-            fun saveMarkdown(saveMarkdown: Boolean) = apply { this.saveMarkdown = saveMarkdown }
+            fun saveMarkdown(saveMarkdown: Boolean) = apply {
+                this.saveMarkdown = saveMarkdown
+            }
 
             @JsonProperty("useSitemaps")
-            fun useSitemaps(useSitemaps: Boolean) = apply { this.useSitemaps = useSitemaps }
+            fun useSitemaps(useSitemaps: Boolean) = apply {
+                this.useSitemaps = useSitemaps
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -829,39 +937,36 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CrawlSpec =
-                CrawlSpec(
-                    ingestionWorkflowId,
-                    startUrls?.toUnmodifiable(),
-                    exclusionPatterns?.toUnmodifiable(),
-                    htmlTransformer,
-                    removeElementsCssSelector,
-                    maxCrawlDepth,
-                    maxCrawlPages,
-                    initialConcurrency,
-                    maxConcurrency,
-                    timeoutSeconds,
-                    saveHtml,
-                    saveMarkdown,
-                    useSitemaps,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): CrawlSpec = CrawlSpec(
+                ingestionWorkflowId,
+                startUrls?.toUnmodifiable(),
+                exclusionPatterns?.toUnmodifiable(),
+                htmlTransformer,
+                removeElementsCssSelector,
+                maxCrawlDepth,
+                maxCrawlPages,
+                initialConcurrency,
+                maxConcurrency,
+                timeoutSeconds,
+                saveHtml,
+                saveMarkdown,
+                useSitemaps,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
-        class HtmlTransformer
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class HtmlTransformer @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is HtmlTransformer && this.value == other.value
+              return other is HtmlTransformer &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -876,8 +981,7 @@ constructor(
 
                 val READABLE_TEXT = HtmlTransformer(JsonField.of("READABLE_TEXT"))
 
-                val READABLE_TEXT_IF_POSSIBLE =
-                    HtmlTransformer(JsonField.of("READABLE_TEXT_IF_POSSIBLE"))
+                val READABLE_TEXT_IF_POSSIBLE = HtmlTransformer(JsonField.of("READABLE_TEXT_IF_POSSIBLE"))
 
                 fun of(value: String) = HtmlTransformer(JsonField.of(value))
             }
@@ -897,23 +1001,21 @@ constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    NONE -> Value.NONE
-                    EXTRACTUS -> Value.EXTRACTUS
-                    READABLE_TEXT -> Value.READABLE_TEXT
-                    READABLE_TEXT_IF_POSSIBLE -> Value.READABLE_TEXT_IF_POSSIBLE
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                NONE -> Value.NONE
+                EXTRACTUS -> Value.EXTRACTUS
+                READABLE_TEXT -> Value.READABLE_TEXT
+                READABLE_TEXT_IF_POSSIBLE -> Value.READABLE_TEXT_IF_POSSIBLE
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    NONE -> Known.NONE
-                    EXTRACTUS -> Known.EXTRACTUS
-                    READABLE_TEXT -> Known.READABLE_TEXT
-                    READABLE_TEXT_IF_POSSIBLE -> Known.READABLE_TEXT_IF_POSSIBLE
-                    else -> throw SamInvalidDataException("Unknown HtmlTransformer: $value")
-                }
+            fun known(): Known = when (this) {
+                NONE -> Known.NONE
+                EXTRACTUS -> Known.EXTRACTUS
+                READABLE_TEXT -> Known.READABLE_TEXT
+                READABLE_TEXT_IF_POSSIBLE -> Known.READABLE_TEXT_IF_POSSIBLE
+                else -> throw SamInvalidDataException("Unknown HtmlTransformer: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
@@ -921,18 +1023,15 @@ constructor(
 
     @JsonDeserialize(builder = CreatedBy.Builder::class)
     @NoAutoDetect
-    class CreatedBy
-    private constructor(
-        private val id: String?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class CreatedBy private constructor(private val id: String?, private val name: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id")
+        fun id(): String? = id
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name")
+        fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -941,30 +1040,28 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CreatedBy &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
+          return other is CreatedBy &&
+              this.id == other.id &&
+              this.name == other.name &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                name,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "CreatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() = "CreatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -983,9 +1080,15 @@ constructor(
                 additionalProperties(createdBy.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: String) = apply {
+                this.id = id
+            }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            @JsonProperty("name")
+            fun name(name: String) = apply {
+                this.name = name
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1001,29 +1104,26 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CreatedBy =
-                CreatedBy(
-                    id,
-                    name,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): CreatedBy = CreatedBy(
+                id,
+                name,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
-    class HtmlTransformer
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class HtmlTransformer @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is HtmlTransformer && this.value == other.value
+          return other is HtmlTransformer &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1038,8 +1138,7 @@ constructor(
 
             val READABLE_TEXT = HtmlTransformer(JsonField.of("READABLE_TEXT"))
 
-            val READABLE_TEXT_IF_POSSIBLE =
-                HtmlTransformer(JsonField.of("READABLE_TEXT_IF_POSSIBLE"))
+            val READABLE_TEXT_IF_POSSIBLE = HtmlTransformer(JsonField.of("READABLE_TEXT_IF_POSSIBLE"))
 
             fun of(value: String) = HtmlTransformer(JsonField.of(value))
         }
@@ -1059,41 +1158,37 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                NONE -> Value.NONE
-                EXTRACTUS -> Value.EXTRACTUS
-                READABLE_TEXT -> Value.READABLE_TEXT
-                READABLE_TEXT_IF_POSSIBLE -> Value.READABLE_TEXT_IF_POSSIBLE
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            NONE -> Value.NONE
+            EXTRACTUS -> Value.EXTRACTUS
+            READABLE_TEXT -> Value.READABLE_TEXT
+            READABLE_TEXT_IF_POSSIBLE -> Value.READABLE_TEXT_IF_POSSIBLE
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                NONE -> Known.NONE
-                EXTRACTUS -> Known.EXTRACTUS
-                READABLE_TEXT -> Known.READABLE_TEXT
-                READABLE_TEXT_IF_POSSIBLE -> Known.READABLE_TEXT_IF_POSSIBLE
-                else -> throw SamInvalidDataException("Unknown HtmlTransformer: $value")
-            }
+        fun known(): Known = when (this) {
+            NONE -> Known.NONE
+            EXTRACTUS -> Known.EXTRACTUS
+            READABLE_TEXT -> Known.READABLE_TEXT
+            READABLE_TEXT_IF_POSSIBLE -> Known.READABLE_TEXT_IF_POSSIBLE
+            else -> throw SamInvalidDataException("Unknown HtmlTransformer: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class Integration
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Integration @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Integration && this.value == other.value
+          return other is Integration &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1132,43 +1227,39 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                SALESFORCE -> Value.SALESFORCE
-                ZENDESK -> Value.ZENDESK
-                FRESHDESK -> Value.FRESHDESK
-                SLACK_QA_BOT -> Value.SLACK_QA_BOT
-                TWILIO -> Value.TWILIO
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            SALESFORCE -> Value.SALESFORCE
+            ZENDESK -> Value.ZENDESK
+            FRESHDESK -> Value.FRESHDESK
+            SLACK_QA_BOT -> Value.SLACK_QA_BOT
+            TWILIO -> Value.TWILIO
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                SALESFORCE -> Known.SALESFORCE
-                ZENDESK -> Known.ZENDESK
-                FRESHDESK -> Known.FRESHDESK
-                SLACK_QA_BOT -> Known.SLACK_QA_BOT
-                TWILIO -> Known.TWILIO
-                else -> throw SamInvalidDataException("Unknown Integration: $value")
-            }
+        fun known(): Known = when (this) {
+            SALESFORCE -> Known.SALESFORCE
+            ZENDESK -> Known.ZENDESK
+            FRESHDESK -> Known.FRESHDESK
+            SLACK_QA_BOT -> Known.SLACK_QA_BOT
+            TWILIO -> Known.TWILIO
+            else -> throw SamInvalidDataException("Unknown Integration: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class Status
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Status @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Status && this.value == other.value
+          return other is Status &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1199,39 +1290,35 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                PROCESSING -> Value.PROCESSING
-                READY -> Value.READY
-                FAILED -> Value.FAILED
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            PROCESSING -> Value.PROCESSING
+            READY -> Value.READY
+            FAILED -> Value.FAILED
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                PROCESSING -> Known.PROCESSING
-                READY -> Known.READY
-                FAILED -> Known.FAILED
-                else -> throw SamInvalidDataException("Unknown Status: $value")
-            }
+        fun known(): Known = when (this) {
+            PROCESSING -> Known.PROCESSING
+            READY -> Known.READY
+            FAILED -> Known.FAILED
+            else -> throw SamInvalidDataException("Unknown Status: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Type && this.value == other.value
+          return other is Type &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1282,49 +1369,44 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                URL -> Value.URL
-                MANUAL -> Value.MANUAL
-                FILE_UPLOAD -> Value.FILE_UPLOAD
-                EXTERNAL_INTEGRATION -> Value.EXTERNAL_INTEGRATION
-                FRESHDESK_KB -> Value.FRESHDESK_KB
-                ZENDESK_KB -> Value.ZENDESK_KB
-                CSV -> Value.CSV
-                UNKNOWN -> Value.UNKNOWN
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            URL -> Value.URL
+            MANUAL -> Value.MANUAL
+            FILE_UPLOAD -> Value.FILE_UPLOAD
+            EXTERNAL_INTEGRATION -> Value.EXTERNAL_INTEGRATION
+            FRESHDESK_KB -> Value.FRESHDESK_KB
+            ZENDESK_KB -> Value.ZENDESK_KB
+            CSV -> Value.CSV
+            UNKNOWN -> Value.UNKNOWN
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                URL -> Known.URL
-                MANUAL -> Known.MANUAL
-                FILE_UPLOAD -> Known.FILE_UPLOAD
-                EXTERNAL_INTEGRATION -> Known.EXTERNAL_INTEGRATION
-                FRESHDESK_KB -> Known.FRESHDESK_KB
-                ZENDESK_KB -> Known.ZENDESK_KB
-                CSV -> Known.CSV
-                UNKNOWN -> Known.UNKNOWN
-                else -> throw SamInvalidDataException("Unknown Type: $value")
-            }
+        fun known(): Known = when (this) {
+            URL -> Known.URL
+            MANUAL -> Known.MANUAL
+            FILE_UPLOAD -> Known.FILE_UPLOAD
+            EXTERNAL_INTEGRATION -> Known.EXTERNAL_INTEGRATION
+            FRESHDESK_KB -> Known.FRESHDESK_KB
+            ZENDESK_KB -> Known.ZENDESK_KB
+            CSV -> Known.CSV
+            UNKNOWN -> Known.UNKNOWN
+            else -> throw SamInvalidDataException("Unknown Type: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = UpdatedBy.Builder::class)
     @NoAutoDetect
-    class UpdatedBy
-    private constructor(
-        private val id: String?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class UpdatedBy private constructor(private val id: String?, private val name: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id")
+        fun id(): String? = id
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name")
+        fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1333,30 +1415,28 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is UpdatedBy &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
+          return other is UpdatedBy &&
+              this.id == other.id &&
+              this.name == other.name &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                name,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "UpdatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() = "UpdatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1375,9 +1455,15 @@ constructor(
                 additionalProperties(updatedBy.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: String) = apply {
+                this.id = id
+            }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            @JsonProperty("name")
+            fun name(name: String) = apply {
+                this.name = name
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1393,12 +1479,11 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): UpdatedBy =
-                UpdatedBy(
-                    id,
-                    name,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): UpdatedBy = UpdatedBy(
+                id,
+                name,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 }
