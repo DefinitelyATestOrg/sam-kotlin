@@ -5,38 +5,56 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class DocumentUpdateParams
-constructor(
-    private val docId: String,
-    private val id: String?,
-    private val corpusPolicy: CorpusPolicy?,
-    private val createdBy: CreatedBy?,
-    private val externalLookupKey: String?,
-    private val languageCode: LanguageCode?,
-    private val processingVersion: Long?,
-    private val sourceAuthor: String?,
-    private val sourceCreatedAt: OffsetDateTime?,
-    private val sourceUpdatedAt: OffsetDateTime?,
-    private val sourceUrl: String?,
-    private val text: String?,
-    private val title: String?,
-    private val updatedBy: UpdatedBy?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class DocumentUpdateParams constructor(
+  private val docId: String,
+  private val id: String?,
+  private val corpusPolicy: CorpusPolicy?,
+  private val createdBy: CreatedBy?,
+  private val externalLookupKey: String?,
+  private val languageCode: LanguageCode?,
+  private val processingVersion: Long?,
+  private val sourceAuthor: String?,
+  private val sourceCreatedAt: OffsetDateTime?,
+  private val sourceUpdatedAt: OffsetDateTime?,
+  private val sourceUrl: String?,
+  private val text: String?,
+  private val title: String?,
+  private val updatedBy: UpdatedBy?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun docId(): String = docId
@@ -68,22 +86,22 @@ constructor(
     fun updatedBy(): UpdatedBy? = updatedBy
 
     internal fun getBody(): DocumentUpdateBody {
-        return DocumentUpdateBody(
-            id,
-            corpusPolicy,
-            createdBy,
-            externalLookupKey,
-            languageCode,
-            processingVersion,
-            sourceAuthor,
-            sourceCreatedAt,
-            sourceUpdatedAt,
-            sourceUrl,
-            text,
-            title,
-            updatedBy,
-            additionalBodyProperties,
-        )
+      return DocumentUpdateBody(
+          id,
+          corpusPolicy,
+          createdBy,
+          externalLookupKey,
+          languageCode,
+          processingVersion,
+          sourceAuthor,
+          sourceCreatedAt,
+          sourceUpdatedAt,
+          sourceUrl,
+          text,
+          title,
+          updatedBy,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -91,59 +109,72 @@ constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> docId
-            else -> ""
-        }
+      return when (index) {
+          0 -> docId
+          else -> ""
+      }
     }
 
     @JsonDeserialize(builder = DocumentUpdateBody.Builder::class)
     @NoAutoDetect
-    class DocumentUpdateBody
-    internal constructor(
-        private val id: String?,
-        private val corpusPolicy: CorpusPolicy?,
-        private val createdBy: CreatedBy?,
-        private val externalLookupKey: String?,
-        private val languageCode: LanguageCode?,
-        private val processingVersion: Long?,
-        private val sourceAuthor: String?,
-        private val sourceCreatedAt: OffsetDateTime?,
-        private val sourceUpdatedAt: OffsetDateTime?,
-        private val sourceUrl: String?,
-        private val text: String?,
-        private val title: String?,
-        private val updatedBy: UpdatedBy?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class DocumentUpdateBody internal constructor(
+      private val id: String?,
+      private val corpusPolicy: CorpusPolicy?,
+      private val createdBy: CreatedBy?,
+      private val externalLookupKey: String?,
+      private val languageCode: LanguageCode?,
+      private val processingVersion: Long?,
+      private val sourceAuthor: String?,
+      private val sourceCreatedAt: OffsetDateTime?,
+      private val sourceUpdatedAt: OffsetDateTime?,
+      private val sourceUrl: String?,
+      private val text: String?,
+      private val title: String?,
+      private val updatedBy: UpdatedBy?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id")
+        fun id(): String? = id
 
-        @JsonProperty("corpusPolicy") fun corpusPolicy(): CorpusPolicy? = corpusPolicy
+        @JsonProperty("corpusPolicy")
+        fun corpusPolicy(): CorpusPolicy? = corpusPolicy
 
-        @JsonProperty("createdBy") fun createdBy(): CreatedBy? = createdBy
+        @JsonProperty("createdBy")
+        fun createdBy(): CreatedBy? = createdBy
 
-        @JsonProperty("externalLookupKey") fun externalLookupKey(): String? = externalLookupKey
+        @JsonProperty("externalLookupKey")
+        fun externalLookupKey(): String? = externalLookupKey
 
-        @JsonProperty("languageCode") fun languageCode(): LanguageCode? = languageCode
+        @JsonProperty("languageCode")
+        fun languageCode(): LanguageCode? = languageCode
 
-        @JsonProperty("processingVersion") fun processingVersion(): Long? = processingVersion
+        @JsonProperty("processingVersion")
+        fun processingVersion(): Long? = processingVersion
 
-        @JsonProperty("sourceAuthor") fun sourceAuthor(): String? = sourceAuthor
+        @JsonProperty("sourceAuthor")
+        fun sourceAuthor(): String? = sourceAuthor
 
-        @JsonProperty("sourceCreatedAt") fun sourceCreatedAt(): OffsetDateTime? = sourceCreatedAt
+        @JsonProperty("sourceCreatedAt")
+        fun sourceCreatedAt(): OffsetDateTime? = sourceCreatedAt
 
-        @JsonProperty("sourceUpdatedAt") fun sourceUpdatedAt(): OffsetDateTime? = sourceUpdatedAt
+        @JsonProperty("sourceUpdatedAt")
+        fun sourceUpdatedAt(): OffsetDateTime? = sourceUpdatedAt
 
-        @JsonProperty("sourceUrl") fun sourceUrl(): String? = sourceUrl
+        @JsonProperty("sourceUrl")
+        fun sourceUrl(): String? = sourceUrl
 
-        @JsonProperty("text") fun text(): String? = text
+        @JsonProperty("text")
+        fun text(): String? = text
 
-        @JsonProperty("title") fun title(): String? = title
+        @JsonProperty("title")
+        fun title(): String? = title
 
-        @JsonProperty("updatedBy") fun updatedBy(): UpdatedBy? = updatedBy
+        @JsonProperty("updatedBy")
+        fun updatedBy(): UpdatedBy? = updatedBy
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -152,52 +183,50 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is DocumentUpdateBody &&
-                this.id == other.id &&
-                this.corpusPolicy == other.corpusPolicy &&
-                this.createdBy == other.createdBy &&
-                this.externalLookupKey == other.externalLookupKey &&
-                this.languageCode == other.languageCode &&
-                this.processingVersion == other.processingVersion &&
-                this.sourceAuthor == other.sourceAuthor &&
-                this.sourceCreatedAt == other.sourceCreatedAt &&
-                this.sourceUpdatedAt == other.sourceUpdatedAt &&
-                this.sourceUrl == other.sourceUrl &&
-                this.text == other.text &&
-                this.title == other.title &&
-                this.updatedBy == other.updatedBy &&
-                this.additionalProperties == other.additionalProperties
+          return other is DocumentUpdateBody &&
+              this.id == other.id &&
+              this.corpusPolicy == other.corpusPolicy &&
+              this.createdBy == other.createdBy &&
+              this.externalLookupKey == other.externalLookupKey &&
+              this.languageCode == other.languageCode &&
+              this.processingVersion == other.processingVersion &&
+              this.sourceAuthor == other.sourceAuthor &&
+              this.sourceCreatedAt == other.sourceCreatedAt &&
+              this.sourceUpdatedAt == other.sourceUpdatedAt &&
+              this.sourceUrl == other.sourceUrl &&
+              this.text == other.text &&
+              this.title == other.title &&
+              this.updatedBy == other.updatedBy &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        corpusPolicy,
-                        createdBy,
-                        externalLookupKey,
-                        languageCode,
-                        processingVersion,
-                        sourceAuthor,
-                        sourceCreatedAt,
-                        sourceUpdatedAt,
-                        sourceUrl,
-                        text,
-                        title,
-                        updatedBy,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                corpusPolicy,
+                createdBy,
+                externalLookupKey,
+                languageCode,
+                processingVersion,
+                sourceAuthor,
+                sourceCreatedAt,
+                sourceUpdatedAt,
+                sourceUrl,
+                text,
+                title,
+                updatedBy,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "DocumentUpdateBody{id=$id, corpusPolicy=$corpusPolicy, createdBy=$createdBy, externalLookupKey=$externalLookupKey, languageCode=$languageCode, processingVersion=$processingVersion, sourceAuthor=$sourceAuthor, sourceCreatedAt=$sourceCreatedAt, sourceUpdatedAt=$sourceUpdatedAt, sourceUrl=$sourceUrl, text=$text, title=$title, updatedBy=$updatedBy, additionalProperties=$additionalProperties}"
+        override fun toString() = "DocumentUpdateBody{id=$id, corpusPolicy=$corpusPolicy, createdBy=$createdBy, externalLookupKey=$externalLookupKey, languageCode=$languageCode, processingVersion=$processingVersion, sourceAuthor=$sourceAuthor, sourceCreatedAt=$sourceCreatedAt, sourceUpdatedAt=$sourceUpdatedAt, sourceUrl=$sourceUrl, text=$text, title=$title, updatedBy=$updatedBy, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -238,7 +267,10 @@ constructor(
                 additionalProperties(documentUpdateBody.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: String) = apply {
+                this.id = id
+            }
 
             @JsonProperty("corpusPolicy")
             fun corpusPolicy(corpusPolicy: CorpusPolicy) = apply {
@@ -246,7 +278,9 @@ constructor(
             }
 
             @JsonProperty("createdBy")
-            fun createdBy(createdBy: CreatedBy) = apply { this.createdBy = createdBy }
+            fun createdBy(createdBy: CreatedBy) = apply {
+                this.createdBy = createdBy
+            }
 
             @JsonProperty("externalLookupKey")
             fun externalLookupKey(externalLookupKey: String) = apply {
@@ -264,7 +298,9 @@ constructor(
             }
 
             @JsonProperty("sourceAuthor")
-            fun sourceAuthor(sourceAuthor: String) = apply { this.sourceAuthor = sourceAuthor }
+            fun sourceAuthor(sourceAuthor: String) = apply {
+                this.sourceAuthor = sourceAuthor
+            }
 
             @JsonProperty("sourceCreatedAt")
             fun sourceCreatedAt(sourceCreatedAt: OffsetDateTime) = apply {
@@ -277,14 +313,24 @@ constructor(
             }
 
             @JsonProperty("sourceUrl")
-            fun sourceUrl(sourceUrl: String) = apply { this.sourceUrl = sourceUrl }
+            fun sourceUrl(sourceUrl: String) = apply {
+                this.sourceUrl = sourceUrl
+            }
 
-            @JsonProperty("text") fun text(text: String) = apply { this.text = text }
+            @JsonProperty("text")
+            fun text(text: String) = apply {
+                this.text = text
+            }
 
-            @JsonProperty("title") fun title(title: String) = apply { this.title = title }
+            @JsonProperty("title")
+            fun title(title: String) = apply {
+                this.title = title
+            }
 
             @JsonProperty("updatedBy")
-            fun updatedBy(updatedBy: UpdatedBy) = apply { this.updatedBy = updatedBy }
+            fun updatedBy(updatedBy: UpdatedBy) = apply {
+                this.updatedBy = updatedBy
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -300,23 +346,22 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): DocumentUpdateBody =
-                DocumentUpdateBody(
-                    id,
-                    corpusPolicy,
-                    createdBy,
-                    externalLookupKey,
-                    languageCode,
-                    processingVersion,
-                    sourceAuthor,
-                    sourceCreatedAt,
-                    sourceUpdatedAt,
-                    sourceUrl,
-                    text,
-                    title,
-                    updatedBy,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): DocumentUpdateBody = DocumentUpdateBody(
+                id,
+                corpusPolicy,
+                createdBy,
+                externalLookupKey,
+                languageCode,
+                processingVersion,
+                sourceAuthor,
+                sourceCreatedAt,
+                sourceUpdatedAt,
+                sourceUrl,
+                text,
+                title,
+                updatedBy,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -327,54 +372,53 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is DocumentUpdateParams &&
-            this.docId == other.docId &&
-            this.id == other.id &&
-            this.corpusPolicy == other.corpusPolicy &&
-            this.createdBy == other.createdBy &&
-            this.externalLookupKey == other.externalLookupKey &&
-            this.languageCode == other.languageCode &&
-            this.processingVersion == other.processingVersion &&
-            this.sourceAuthor == other.sourceAuthor &&
-            this.sourceCreatedAt == other.sourceCreatedAt &&
-            this.sourceUpdatedAt == other.sourceUpdatedAt &&
-            this.sourceUrl == other.sourceUrl &&
-            this.text == other.text &&
-            this.title == other.title &&
-            this.updatedBy == other.updatedBy &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is DocumentUpdateParams &&
+          this.docId == other.docId &&
+          this.id == other.id &&
+          this.corpusPolicy == other.corpusPolicy &&
+          this.createdBy == other.createdBy &&
+          this.externalLookupKey == other.externalLookupKey &&
+          this.languageCode == other.languageCode &&
+          this.processingVersion == other.processingVersion &&
+          this.sourceAuthor == other.sourceAuthor &&
+          this.sourceCreatedAt == other.sourceCreatedAt &&
+          this.sourceUpdatedAt == other.sourceUpdatedAt &&
+          this.sourceUrl == other.sourceUrl &&
+          this.text == other.text &&
+          this.title == other.title &&
+          this.updatedBy == other.updatedBy &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            docId,
-            id,
-            corpusPolicy,
-            createdBy,
-            externalLookupKey,
-            languageCode,
-            processingVersion,
-            sourceAuthor,
-            sourceCreatedAt,
-            sourceUpdatedAt,
-            sourceUrl,
-            text,
-            title,
-            updatedBy,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          docId,
+          id,
+          corpusPolicy,
+          createdBy,
+          externalLookupKey,
+          languageCode,
+          processingVersion,
+          sourceAuthor,
+          sourceCreatedAt,
+          sourceUpdatedAt,
+          sourceUrl,
+          text,
+          title,
+          updatedBy,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "DocumentUpdateParams{docId=$docId, id=$id, corpusPolicy=$corpusPolicy, createdBy=$createdBy, externalLookupKey=$externalLookupKey, languageCode=$languageCode, processingVersion=$processingVersion, sourceAuthor=$sourceAuthor, sourceCreatedAt=$sourceCreatedAt, sourceUpdatedAt=$sourceUpdatedAt, sourceUrl=$sourceUrl, text=$text, title=$title, updatedBy=$updatedBy, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "DocumentUpdateParams{docId=$docId, id=$id, corpusPolicy=$corpusPolicy, createdBy=$createdBy, externalLookupKey=$externalLookupKey, languageCode=$languageCode, processingVersion=$processingVersion, sourceAuthor=$sourceAuthor, sourceCreatedAt=$sourceCreatedAt, sourceUpdatedAt=$sourceUpdatedAt, sourceUrl=$sourceUrl, text=$text, title=$title, updatedBy=$updatedBy, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -424,25 +468,37 @@ constructor(
             additionalBodyProperties(documentUpdateParams.additionalBodyProperties)
         }
 
-        fun docId(docId: String) = apply { this.docId = docId }
+        fun docId(docId: String) = apply {
+            this.docId = docId
+        }
 
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply {
+            this.id = id
+        }
 
-        fun corpusPolicy(corpusPolicy: CorpusPolicy) = apply { this.corpusPolicy = corpusPolicy }
+        fun corpusPolicy(corpusPolicy: CorpusPolicy) = apply {
+            this.corpusPolicy = corpusPolicy
+        }
 
-        fun createdBy(createdBy: CreatedBy) = apply { this.createdBy = createdBy }
+        fun createdBy(createdBy: CreatedBy) = apply {
+            this.createdBy = createdBy
+        }
 
         fun externalLookupKey(externalLookupKey: String) = apply {
             this.externalLookupKey = externalLookupKey
         }
 
-        fun languageCode(languageCode: LanguageCode) = apply { this.languageCode = languageCode }
+        fun languageCode(languageCode: LanguageCode) = apply {
+            this.languageCode = languageCode
+        }
 
         fun processingVersion(processingVersion: Long) = apply {
             this.processingVersion = processingVersion
         }
 
-        fun sourceAuthor(sourceAuthor: String) = apply { this.sourceAuthor = sourceAuthor }
+        fun sourceAuthor(sourceAuthor: String) = apply {
+            this.sourceAuthor = sourceAuthor
+        }
 
         fun sourceCreatedAt(sourceCreatedAt: OffsetDateTime) = apply {
             this.sourceCreatedAt = sourceCreatedAt
@@ -452,13 +508,21 @@ constructor(
             this.sourceUpdatedAt = sourceUpdatedAt
         }
 
-        fun sourceUrl(sourceUrl: String) = apply { this.sourceUrl = sourceUrl }
+        fun sourceUrl(sourceUrl: String) = apply {
+            this.sourceUrl = sourceUrl
+        }
 
-        fun text(text: String) = apply { this.text = text }
+        fun text(text: String) = apply {
+            this.text = text
+        }
 
-        fun title(title: String) = apply { this.title = title }
+        fun title(title: String) = apply {
+            this.title = title
+        }
 
-        fun updatedBy(updatedBy: UpdatedBy) = apply { this.updatedBy = updatedBy }
+        fun updatedBy(updatedBy: UpdatedBy) = apply {
+            this.updatedBy = updatedBy
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -498,7 +562,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -509,47 +575,45 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): DocumentUpdateParams =
-            DocumentUpdateParams(
-                checkNotNull(docId) { "`docId` is required but was not set" },
-                id,
-                corpusPolicy,
-                createdBy,
-                externalLookupKey,
-                languageCode,
-                processingVersion,
-                sourceAuthor,
-                sourceCreatedAt,
-                sourceUpdatedAt,
-                sourceUrl,
-                text,
-                title,
-                updatedBy,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): DocumentUpdateParams = DocumentUpdateParams(
+            checkNotNull(docId) {
+                "`docId` is required but was not set"
+            },
+            id,
+            corpusPolicy,
+            createdBy,
+            externalLookupKey,
+            languageCode,
+            processingVersion,
+            sourceAuthor,
+            sourceCreatedAt,
+            sourceUpdatedAt,
+            sourceUrl,
+            text,
+            title,
+            updatedBy,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 
-    class CorpusPolicy
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class CorpusPolicy @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CorpusPolicy && this.value == other.value
+          return other is CorpusPolicy &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -576,37 +640,32 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                INCLUDE -> Value.INCLUDE
-                EXCLUDE_ALWAYS -> Value.EXCLUDE_ALWAYS
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            INCLUDE -> Value.INCLUDE
+            EXCLUDE_ALWAYS -> Value.EXCLUDE_ALWAYS
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                INCLUDE -> Known.INCLUDE
-                EXCLUDE_ALWAYS -> Known.EXCLUDE_ALWAYS
-                else -> throw SamInvalidDataException("Unknown CorpusPolicy: $value")
-            }
+        fun known(): Known = when (this) {
+            INCLUDE -> Known.INCLUDE
+            EXCLUDE_ALWAYS -> Known.EXCLUDE_ALWAYS
+            else -> throw SamInvalidDataException("Unknown CorpusPolicy: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = CreatedBy.Builder::class)
     @NoAutoDetect
-    class CreatedBy
-    private constructor(
-        private val id: String?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class CreatedBy private constructor(private val id: String?, private val name: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id")
+        fun id(): String? = id
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name")
+        fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -615,30 +674,28 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CreatedBy &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
+          return other is CreatedBy &&
+              this.id == other.id &&
+              this.name == other.name &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                name,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "CreatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() = "CreatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -657,9 +714,15 @@ constructor(
                 additionalProperties(createdBy.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: String) = apply {
+                this.id = id
+            }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            @JsonProperty("name")
+            fun name(name: String) = apply {
+                this.name = name
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -675,29 +738,25 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CreatedBy =
-                CreatedBy(
-                    id,
-                    name,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): CreatedBy = CreatedBy(
+                id,
+                name,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
     @JsonDeserialize(builder = LanguageCode.Builder::class)
     @NoAutoDetect
-    class LanguageCode
-    private constructor(
-        private val code: String?,
-        private val detected: Boolean?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class LanguageCode private constructor(private val code: String?, private val detected: Boolean?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("code") fun code(): String? = code
+        @JsonProperty("code")
+        fun code(): String? = code
 
-        @JsonProperty("detected") fun detected(): Boolean? = detected
+        @JsonProperty("detected")
+        fun detected(): Boolean? = detected
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -706,30 +765,28 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is LanguageCode &&
-                this.code == other.code &&
-                this.detected == other.detected &&
-                this.additionalProperties == other.additionalProperties
+          return other is LanguageCode &&
+              this.code == other.code &&
+              this.detected == other.detected &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        code,
-                        detected,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                code,
+                detected,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "LanguageCode{code=$code, detected=$detected, additionalProperties=$additionalProperties}"
+        override fun toString() = "LanguageCode{code=$code, detected=$detected, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -748,10 +805,15 @@ constructor(
                 additionalProperties(languageCode.additionalProperties)
             }
 
-            @JsonProperty("code") fun code(code: String) = apply { this.code = code }
+            @JsonProperty("code")
+            fun code(code: String) = apply {
+                this.code = code
+            }
 
             @JsonProperty("detected")
-            fun detected(detected: Boolean) = apply { this.detected = detected }
+            fun detected(detected: Boolean) = apply {
+                this.detected = detected
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -767,29 +829,25 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): LanguageCode =
-                LanguageCode(
-                    code,
-                    detected,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): LanguageCode = LanguageCode(
+                code,
+                detected,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
     @JsonDeserialize(builder = UpdatedBy.Builder::class)
     @NoAutoDetect
-    class UpdatedBy
-    private constructor(
-        private val id: String?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class UpdatedBy private constructor(private val id: String?, private val name: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id")
+        fun id(): String? = id
 
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name")
+        fun name(): String? = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -798,30 +856,28 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is UpdatedBy &&
-                this.id == other.id &&
-                this.name == other.name &&
-                this.additionalProperties == other.additionalProperties
+          return other is UpdatedBy &&
+              this.id == other.id &&
+              this.name == other.name &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        name,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                name,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "UpdatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() = "UpdatedBy{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -840,9 +896,15 @@ constructor(
                 additionalProperties(updatedBy.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: String) = apply {
+                this.id = id
+            }
 
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            @JsonProperty("name")
+            fun name(name: String) = apply {
+                this.name = name
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -858,12 +920,11 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): UpdatedBy =
-                UpdatedBy(
-                    id,
-                    name,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): UpdatedBy = UpdatedBy(
+                id,
+                name,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 }
