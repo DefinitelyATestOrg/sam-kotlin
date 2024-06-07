@@ -2,15 +2,15 @@
 
 package software.elborai.api.services
 
+import com.fasterxml.jackson.databind.json.JsonMapper
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder
 import software.elborai.api.core.Enum
 import software.elborai.api.core.JsonValue
-import com.fasterxml.jackson.databind.json.JsonMapper
-import software.elborai.api.core.http.HttpRequestBody
 import software.elborai.api.core.MultipartFormValue
+import software.elborai.api.core.http.HttpRequestBody
 import software.elborai.api.errors.SamException
-import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder
-import java.io.OutputStream
-import java.io.ByteArrayOutputStream
 
 internal inline fun <reified T> json(
     jsonMapper: JsonMapper,
@@ -48,7 +48,10 @@ internal inline fun <reified T> json(
     }
 }
 
-internal fun  multipartFormData(jsonMapper: JsonMapper, parts: Array<MultipartFormValue<*>?>): HttpRequestBody {
+internal fun multipartFormData(
+    jsonMapper: JsonMapper,
+    parts: Array<MultipartFormValue<*>?>
+): HttpRequestBody {
     val builder = MultipartEntityBuilder.create()
     parts.forEach { part ->
         if (part?.value != null) {
@@ -60,16 +63,30 @@ internal fun  multipartFormData(jsonMapper: JsonMapper, parts: Array<MultipartFo
                     } catch (e: Exception) {
                         throw SamException("Error serializing value to json", e)
                     }
-                    builder.addBinaryBody(part.name, buffer.toByteArray(), part.contentType, part.filename)
+                    builder.addBinaryBody(
+                        part.name,
+                        buffer.toByteArray(),
+                        part.contentType,
+                        part.filename
+                    )
                 }
-                is Boolean -> builder.addTextBody (part.name, if (part.value) "true" else "false", part.contentType)
+                is Boolean ->
+                    builder.addTextBody(
+                        part.name,
+                        if (part.value) "true" else "false",
+                        part.contentType
+                    )
                 is Int -> builder.addTextBody(part.name, part.value.toString(), part.contentType)
                 is Long -> builder.addTextBody(part.name, part.value.toString(), part.contentType)
                 is Double -> builder.addTextBody(part.name, part.value.toString(), part.contentType)
-                is ByteArray -> builder.addBinaryBody(part.name, part.value, part.contentType, part.filename)
+                is ByteArray ->
+                    builder.addBinaryBody(part.name, part.value, part.contentType, part.filename)
                 is String -> builder.addTextBody(part.name, part.value, part.contentType)
                 is Enum -> builder.addTextBody(part.name, part.value.toString(), part.contentType)
-                else -> throw IllegalArgumentException("Unsupported content type: ${part.value::class.java.simpleName}")
+                else ->
+                    throw IllegalArgumentException(
+                        "Unsupported content type: ${part.value::class.java.simpleName}"
+                    )
             }
         }
     }
