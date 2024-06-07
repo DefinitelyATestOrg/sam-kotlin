@@ -5,26 +5,45 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class AgentConfigUpdateParams
-constructor(
-    private val agentId: String,
-    private val integration: Integration,
-    private val class_: String,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class AgentConfigUpdateParams constructor(
+  private val agentId: String,
+  private val integration: Integration,
+  private val class_: String,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun agentId(): String = agentId
@@ -34,7 +53,7 @@ constructor(
     fun class_(): String = class_
 
     internal fun getBody(): AgentConfigUpdateBody {
-        return AgentConfigUpdateBody(class_, additionalBodyProperties)
+      return AgentConfigUpdateBody(class_, additionalBodyProperties)
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -42,24 +61,21 @@ constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> agentId
-            1 -> integration.toString()
-            else -> ""
-        }
+      return when (index) {
+          0 -> agentId
+          1 -> integration.toString()
+          else -> ""
+      }
     }
 
     @JsonDeserialize(builder = AgentConfigUpdateBody.Builder::class)
     @NoAutoDetect
-    class AgentConfigUpdateBody
-    internal constructor(
-        private val class_: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class AgentConfigUpdateBody internal constructor(private val class_: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("@class") fun class_(): String? = class_
+        @JsonProperty("@class")
+        fun class_(): String? = class_
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -68,24 +84,23 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is AgentConfigUpdateBody &&
-                this.class_ == other.class_ &&
-                this.additionalProperties == other.additionalProperties
+          return other is AgentConfigUpdateBody &&
+              this.class_ == other.class_ &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(class_, additionalProperties)
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(class_, additionalProperties)
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "AgentConfigUpdateBody{class_=$class_, additionalProperties=$additionalProperties}"
+        override fun toString() = "AgentConfigUpdateBody{class_=$class_, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -102,7 +117,10 @@ constructor(
                 additionalProperties(agentConfigUpdateBody.additionalProperties)
             }
 
-            @JsonProperty("@class") fun class_(class_: String) = apply { this.class_ = class_ }
+            @JsonProperty("@class")
+            fun class_(class_: String) = apply {
+                this.class_ = class_
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -118,11 +136,9 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): AgentConfigUpdateBody =
-                AgentConfigUpdateBody(
-                    checkNotNull(class_) { "`class_` is required but was not set" },
-                    additionalProperties.toUnmodifiable()
-                )
+            fun build(): AgentConfigUpdateBody = AgentConfigUpdateBody(checkNotNull(class_) {
+                "`class_` is required but was not set"
+            }, additionalProperties.toUnmodifiable())
         }
     }
 
@@ -133,32 +149,31 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is AgentConfigUpdateParams &&
-            this.agentId == other.agentId &&
-            this.integration == other.integration &&
-            this.class_ == other.class_ &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is AgentConfigUpdateParams &&
+          this.agentId == other.agentId &&
+          this.integration == other.integration &&
+          this.class_ == other.class_ &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            agentId,
-            integration,
-            class_,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          agentId,
+          integration,
+          class_,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "AgentConfigUpdateParams{agentId=$agentId, integration=$integration, class_=$class_, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "AgentConfigUpdateParams{agentId=$agentId, integration=$integration, class_=$class_, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -186,11 +201,17 @@ constructor(
             additionalBodyProperties(agentConfigUpdateParams.additionalBodyProperties)
         }
 
-        fun agentId(agentId: String) = apply { this.agentId = agentId }
+        fun agentId(agentId: String) = apply {
+            this.agentId = agentId
+        }
 
-        fun integration(integration: Integration) = apply { this.integration = integration }
+        fun integration(integration: Integration) = apply {
+            this.integration = integration
+        }
 
-        fun class_(class_: String) = apply { this.class_ = class_ }
+        fun class_(class_: String) = apply {
+            this.class_ = class_
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -230,7 +251,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -241,36 +264,38 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): AgentConfigUpdateParams =
-            AgentConfigUpdateParams(
-                checkNotNull(agentId) { "`agentId` is required but was not set" },
-                checkNotNull(integration) { "`integration` is required but was not set" },
-                checkNotNull(class_) { "`class_` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): AgentConfigUpdateParams = AgentConfigUpdateParams(
+            checkNotNull(agentId) {
+                "`agentId` is required but was not set"
+            },
+            checkNotNull(integration) {
+                "`integration` is required but was not set"
+            },
+            checkNotNull(class_) {
+                "`class_` is required but was not set"
+            },
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 
-    class Integration
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Integration @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Integration && this.value == other.value
+          return other is Integration &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -309,25 +334,23 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                SALESFORCE -> Value.SALESFORCE
-                ZENDESK -> Value.ZENDESK
-                FRESHDESK -> Value.FRESHDESK
-                SLACK_QA_BOT -> Value.SLACK_QA_BOT
-                TWILIO -> Value.TWILIO
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            SALESFORCE -> Value.SALESFORCE
+            ZENDESK -> Value.ZENDESK
+            FRESHDESK -> Value.FRESHDESK
+            SLACK_QA_BOT -> Value.SLACK_QA_BOT
+            TWILIO -> Value.TWILIO
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                SALESFORCE -> Known.SALESFORCE
-                ZENDESK -> Known.ZENDESK
-                FRESHDESK -> Known.FRESHDESK
-                SLACK_QA_BOT -> Known.SLACK_QA_BOT
-                TWILIO -> Known.TWILIO
-                else -> throw SamInvalidDataException("Unknown Integration: $value")
-            }
+        fun known(): Known = when (this) {
+            SALESFORCE -> Known.SALESFORCE
+            ZENDESK -> Known.ZENDESK
+            FRESHDESK -> Known.FRESHDESK
+            SLACK_QA_BOT -> Known.SLACK_QA_BOT
+            TWILIO -> Known.TWILIO
+            else -> throw SamInvalidDataException("Unknown Integration: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
