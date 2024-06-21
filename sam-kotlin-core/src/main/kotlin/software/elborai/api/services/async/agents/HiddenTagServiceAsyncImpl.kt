@@ -33,6 +33,7 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.PUT)
                 .addPathSegments("api", "v1", "agents", params.getPathParam(0), "hiddenTags")
+                .putAllQueryParams(clientOptions.queryParams)
                 .putAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
                 .putAllHeaders(params.getHeaders())
