@@ -11,7 +11,7 @@ class SimulationInboundInternationalAchTransferCreateParamsTest {
     @Test
     fun createSimulationInboundInternationalAchTransferCreateParams() {
         SimulationInboundInternationalAchTransferCreateParams.builder()
-            .accountNumberId("string")
+            .accountNumberId("account_number_id")
             .amount(123L)
             .foreignPaymentAmount(123L)
             .originatingCurrencyCode("x")
@@ -25,7 +25,7 @@ class SimulationInboundInternationalAchTransferCreateParamsTest {
     fun getBody() {
         val params =
             SimulationInboundInternationalAchTransferCreateParams.builder()
-                .accountNumberId("string")
+                .accountNumberId("account_number_id")
                 .amount(123L)
                 .foreignPaymentAmount(123L)
                 .originatingCurrencyCode("x")
@@ -35,7 +35,7 @@ class SimulationInboundInternationalAchTransferCreateParamsTest {
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.accountNumberId()).isEqualTo("string")
+        assertThat(body.accountNumberId()).isEqualTo("account_number_id")
         assertThat(body.amount()).isEqualTo(123L)
         assertThat(body.foreignPaymentAmount()).isEqualTo(123L)
         assertThat(body.originatingCurrencyCode()).isEqualTo("x")
@@ -48,14 +48,14 @@ class SimulationInboundInternationalAchTransferCreateParamsTest {
     fun getBodyWithoutOptionalFields() {
         val params =
             SimulationInboundInternationalAchTransferCreateParams.builder()
-                .accountNumberId("string")
+                .accountNumberId("account_number_id")
                 .amount(123L)
                 .foreignPaymentAmount(123L)
                 .originatingCurrencyCode("x")
                 .build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.accountNumberId()).isEqualTo("string")
+        assertThat(body.accountNumberId()).isEqualTo("account_number_id")
         assertThat(body.amount()).isEqualTo(123L)
         assertThat(body.foreignPaymentAmount()).isEqualTo(123L)
         assertThat(body.originatingCurrencyCode()).isEqualTo("x")
