@@ -5,22 +5,22 @@
 package software.elborai.api.services.blocking
 
 import software.elborai.api.core.RequestOptions
-import software.elborai.api.core.http.BinaryResponseContent
-import software.elborai.api.models.DocumentDeleteParams
+import software.elborai.api.models.Document
+import software.elborai.api.models.DocumentListPage
+import software.elborai.api.models.DocumentListParams
 import software.elborai.api.models.DocumentRetrieveParams
-import software.elborai.api.models.DocumentUpdateParams
 
 interface DocumentService {
 
+    /** Retrieve a Document */
     fun retrieve(
         params: DocumentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): BinaryResponseContent
+    ): Document
 
-    fun update(
-        params: DocumentUpdateParams,
+    /** List Documents */
+    fun list(
+        params: DocumentListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): BinaryResponseContent
-
-    fun delete(params: DocumentDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
+    ): DocumentListPage
 }

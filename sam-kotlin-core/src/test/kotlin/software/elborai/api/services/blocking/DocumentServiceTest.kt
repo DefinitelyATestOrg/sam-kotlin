@@ -2,94 +2,40 @@
 
 package software.elborai.api.services.blocking
 
-import com.github.tomakehurst.wiremock.client.WireMock.delete
-import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.ok
-import com.github.tomakehurst.wiremock.client.WireMock.put
-import com.github.tomakehurst.wiremock.client.WireMock.stubFor
-import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
-import com.github.tomakehurst.wiremock.junit5.WireMockTest
-import java.time.OffsetDateTime
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import software.elborai.api.TestServerExtension
-import software.elborai.api.client.okhttp.SamOkHttpClient
-import software.elborai.api.core.http.BinaryResponseContent
+import software.elborai.api.client.okhttp.IncreaseOkHttpClient
 import software.elborai.api.models.*
+import software.elborai.api.models.DocumentListParams
 
 @ExtendWith(TestServerExtension::class)
-@WireMockTest
 class DocumentServiceTest {
 
     @Test
-    fun callRetrieve(wmRuntimeInfo: WireMockRuntimeInfo) {
+    fun callRetrieve() {
         val client =
-            SamOkHttpClient.builder()
-                .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
-                .authToken("My Auth Token")
-                .build()
-        stubFor(get("/api/v1/document/{doc_id}").willReturn(ok().withBody("abc")))
-        val documentService = client.documents()
-        val response =
-            documentService.retrieve(
-                DocumentRetrieveParams.builder().docId("string").text(true).build()
-            )
-        println(response)
-        assertThat(response).isInstanceOf(BinaryResponseContent::class.java)
-        assertThat(response.body()).hasBinaryContent("abc".toByteArray())
-    }
-
-    @Test
-    fun callUpdate(wmRuntimeInfo: WireMockRuntimeInfo) {
-        val client =
-            SamOkHttpClient.builder()
-                .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
-                .authToken("My Auth Token")
-                .build()
-        stubFor(put("/api/v1/document/{doc_id}").willReturn(ok().withBody("abc")))
-        val documentService = client.documents()
-        val response =
-            documentService.update(
-                DocumentUpdateParams.builder()
-                    .docId("string")
-                    .id("string")
-                    .corpusPolicy(DocumentUpdateParams.CorpusPolicy.INCLUDE)
-                    .createdBy(
-                        DocumentUpdateParams.CreatedBy.builder().id("string").name("string").build()
-                    )
-                    .externalLookupKey("string")
-                    .languageCode(
-                        DocumentUpdateParams.LanguageCode.builder()
-                            .code("string")
-                            .detected(true)
-                            .build()
-                    )
-                    .processingVersion(123L)
-                    .sourceAuthor("string")
-                    .sourceCreatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .sourceUpdatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .sourceUrl("string")
-                    .text("string")
-                    .title("string")
-                    .updatedBy(
-                        DocumentUpdateParams.UpdatedBy.builder().id("string").name("string").build()
-                    )
-                    .build()
-            )
-        println(response)
-        assertThat(response).isInstanceOf(BinaryResponseContent::class.java)
-        assertThat(response.body()).hasBinaryContent("abc".toByteArray())
-    }
-
-    @Test
-    fun callDelete() {
-        val client =
-            SamOkHttpClient.builder()
+            IncreaseOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .authToken("My Auth Token")
+                .apiKey("My API Key")
                 .build()
         val documentService = client.documents()
-        documentService.delete(DocumentDeleteParams.builder().docId("string").build())
+        val document =
+            documentService.retrieve(DocumentRetrieveParams.builder().documentId("string").build())
+        println(document)
+        document.validate()
+    }
+
+    @Test
+    fun callList() {
+        val client =
+            IncreaseOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val documentService = client.documents()
+        val documentList = documentService.list(DocumentListParams.builder().build())
+        println(documentList)
+        documentList.data().forEach { it.validate() }
     }
 }

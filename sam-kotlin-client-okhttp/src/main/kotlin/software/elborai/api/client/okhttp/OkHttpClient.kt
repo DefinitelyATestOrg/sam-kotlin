@@ -25,7 +25,7 @@ import software.elborai.api.core.http.HttpMethod
 import software.elborai.api.core.http.HttpRequest
 import software.elborai.api.core.http.HttpRequestBody
 import software.elborai.api.core.http.HttpResponse
-import software.elborai.api.errors.SamIoException
+import software.elborai.api.errors.IncreaseIoException
 
 class OkHttpClient
 private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val baseUrl: HttpUrl) :
@@ -51,7 +51,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         return try {
             call.execute().toResponse()
         } catch (e: IOException) {
-            throw SamIoException("Request failed", e)
+            throw IncreaseIoException("Request failed", e)
         } finally {
             request.body?.close()
         }
@@ -66,7 +66,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         return try {
             call.executeAsync().toResponse()
         } catch (e: IOException) {
-            throw SamIoException("Request failed", e)
+            throw IncreaseIoException("Request failed", e)
         } finally {
             request.body?.close()
         }

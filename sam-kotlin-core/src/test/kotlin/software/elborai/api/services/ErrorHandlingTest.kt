@@ -6,30 +6,32 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.google.common.collect.ImmutableListMultimap
 import com.google.common.collect.ListMultimap
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.time.LocalDate
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.InstanceOfAssertFactories
 import org.assertj.guava.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import software.elborai.api.client.SamClient
-import software.elborai.api.client.okhttp.SamOkHttpClient
+import software.elborai.api.client.IncreaseClient
+import software.elborai.api.client.okhttp.IncreaseOkHttpClient
 import software.elborai.api.core.JsonString
 import software.elborai.api.core.jsonMapper
 import software.elborai.api.errors.BadRequestException
+import software.elborai.api.errors.IncreaseError
+import software.elborai.api.errors.IncreaseException
 import software.elborai.api.errors.InternalServerException
 import software.elborai.api.errors.NotFoundException
 import software.elborai.api.errors.PermissionDeniedException
 import software.elborai.api.errors.RateLimitException
-import software.elborai.api.errors.SamError
 import software.elborai.api.errors.UnauthorizedException
 import software.elborai.api.errors.UnexpectedStatusCodeException
 import software.elborai.api.errors.UnprocessableEntityException
@@ -40,180 +42,263 @@ class ErrorHandlingTest {
 
     private val JSON_MAPPER: JsonMapper = jsonMapper()
 
-    private val SAM_ERROR: SamError =
-        SamError.builder().putAdditionalProperty("key", JsonString.of("value")).build()
+    private val INCREASE_ERROR: IncreaseError =
+        IncreaseError.builder().putAdditionalProperty("key", JsonString.of("value")).build()
 
-    private lateinit var client: SamClient
+    private lateinit var client: IncreaseClient
 
     @BeforeEach
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
         client =
-            SamOkHttpClient.builder()
+            IncreaseOkHttpClient.builder()
                 .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
-                .authToken("My Auth Token")
+                .apiKey("My API Key")
+                .webhookSecret("My Webhook Secret")
                 .build()
     }
 
-    // Note: readAllBytes is only available in Java 9+
-    private fun InputStream.readBytesFully(): ByteArray {
-        val buffer = ByteArrayOutputStream()
-        val data = ByteArray(1024)
+    @Test
+    fun accountsCreate200() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
-        var nRead: Int
-        while (this.read(data, 0, data.size).also { nRead = it } != -1) {
-            buffer.write(data, 0, nRead)
-        }
+        val expected =
+            Account.builder()
+                .id("string")
+                .bank(Account.Bank.BLUE_RIDGE_BANK)
+                .closedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .currency(Account.Currency.CAD)
+                .entityId("string")
+                .idempotencyKey("string")
+                .informationalEntityId("string")
+                .interestAccrued("string")
+                .interestAccruedAt(LocalDate.parse("2019-12-27"))
+                .interestRate("string")
+                .name("string")
+                .programId("string")
+                .status(Account.Status.OPEN)
+                .type(Account.Type.ACCOUNT)
+                .build()
 
-        buffer.flush()
-        return buffer.toByteArray()
+        stubFor(post(anyUrl()).willReturn(ok().withBody(toJson(expected))))
+
+        assertThat(client.accounts().create(params)).isEqualTo(expected)
     }
 
     @Test
-    fun agentsRetrieve200() {
-        val params = AgentRetrieveParams.builder().id("string").build()
-
-        val expected = "abc".encodeToByteArray()
-
-        stubFor(get(anyUrl()).willReturn(ok().withBody(expected)))
-
-        assertThat(client.agents().retrieve(params).body().use { it.readBytesFully() })
-            .isEqualTo(expected)
-    }
-
-    @Test
-    fun agentsRetrieve400() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate400() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(400).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(400).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertBadRequest(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertBadRequest(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
-    fun agentsRetrieve401() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate401() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(401).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(401).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertUnauthorized(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertUnauthorized(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
-    fun agentsRetrieve403() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate403() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(403).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(403).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertPermissionDenied(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertPermissionDenied(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
-    fun agentsRetrieve404() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate404() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(404).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(404).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertNotFound(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertNotFound(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
-    fun agentsRetrieve422() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate422() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(422).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(422).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertUnprocessableEntity(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertUnprocessableEntity(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
-    fun agentsRetrieve429() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate429() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(429).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(429).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertRateLimit(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertRateLimit(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
-    fun agentsRetrieve500() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun accountsCreate500() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(500).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(500).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertInternalServer(e, ImmutableListMultimap.of("Foo", "Bar"), SAM_ERROR)
+                assertInternalServer(e, ImmutableListMultimap.of("Foo", "Bar"), INCREASE_ERROR)
             })
     }
 
     @Test
     fun unexpectedStatusCode() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
         stubFor(
-            get(anyUrl())
-                .willReturn(status(999).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
+            post(anyUrl())
+                .willReturn(status(999).withHeader("Foo", "Bar").withBody(toJson(INCREASE_ERROR)))
         )
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
                 assertUnexpectedStatusCodeException(
                     e,
                     999,
                     ImmutableListMultimap.of("Foo", "Bar"),
-                    toJson(SAM_ERROR)
+                    toJson(INCREASE_ERROR)
                 )
             })
     }
 
     @Test
-    fun invalidErrorBody() {
-        val params = AgentRetrieveParams.builder().id("string").build()
+    fun invalidBody() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
 
-        stubFor(get(anyUrl()).willReturn(status(400).withBody("Not JSON")))
+        stubFor(post(anyUrl()).willReturn(status(200).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.agents().retrieve(params) })
+        assertThatThrownBy({ client.accounts().create(params) })
             .satisfies({ e ->
-                assertBadRequest(e, ImmutableListMultimap.of(), SamError.builder().build())
+                assertThat(e)
+                    .isInstanceOf(IncreaseException::class.java)
+                    .hasMessage("Error reading response")
+            })
+    }
+
+    @Test
+    fun invalidErrorBody() {
+        val params =
+            AccountCreateParams.builder()
+                .name("x")
+                .entityId("string")
+                .informationalEntityId("string")
+                .programId("string")
+                .build()
+
+        stubFor(post(anyUrl()).willReturn(status(400).withBody("Not JSON")))
+
+        assertThatThrownBy({ client.accounts().create(params) })
+            .satisfies({ e ->
+                assertBadRequest(e, ImmutableListMultimap.of(), IncreaseError.builder().build())
             })
     }
 
@@ -241,7 +326,7 @@ class ErrorHandlingTest {
     private fun assertBadRequest(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(BadRequestException::class.java))
@@ -255,7 +340,7 @@ class ErrorHandlingTest {
     private fun assertUnauthorized(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(UnauthorizedException::class.java))
@@ -269,7 +354,7 @@ class ErrorHandlingTest {
     private fun assertPermissionDenied(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(
@@ -285,7 +370,7 @@ class ErrorHandlingTest {
     private fun assertNotFound(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(NotFoundException::class.java))
@@ -299,7 +384,7 @@ class ErrorHandlingTest {
     private fun assertUnprocessableEntity(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(
@@ -315,7 +400,7 @@ class ErrorHandlingTest {
     private fun assertRateLimit(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(RateLimitException::class.java))
@@ -329,7 +414,7 @@ class ErrorHandlingTest {
     private fun assertInternalServer(
         throwable: Throwable,
         headers: ListMultimap<String, String>,
-        error: SamError
+        error: IncreaseError
     ) {
         assertThat(throwable)
             .asInstanceOf(InstanceOfAssertFactories.throwable(InternalServerException::class.java))
