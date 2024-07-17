@@ -10,29 +10,14 @@ class DocumentRetrieveParamsTest {
 
     @Test
     fun createDocumentRetrieveParams() {
-        DocumentRetrieveParams.builder().docId("string").text(true).build()
-    }
-
-    @Test
-    fun getQueryParams() {
-        val params = DocumentRetrieveParams.builder().docId("string").text(true).build()
-        val expected = mutableMapOf<String, List<String>>()
-        expected.put("text", listOf("true"))
-        assertThat(params.getQueryParams()).isEqualTo(expected)
-    }
-
-    @Test
-    fun getQueryParamsWithoutOptionalFields() {
-        val params = DocumentRetrieveParams.builder().docId("string").build()
-        val expected = mutableMapOf<String, List<String>>()
-        assertThat(params.getQueryParams()).isEqualTo(expected)
+        DocumentRetrieveParams.builder().documentId("string").build()
     }
 
     @Test
     fun getPathParam() {
-        val params = DocumentRetrieveParams.builder().docId("string").build()
+        val params = DocumentRetrieveParams.builder().documentId("string").build()
         assertThat(params).isNotNull
-        // path param "docId"
+        // path param "documentId"
         assertThat(params.getPathParam(0)).isEqualTo("string")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")

@@ -1,0 +1,146 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package software.elborai.api.models
+
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import software.elborai.api.models.*
+
+class PhysicalCardCreateParamsTest {
+
+    @Test
+    fun createPhysicalCardCreateParams() {
+        PhysicalCardCreateParams.builder()
+            .cardId("string")
+            .cardholder(
+                PhysicalCardCreateParams.Cardholder.builder().firstName("x").lastName("x").build()
+            )
+            .shipment(
+                PhysicalCardCreateParams.Shipment.builder()
+                    .address(
+                        PhysicalCardCreateParams.Shipment.Address.builder()
+                            .city("x")
+                            .line1("x")
+                            .name("x")
+                            .postalCode("x")
+                            .state("x")
+                            .line2("x")
+                            .line3("x")
+                            .phoneNumber("x")
+                            .build()
+                    )
+                    .method(PhysicalCardCreateParams.Shipment.Method.USPS)
+                    .build()
+            )
+            .physicalCardProfileId("string")
+            .build()
+    }
+
+    @Test
+    fun getBody() {
+        val params =
+            PhysicalCardCreateParams.builder()
+                .cardId("string")
+                .cardholder(
+                    PhysicalCardCreateParams.Cardholder.builder()
+                        .firstName("x")
+                        .lastName("x")
+                        .build()
+                )
+                .shipment(
+                    PhysicalCardCreateParams.Shipment.builder()
+                        .address(
+                            PhysicalCardCreateParams.Shipment.Address.builder()
+                                .city("x")
+                                .line1("x")
+                                .name("x")
+                                .postalCode("x")
+                                .state("x")
+                                .line2("x")
+                                .line3("x")
+                                .phoneNumber("x")
+                                .build()
+                        )
+                        .method(PhysicalCardCreateParams.Shipment.Method.USPS)
+                        .build()
+                )
+                .physicalCardProfileId("string")
+                .build()
+        val body = params.getBody()
+        assertThat(body).isNotNull
+        assertThat(body.cardId()).isEqualTo("string")
+        assertThat(body.cardholder())
+            .isEqualTo(
+                PhysicalCardCreateParams.Cardholder.builder().firstName("x").lastName("x").build()
+            )
+        assertThat(body.shipment())
+            .isEqualTo(
+                PhysicalCardCreateParams.Shipment.builder()
+                    .address(
+                        PhysicalCardCreateParams.Shipment.Address.builder()
+                            .city("x")
+                            .line1("x")
+                            .name("x")
+                            .postalCode("x")
+                            .state("x")
+                            .line2("x")
+                            .line3("x")
+                            .phoneNumber("x")
+                            .build()
+                    )
+                    .method(PhysicalCardCreateParams.Shipment.Method.USPS)
+                    .build()
+            )
+        assertThat(body.physicalCardProfileId()).isEqualTo("string")
+    }
+
+    @Test
+    fun getBodyWithoutOptionalFields() {
+        val params =
+            PhysicalCardCreateParams.builder()
+                .cardId("string")
+                .cardholder(
+                    PhysicalCardCreateParams.Cardholder.builder()
+                        .firstName("x")
+                        .lastName("x")
+                        .build()
+                )
+                .shipment(
+                    PhysicalCardCreateParams.Shipment.builder()
+                        .address(
+                            PhysicalCardCreateParams.Shipment.Address.builder()
+                                .city("x")
+                                .line1("x")
+                                .name("x")
+                                .postalCode("x")
+                                .state("x")
+                                .build()
+                        )
+                        .method(PhysicalCardCreateParams.Shipment.Method.USPS)
+                        .build()
+                )
+                .build()
+        val body = params.getBody()
+        assertThat(body).isNotNull
+        assertThat(body.cardId()).isEqualTo("string")
+        assertThat(body.cardholder())
+            .isEqualTo(
+                PhysicalCardCreateParams.Cardholder.builder().firstName("x").lastName("x").build()
+            )
+        assertThat(body.shipment())
+            .isEqualTo(
+                PhysicalCardCreateParams.Shipment.builder()
+                    .address(
+                        PhysicalCardCreateParams.Shipment.Address.builder()
+                            .city("x")
+                            .line1("x")
+                            .name("x")
+                            .postalCode("x")
+                            .state("x")
+                            .build()
+                    )
+                    .method(PhysicalCardCreateParams.Shipment.Method.USPS)
+                    .build()
+            )
+    }
+}

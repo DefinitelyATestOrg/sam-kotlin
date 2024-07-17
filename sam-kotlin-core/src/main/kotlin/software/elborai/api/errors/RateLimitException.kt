@@ -5,9 +5,9 @@ import com.google.common.collect.ListMultimap
 class RateLimitException
 constructor(
     headers: ListMultimap<String, String>,
-    private val error: SamError,
-) : SamServiceException(headers, "${error}") {
+    private val error: IncreaseError,
+) : IncreaseServiceException(headers, "${error}") {
     override fun statusCode(): Int = 429
 
-    fun error(): SamError = error
+    fun error(): IncreaseError = error
 }
