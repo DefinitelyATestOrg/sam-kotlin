@@ -20,8 +20,8 @@ import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.errors.IncreaseInvalidDataException
 
 /**
- * Accounts are your bank accounts with Increase. They store money, receive transfers, and send
- * payments. They earn interest and have depository insurance.
+ * Accounts are your accounts with Increase. They store money, receive transfers, and send payments.
+ * They earn interest and have depository insurance.
  */
 @JsonDeserialize(builder = Account.Builder::class)
 @NoAutoDetect
