@@ -1,0 +1,100 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package software.elborai.api.models
+
+import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class AccountTransferTest {
+
+    @Test
+    fun createAccountTransfer() {
+        val accountTransfer =
+            AccountTransfer.builder()
+                .id("string")
+                .accountId("string")
+                .amount(123L)
+                .approval(
+                    AccountTransfer.Approval.builder()
+                        .approvedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .approvedBy("string")
+                        .build()
+                )
+                .cancellation(
+                    AccountTransfer.Cancellation.builder()
+                        .canceledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .canceledBy("string")
+                        .build()
+                )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .createdBy(
+                    AccountTransfer.CreatedBy.builder()
+                        .apiKey(
+                            AccountTransfer.CreatedBy.ApiKey.builder().description("string").build()
+                        )
+                        .category(AccountTransfer.CreatedBy.Category.API_KEY)
+                        .oauthApplication(
+                            AccountTransfer.CreatedBy.OAuthApplication.builder()
+                                .name("string")
+                                .build()
+                        )
+                        .user(AccountTransfer.CreatedBy.User.builder().email("string").build())
+                        .build()
+                )
+                .currency(AccountTransfer.Currency.CAD)
+                .description("string")
+                .destinationAccountId("string")
+                .destinationTransactionId("string")
+                .idempotencyKey("string")
+                .network(AccountTransfer.Network.ACCOUNT)
+                .pendingTransactionId("string")
+                .status(AccountTransfer.Status.PENDING_APPROVAL)
+                .transactionId("string")
+                .type(AccountTransfer.Type.ACCOUNT_TRANSFER)
+                .build()
+        assertThat(accountTransfer).isNotNull
+        assertThat(accountTransfer.id()).isEqualTo("string")
+        assertThat(accountTransfer.accountId()).isEqualTo("string")
+        assertThat(accountTransfer.amount()).isEqualTo(123L)
+        assertThat(accountTransfer.approval())
+            .isEqualTo(
+                AccountTransfer.Approval.builder()
+                    .approvedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .approvedBy("string")
+                    .build()
+            )
+        assertThat(accountTransfer.cancellation())
+            .isEqualTo(
+                AccountTransfer.Cancellation.builder()
+                    .canceledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .canceledBy("string")
+                    .build()
+            )
+        assertThat(accountTransfer.createdAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(accountTransfer.createdBy())
+            .isEqualTo(
+                AccountTransfer.CreatedBy.builder()
+                    .apiKey(
+                        AccountTransfer.CreatedBy.ApiKey.builder().description("string").build()
+                    )
+                    .category(AccountTransfer.CreatedBy.Category.API_KEY)
+                    .oauthApplication(
+                        AccountTransfer.CreatedBy.OAuthApplication.builder().name("string").build()
+                    )
+                    .user(AccountTransfer.CreatedBy.User.builder().email("string").build())
+                    .build()
+            )
+        assertThat(accountTransfer.currency()).isEqualTo(AccountTransfer.Currency.CAD)
+        assertThat(accountTransfer.description()).isEqualTo("string")
+        assertThat(accountTransfer.destinationAccountId()).isEqualTo("string")
+        assertThat(accountTransfer.destinationTransactionId()).isEqualTo("string")
+        assertThat(accountTransfer.idempotencyKey()).isEqualTo("string")
+        assertThat(accountTransfer.network()).isEqualTo(AccountTransfer.Network.ACCOUNT)
+        assertThat(accountTransfer.pendingTransactionId()).isEqualTo("string")
+        assertThat(accountTransfer.status()).isEqualTo(AccountTransfer.Status.PENDING_APPROVAL)
+        assertThat(accountTransfer.transactionId()).isEqualTo("string")
+        assertThat(accountTransfer.type()).isEqualTo(AccountTransfer.Type.ACCOUNT_TRANSFER)
+    }
+}

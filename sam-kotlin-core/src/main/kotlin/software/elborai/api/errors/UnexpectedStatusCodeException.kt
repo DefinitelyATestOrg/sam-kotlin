@@ -7,7 +7,7 @@ constructor(
     private val statusCode: Int,
     headers: ListMultimap<String, String>,
     private val body: String
-) : SamServiceException(headers, "Unexpected status code: ${statusCode}") {
+) : IncreaseServiceException(headers, "Unexpected status code: ${statusCode}") {
     override fun statusCode(): Int = statusCode
 
     fun body() = body
