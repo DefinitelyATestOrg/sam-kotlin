@@ -10,29 +10,21 @@ import software.elborai.api.models.*
 
 class DocumentRetrieveParams
 constructor(
-    private val docId: String,
-    private val text: Boolean?,
+    private val documentId: String,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun docId(): String = docId
+    fun documentId(): String = documentId
 
-    fun text(): Boolean? = text
-
-    internal fun getQueryParams(): Map<String, List<String>> {
-        val params = mutableMapOf<String, List<String>>()
-        this.text?.let { params.put("text", listOf(it.toString())) }
-        params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
-    }
+    internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
 
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
         return when (index) {
-            0 -> docId
+            0 -> documentId
             else -> ""
         }
     }
@@ -49,8 +41,7 @@ constructor(
         }
 
         return other is DocumentRetrieveParams &&
-            this.docId == other.docId &&
-            this.text == other.text &&
+            this.documentId == other.documentId &&
             this.additionalQueryParams == other.additionalQueryParams &&
             this.additionalHeaders == other.additionalHeaders &&
             this.additionalBodyProperties == other.additionalBodyProperties
@@ -58,8 +49,7 @@ constructor(
 
     override fun hashCode(): Int {
         return Objects.hash(
-            docId,
-            text,
+            documentId,
             additionalQueryParams,
             additionalHeaders,
             additionalBodyProperties,
@@ -67,7 +57,7 @@ constructor(
     }
 
     override fun toString() =
-        "DocumentRetrieveParams{docId=$docId, text=$text, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "DocumentRetrieveParams{documentId=$documentId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -79,23 +69,20 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var docId: String? = null
-        private var text: Boolean? = null
+        private var documentId: String? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(documentRetrieveParams: DocumentRetrieveParams) = apply {
-            this.docId = documentRetrieveParams.docId
-            this.text = documentRetrieveParams.text
+            this.documentId = documentRetrieveParams.documentId
             additionalQueryParams(documentRetrieveParams.additionalQueryParams)
             additionalHeaders(documentRetrieveParams.additionalHeaders)
             additionalBodyProperties(documentRetrieveParams.additionalBodyProperties)
         }
 
-        fun docId(docId: String) = apply { this.docId = docId }
-
-        fun text(text: Boolean) = apply { this.text = text }
+        /** The identifier of the Document to retrieve. */
+        fun documentId(documentId: String) = apply { this.documentId = documentId }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -153,8 +140,7 @@ constructor(
 
         fun build(): DocumentRetrieveParams =
             DocumentRetrieveParams(
-                checkNotNull(docId) { "`docId` is required but was not set" },
-                text,
+                checkNotNull(documentId) { "`documentId` is required but was not set" },
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalBodyProperties.toUnmodifiable(),

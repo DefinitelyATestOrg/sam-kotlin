@@ -10,12 +10,12 @@ import software.elborai.api.core.http.BinaryResponseContent
 import software.elborai.api.core.http.HttpResponse
 import software.elborai.api.core.http.HttpResponse.Handler
 import software.elborai.api.errors.BadRequestException
+import software.elborai.api.errors.IncreaseError
+import software.elborai.api.errors.IncreaseException
 import software.elborai.api.errors.InternalServerException
 import software.elborai.api.errors.NotFoundException
 import software.elborai.api.errors.PermissionDeniedException
 import software.elborai.api.errors.RateLimitException
-import software.elborai.api.errors.SamError
-import software.elborai.api.errors.SamException
 import software.elborai.api.errors.UnauthorizedException
 import software.elborai.api.errors.UnexpectedStatusCodeException
 import software.elborai.api.errors.UnprocessableEntityException
@@ -48,27 +48,27 @@ internal inline fun <reified T> jsonHandler(jsonMapper: JsonMapper): Handler<T> 
             try {
                 return jsonMapper.readValue(response.body(), jacksonTypeRef())
             } catch (e: Exception) {
-                throw SamException("Error reading response", e)
+                throw IncreaseException("Error reading response", e)
             }
         }
     }
 }
 
-internal fun errorHandler(jsonMapper: JsonMapper): Handler<SamError> {
-    val handler = jsonHandler<SamError>(jsonMapper)
+internal fun errorHandler(jsonMapper: JsonMapper): Handler<IncreaseError> {
+    val handler = jsonHandler<IncreaseError>(jsonMapper)
 
-    return object : Handler<SamError> {
-        override fun handle(response: HttpResponse): SamError {
+    return object : Handler<IncreaseError> {
+        override fun handle(response: HttpResponse): IncreaseError {
             try {
                 return handler.handle(response)
             } catch (e: Exception) {
-                return SamError.builder().build()
+                return IncreaseError.builder().build()
             }
         }
     }
 }
 
-internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<SamError>): Handler<T> {
+internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<IncreaseError>): Handler<T> {
     return object : Handler<T> {
         override fun handle(response: HttpResponse): T {
             when (val statusCode = response.statusCode()) {

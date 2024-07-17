@@ -5,25 +5,22 @@
 package software.elborai.api.services.async
 
 import software.elborai.api.core.RequestOptions
-import software.elborai.api.core.http.BinaryResponseContent
-import software.elborai.api.models.DocumentDeleteParams
+import software.elborai.api.models.Document
+import software.elborai.api.models.DocumentListPageAsync
+import software.elborai.api.models.DocumentListParams
 import software.elborai.api.models.DocumentRetrieveParams
-import software.elborai.api.models.DocumentUpdateParams
 
 interface DocumentServiceAsync {
 
+    /** Retrieve a Document */
     suspend fun retrieve(
         params: DocumentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): BinaryResponseContent
+    ): Document
 
-    suspend fun update(
-        params: DocumentUpdateParams,
+    /** List Documents */
+    suspend fun list(
+        params: DocumentListParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): BinaryResponseContent
-
-    suspend fun delete(
-        params: DocumentDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    )
+    ): DocumentListPageAsync
 }

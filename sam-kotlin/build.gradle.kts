@@ -1,6 +1,6 @@
 plugins {
-    id("sam.kotlin")
-    id("sam.publish")
+    id("increase.kotlin")
+    id("increase.publish")
 }
 
 dependencies {

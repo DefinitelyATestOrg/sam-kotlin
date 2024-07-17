@@ -31,7 +31,7 @@ import java.nio.charset.Charset
 import java.util.Objects
 import kotlin.reflect.KClass
 import org.apache.hc.core5.http.ContentType
-import software.elborai.api.errors.SamInvalidDataException
+import software.elborai.api.errors.IncreaseInvalidDataException
 
 @JsonDeserialize(using = JsonField.Deserializer::class)
 sealed class JsonField<out T : Any> {
@@ -77,7 +77,7 @@ sealed class JsonField<out T : Any> {
     fun asStringOrThrow(): String =
         when (this) {
             is JsonString -> value
-            else -> throw SamInvalidDataException("Value is not a string")
+            else -> throw IncreaseInvalidDataException("Value is not a string")
         }
 
     fun asArray(): List<JsonValue>? =
@@ -95,9 +95,9 @@ sealed class JsonField<out T : Any> {
     internal fun getRequired(name: String): T =
         when (this) {
             is KnownValue -> value
-            is JsonMissing -> throw SamInvalidDataException("'${name}' is not set")
-            is JsonNull -> throw SamInvalidDataException("'${name}' is null")
-            else -> throw SamInvalidDataException("'${name}' is invalid, received ${this}")
+            is JsonMissing -> throw IncreaseInvalidDataException("'${name}' is not set")
+            is JsonNull -> throw IncreaseInvalidDataException("'${name}' is null")
+            else -> throw IncreaseInvalidDataException("'${name}' is invalid, received ${this}")
         }
 
     internal fun getNullable(name: String): T? =
@@ -105,7 +105,7 @@ sealed class JsonField<out T : Any> {
             is KnownValue -> value
             is JsonMissing -> null
             is JsonNull -> null
-            else -> throw SamInvalidDataException("'${name}' is invalid, received ${this}")
+            else -> throw IncreaseInvalidDataException("'${name}' is invalid, received ${this}")
         }
 
     internal fun <R : Any> map(transform: (T) -> R): JsonField<R> =

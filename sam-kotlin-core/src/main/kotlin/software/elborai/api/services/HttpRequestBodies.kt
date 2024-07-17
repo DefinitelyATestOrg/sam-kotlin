@@ -10,7 +10,7 @@ import software.elborai.api.core.Enum
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.http.HttpRequestBody
-import software.elborai.api.errors.SamException
+import software.elborai.api.errors.IncreaseException
 
 internal inline fun <reified T> json(
     jsonMapper: JsonMapper,
@@ -28,7 +28,7 @@ internal inline fun <reified T> json(
                 cachedBytes = buffer.toByteArray()
                 return cachedBytes!!
             } catch (e: Exception) {
-                throw SamException("Error writing request", e)
+                throw IncreaseException("Error writing request", e)
             }
         }
 
@@ -61,7 +61,7 @@ internal fun multipartFormData(
                     try {
                         jsonMapper.writeValue(buffer, part.value)
                     } catch (e: Exception) {
-                        throw SamException("Error serializing value to json", e)
+                        throw IncreaseException("Error serializing value to json", e)
                     }
                     builder.addBinaryBody(
                         part.name,
@@ -97,7 +97,7 @@ internal fun multipartFormData(
             try {
                 return entity.writeTo(outputStream)
             } catch (e: Exception) {
-                throw SamException("Error writing request", e)
+                throw IncreaseException("Error writing request", e)
             }
         }
 

@@ -6,11 +6,11 @@ import com.google.common.collect.ImmutableListMultimap
 import com.google.common.collect.ListMultimap
 import com.google.common.collect.Multimaps
 import java.util.Collections
-import software.elborai.api.errors.SamInvalidDataException
+import software.elborai.api.errors.IncreaseInvalidDataException
 
 internal fun <T : Any> T?.getOrThrow(name: String): T {
     if (this == null) {
-        throw SamInvalidDataException("'${name}' is not present")
+        throw IncreaseInvalidDataException("'${name}' is not present")
     }
 
     return this
@@ -48,7 +48,7 @@ internal fun ListMultimap<String, String>.getRequiredHeader(header: String): Str
             .map { entry -> entry.value }
             .findFirst()
     if (!value.isPresent) {
-        throw SamInvalidDataException("Could not find $header header")
+        throw IncreaseInvalidDataException("Could not find $header header")
     }
     return value.get()
 }

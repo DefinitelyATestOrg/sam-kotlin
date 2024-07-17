@@ -1,14 +1,12 @@
-# Sam Kotlin API Library
+# Increase Kotlin API Library
 
-The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin. It includes helper classes with helpful types and documentation for every request and response property.
+The Increase Kotlin SDK provides convenient access to the Increase REST API from applications written in Kotlin. It includes helper classes with helpful types and documentation for every request and response property.
 
-The Sam Kotlin SDK is similar to the Sam Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
-
-It is generated with [Stainless](https://www.stainlessapi.com/).
+The Increase Kotlin SDK is similar to the Increase Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
 
 ## Documentation
 
-The REST API documentation can be found [on docs.elborai.software](https://docs.elborai.software).
+The REST API documentation can be found [on increase.com](https://increase.com/documentation).
 
 ---
 
@@ -38,23 +36,33 @@ implementation("software.elborai.api:sam-kotlin:0.0.1-alpha.0")
 
 ### Configure the client
 
-Use `SamOkHttpClient.builder()` to configure the client.
-
-Alternately, set the environment with `MAVENAGI_AUTH_TOKEN`, and use `SamOkHttpClient.fromEnv()` to read from the environment.
+Use `IncreaseOkHttpClient.builder()` to configure the client. At a minimum you need to set `.apiKey()`:
 
 ```kotlin
-val client = SamOkHttpClient.fromEnv()
+import software.elborai.api.client.IncreaseClient
+import software.elborai.api.client.okhttp.IncreaseOkHttpClient
+
+val client = IncreaseOkHttpClient.builder()
+    .apiKey("My API Key")
+    .build()
+```
+
+Alternately, set the environment with `INCREASE_API_KEY` or `INCREASE_WEBHOOK_SECRET`, and use `IncreaseOkHttpClient.fromEnv()` to read from the environment.
+
+```kotlin
+val client = IncreaseOkHttpClient.fromEnv()
 
 // Note: you can also call fromEnv() from the client builder, for example if you need to set additional properties
-val client = SamOkHttpClient.builder()
+val client = IncreaseOkHttpClient.builder()
     .fromEnv()
     // ... set properties on the builder
     .build()
 ```
 
-| Property  | Environment variable  | Required | Default value |
-| --------- | --------------------- | -------- | ------------- |
-| authToken | `MAVENAGI_AUTH_TOKEN` | false    | —             |
+| Property      | Environment variable      | Required | Default value |
+| ------------- | ------------------------- | -------- | ------------- |
+| apiKey        | `INCREASE_API_KEY`        | true     | —             |
+| webhookSecret | `INCREASE_WEBHOOK_SECRET` | false    | —             |
 
 Read the documentation for more configuration options.
 
@@ -62,18 +70,35 @@ Read the documentation for more configuration options.
 
 ### Example: creating a resource
 
-To create a new action set, first use the `ActionSetRetrieveParams` builder to specify attributes,
-then pass that to the `retrieve` method of the `actionSets` service.
+To create a new account, first use the `AccountCreateParams` builder to specify attributes,
+then pass that to the `create` method of the `accounts` service.
 
 ```kotlin
-import software.elborai.api.models.ActionSetRetrieveParams
-import software.elborai.api.models.BinaryResponseContent
+import software.elborai.api.models.Account
+import software.elborai.api.models.AccountCreateParams
 
-val params = ActionSetRetrieveParams.builder()
-    .id("abc123")
+val params = AccountCreateParams.builder()
+    .name("My First Increase Account")
     .build()
-val actionSet = client.actionSets().retrieve(params)
+val account = client.accounts().create(params)
 ```
+
+### Example: listing resources
+
+The Increase API provides a `list` method to get a paginated list of accounts.
+You can retrieve the first page by:
+
+```kotlin
+import software.elborai.api.models.Account
+import software.elborai.api.models.Page
+
+val page = client.accounts().list()
+for (account: Account in page.data()) {
+    print(account)
+}
+```
+
+See [Pagination](#pagination) below for more information on transparently working with lists of objects without worrying about fetching each page.
 
 ---
 
@@ -81,16 +106,16 @@ val actionSet = client.actionSets().retrieve(params)
 
 ### Parameters and bodies
 
-To make a request to the Sam API, you generally build an instance of the appropriate `Params` class.
+To make a request to the Increase API, you generally build an instance of the appropriate `Params` class.
 
-In [Example: creating a resource](#example-creating-a-resource) above, we used the `AgentRetrieveParams.builder()` to pass to
-the `retrieve` method of the `agents` service.
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `AccountCreateParams.builder()` to pass to
+the `create` method of the `accounts` service.
 
 Sometimes, the API may support other properties that are not yet supported in the Kotlin SDK types. In that case,
 you can attach them using the `putAdditionalProperty` method.
 
 ```kotlin
-val params = AgentRetrieveParams.builder()
+val params = AccountCreateParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", "4242")
     .build()
@@ -100,10 +125,10 @@ val params = AgentRetrieveParams.builder()
 
 ### Response validation
 
-When receiving a response, the Sam Kotlin SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Kotlin type. If you directly access the mistaken property, the SDK will throw an unchecked `SamInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
+When receiving a response, the Increase Kotlin SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Kotlin type. If you directly access the mistaken property, the SDK will throw an unchecked `IncreaseInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```kotlin
-val agent = client.agents().retrieve().validate()
+val account = client.accounts().create().validate()
 ```
 
 ### Response properties as JSON
@@ -133,10 +158,56 @@ if (field.isMissing()) {
 Sometimes, the server response may include additional properties that are not yet available in this library's types. You can access them using the model's `_additionalProperties` method:
 
 ```kotlin
-val secret = agent._additionalProperties().get("secret_field")
+val secret = account._additionalProperties().get("secret_field")
 ```
 
 ---
+
+## Pagination
+
+For methods that return a paginated list of results, this library provides convenient ways access
+the results either one page at a time, or item-by-item across all pages.
+
+### Auto-pagination
+
+To iterate through all results across all pages, you can use `autoPager`,
+which automatically handles fetching more pages for you:
+
+### Synchronous
+
+```kotlin
+// As a Sequence:
+client.accounts().list(params).autoPager()
+    .take(50)
+    .forEach { account -> print(account) }
+```
+
+### Asynchronous
+
+```kotlin
+// As a Flow:
+asyncClient.accounts().list(params).autoPager()
+    .take(50)
+    .collect { account -> print(account) }
+```
+
+### Manual pagination
+
+If none of the above helpers meet your needs, you can also manually request pages one-by-one.
+A page of results has a `data()` method to fetch the list of objects, as well as top-level
+`response` and other methods to fetch top-level data about the page. It also has methods
+`hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
+
+```kotlin
+val page = client.accounts().list(params)
+while (page != null) {
+    for (account in page.data) {
+        print(account)
+    }
+
+    page = page.getNextPage()
+}
+```
 
 ---
 
@@ -144,9 +215,9 @@ val secret = agent._additionalProperties().get("secret_field")
 
 This library throws exceptions in a single hierarchy for easy handling:
 
-- **`SamException`** - Base exception for all exceptions
+- **`IncreaseException`** - Base exception for all exceptions
 
-  - **`SamServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
+  - **`IncreaseServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
 
     | 400    | BadRequestException           |
     | ------ | ----------------------------- |
@@ -158,8 +229,8 @@ This library throws exceptions in a single hierarchy for easy handling:
     | 5xx    | InternalServerException       |
     | others | UnexpectedStatusCodeException |
 
-  - **`SamIoException`** - I/O networking errors
-  - **`SamInvalidDataException`** - any other exceptions on the client side, e.g.:
+  - **`IncreaseIoException`** - I/O networking errors
+  - **`IncreaseInvalidDataException`** - any other exceptions on the client side, e.g.:
     - We failed to serialize the request body
     - We failed to parse the response body (has access to response code and body)
 
@@ -171,7 +242,7 @@ Requests that experience certain errors are automatically retried 2 times by def
 You can provide a `maxRetries` on the client builder to configure this:
 
 ```kotlin
-val client = SamOkHttpClient.builder()
+val client = IncreaseOkHttpClient.builder()
     .fromEnv()
     .maxRetries(4)
     .build()
@@ -182,7 +253,7 @@ val client = SamOkHttpClient.builder()
 Requests time out after 1 minute by default. You can configure this on the client builder:
 
 ```kotlin
-val client = SamOkHttpClient.builder()
+val client = IncreaseOkHttpClient.builder()
     .fromEnv()
     .timeout(Duration.ofSeconds(30))
     .build()
@@ -193,12 +264,23 @@ val client = SamOkHttpClient.builder()
 Requests can be routed through a proxy. You can configure this on the client builder:
 
 ```kotlin
-val client = SamOkHttpClient.builder()
+val client = IncreaseOkHttpClient.builder()
     .fromEnv()
     .proxy(new Proxy(
         Type.HTTP,
         new InetSocketAddress("proxy.com", 8080)
     ))
+    .build()
+```
+
+### Environments
+
+Requests are made to the production environment by default. You can connect to other environments, like `sandbox`, via the client builder:
+
+```kotlin
+val client = IncreaseOkHttpClient.builder()
+    .fromEnv()
+    .sandbox()
     .build()
 ```
 
