@@ -5,62 +5,76 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
-import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.Enum
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
 import software.elborai.api.errors.IncreaseInvalidDataException
 
 /**
- * ACH transfers move funds between your Increase account and any other account accessible by the
- * Automated Clearing House (ACH).
+ * ACH transfers move funds between your Increase account and any other account
+ * accessible by the Automated Clearing House (ACH).
  */
 @JsonDeserialize(builder = AchTransfer.Builder::class)
 @NoAutoDetect
-class AchTransfer
-private constructor(
-    private val accountId: JsonField<String>,
-    private val accountNumber: JsonField<String>,
-    private val acknowledgement: JsonField<Acknowledgement>,
-    private val addenda: JsonField<Addenda>,
-    private val amount: JsonField<Long>,
-    private val approval: JsonField<Approval>,
-    private val cancellation: JsonField<Cancellation>,
-    private val companyDescriptiveDate: JsonField<String>,
-    private val companyDiscretionaryData: JsonField<String>,
-    private val companyEntryDescription: JsonField<String>,
-    private val companyName: JsonField<String>,
-    private val createdAt: JsonField<OffsetDateTime>,
-    private val createdBy: JsonField<CreatedBy>,
-    private val currency: JsonField<Currency>,
-    private val destinationAccountHolder: JsonField<DestinationAccountHolder>,
-    private val externalAccountId: JsonField<String>,
-    private val funding: JsonField<Funding>,
-    private val id: JsonField<String>,
-    private val idempotencyKey: JsonField<String>,
-    private val individualId: JsonField<String>,
-    private val individualName: JsonField<String>,
-    private val network: JsonField<Network>,
-    private val notificationsOfChange: JsonField<List<NotificationsOfChange>>,
-    private val pendingTransactionId: JsonField<String>,
-    private val preferredEffectiveDate: JsonField<PreferredEffectiveDate>,
-    private val return_: JsonField<Return>,
-    private val routingNumber: JsonField<String>,
-    private val standardEntryClassCode: JsonField<StandardEntryClassCode>,
-    private val statementDescriptor: JsonField<String>,
-    private val status: JsonField<Status>,
-    private val submission: JsonField<Submission>,
-    private val transactionId: JsonField<String>,
-    private val type: JsonField<Type>,
-    private val additionalProperties: Map<String, JsonValue>,
+class AchTransfer private constructor(
+  private val accountId: JsonField<String>,
+  private val accountNumber: JsonField<String>,
+  private val acknowledgement: JsonField<Acknowledgement>,
+  private val addenda: JsonField<Addenda>,
+  private val amount: JsonField<Long>,
+  private val approval: JsonField<Approval>,
+  private val cancellation: JsonField<Cancellation>,
+  private val companyDescriptiveDate: JsonField<String>,
+  private val companyDiscretionaryData: JsonField<String>,
+  private val companyEntryDescription: JsonField<String>,
+  private val companyName: JsonField<String>,
+  private val createdAt: JsonField<OffsetDateTime>,
+  private val createdBy: JsonField<CreatedBy>,
+  private val currency: JsonField<Currency>,
+  private val destinationAccountHolder: JsonField<DestinationAccountHolder>,
+  private val externalAccountId: JsonField<String>,
+  private val funding: JsonField<Funding>,
+  private val id: JsonField<String>,
+  private val idempotencyKey: JsonField<String>,
+  private val individualId: JsonField<String>,
+  private val individualName: JsonField<String>,
+  private val network: JsonField<Network>,
+  private val notificationsOfChange: JsonField<List<NotificationsOfChange>>,
+  private val pendingTransactionId: JsonField<String>,
+  private val preferredEffectiveDate: JsonField<PreferredEffectiveDate>,
+  private val return_: JsonField<Return>,
+  private val routingNumber: JsonField<String>,
+  private val standardEntryClassCode: JsonField<StandardEntryClassCode>,
+  private val statementDescriptor: JsonField<String>,
+  private val status: JsonField<Status>,
+  private val submission: JsonField<Submission>,
+  private val transactionId: JsonField<String>,
+  private val type: JsonField<Type>,
+  private val additionalProperties: Map<String, JsonValue>,
+
 ) {
 
     private var validated: Boolean = false
@@ -74,8 +88,9 @@ private constructor(
     fun accountNumber(): String = accountNumber.getRequired("account_number")
 
     /**
-     * After the transfer is acknowledged by FedACH, this will contain supplemental details. The
-     * Federal Reserve sends an acknowledgement message for each file that Increase submits.
+     * After the transfer is acknowledged by FedACH, this will contain supplemental
+     * details. The Federal Reserve sends an acknowledgement message for each file that
+     * Increase submits.
      */
     fun acknowledgement(): Acknowledgement? = acknowledgement.getNullable("acknowledgement")
 
@@ -83,42 +98,39 @@ private constructor(
     fun addenda(): Addenda? = addenda.getNullable("addenda")
 
     /**
-     * The transfer amount in USD cents. A positive amount indicates a credit transfer pushing funds
-     * to the receiving account. A negative amount indicates a debit transfer pulling funds from the
-     * receiving account.
+     * The transfer amount in USD cents. A positive amount indicates a credit transfer
+     * pushing funds to the receiving account. A negative amount indicates a debit
+     * transfer pulling funds from the receiving account.
      */
     fun amount(): Long = amount.getRequired("amount")
 
     /**
-     * If your account requires approvals for transfers and the transfer was approved, this will
-     * contain details of the approval.
+     * If your account requires approvals for transfers and the transfer was approved,
+     * this will contain details of the approval.
      */
     fun approval(): Approval? = approval.getNullable("approval")
 
     /**
-     * If your account requires approvals for transfers and the transfer was not approved, this will
-     * contain details of the cancellation.
+     * If your account requires approvals for transfers and the transfer was not
+     * approved, this will contain details of the cancellation.
      */
     fun cancellation(): Cancellation? = cancellation.getNullable("cancellation")
 
     /** The description of the date of the transfer. */
-    fun companyDescriptiveDate(): String? =
-        companyDescriptiveDate.getNullable("company_descriptive_date")
+    fun companyDescriptiveDate(): String? = companyDescriptiveDate.getNullable("company_descriptive_date")
 
     /** The data you chose to associate with the transfer. */
-    fun companyDiscretionaryData(): String? =
-        companyDiscretionaryData.getNullable("company_discretionary_data")
+    fun companyDiscretionaryData(): String? = companyDiscretionaryData.getNullable("company_discretionary_data")
 
     /** The description of the transfer you set to be shown to the recipient. */
-    fun companyEntryDescription(): String? =
-        companyEntryDescription.getNullable("company_entry_description")
+    fun companyEntryDescription(): String? = companyEntryDescription.getNullable("company_entry_description")
 
     /** The name by which the recipient knows you. */
     fun companyName(): String? = companyName.getNullable("company_name")
 
     /**
-     * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the transfer
-     * was created.
+     * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+     * the transfer was created.
      */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
@@ -126,14 +138,16 @@ private constructor(
     fun createdBy(): CreatedBy? = createdBy.getNullable("created_by")
 
     /**
-     * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's currency. For
-     * ACH transfers this is always equal to `usd`.
+     * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's
+     * currency. For ACH transfers this is always equal to `usd`.
      */
     fun currency(): Currency = currency.getRequired("currency")
 
-    /** The type of entity that owns the account to which the ACH Transfer is being sent. */
-    fun destinationAccountHolder(): DestinationAccountHolder =
-        destinationAccountHolder.getRequired("destination_account_holder")
+    /**
+     * The type of entity that owns the account to which the ACH Transfer is being
+     * sent.
+     */
+    fun destinationAccountHolder(): DestinationAccountHolder = destinationAccountHolder.getRequired("destination_account_holder")
 
     /** The identifier of the External Account the transfer was made to, if any. */
     fun externalAccountId(): String? = externalAccountId.getNullable("external_account_id")
@@ -145,9 +159,9 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * The idempotency key you chose for this object. This value is unique across Increase and is
-     * used to ensure that a request is only processed once. Learn more about
-     * [idempotency](https://increase.com/documentation/idempotency-keys).
+     * The idempotency key you chose for this object. This value is unique across
+     * Increase and is used to ensure that a request is only processed once. Learn more
+     * about [idempotency](https://increase.com/documentation/idempotency-keys).
      */
     fun idempotencyKey(): String? = idempotencyKey.getNullable("idempotency_key")
 
@@ -155,8 +169,8 @@ private constructor(
     fun individualId(): String? = individualId.getNullable("individual_id")
 
     /**
-     * The name of the transfer recipient. This value is information and not verified by the
-     * recipient's bank.
+     * The name of the transfer recipient. This value is information and not verified
+     * by the recipient's bank.
      */
     fun individualName(): String? = individualName.getNullable("individual_name")
 
@@ -164,27 +178,26 @@ private constructor(
     fun network(): Network = network.getRequired("network")
 
     /**
-     * If the receiving bank accepts the transfer but notifies that future transfers should use
-     * different details, this will contain those details.
+     * If the receiving bank accepts the transfer but notifies that future transfers
+     * should use different details, this will contain those details.
      */
-    fun notificationsOfChange(): List<NotificationsOfChange> =
-        notificationsOfChange.getRequired("notifications_of_change")
+    fun notificationsOfChange(): List<NotificationsOfChange> = notificationsOfChange.getRequired("notifications_of_change")
 
     /**
-     * The ID for the pending transaction representing the transfer. A pending transaction is
-     * created when the transfer
+     * The ID for the pending transaction representing the transfer. A pending
+     * transaction is created when the transfer
      * [requires approval](https://increase.com/documentation/transfer-approvals#transfer-approvals)
      * by someone else in your organization.
      */
     fun pendingTransactionId(): String? = pendingTransactionId.getNullable("pending_transaction_id")
 
     /**
-     * Configuration for how the effective date of the transfer will be set. This determines
-     * same-day vs future-dated settlement timing. If not set, defaults to a `settlement_schedule`
-     * of `same_day`. If set, exactly one of the child atributes must be set.
+     * Configuration for how the effective date of the transfer will be set. This
+     * determines same-day vs future-dated settlement timing. If not set, defaults to a
+     * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes
+     * must be set.
      */
-    fun preferredEffectiveDate(): PreferredEffectiveDate =
-        preferredEffectiveDate.getRequired("preferred_effective_date")
+    fun preferredEffectiveDate(): PreferredEffectiveDate = preferredEffectiveDate.getRequired("preferred_effective_date")
 
     /** If your transfer is returned, this will contain details of the return. */
     fun return_(): Return? = return_.getNullable("return")
@@ -193,8 +206,7 @@ private constructor(
     fun routingNumber(): String = routingNumber.getRequired("routing_number")
 
     /** The Standard Entry Class (SEC) code to use for the transfer. */
-    fun standardEntryClassCode(): StandardEntryClassCode =
-        standardEntryClassCode.getRequired("standard_entry_class_code")
+    fun standardEntryClassCode(): StandardEntryClassCode = standardEntryClassCode.getRequired("standard_entry_class_code")
 
     /** The descriptor that will show on the recipient's bank statement. */
     fun statementDescriptor(): String = statementDescriptor.getRequired("statement_descriptor")
@@ -203,9 +215,10 @@ private constructor(
     fun status(): Status = status.getRequired("status")
 
     /**
-     * After the transfer is submitted to FedACH, this will contain supplemental details. Increase
-     * batches transfers and submits a file to the Federal Reserve roughly every 30 minutes. The
-     * Federal Reserve processes ACH transfers during weekdays according to their
+     * After the transfer is submitted to FedACH, this will contain supplemental
+     * details. Increase batches transfers and submits a file to the Federal Reserve
+     * roughly every 30 minutes. The Federal Reserve processes ACH transfers during
+     * weekdays according to their
      * [posted schedule](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
      */
     fun submission(): Submission? = submission.getNullable("submission")
@@ -220,38 +233,53 @@ private constructor(
     fun type(): Type = type.getRequired("type")
 
     /** The Account to which the transfer belongs. */
-    @JsonProperty("account_id") @ExcludeMissing fun _accountId() = accountId
+    @JsonProperty("account_id")
+    @ExcludeMissing
+    fun _accountId() = accountId
 
     /** The destination account number. */
-    @JsonProperty("account_number") @ExcludeMissing fun _accountNumber() = accountNumber
+    @JsonProperty("account_number")
+    @ExcludeMissing
+    fun _accountNumber() = accountNumber
 
     /**
-     * After the transfer is acknowledged by FedACH, this will contain supplemental details. The
-     * Federal Reserve sends an acknowledgement message for each file that Increase submits.
+     * After the transfer is acknowledged by FedACH, this will contain supplemental
+     * details. The Federal Reserve sends an acknowledgement message for each file that
+     * Increase submits.
      */
-    @JsonProperty("acknowledgement") @ExcludeMissing fun _acknowledgement() = acknowledgement
+    @JsonProperty("acknowledgement")
+    @ExcludeMissing
+    fun _acknowledgement() = acknowledgement
 
     /** Additional information that will be sent to the recipient. */
-    @JsonProperty("addenda") @ExcludeMissing fun _addenda() = addenda
+    @JsonProperty("addenda")
+    @ExcludeMissing
+    fun _addenda() = addenda
 
     /**
-     * The transfer amount in USD cents. A positive amount indicates a credit transfer pushing funds
-     * to the receiving account. A negative amount indicates a debit transfer pulling funds from the
-     * receiving account.
+     * The transfer amount in USD cents. A positive amount indicates a credit transfer
+     * pushing funds to the receiving account. A negative amount indicates a debit
+     * transfer pulling funds from the receiving account.
      */
-    @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+    @JsonProperty("amount")
+    @ExcludeMissing
+    fun _amount() = amount
 
     /**
-     * If your account requires approvals for transfers and the transfer was approved, this will
-     * contain details of the approval.
+     * If your account requires approvals for transfers and the transfer was approved,
+     * this will contain details of the approval.
      */
-    @JsonProperty("approval") @ExcludeMissing fun _approval() = approval
+    @JsonProperty("approval")
+    @ExcludeMissing
+    fun _approval() = approval
 
     /**
-     * If your account requires approvals for transfers and the transfer was not approved, this will
-     * contain details of the cancellation.
+     * If your account requires approvals for transfers and the transfer was not
+     * approved, this will contain details of the cancellation.
      */
-    @JsonProperty("cancellation") @ExcludeMissing fun _cancellation() = cancellation
+    @JsonProperty("cancellation")
+    @ExcludeMissing
+    fun _cancellation() = cancellation
 
     /** The description of the date of the transfer. */
     @JsonProperty("company_descriptive_date")
@@ -269,24 +297,35 @@ private constructor(
     fun _companyEntryDescription() = companyEntryDescription
 
     /** The name by which the recipient knows you. */
-    @JsonProperty("company_name") @ExcludeMissing fun _companyName() = companyName
+    @JsonProperty("company_name")
+    @ExcludeMissing
+    fun _companyName() = companyName
 
     /**
-     * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the transfer
-     * was created.
+     * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+     * the transfer was created.
      */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt() = createdAt
 
     /** What object created the transfer, either via the API or the dashboard. */
-    @JsonProperty("created_by") @ExcludeMissing fun _createdBy() = createdBy
+    @JsonProperty("created_by")
+    @ExcludeMissing
+    fun _createdBy() = createdBy
 
     /**
-     * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's currency. For
-     * ACH transfers this is always equal to `usd`.
+     * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's
+     * currency. For ACH transfers this is always equal to `usd`.
      */
-    @JsonProperty("currency") @ExcludeMissing fun _currency() = currency
+    @JsonProperty("currency")
+    @ExcludeMissing
+    fun _currency() = currency
 
-    /** The type of entity that owns the account to which the ACH Transfer is being sent. */
+    /**
+     * The type of entity that owns the account to which the ACH Transfer is being
+     * sent.
+     */
     @JsonProperty("destination_account_holder")
     @ExcludeMissing
     fun _destinationAccountHolder() = destinationAccountHolder
@@ -297,41 +336,53 @@ private constructor(
     fun _externalAccountId() = externalAccountId
 
     /** The type of the account to which the transfer will be sent. */
-    @JsonProperty("funding") @ExcludeMissing fun _funding() = funding
+    @JsonProperty("funding")
+    @ExcludeMissing
+    fun _funding() = funding
 
     /** The ACH transfer's identifier. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id() = id
 
     /**
-     * The idempotency key you chose for this object. This value is unique across Increase and is
-     * used to ensure that a request is only processed once. Learn more about
-     * [idempotency](https://increase.com/documentation/idempotency-keys).
+     * The idempotency key you chose for this object. This value is unique across
+     * Increase and is used to ensure that a request is only processed once. Learn more
+     * about [idempotency](https://increase.com/documentation/idempotency-keys).
      */
-    @JsonProperty("idempotency_key") @ExcludeMissing fun _idempotencyKey() = idempotencyKey
+    @JsonProperty("idempotency_key")
+    @ExcludeMissing
+    fun _idempotencyKey() = idempotencyKey
 
     /** Your identifier for the transfer recipient. */
-    @JsonProperty("individual_id") @ExcludeMissing fun _individualId() = individualId
+    @JsonProperty("individual_id")
+    @ExcludeMissing
+    fun _individualId() = individualId
 
     /**
-     * The name of the transfer recipient. This value is information and not verified by the
-     * recipient's bank.
+     * The name of the transfer recipient. This value is information and not verified
+     * by the recipient's bank.
      */
-    @JsonProperty("individual_name") @ExcludeMissing fun _individualName() = individualName
+    @JsonProperty("individual_name")
+    @ExcludeMissing
+    fun _individualName() = individualName
 
     /** The transfer's network. */
-    @JsonProperty("network") @ExcludeMissing fun _network() = network
+    @JsonProperty("network")
+    @ExcludeMissing
+    fun _network() = network
 
     /**
-     * If the receiving bank accepts the transfer but notifies that future transfers should use
-     * different details, this will contain those details.
+     * If the receiving bank accepts the transfer but notifies that future transfers
+     * should use different details, this will contain those details.
      */
     @JsonProperty("notifications_of_change")
     @ExcludeMissing
     fun _notificationsOfChange() = notificationsOfChange
 
     /**
-     * The ID for the pending transaction representing the transfer. A pending transaction is
-     * created when the transfer
+     * The ID for the pending transaction representing the transfer. A pending
+     * transaction is created when the transfer
      * [requires approval](https://increase.com/documentation/transfer-approvals#transfer-approvals)
      * by someone else in your organization.
      */
@@ -340,19 +391,24 @@ private constructor(
     fun _pendingTransactionId() = pendingTransactionId
 
     /**
-     * Configuration for how the effective date of the transfer will be set. This determines
-     * same-day vs future-dated settlement timing. If not set, defaults to a `settlement_schedule`
-     * of `same_day`. If set, exactly one of the child atributes must be set.
+     * Configuration for how the effective date of the transfer will be set. This
+     * determines same-day vs future-dated settlement timing. If not set, defaults to a
+     * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes
+     * must be set.
      */
     @JsonProperty("preferred_effective_date")
     @ExcludeMissing
     fun _preferredEffectiveDate() = preferredEffectiveDate
 
     /** If your transfer is returned, this will contain details of the return. */
-    @JsonProperty("return") @ExcludeMissing fun _return_() = return_
+    @JsonProperty("return")
+    @ExcludeMissing
+    fun _return_() = return_
 
     /** The American Bankers' Association (ABA) Routing Transit Number (RTN). */
-    @JsonProperty("routing_number") @ExcludeMissing fun _routingNumber() = routingNumber
+    @JsonProperty("routing_number")
+    @ExcludeMissing
+    fun _routingNumber() = routingNumber
 
     /** The Standard Entry Class (SEC) code to use for the transfer. */
     @JsonProperty("standard_entry_class_code")
@@ -365,24 +421,33 @@ private constructor(
     fun _statementDescriptor() = statementDescriptor
 
     /** The lifecycle status of the transfer. */
-    @JsonProperty("status") @ExcludeMissing fun _status() = status
+    @JsonProperty("status")
+    @ExcludeMissing
+    fun _status() = status
 
     /**
-     * After the transfer is submitted to FedACH, this will contain supplemental details. Increase
-     * batches transfers and submits a file to the Federal Reserve roughly every 30 minutes. The
-     * Federal Reserve processes ACH transfers during weekdays according to their
+     * After the transfer is submitted to FedACH, this will contain supplemental
+     * details. Increase batches transfers and submits a file to the Federal Reserve
+     * roughly every 30 minutes. The Federal Reserve processes ACH transfers during
+     * weekdays according to their
      * [posted schedule](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
      */
-    @JsonProperty("submission") @ExcludeMissing fun _submission() = submission
+    @JsonProperty("submission")
+    @ExcludeMissing
+    fun _submission() = submission
 
     /** The ID for the transaction funding the transfer. */
-    @JsonProperty("transaction_id") @ExcludeMissing fun _transactionId() = transactionId
+    @JsonProperty("transaction_id")
+    @ExcludeMissing
+    fun _transactionId() = transactionId
 
     /**
      * A constant representing the object's type. For this resource it will always be
      * `ach_transfer`.
      */
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    @JsonProperty("type")
+    @ExcludeMissing
+    fun _type() = type
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -390,132 +455,130 @@ private constructor(
 
     fun validate(): AchTransfer = apply {
         if (!validated) {
-            accountId()
-            accountNumber()
-            acknowledgement()?.validate()
-            addenda()?.validate()
-            amount()
-            approval()?.validate()
-            cancellation()?.validate()
-            companyDescriptiveDate()
-            companyDiscretionaryData()
-            companyEntryDescription()
-            companyName()
-            createdAt()
-            createdBy()?.validate()
-            currency()
-            destinationAccountHolder()
-            externalAccountId()
-            funding()
-            id()
-            idempotencyKey()
-            individualId()
-            individualName()
-            network()
-            notificationsOfChange().forEach { it.validate() }
-            pendingTransactionId()
-            preferredEffectiveDate().validate()
-            return_()?.validate()
-            routingNumber()
-            standardEntryClassCode()
-            statementDescriptor()
-            status()
-            submission()?.validate()
-            transactionId()
-            type()
-            validated = true
+          accountId()
+          accountNumber()
+          acknowledgement()?.validate()
+          addenda()?.validate()
+          amount()
+          approval()?.validate()
+          cancellation()?.validate()
+          companyDescriptiveDate()
+          companyDiscretionaryData()
+          companyEntryDescription()
+          companyName()
+          createdAt()
+          createdBy()?.validate()
+          currency()
+          destinationAccountHolder()
+          externalAccountId()
+          funding()
+          id()
+          idempotencyKey()
+          individualId()
+          individualName()
+          network()
+          notificationsOfChange().forEach { it.validate() }
+          pendingTransactionId()
+          preferredEffectiveDate().validate()
+          return_()?.validate()
+          routingNumber()
+          standardEntryClassCode()
+          statementDescriptor()
+          status()
+          submission()?.validate()
+          transactionId()
+          type()
+          validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is AchTransfer &&
-            this.accountId == other.accountId &&
-            this.accountNumber == other.accountNumber &&
-            this.acknowledgement == other.acknowledgement &&
-            this.addenda == other.addenda &&
-            this.amount == other.amount &&
-            this.approval == other.approval &&
-            this.cancellation == other.cancellation &&
-            this.companyDescriptiveDate == other.companyDescriptiveDate &&
-            this.companyDiscretionaryData == other.companyDiscretionaryData &&
-            this.companyEntryDescription == other.companyEntryDescription &&
-            this.companyName == other.companyName &&
-            this.createdAt == other.createdAt &&
-            this.createdBy == other.createdBy &&
-            this.currency == other.currency &&
-            this.destinationAccountHolder == other.destinationAccountHolder &&
-            this.externalAccountId == other.externalAccountId &&
-            this.funding == other.funding &&
-            this.id == other.id &&
-            this.idempotencyKey == other.idempotencyKey &&
-            this.individualId == other.individualId &&
-            this.individualName == other.individualName &&
-            this.network == other.network &&
-            this.notificationsOfChange == other.notificationsOfChange &&
-            this.pendingTransactionId == other.pendingTransactionId &&
-            this.preferredEffectiveDate == other.preferredEffectiveDate &&
-            this.return_ == other.return_ &&
-            this.routingNumber == other.routingNumber &&
-            this.standardEntryClassCode == other.standardEntryClassCode &&
-            this.statementDescriptor == other.statementDescriptor &&
-            this.status == other.status &&
-            this.submission == other.submission &&
-            this.transactionId == other.transactionId &&
-            this.type == other.type &&
-            this.additionalProperties == other.additionalProperties
+      return other is AchTransfer &&
+          this.accountId == other.accountId &&
+          this.accountNumber == other.accountNumber &&
+          this.acknowledgement == other.acknowledgement &&
+          this.addenda == other.addenda &&
+          this.amount == other.amount &&
+          this.approval == other.approval &&
+          this.cancellation == other.cancellation &&
+          this.companyDescriptiveDate == other.companyDescriptiveDate &&
+          this.companyDiscretionaryData == other.companyDiscretionaryData &&
+          this.companyEntryDescription == other.companyEntryDescription &&
+          this.companyName == other.companyName &&
+          this.createdAt == other.createdAt &&
+          this.createdBy == other.createdBy &&
+          this.currency == other.currency &&
+          this.destinationAccountHolder == other.destinationAccountHolder &&
+          this.externalAccountId == other.externalAccountId &&
+          this.funding == other.funding &&
+          this.id == other.id &&
+          this.idempotencyKey == other.idempotencyKey &&
+          this.individualId == other.individualId &&
+          this.individualName == other.individualName &&
+          this.network == other.network &&
+          this.notificationsOfChange == other.notificationsOfChange &&
+          this.pendingTransactionId == other.pendingTransactionId &&
+          this.preferredEffectiveDate == other.preferredEffectiveDate &&
+          this.return_ == other.return_ &&
+          this.routingNumber == other.routingNumber &&
+          this.standardEntryClassCode == other.standardEntryClassCode &&
+          this.statementDescriptor == other.statementDescriptor &&
+          this.status == other.status &&
+          this.submission == other.submission &&
+          this.transactionId == other.transactionId &&
+          this.type == other.type &&
+          this.additionalProperties == other.additionalProperties
     }
 
     override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    accountId,
-                    accountNumber,
-                    acknowledgement,
-                    addenda,
-                    amount,
-                    approval,
-                    cancellation,
-                    companyDescriptiveDate,
-                    companyDiscretionaryData,
-                    companyEntryDescription,
-                    companyName,
-                    createdAt,
-                    createdBy,
-                    currency,
-                    destinationAccountHolder,
-                    externalAccountId,
-                    funding,
-                    id,
-                    idempotencyKey,
-                    individualId,
-                    individualName,
-                    network,
-                    notificationsOfChange,
-                    pendingTransactionId,
-                    preferredEffectiveDate,
-                    return_,
-                    routingNumber,
-                    standardEntryClassCode,
-                    statementDescriptor,
-                    status,
-                    submission,
-                    transactionId,
-                    type,
-                    additionalProperties,
-                )
-        }
-        return hashCode
+      if (hashCode == 0) {
+        hashCode = Objects.hash(
+            accountId,
+            accountNumber,
+            acknowledgement,
+            addenda,
+            amount,
+            approval,
+            cancellation,
+            companyDescriptiveDate,
+            companyDiscretionaryData,
+            companyEntryDescription,
+            companyName,
+            createdAt,
+            createdBy,
+            currency,
+            destinationAccountHolder,
+            externalAccountId,
+            funding,
+            id,
+            idempotencyKey,
+            individualId,
+            individualName,
+            network,
+            notificationsOfChange,
+            pendingTransactionId,
+            preferredEffectiveDate,
+            return_,
+            routingNumber,
+            standardEntryClassCode,
+            statementDescriptor,
+            status,
+            submission,
+            transactionId,
+            type,
+            additionalProperties,
+        )
+      }
+      return hashCode
     }
 
-    override fun toString() =
-        "AchTransfer{accountId=$accountId, accountNumber=$accountNumber, acknowledgement=$acknowledgement, addenda=$addenda, amount=$amount, approval=$approval, cancellation=$cancellation, companyDescriptiveDate=$companyDescriptiveDate, companyDiscretionaryData=$companyDiscretionaryData, companyEntryDescription=$companyEntryDescription, companyName=$companyName, createdAt=$createdAt, createdBy=$createdBy, currency=$currency, destinationAccountHolder=$destinationAccountHolder, externalAccountId=$externalAccountId, funding=$funding, id=$id, idempotencyKey=$idempotencyKey, individualId=$individualId, individualName=$individualName, network=$network, notificationsOfChange=$notificationsOfChange, pendingTransactionId=$pendingTransactionId, preferredEffectiveDate=$preferredEffectiveDate, return_=$return_, routingNumber=$routingNumber, standardEntryClassCode=$standardEntryClassCode, statementDescriptor=$statementDescriptor, status=$status, submission=$submission, transactionId=$transactionId, type=$type, additionalProperties=$additionalProperties}"
+    override fun toString() = "AchTransfer{accountId=$accountId, accountNumber=$accountNumber, acknowledgement=$acknowledgement, addenda=$addenda, amount=$amount, approval=$approval, cancellation=$cancellation, companyDescriptiveDate=$companyDescriptiveDate, companyDiscretionaryData=$companyDiscretionaryData, companyEntryDescription=$companyEntryDescription, companyName=$companyName, createdAt=$createdAt, createdBy=$createdBy, currency=$currency, destinationAccountHolder=$destinationAccountHolder, externalAccountId=$externalAccountId, funding=$funding, id=$id, idempotencyKey=$idempotencyKey, individualId=$individualId, individualName=$individualName, network=$network, notificationsOfChange=$notificationsOfChange, pendingTransactionId=$pendingTransactionId, preferredEffectiveDate=$preferredEffectiveDate, return_=$return_, routingNumber=$routingNumber, standardEntryClassCode=$standardEntryClassCode, statementDescriptor=$statementDescriptor, status=$status, submission=$submission, transactionId=$transactionId, type=$type, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -602,7 +665,9 @@ private constructor(
         /** The Account to which the transfer belongs. */
         @JsonProperty("account_id")
         @ExcludeMissing
-        fun accountId(accountId: JsonField<String>) = apply { this.accountId = accountId }
+        fun accountId(accountId: JsonField<String>) = apply {
+            this.accountId = accountId
+        }
 
         /** The destination account number. */
         fun accountNumber(accountNumber: String) = accountNumber(JsonField.of(accountNumber))
@@ -615,15 +680,16 @@ private constructor(
         }
 
         /**
-         * After the transfer is acknowledged by FedACH, this will contain supplemental details. The
-         * Federal Reserve sends an acknowledgement message for each file that Increase submits.
+         * After the transfer is acknowledged by FedACH, this will contain supplemental
+         * details. The Federal Reserve sends an acknowledgement message for each file that
+         * Increase submits.
          */
-        fun acknowledgement(acknowledgement: Acknowledgement) =
-            acknowledgement(JsonField.of(acknowledgement))
+        fun acknowledgement(acknowledgement: Acknowledgement) = acknowledgement(JsonField.of(acknowledgement))
 
         /**
-         * After the transfer is acknowledged by FedACH, this will contain supplemental details. The
-         * Federal Reserve sends an acknowledgement message for each file that Increase submits.
+         * After the transfer is acknowledged by FedACH, this will contain supplemental
+         * details. The Federal Reserve sends an acknowledgement message for each file that
+         * Increase submits.
          */
         @JsonProperty("acknowledgement")
         @ExcludeMissing
@@ -637,47 +703,53 @@ private constructor(
         /** Additional information that will be sent to the recipient. */
         @JsonProperty("addenda")
         @ExcludeMissing
-        fun addenda(addenda: JsonField<Addenda>) = apply { this.addenda = addenda }
+        fun addenda(addenda: JsonField<Addenda>) = apply {
+            this.addenda = addenda
+        }
 
         /**
-         * The transfer amount in USD cents. A positive amount indicates a credit transfer pushing
-         * funds to the receiving account. A negative amount indicates a debit transfer pulling
-         * funds from the receiving account.
+         * The transfer amount in USD cents. A positive amount indicates a credit transfer
+         * pushing funds to the receiving account. A negative amount indicates a debit
+         * transfer pulling funds from the receiving account.
          */
         fun amount(amount: Long) = amount(JsonField.of(amount))
 
         /**
-         * The transfer amount in USD cents. A positive amount indicates a credit transfer pushing
-         * funds to the receiving account. A negative amount indicates a debit transfer pulling
-         * funds from the receiving account.
+         * The transfer amount in USD cents. A positive amount indicates a credit transfer
+         * pushing funds to the receiving account. A negative amount indicates a debit
+         * transfer pulling funds from the receiving account.
          */
         @JsonProperty("amount")
         @ExcludeMissing
-        fun amount(amount: JsonField<Long>) = apply { this.amount = amount }
+        fun amount(amount: JsonField<Long>) = apply {
+            this.amount = amount
+        }
 
         /**
-         * If your account requires approvals for transfers and the transfer was approved, this will
-         * contain details of the approval.
+         * If your account requires approvals for transfers and the transfer was approved,
+         * this will contain details of the approval.
          */
         fun approval(approval: Approval) = approval(JsonField.of(approval))
 
         /**
-         * If your account requires approvals for transfers and the transfer was approved, this will
-         * contain details of the approval.
+         * If your account requires approvals for transfers and the transfer was approved,
+         * this will contain details of the approval.
          */
         @JsonProperty("approval")
         @ExcludeMissing
-        fun approval(approval: JsonField<Approval>) = apply { this.approval = approval }
+        fun approval(approval: JsonField<Approval>) = apply {
+            this.approval = approval
+        }
 
         /**
-         * If your account requires approvals for transfers and the transfer was not approved, this
-         * will contain details of the cancellation.
+         * If your account requires approvals for transfers and the transfer was not
+         * approved, this will contain details of the cancellation.
          */
         fun cancellation(cancellation: Cancellation) = cancellation(JsonField.of(cancellation))
 
         /**
-         * If your account requires approvals for transfers and the transfer was not approved, this
-         * will contain details of the cancellation.
+         * If your account requires approvals for transfers and the transfer was not
+         * approved, this will contain details of the cancellation.
          */
         @JsonProperty("cancellation")
         @ExcludeMissing
@@ -686,8 +758,7 @@ private constructor(
         }
 
         /** The description of the date of the transfer. */
-        fun companyDescriptiveDate(companyDescriptiveDate: String) =
-            companyDescriptiveDate(JsonField.of(companyDescriptiveDate))
+        fun companyDescriptiveDate(companyDescriptiveDate: String) = companyDescriptiveDate(JsonField.of(companyDescriptiveDate))
 
         /** The description of the date of the transfer. */
         @JsonProperty("company_descriptive_date")
@@ -697,8 +768,7 @@ private constructor(
         }
 
         /** The data you chose to associate with the transfer. */
-        fun companyDiscretionaryData(companyDiscretionaryData: String) =
-            companyDiscretionaryData(JsonField.of(companyDiscretionaryData))
+        fun companyDiscretionaryData(companyDiscretionaryData: String) = companyDiscretionaryData(JsonField.of(companyDiscretionaryData))
 
         /** The data you chose to associate with the transfer. */
         @JsonProperty("company_discretionary_data")
@@ -708,8 +778,7 @@ private constructor(
         }
 
         /** The description of the transfer you set to be shown to the recipient. */
-        fun companyEntryDescription(companyEntryDescription: String) =
-            companyEntryDescription(JsonField.of(companyEntryDescription))
+        fun companyEntryDescription(companyEntryDescription: String) = companyEntryDescription(JsonField.of(companyEntryDescription))
 
         /** The description of the transfer you set to be shown to the recipient. */
         @JsonProperty("company_entry_description")
@@ -724,21 +793,25 @@ private constructor(
         /** The name by which the recipient knows you. */
         @JsonProperty("company_name")
         @ExcludeMissing
-        fun companyName(companyName: JsonField<String>) = apply { this.companyName = companyName }
+        fun companyName(companyName: JsonField<String>) = apply {
+            this.companyName = companyName
+        }
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * transfer was created.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the transfer was created.
          */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * transfer was created.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the transfer was created.
          */
         @JsonProperty("created_at")
         @ExcludeMissing
-        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+            this.createdAt = createdAt
+        }
 
         /** What object created the transfer, either via the API or the dashboard. */
         fun createdBy(createdBy: CreatedBy) = createdBy(JsonField.of(createdBy))
@@ -746,36 +819,44 @@ private constructor(
         /** What object created the transfer, either via the API or the dashboard. */
         @JsonProperty("created_by")
         @ExcludeMissing
-        fun createdBy(createdBy: JsonField<CreatedBy>) = apply { this.createdBy = createdBy }
+        fun createdBy(createdBy: JsonField<CreatedBy>) = apply {
+            this.createdBy = createdBy
+        }
 
         /**
-         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's currency.
-         * For ACH transfers this is always equal to `usd`.
+         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's
+         * currency. For ACH transfers this is always equal to `usd`.
          */
         fun currency(currency: Currency) = currency(JsonField.of(currency))
 
         /**
-         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's currency.
-         * For ACH transfers this is always equal to `usd`.
+         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) code for the transfer's
+         * currency. For ACH transfers this is always equal to `usd`.
          */
         @JsonProperty("currency")
         @ExcludeMissing
-        fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
+        fun currency(currency: JsonField<Currency>) = apply {
+            this.currency = currency
+        }
 
-        /** The type of entity that owns the account to which the ACH Transfer is being sent. */
-        fun destinationAccountHolder(destinationAccountHolder: DestinationAccountHolder) =
-            destinationAccountHolder(JsonField.of(destinationAccountHolder))
+        /**
+         * The type of entity that owns the account to which the ACH Transfer is being
+         * sent.
+         */
+        fun destinationAccountHolder(destinationAccountHolder: DestinationAccountHolder) = destinationAccountHolder(JsonField.of(destinationAccountHolder))
 
-        /** The type of entity that owns the account to which the ACH Transfer is being sent. */
+        /**
+         * The type of entity that owns the account to which the ACH Transfer is being
+         * sent.
+         */
         @JsonProperty("destination_account_holder")
         @ExcludeMissing
-        fun destinationAccountHolder(
-            destinationAccountHolder: JsonField<DestinationAccountHolder>
-        ) = apply { this.destinationAccountHolder = destinationAccountHolder }
+        fun destinationAccountHolder(destinationAccountHolder: JsonField<DestinationAccountHolder>) = apply {
+            this.destinationAccountHolder = destinationAccountHolder
+        }
 
         /** The identifier of the External Account the transfer was made to, if any. */
-        fun externalAccountId(externalAccountId: String) =
-            externalAccountId(JsonField.of(externalAccountId))
+        fun externalAccountId(externalAccountId: String) = externalAccountId(JsonField.of(externalAccountId))
 
         /** The identifier of the External Account the transfer was made to, if any. */
         @JsonProperty("external_account_id")
@@ -790,25 +871,31 @@ private constructor(
         /** The type of the account to which the transfer will be sent. */
         @JsonProperty("funding")
         @ExcludeMissing
-        fun funding(funding: JsonField<Funding>) = apply { this.funding = funding }
+        fun funding(funding: JsonField<Funding>) = apply {
+            this.funding = funding
+        }
 
         /** The ACH transfer's identifier. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** The ACH transfer's identifier. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        @JsonProperty("id")
+        @ExcludeMissing
+        fun id(id: JsonField<String>) = apply {
+            this.id = id
+        }
 
         /**
-         * The idempotency key you chose for this object. This value is unique across Increase and
-         * is used to ensure that a request is only processed once. Learn more about
-         * [idempotency](https://increase.com/documentation/idempotency-keys).
+         * The idempotency key you chose for this object. This value is unique across
+         * Increase and is used to ensure that a request is only processed once. Learn more
+         * about [idempotency](https://increase.com/documentation/idempotency-keys).
          */
         fun idempotencyKey(idempotencyKey: String) = idempotencyKey(JsonField.of(idempotencyKey))
 
         /**
-         * The idempotency key you chose for this object. This value is unique across Increase and
-         * is used to ensure that a request is only processed once. Learn more about
-         * [idempotency](https://increase.com/documentation/idempotency-keys).
+         * The idempotency key you chose for this object. This value is unique across
+         * Increase and is used to ensure that a request is only processed once. Learn more
+         * about [idempotency](https://increase.com/documentation/idempotency-keys).
          */
         @JsonProperty("idempotency_key")
         @ExcludeMissing
@@ -827,14 +914,14 @@ private constructor(
         }
 
         /**
-         * The name of the transfer recipient. This value is information and not verified by the
-         * recipient's bank.
+         * The name of the transfer recipient. This value is information and not verified
+         * by the recipient's bank.
          */
         fun individualName(individualName: String) = individualName(JsonField.of(individualName))
 
         /**
-         * The name of the transfer recipient. This value is information and not verified by the
-         * recipient's bank.
+         * The name of the transfer recipient. This value is information and not verified
+         * by the recipient's bank.
          */
         @JsonProperty("individual_name")
         @ExcludeMissing
@@ -848,38 +935,37 @@ private constructor(
         /** The transfer's network. */
         @JsonProperty("network")
         @ExcludeMissing
-        fun network(network: JsonField<Network>) = apply { this.network = network }
+        fun network(network: JsonField<Network>) = apply {
+            this.network = network
+        }
 
         /**
-         * If the receiving bank accepts the transfer but notifies that future transfers should use
-         * different details, this will contain those details.
+         * If the receiving bank accepts the transfer but notifies that future transfers
+         * should use different details, this will contain those details.
          */
-        fun notificationsOfChange(notificationsOfChange: List<NotificationsOfChange>) =
-            notificationsOfChange(JsonField.of(notificationsOfChange))
+        fun notificationsOfChange(notificationsOfChange: List<NotificationsOfChange>) = notificationsOfChange(JsonField.of(notificationsOfChange))
 
         /**
-         * If the receiving bank accepts the transfer but notifies that future transfers should use
-         * different details, this will contain those details.
+         * If the receiving bank accepts the transfer but notifies that future transfers
+         * should use different details, this will contain those details.
          */
         @JsonProperty("notifications_of_change")
         @ExcludeMissing
-        fun notificationsOfChange(notificationsOfChange: JsonField<List<NotificationsOfChange>>) =
-            apply {
-                this.notificationsOfChange = notificationsOfChange
-            }
+        fun notificationsOfChange(notificationsOfChange: JsonField<List<NotificationsOfChange>>) = apply {
+            this.notificationsOfChange = notificationsOfChange
+        }
 
         /**
-         * The ID for the pending transaction representing the transfer. A pending transaction is
-         * created when the transfer
+         * The ID for the pending transaction representing the transfer. A pending
+         * transaction is created when the transfer
          * [requires approval](https://increase.com/documentation/transfer-approvals#transfer-approvals)
          * by someone else in your organization.
          */
-        fun pendingTransactionId(pendingTransactionId: String) =
-            pendingTransactionId(JsonField.of(pendingTransactionId))
+        fun pendingTransactionId(pendingTransactionId: String) = pendingTransactionId(JsonField.of(pendingTransactionId))
 
         /**
-         * The ID for the pending transaction representing the transfer. A pending transaction is
-         * created when the transfer
+         * The ID for the pending transaction representing the transfer. A pending
+         * transaction is created when the transfer
          * [requires approval](https://increase.com/documentation/transfer-approvals#transfer-approvals)
          * by someone else in your organization.
          */
@@ -890,26 +976,24 @@ private constructor(
         }
 
         /**
-         * Configuration for how the effective date of the transfer will be set. This determines
-         * same-day vs future-dated settlement timing. If not set, defaults to a
-         * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes must be
-         * set.
+         * Configuration for how the effective date of the transfer will be set. This
+         * determines same-day vs future-dated settlement timing. If not set, defaults to a
+         * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes
+         * must be set.
          */
-        fun preferredEffectiveDate(preferredEffectiveDate: PreferredEffectiveDate) =
-            preferredEffectiveDate(JsonField.of(preferredEffectiveDate))
+        fun preferredEffectiveDate(preferredEffectiveDate: PreferredEffectiveDate) = preferredEffectiveDate(JsonField.of(preferredEffectiveDate))
 
         /**
-         * Configuration for how the effective date of the transfer will be set. This determines
-         * same-day vs future-dated settlement timing. If not set, defaults to a
-         * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes must be
-         * set.
+         * Configuration for how the effective date of the transfer will be set. This
+         * determines same-day vs future-dated settlement timing. If not set, defaults to a
+         * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes
+         * must be set.
          */
         @JsonProperty("preferred_effective_date")
         @ExcludeMissing
-        fun preferredEffectiveDate(preferredEffectiveDate: JsonField<PreferredEffectiveDate>) =
-            apply {
-                this.preferredEffectiveDate = preferredEffectiveDate
-            }
+        fun preferredEffectiveDate(preferredEffectiveDate: JsonField<PreferredEffectiveDate>) = apply {
+            this.preferredEffectiveDate = preferredEffectiveDate
+        }
 
         /** If your transfer is returned, this will contain details of the return. */
         fun return_(return_: Return) = return_(JsonField.of(return_))
@@ -917,7 +1001,9 @@ private constructor(
         /** If your transfer is returned, this will contain details of the return. */
         @JsonProperty("return")
         @ExcludeMissing
-        fun return_(return_: JsonField<Return>) = apply { this.return_ = return_ }
+        fun return_(return_: JsonField<Return>) = apply {
+            this.return_ = return_
+        }
 
         /** The American Bankers' Association (ABA) Routing Transit Number (RTN). */
         fun routingNumber(routingNumber: String) = routingNumber(JsonField.of(routingNumber))
@@ -930,20 +1016,17 @@ private constructor(
         }
 
         /** The Standard Entry Class (SEC) code to use for the transfer. */
-        fun standardEntryClassCode(standardEntryClassCode: StandardEntryClassCode) =
-            standardEntryClassCode(JsonField.of(standardEntryClassCode))
+        fun standardEntryClassCode(standardEntryClassCode: StandardEntryClassCode) = standardEntryClassCode(JsonField.of(standardEntryClassCode))
 
         /** The Standard Entry Class (SEC) code to use for the transfer. */
         @JsonProperty("standard_entry_class_code")
         @ExcludeMissing
-        fun standardEntryClassCode(standardEntryClassCode: JsonField<StandardEntryClassCode>) =
-            apply {
-                this.standardEntryClassCode = standardEntryClassCode
-            }
+        fun standardEntryClassCode(standardEntryClassCode: JsonField<StandardEntryClassCode>) = apply {
+            this.standardEntryClassCode = standardEntryClassCode
+        }
 
         /** The descriptor that will show on the recipient's bank statement. */
-        fun statementDescriptor(statementDescriptor: String) =
-            statementDescriptor(JsonField.of(statementDescriptor))
+        fun statementDescriptor(statementDescriptor: String) = statementDescriptor(JsonField.of(statementDescriptor))
 
         /** The descriptor that will show on the recipient's bank statement. */
         @JsonProperty("statement_descriptor")
@@ -958,25 +1041,31 @@ private constructor(
         /** The lifecycle status of the transfer. */
         @JsonProperty("status")
         @ExcludeMissing
-        fun status(status: JsonField<Status>) = apply { this.status = status }
+        fun status(status: JsonField<Status>) = apply {
+            this.status = status
+        }
 
         /**
-         * After the transfer is submitted to FedACH, this will contain supplemental details.
-         * Increase batches transfers and submits a file to the Federal Reserve roughly every 30
-         * minutes. The Federal Reserve processes ACH transfers during weekdays according to their
+         * After the transfer is submitted to FedACH, this will contain supplemental
+         * details. Increase batches transfers and submits a file to the Federal Reserve
+         * roughly every 30 minutes. The Federal Reserve processes ACH transfers during
+         * weekdays according to their
          * [posted schedule](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
          */
         fun submission(submission: Submission) = submission(JsonField.of(submission))
 
         /**
-         * After the transfer is submitted to FedACH, this will contain supplemental details.
-         * Increase batches transfers and submits a file to the Federal Reserve roughly every 30
-         * minutes. The Federal Reserve processes ACH transfers during weekdays according to their
+         * After the transfer is submitted to FedACH, this will contain supplemental
+         * details. Increase batches transfers and submits a file to the Federal Reserve
+         * roughly every 30 minutes. The Federal Reserve processes ACH transfers during
+         * weekdays according to their
          * [posted schedule](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
          */
         @JsonProperty("submission")
         @ExcludeMissing
-        fun submission(submission: JsonField<Submission>) = apply { this.submission = submission }
+        fun submission(submission: JsonField<Submission>) = apply {
+            this.submission = submission
+        }
 
         /** The ID for the transaction funding the transfer. */
         fun transactionId(transactionId: String) = transactionId(JsonField.of(transactionId))
@@ -1000,7 +1089,9 @@ private constructor(
          */
         @JsonProperty("type")
         @ExcludeMissing
-        fun type(type: JsonField<Type>) = apply { this.type = type }
+        fun type(type: JsonField<Type>) = apply {
+            this.type = type
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -1016,66 +1107,70 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): AchTransfer =
-            AchTransfer(
-                accountId,
-                accountNumber,
-                acknowledgement,
-                addenda,
-                amount,
-                approval,
-                cancellation,
-                companyDescriptiveDate,
-                companyDiscretionaryData,
-                companyEntryDescription,
-                companyName,
-                createdAt,
-                createdBy,
-                currency,
-                destinationAccountHolder,
-                externalAccountId,
-                funding,
-                id,
-                idempotencyKey,
-                individualId,
-                individualName,
-                network,
-                notificationsOfChange.map { it.toUnmodifiable() },
-                pendingTransactionId,
-                preferredEffectiveDate,
-                return_,
-                routingNumber,
-                standardEntryClassCode,
-                statementDescriptor,
-                status,
-                submission,
-                transactionId,
-                type,
-                additionalProperties.toUnmodifiable(),
-            )
+        fun build(): AchTransfer = AchTransfer(
+            accountId,
+            accountNumber,
+            acknowledgement,
+            addenda,
+            amount,
+            approval,
+            cancellation,
+            companyDescriptiveDate,
+            companyDiscretionaryData,
+            companyEntryDescription,
+            companyName,
+            createdAt,
+            createdBy,
+            currency,
+            destinationAccountHolder,
+            externalAccountId,
+            funding,
+            id,
+            idempotencyKey,
+            individualId,
+            individualName,
+            network,
+            notificationsOfChange.map { it.toUnmodifiable() },
+            pendingTransactionId,
+            preferredEffectiveDate,
+            return_,
+            routingNumber,
+            standardEntryClassCode,
+            statementDescriptor,
+            status,
+            submission,
+            transactionId,
+            type,
+            additionalProperties.toUnmodifiable(),
+        )
     }
 
     /**
-     * After the transfer is acknowledged by FedACH, this will contain supplemental details. The
-     * Federal Reserve sends an acknowledgement message for each file that Increase submits.
+     * After the transfer is acknowledged by FedACH, this will contain supplemental
+     * details. The Federal Reserve sends an acknowledgement message for each file that
+     * Increase submits.
      */
     @JsonDeserialize(builder = Acknowledgement.Builder::class)
     @NoAutoDetect
-    class Acknowledgement
-    private constructor(
-        private val acknowledgedAt: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class Acknowledgement private constructor(private val acknowledgedAt: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var validated: Boolean = false
 
         private var hashCode: Int = 0
 
-        /** When the Federal Reserve acknowledged the submitted file containing this transfer. */
+        /**
+         * When the Federal Reserve acknowledged the submitted file containing this
+         * transfer.
+         */
         fun acknowledgedAt(): String = acknowledgedAt.getRequired("acknowledged_at")
 
-        /** When the Federal Reserve acknowledged the submitted file containing this transfer. */
-        @JsonProperty("acknowledged_at") @ExcludeMissing fun _acknowledgedAt() = acknowledgedAt
+        /**
+         * When the Federal Reserve acknowledged the submitted file containing this
+         * transfer.
+         */
+        @JsonProperty("acknowledged_at")
+        @ExcludeMissing
+        fun _acknowledgedAt() = acknowledgedAt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1083,32 +1178,31 @@ private constructor(
 
         fun validate(): Acknowledgement = apply {
             if (!validated) {
-                acknowledgedAt()
-                validated = true
+              acknowledgedAt()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Acknowledgement &&
-                this.acknowledgedAt == other.acknowledgedAt &&
-                this.additionalProperties == other.additionalProperties
+          return other is Acknowledgement &&
+              this.acknowledgedAt == other.acknowledgedAt &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(acknowledgedAt, additionalProperties)
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(acknowledgedAt, additionalProperties)
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "Acknowledgement{acknowledgedAt=$acknowledgedAt, additionalProperties=$additionalProperties}"
+        override fun toString() = "Acknowledgement{acknowledgedAt=$acknowledgedAt, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1126,13 +1220,14 @@ private constructor(
             }
 
             /**
-             * When the Federal Reserve acknowledged the submitted file containing this transfer.
+             * When the Federal Reserve acknowledged the submitted file containing this
+             * transfer.
              */
-            fun acknowledgedAt(acknowledgedAt: String) =
-                acknowledgedAt(JsonField.of(acknowledgedAt))
+            fun acknowledgedAt(acknowledgedAt: String) = acknowledgedAt(JsonField.of(acknowledgedAt))
 
             /**
-             * When the Federal Reserve acknowledged the submitted file containing this transfer.
+             * When the Federal Reserve acknowledged the submitted file containing this
+             * transfer.
              */
             @JsonProperty("acknowledged_at")
             @ExcludeMissing
@@ -1154,20 +1249,19 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Acknowledgement =
-                Acknowledgement(acknowledgedAt, additionalProperties.toUnmodifiable())
+            fun build(): Acknowledgement = Acknowledgement(acknowledgedAt, additionalProperties.toUnmodifiable())
         }
     }
 
     /** Additional information that will be sent to the recipient. */
     @JsonDeserialize(builder = Addenda.Builder::class)
     @NoAutoDetect
-    class Addenda
-    private constructor(
-        private val category: JsonField<Category>,
-        private val freeform: JsonField<Freeform>,
-        private val paymentOrderRemittanceAdvice: JsonField<PaymentOrderRemittanceAdvice>,
-        private val additionalProperties: Map<String, JsonValue>,
+    class Addenda private constructor(
+      private val category: JsonField<Category>,
+      private val freeform: JsonField<Freeform>,
+      private val paymentOrderRemittanceAdvice: JsonField<PaymentOrderRemittanceAdvice>,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var validated: Boolean = false
@@ -1175,8 +1269,8 @@ private constructor(
         private var hashCode: Int = 0
 
         /**
-         * The type of the resource. We may add additional possible values for this enum over time;
-         * your application should be able to handle such additions gracefully.
+         * The type of the resource. We may add additional possible values for this enum
+         * over time; your application should be able to handle such additions gracefully.
          */
         fun category(): Category = category.getRequired("category")
 
@@ -1187,17 +1281,20 @@ private constructor(
          * Structured ASC X12 820 remittance advice records. Please reach out to
          * [support@increase.com](mailto:support@increase.com) for more information.
          */
-        fun paymentOrderRemittanceAdvice(): PaymentOrderRemittanceAdvice? =
-            paymentOrderRemittanceAdvice.getNullable("payment_order_remittance_advice")
+        fun paymentOrderRemittanceAdvice(): PaymentOrderRemittanceAdvice? = paymentOrderRemittanceAdvice.getNullable("payment_order_remittance_advice")
 
         /**
-         * The type of the resource. We may add additional possible values for this enum over time;
-         * your application should be able to handle such additions gracefully.
+         * The type of the resource. We may add additional possible values for this enum
+         * over time; your application should be able to handle such additions gracefully.
          */
-        @JsonProperty("category") @ExcludeMissing fun _category() = category
+        @JsonProperty("category")
+        @ExcludeMissing
+        fun _category() = category
 
         /** Unstructured `payment_related_information` passed through with the transfer. */
-        @JsonProperty("freeform") @ExcludeMissing fun _freeform() = freeform
+        @JsonProperty("freeform")
+        @ExcludeMissing
+        fun _freeform() = freeform
 
         /**
          * Structured ASC X12 820 remittance advice records. Please reach out to
@@ -1213,42 +1310,40 @@ private constructor(
 
         fun validate(): Addenda = apply {
             if (!validated) {
-                category()
-                freeform()?.validate()
-                paymentOrderRemittanceAdvice()?.validate()
-                validated = true
+              category()
+              freeform()?.validate()
+              paymentOrderRemittanceAdvice()?.validate()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Addenda &&
-                this.category == other.category &&
-                this.freeform == other.freeform &&
-                this.paymentOrderRemittanceAdvice == other.paymentOrderRemittanceAdvice &&
-                this.additionalProperties == other.additionalProperties
+          return other is Addenda &&
+              this.category == other.category &&
+              this.freeform == other.freeform &&
+              this.paymentOrderRemittanceAdvice == other.paymentOrderRemittanceAdvice &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        category,
-                        freeform,
-                        paymentOrderRemittanceAdvice,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                category,
+                freeform,
+                paymentOrderRemittanceAdvice,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "Addenda{category=$category, freeform=$freeform, paymentOrderRemittanceAdvice=$paymentOrderRemittanceAdvice, additionalProperties=$additionalProperties}"
+        override fun toString() = "Addenda{category=$category, freeform=$freeform, paymentOrderRemittanceAdvice=$paymentOrderRemittanceAdvice, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1259,8 +1354,7 @@ private constructor(
 
             private var category: JsonField<Category> = JsonMissing.of()
             private var freeform: JsonField<Freeform> = JsonMissing.of()
-            private var paymentOrderRemittanceAdvice: JsonField<PaymentOrderRemittanceAdvice> =
-                JsonMissing.of()
+            private var paymentOrderRemittanceAdvice: JsonField<PaymentOrderRemittanceAdvice> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(addenda: Addenda) = apply {
@@ -1271,18 +1365,20 @@ private constructor(
             }
 
             /**
-             * The type of the resource. We may add additional possible values for this enum over
-             * time; your application should be able to handle such additions gracefully.
+             * The type of the resource. We may add additional possible values for this enum
+             * over time; your application should be able to handle such additions gracefully.
              */
             fun category(category: Category) = category(JsonField.of(category))
 
             /**
-             * The type of the resource. We may add additional possible values for this enum over
-             * time; your application should be able to handle such additions gracefully.
+             * The type of the resource. We may add additional possible values for this enum
+             * over time; your application should be able to handle such additions gracefully.
              */
             @JsonProperty("category")
             @ExcludeMissing
-            fun category(category: JsonField<Category>) = apply { this.category = category }
+            fun category(category: JsonField<Category>) = apply {
+                this.category = category
+            }
 
             /** Unstructured `payment_related_information` passed through with the transfer. */
             fun freeform(freeform: Freeform) = freeform(JsonField.of(freeform))
@@ -1290,15 +1386,15 @@ private constructor(
             /** Unstructured `payment_related_information` passed through with the transfer. */
             @JsonProperty("freeform")
             @ExcludeMissing
-            fun freeform(freeform: JsonField<Freeform>) = apply { this.freeform = freeform }
+            fun freeform(freeform: JsonField<Freeform>) = apply {
+                this.freeform = freeform
+            }
 
             /**
              * Structured ASC X12 820 remittance advice records. Please reach out to
              * [support@increase.com](mailto:support@increase.com) for more information.
              */
-            fun paymentOrderRemittanceAdvice(
-                paymentOrderRemittanceAdvice: PaymentOrderRemittanceAdvice
-            ) = paymentOrderRemittanceAdvice(JsonField.of(paymentOrderRemittanceAdvice))
+            fun paymentOrderRemittanceAdvice(paymentOrderRemittanceAdvice: PaymentOrderRemittanceAdvice) = paymentOrderRemittanceAdvice(JsonField.of(paymentOrderRemittanceAdvice))
 
             /**
              * Structured ASC X12 820 remittance advice records. Please reach out to
@@ -1306,9 +1402,9 @@ private constructor(
              */
             @JsonProperty("payment_order_remittance_advice")
             @ExcludeMissing
-            fun paymentOrderRemittanceAdvice(
-                paymentOrderRemittanceAdvice: JsonField<PaymentOrderRemittanceAdvice>
-            ) = apply { this.paymentOrderRemittanceAdvice = paymentOrderRemittanceAdvice }
+            fun paymentOrderRemittanceAdvice(paymentOrderRemittanceAdvice: JsonField<PaymentOrderRemittanceAdvice>) = apply {
+                this.paymentOrderRemittanceAdvice = paymentOrderRemittanceAdvice
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1324,29 +1420,26 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Addenda =
-                Addenda(
-                    category,
-                    freeform,
-                    paymentOrderRemittanceAdvice,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): Addenda = Addenda(
+                category,
+                freeform,
+                paymentOrderRemittanceAdvice,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
-        class Category
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Category @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Category && this.value == other.value
+              return other is Category &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1357,8 +1450,7 @@ private constructor(
 
                 val FREEFORM = Category(JsonField.of("freeform"))
 
-                val PAYMENT_ORDER_REMITTANCE_ADVICE =
-                    Category(JsonField.of("payment_order_remittance_advice"))
+                val PAYMENT_ORDER_REMITTANCE_ADVICE = Category(JsonField.of("payment_order_remittance_advice"))
 
                 val OTHER = Category(JsonField.of("other"))
 
@@ -1378,21 +1470,19 @@ private constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    FREEFORM -> Value.FREEFORM
-                    PAYMENT_ORDER_REMITTANCE_ADVICE -> Value.PAYMENT_ORDER_REMITTANCE_ADVICE
-                    OTHER -> Value.OTHER
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                FREEFORM -> Value.FREEFORM
+                PAYMENT_ORDER_REMITTANCE_ADVICE -> Value.PAYMENT_ORDER_REMITTANCE_ADVICE
+                OTHER -> Value.OTHER
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    FREEFORM -> Known.FREEFORM
-                    PAYMENT_ORDER_REMITTANCE_ADVICE -> Known.PAYMENT_ORDER_REMITTANCE_ADVICE
-                    OTHER -> Known.OTHER
-                    else -> throw IncreaseInvalidDataException("Unknown Category: $value")
-                }
+            fun known(): Known = when (this) {
+                FREEFORM -> Known.FREEFORM
+                PAYMENT_ORDER_REMITTANCE_ADVICE -> Known.PAYMENT_ORDER_REMITTANCE_ADVICE
+                OTHER -> Known.OTHER
+                else -> throw IncreaseInvalidDataException("Unknown Category: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
@@ -1400,11 +1490,7 @@ private constructor(
         /** Unstructured `payment_related_information` passed through with the transfer. */
         @JsonDeserialize(builder = Freeform.Builder::class)
         @NoAutoDetect
-        class Freeform
-        private constructor(
-            private val entries: JsonField<List<Entry>>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        class Freeform private constructor(private val entries: JsonField<List<Entry>>, private val additionalProperties: Map<String, JsonValue>, ) {
 
             private var validated: Boolean = false
 
@@ -1414,7 +1500,9 @@ private constructor(
             fun entries(): List<Entry> = entries.getRequired("entries")
 
             /** Each entry represents an addendum sent with the transfer. */
-            @JsonProperty("entries") @ExcludeMissing fun _entries() = entries
+            @JsonProperty("entries")
+            @ExcludeMissing
+            fun _entries() = entries
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1422,32 +1510,31 @@ private constructor(
 
             fun validate(): Freeform = apply {
                 if (!validated) {
-                    entries().forEach { it.validate() }
-                    validated = true
+                  entries().forEach { it.validate() }
+                  validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Freeform &&
-                    this.entries == other.entries &&
-                    this.additionalProperties == other.additionalProperties
+              return other is Freeform &&
+                  this.entries == other.entries &&
+                  this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(entries, additionalProperties)
-                }
-                return hashCode
+              if (hashCode == 0) {
+                hashCode = Objects.hash(entries, additionalProperties)
+              }
+              return hashCode
             }
 
-            override fun toString() =
-                "Freeform{entries=$entries, additionalProperties=$additionalProperties}"
+            override fun toString() = "Freeform{entries=$entries, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1470,7 +1557,9 @@ private constructor(
                 /** Each entry represents an addendum sent with the transfer. */
                 @JsonProperty("entries")
                 @ExcludeMissing
-                fun entries(entries: JsonField<List<Entry>>) = apply { this.entries = entries }
+                fun entries(entries: JsonField<List<Entry>>) = apply {
+                    this.entries = entries
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1482,33 +1571,23 @@ private constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-                fun build(): Freeform =
-                    Freeform(
-                        entries.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable()
-                    )
+                fun build(): Freeform = Freeform(entries.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
             }
 
             @JsonDeserialize(builder = Entry.Builder::class)
             @NoAutoDetect
-            class Entry
-            private constructor(
-                private val paymentRelatedInformation: JsonField<String>,
-                private val additionalProperties: Map<String, JsonValue>,
-            ) {
+            class Entry private constructor(private val paymentRelatedInformation: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
                 private var validated: Boolean = false
 
                 private var hashCode: Int = 0
 
                 /** The payment related information passed in the addendum. */
-                fun paymentRelatedInformation(): String =
-                    paymentRelatedInformation.getRequired("payment_related_information")
+                fun paymentRelatedInformation(): String = paymentRelatedInformation.getRequired("payment_related_information")
 
                 /** The payment related information passed in the addendum. */
                 @JsonProperty("payment_related_information")
@@ -1521,32 +1600,31 @@ private constructor(
 
                 fun validate(): Entry = apply {
                     if (!validated) {
-                        paymentRelatedInformation()
-                        validated = true
+                      paymentRelatedInformation()
+                      validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return other is Entry &&
-                        this.paymentRelatedInformation == other.paymentRelatedInformation &&
-                        this.additionalProperties == other.additionalProperties
+                  return other is Entry &&
+                      this.paymentRelatedInformation == other.paymentRelatedInformation &&
+                      this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode = Objects.hash(paymentRelatedInformation, additionalProperties)
-                    }
-                    return hashCode
+                  if (hashCode == 0) {
+                    hashCode = Objects.hash(paymentRelatedInformation, additionalProperties)
+                  }
+                  return hashCode
                 }
 
-                override fun toString() =
-                    "Entry{paymentRelatedInformation=$paymentRelatedInformation, additionalProperties=$additionalProperties}"
+                override fun toString() = "Entry{paymentRelatedInformation=$paymentRelatedInformation, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -1564,16 +1642,14 @@ private constructor(
                     }
 
                     /** The payment related information passed in the addendum. */
-                    fun paymentRelatedInformation(paymentRelatedInformation: String) =
-                        paymentRelatedInformation(JsonField.of(paymentRelatedInformation))
+                    fun paymentRelatedInformation(paymentRelatedInformation: String) = paymentRelatedInformation(JsonField.of(paymentRelatedInformation))
 
                     /** The payment related information passed in the addendum. */
                     @JsonProperty("payment_related_information")
                     @ExcludeMissing
-                    fun paymentRelatedInformation(paymentRelatedInformation: JsonField<String>) =
-                        apply {
-                            this.paymentRelatedInformation = paymentRelatedInformation
-                        }
+                    fun paymentRelatedInformation(paymentRelatedInformation: JsonField<String>) = apply {
+                        this.paymentRelatedInformation = paymentRelatedInformation
+                    }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                         this.additionalProperties.clear()
@@ -1585,13 +1661,11 @@ private constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                    fun build(): Entry =
-                        Entry(paymentRelatedInformation, additionalProperties.toUnmodifiable())
+                    fun build(): Entry = Entry(paymentRelatedInformation, additionalProperties.toUnmodifiable())
                 }
             }
         }
@@ -1602,11 +1676,7 @@ private constructor(
          */
         @JsonDeserialize(builder = PaymentOrderRemittanceAdvice.Builder::class)
         @NoAutoDetect
-        class PaymentOrderRemittanceAdvice
-        private constructor(
-            private val invoices: JsonField<List<Invoice>>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        class PaymentOrderRemittanceAdvice private constructor(private val invoices: JsonField<List<Invoice>>, private val additionalProperties: Map<String, JsonValue>, ) {
 
             private var validated: Boolean = false
 
@@ -1616,7 +1686,9 @@ private constructor(
             fun invoices(): List<Invoice> = invoices.getRequired("invoices")
 
             /** ASC X12 RMR records for this specific transfer. */
-            @JsonProperty("invoices") @ExcludeMissing fun _invoices() = invoices
+            @JsonProperty("invoices")
+            @ExcludeMissing
+            fun _invoices() = invoices
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -1624,32 +1696,31 @@ private constructor(
 
             fun validate(): PaymentOrderRemittanceAdvice = apply {
                 if (!validated) {
-                    invoices().forEach { it.validate() }
-                    validated = true
+                  invoices().forEach { it.validate() }
+                  validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is PaymentOrderRemittanceAdvice &&
-                    this.invoices == other.invoices &&
-                    this.additionalProperties == other.additionalProperties
+              return other is PaymentOrderRemittanceAdvice &&
+                  this.invoices == other.invoices &&
+                  this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(invoices, additionalProperties)
-                }
-                return hashCode
+              if (hashCode == 0) {
+                hashCode = Objects.hash(invoices, additionalProperties)
+              }
+              return hashCode
             }
 
-            override fun toString() =
-                "PaymentOrderRemittanceAdvice{invoices=$invoices, additionalProperties=$additionalProperties}"
+            override fun toString() = "PaymentOrderRemittanceAdvice{invoices=$invoices, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -1661,11 +1732,10 @@ private constructor(
                 private var invoices: JsonField<List<Invoice>> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(paymentOrderRemittanceAdvice: PaymentOrderRemittanceAdvice) =
-                    apply {
-                        this.invoices = paymentOrderRemittanceAdvice.invoices
-                        additionalProperties(paymentOrderRemittanceAdvice.additionalProperties)
-                    }
+                internal fun from(paymentOrderRemittanceAdvice: PaymentOrderRemittanceAdvice) = apply {
+                    this.invoices = paymentOrderRemittanceAdvice.invoices
+                    additionalProperties(paymentOrderRemittanceAdvice.additionalProperties)
+                }
 
                 /** ASC X12 RMR records for this specific transfer. */
                 fun invoices(invoices: List<Invoice>) = invoices(JsonField.of(invoices))
@@ -1687,34 +1757,22 @@ private constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-                fun build(): PaymentOrderRemittanceAdvice =
-                    PaymentOrderRemittanceAdvice(
-                        invoices.map { it.toUnmodifiable() },
-                        additionalProperties.toUnmodifiable()
-                    )
+                fun build(): PaymentOrderRemittanceAdvice = PaymentOrderRemittanceAdvice(invoices.map { it.toUnmodifiable() }, additionalProperties.toUnmodifiable())
             }
 
             @JsonDeserialize(builder = Invoice.Builder::class)
             @NoAutoDetect
-            class Invoice
-            private constructor(
-                private val invoiceNumber: JsonField<String>,
-                private val paidAmount: JsonField<Long>,
-                private val additionalProperties: Map<String, JsonValue>,
-            ) {
+            class Invoice private constructor(private val invoiceNumber: JsonField<String>, private val paidAmount: JsonField<Long>, private val additionalProperties: Map<String, JsonValue>, ) {
 
                 private var validated: Boolean = false
 
                 private var hashCode: Int = 0
 
-                /**
-                 * The invoice number for this reference, determined in advance with the receiver.
-                 */
+                /** The invoice number for this reference, determined in advance with the receiver. */
                 fun invoiceNumber(): String = invoiceNumber.getRequired("invoice_number")
 
                 /**
@@ -1723,16 +1781,18 @@ private constructor(
                  */
                 fun paidAmount(): Long = paidAmount.getRequired("paid_amount")
 
-                /**
-                 * The invoice number for this reference, determined in advance with the receiver.
-                 */
-                @JsonProperty("invoice_number") @ExcludeMissing fun _invoiceNumber() = invoiceNumber
+                /** The invoice number for this reference, determined in advance with the receiver. */
+                @JsonProperty("invoice_number")
+                @ExcludeMissing
+                fun _invoiceNumber() = invoiceNumber
 
                 /**
                  * The amount that was paid for this invoice in the minor unit of its currency. For
                  * dollars, for example, this is cents.
                  */
-                @JsonProperty("paid_amount") @ExcludeMissing fun _paidAmount() = paidAmount
+                @JsonProperty("paid_amount")
+                @ExcludeMissing
+                fun _paidAmount() = paidAmount
 
                 @JsonAnyGetter
                 @ExcludeMissing
@@ -1740,39 +1800,37 @@ private constructor(
 
                 fun validate(): Invoice = apply {
                     if (!validated) {
-                        invoiceNumber()
-                        paidAmount()
-                        validated = true
+                      invoiceNumber()
+                      paidAmount()
+                      validated = true
                     }
                 }
 
                 fun toBuilder() = Builder().from(this)
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return other is Invoice &&
-                        this.invoiceNumber == other.invoiceNumber &&
-                        this.paidAmount == other.paidAmount &&
-                        this.additionalProperties == other.additionalProperties
+                  return other is Invoice &&
+                      this.invoiceNumber == other.invoiceNumber &&
+                      this.paidAmount == other.paidAmount &&
+                      this.additionalProperties == other.additionalProperties
                 }
 
                 override fun hashCode(): Int {
-                    if (hashCode == 0) {
-                        hashCode =
-                            Objects.hash(
-                                invoiceNumber,
-                                paidAmount,
-                                additionalProperties,
-                            )
-                    }
-                    return hashCode
+                  if (hashCode == 0) {
+                    hashCode = Objects.hash(
+                        invoiceNumber,
+                        paidAmount,
+                        additionalProperties,
+                    )
+                  }
+                  return hashCode
                 }
 
-                override fun toString() =
-                    "Invoice{invoiceNumber=$invoiceNumber, paidAmount=$paidAmount, additionalProperties=$additionalProperties}"
+                override fun toString() = "Invoice{invoiceNumber=$invoiceNumber, paidAmount=$paidAmount, additionalProperties=$additionalProperties}"
 
                 companion object {
 
@@ -1791,17 +1849,10 @@ private constructor(
                         additionalProperties(invoice.additionalProperties)
                     }
 
-                    /**
-                     * The invoice number for this reference, determined in advance with the
-                     * receiver.
-                     */
-                    fun invoiceNumber(invoiceNumber: String) =
-                        invoiceNumber(JsonField.of(invoiceNumber))
+                    /** The invoice number for this reference, determined in advance with the receiver. */
+                    fun invoiceNumber(invoiceNumber: String) = invoiceNumber(JsonField.of(invoiceNumber))
 
-                    /**
-                     * The invoice number for this reference, determined in advance with the
-                     * receiver.
-                     */
+                    /** The invoice number for this reference, determined in advance with the receiver. */
                     @JsonProperty("invoice_number")
                     @ExcludeMissing
                     fun invoiceNumber(invoiceNumber: JsonField<String>) = apply {
@@ -1809,14 +1860,14 @@ private constructor(
                     }
 
                     /**
-                     * The amount that was paid for this invoice in the minor unit of its currency.
-                     * For dollars, for example, this is cents.
+                     * The amount that was paid for this invoice in the minor unit of its currency. For
+                     * dollars, for example, this is cents.
                      */
                     fun paidAmount(paidAmount: Long) = paidAmount(JsonField.of(paidAmount))
 
                     /**
-                     * The amount that was paid for this invoice in the minor unit of its currency.
-                     * For dollars, for example, this is cents.
+                     * The amount that was paid for this invoice in the minor unit of its currency. For
+                     * dollars, for example, this is cents.
                      */
                     @JsonProperty("paid_amount")
                     @ExcludeMissing
@@ -1834,60 +1885,59 @@ private constructor(
                         this.additionalProperties.put(key, value)
                     }
 
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
 
-                    fun build(): Invoice =
-                        Invoice(
-                            invoiceNumber,
-                            paidAmount,
-                            additionalProperties.toUnmodifiable(),
-                        )
+                    fun build(): Invoice = Invoice(
+                        invoiceNumber,
+                        paidAmount,
+                        additionalProperties.toUnmodifiable(),
+                    )
                 }
             }
         }
     }
 
     /**
-     * If your account requires approvals for transfers and the transfer was approved, this will
-     * contain details of the approval.
+     * If your account requires approvals for transfers and the transfer was approved,
+     * this will contain details of the approval.
      */
     @JsonDeserialize(builder = Approval.Builder::class)
     @NoAutoDetect
-    class Approval
-    private constructor(
-        private val approvedAt: JsonField<OffsetDateTime>,
-        private val approvedBy: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class Approval private constructor(private val approvedAt: JsonField<OffsetDateTime>, private val approvedBy: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var validated: Boolean = false
 
         private var hashCode: Int = 0
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * transfer was approved.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the transfer was approved.
          */
         fun approvedAt(): OffsetDateTime = approvedAt.getRequired("approved_at")
 
         /**
-         * If the Transfer was approved by a user in the dashboard, the email address of that user.
+         * If the Transfer was approved by a user in the dashboard, the email address of
+         * that user.
          */
         fun approvedBy(): String? = approvedBy.getNullable("approved_by")
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * transfer was approved.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the transfer was approved.
          */
-        @JsonProperty("approved_at") @ExcludeMissing fun _approvedAt() = approvedAt
+        @JsonProperty("approved_at")
+        @ExcludeMissing
+        fun _approvedAt() = approvedAt
 
         /**
-         * If the Transfer was approved by a user in the dashboard, the email address of that user.
+         * If the Transfer was approved by a user in the dashboard, the email address of
+         * that user.
          */
-        @JsonProperty("approved_by") @ExcludeMissing fun _approvedBy() = approvedBy
+        @JsonProperty("approved_by")
+        @ExcludeMissing
+        fun _approvedBy() = approvedBy
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1895,39 +1945,37 @@ private constructor(
 
         fun validate(): Approval = apply {
             if (!validated) {
-                approvedAt()
-                approvedBy()
-                validated = true
+              approvedAt()
+              approvedBy()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Approval &&
-                this.approvedAt == other.approvedAt &&
-                this.approvedBy == other.approvedBy &&
-                this.additionalProperties == other.additionalProperties
+          return other is Approval &&
+              this.approvedAt == other.approvedAt &&
+              this.approvedBy == other.approvedBy &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        approvedAt,
-                        approvedBy,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                approvedAt,
+                approvedBy,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "Approval{approvedAt=$approvedAt, approvedBy=$approvedBy, additionalProperties=$additionalProperties}"
+        override fun toString() = "Approval{approvedAt=$approvedAt, approvedBy=$approvedBy, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -1947,14 +1995,14 @@ private constructor(
             }
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * transfer was approved.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the transfer was approved.
              */
             fun approvedAt(approvedAt: OffsetDateTime) = approvedAt(JsonField.of(approvedAt))
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * transfer was approved.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the transfer was approved.
              */
             @JsonProperty("approved_at")
             @ExcludeMissing
@@ -1963,18 +2011,20 @@ private constructor(
             }
 
             /**
-             * If the Transfer was approved by a user in the dashboard, the email address of that
-             * user.
+             * If the Transfer was approved by a user in the dashboard, the email address of
+             * that user.
              */
             fun approvedBy(approvedBy: String) = approvedBy(JsonField.of(approvedBy))
 
             /**
-             * If the Transfer was approved by a user in the dashboard, the email address of that
-             * user.
+             * If the Transfer was approved by a user in the dashboard, the email address of
+             * that user.
              */
             @JsonProperty("approved_by")
             @ExcludeMissing
-            fun approvedBy(approvedBy: JsonField<String>) = apply { this.approvedBy = approvedBy }
+            fun approvedBy(approvedBy: JsonField<String>) = apply {
+                this.approvedBy = approvedBy
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1990,53 +2040,53 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Approval =
-                Approval(
-                    approvedAt,
-                    approvedBy,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): Approval = Approval(
+                approvedAt,
+                approvedBy,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
     /**
-     * If your account requires approvals for transfers and the transfer was not approved, this will
-     * contain details of the cancellation.
+     * If your account requires approvals for transfers and the transfer was not
+     * approved, this will contain details of the cancellation.
      */
     @JsonDeserialize(builder = Cancellation.Builder::class)
     @NoAutoDetect
-    class Cancellation
-    private constructor(
-        private val canceledAt: JsonField<OffsetDateTime>,
-        private val canceledBy: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class Cancellation private constructor(private val canceledAt: JsonField<OffsetDateTime>, private val canceledBy: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var validated: Boolean = false
 
         private var hashCode: Int = 0
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * Transfer was canceled.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the Transfer was canceled.
          */
         fun canceledAt(): OffsetDateTime = canceledAt.getRequired("canceled_at")
 
         /**
-         * If the Transfer was canceled by a user in the dashboard, the email address of that user.
+         * If the Transfer was canceled by a user in the dashboard, the email address of
+         * that user.
          */
         fun canceledBy(): String? = canceledBy.getNullable("canceled_by")
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * Transfer was canceled.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the Transfer was canceled.
          */
-        @JsonProperty("canceled_at") @ExcludeMissing fun _canceledAt() = canceledAt
+        @JsonProperty("canceled_at")
+        @ExcludeMissing
+        fun _canceledAt() = canceledAt
 
         /**
-         * If the Transfer was canceled by a user in the dashboard, the email address of that user.
+         * If the Transfer was canceled by a user in the dashboard, the email address of
+         * that user.
          */
-        @JsonProperty("canceled_by") @ExcludeMissing fun _canceledBy() = canceledBy
+        @JsonProperty("canceled_by")
+        @ExcludeMissing
+        fun _canceledBy() = canceledBy
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2044,39 +2094,37 @@ private constructor(
 
         fun validate(): Cancellation = apply {
             if (!validated) {
-                canceledAt()
-                canceledBy()
-                validated = true
+              canceledAt()
+              canceledBy()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Cancellation &&
-                this.canceledAt == other.canceledAt &&
-                this.canceledBy == other.canceledBy &&
-                this.additionalProperties == other.additionalProperties
+          return other is Cancellation &&
+              this.canceledAt == other.canceledAt &&
+              this.canceledBy == other.canceledBy &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        canceledAt,
-                        canceledBy,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                canceledAt,
+                canceledBy,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "Cancellation{canceledAt=$canceledAt, canceledBy=$canceledBy, additionalProperties=$additionalProperties}"
+        override fun toString() = "Cancellation{canceledAt=$canceledAt, canceledBy=$canceledBy, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2096,14 +2144,14 @@ private constructor(
             }
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * Transfer was canceled.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the Transfer was canceled.
              */
             fun canceledAt(canceledAt: OffsetDateTime) = canceledAt(JsonField.of(canceledAt))
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * Transfer was canceled.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the Transfer was canceled.
              */
             @JsonProperty("canceled_at")
             @ExcludeMissing
@@ -2112,18 +2160,20 @@ private constructor(
             }
 
             /**
-             * If the Transfer was canceled by a user in the dashboard, the email address of that
-             * user.
+             * If the Transfer was canceled by a user in the dashboard, the email address of
+             * that user.
              */
             fun canceledBy(canceledBy: String) = canceledBy(JsonField.of(canceledBy))
 
             /**
-             * If the Transfer was canceled by a user in the dashboard, the email address of that
-             * user.
+             * If the Transfer was canceled by a user in the dashboard, the email address of
+             * that user.
              */
             @JsonProperty("canceled_by")
             @ExcludeMissing
-            fun canceledBy(canceledBy: JsonField<String>) = apply { this.canceledBy = canceledBy }
+            fun canceledBy(canceledBy: JsonField<String>) = apply {
+                this.canceledBy = canceledBy
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2139,25 +2189,24 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Cancellation =
-                Cancellation(
-                    canceledAt,
-                    canceledBy,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): Cancellation = Cancellation(
+                canceledAt,
+                canceledBy,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
     /** What object created the transfer, either via the API or the dashboard. */
     @JsonDeserialize(builder = CreatedBy.Builder::class)
     @NoAutoDetect
-    class CreatedBy
-    private constructor(
-        private val apiKey: JsonField<ApiKey>,
-        private val category: JsonField<Category>,
-        private val oauthApplication: JsonField<OAuthApplication>,
-        private val user: JsonField<User>,
-        private val additionalProperties: Map<String, JsonValue>,
+    class CreatedBy private constructor(
+      private val apiKey: JsonField<ApiKey>,
+      private val category: JsonField<Category>,
+      private val oauthApplication: JsonField<OAuthApplication>,
+      private val user: JsonField<User>,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var validated: Boolean = false
@@ -2171,17 +2220,20 @@ private constructor(
         fun category(): Category = category.getRequired("category")
 
         /** If present, details about the OAuth Application that created the transfer. */
-        fun oauthApplication(): OAuthApplication? =
-            oauthApplication.getNullable("oauth_application")
+        fun oauthApplication(): OAuthApplication? = oauthApplication.getNullable("oauth_application")
 
         /** If present, details about the User that created the transfer. */
         fun user(): User? = user.getNullable("user")
 
         /** If present, details about the API key that created the transfer. */
-        @JsonProperty("api_key") @ExcludeMissing fun _apiKey() = apiKey
+        @JsonProperty("api_key")
+        @ExcludeMissing
+        fun _apiKey() = apiKey
 
         /** The type of object that created this transfer. */
-        @JsonProperty("category") @ExcludeMissing fun _category() = category
+        @JsonProperty("category")
+        @ExcludeMissing
+        fun _category() = category
 
         /** If present, details about the OAuth Application that created the transfer. */
         @JsonProperty("oauth_application")
@@ -2189,7 +2241,9 @@ private constructor(
         fun _oauthApplication() = oauthApplication
 
         /** If present, details about the User that created the transfer. */
-        @JsonProperty("user") @ExcludeMissing fun _user() = user
+        @JsonProperty("user")
+        @ExcludeMissing
+        fun _user() = user
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2197,45 +2251,43 @@ private constructor(
 
         fun validate(): CreatedBy = apply {
             if (!validated) {
-                apiKey()?.validate()
-                category()
-                oauthApplication()?.validate()
-                user()?.validate()
-                validated = true
+              apiKey()?.validate()
+              category()
+              oauthApplication()?.validate()
+              user()?.validate()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CreatedBy &&
-                this.apiKey == other.apiKey &&
-                this.category == other.category &&
-                this.oauthApplication == other.oauthApplication &&
-                this.user == other.user &&
-                this.additionalProperties == other.additionalProperties
+          return other is CreatedBy &&
+              this.apiKey == other.apiKey &&
+              this.category == other.category &&
+              this.oauthApplication == other.oauthApplication &&
+              this.user == other.user &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        apiKey,
-                        category,
-                        oauthApplication,
-                        user,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                apiKey,
+                category,
+                oauthApplication,
+                user,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "CreatedBy{apiKey=$apiKey, category=$category, oauthApplication=$oauthApplication, user=$user, additionalProperties=$additionalProperties}"
+        override fun toString() = "CreatedBy{apiKey=$apiKey, category=$category, oauthApplication=$oauthApplication, user=$user, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -2264,7 +2316,9 @@ private constructor(
             /** If present, details about the API key that created the transfer. */
             @JsonProperty("api_key")
             @ExcludeMissing
-            fun apiKey(apiKey: JsonField<ApiKey>) = apply { this.apiKey = apiKey }
+            fun apiKey(apiKey: JsonField<ApiKey>) = apply {
+                this.apiKey = apiKey
+            }
 
             /** The type of object that created this transfer. */
             fun category(category: Category) = category(JsonField.of(category))
@@ -2272,11 +2326,12 @@ private constructor(
             /** The type of object that created this transfer. */
             @JsonProperty("category")
             @ExcludeMissing
-            fun category(category: JsonField<Category>) = apply { this.category = category }
+            fun category(category: JsonField<Category>) = apply {
+                this.category = category
+            }
 
             /** If present, details about the OAuth Application that created the transfer. */
-            fun oauthApplication(oauthApplication: OAuthApplication) =
-                oauthApplication(JsonField.of(oauthApplication))
+            fun oauthApplication(oauthApplication: OAuthApplication) = oauthApplication(JsonField.of(oauthApplication))
 
             /** If present, details about the OAuth Application that created the transfer. */
             @JsonProperty("oauth_application")
@@ -2291,7 +2346,9 @@ private constructor(
             /** If present, details about the User that created the transfer. */
             @JsonProperty("user")
             @ExcludeMissing
-            fun user(user: JsonField<User>) = apply { this.user = user }
+            fun user(user: JsonField<User>) = apply {
+                this.user = user
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2307,24 +2364,19 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): CreatedBy =
-                CreatedBy(
-                    apiKey,
-                    category,
-                    oauthApplication,
-                    user,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): CreatedBy = CreatedBy(
+                apiKey,
+                category,
+                oauthApplication,
+                user,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
         /** If present, details about the API key that created the transfer. */
         @JsonDeserialize(builder = ApiKey.Builder::class)
         @NoAutoDetect
-        class ApiKey
-        private constructor(
-            private val description: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        class ApiKey private constructor(private val description: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
             private var validated: Boolean = false
 
@@ -2334,7 +2386,9 @@ private constructor(
             fun description(): String? = description.getNullable("description")
 
             /** The description set for the API key when it was created. */
-            @JsonProperty("description") @ExcludeMissing fun _description() = description
+            @JsonProperty("description")
+            @ExcludeMissing
+            fun _description() = description
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2342,32 +2396,31 @@ private constructor(
 
             fun validate(): ApiKey = apply {
                 if (!validated) {
-                    description()
-                    validated = true
+                  description()
+                  validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is ApiKey &&
-                    this.description == other.description &&
-                    this.additionalProperties == other.additionalProperties
+              return other is ApiKey &&
+                  this.description == other.description &&
+                  this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(description, additionalProperties)
-                }
-                return hashCode
+              if (hashCode == 0) {
+                hashCode = Objects.hash(description, additionalProperties)
+              }
+              return hashCode
             }
 
-            override fun toString() =
-                "ApiKey{description=$description, additionalProperties=$additionalProperties}"
+            override fun toString() = "ApiKey{description=$description, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2404,29 +2457,26 @@ private constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
                 fun build(): ApiKey = ApiKey(description, additionalProperties.toUnmodifiable())
             }
         }
 
-        class Category
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class Category @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Category && this.value == other.value
+              return other is Category &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2457,21 +2507,19 @@ private constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    API_KEY -> Value.API_KEY
-                    OAUTH_APPLICATION -> Value.OAUTH_APPLICATION
-                    USER -> Value.USER
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                API_KEY -> Value.API_KEY
+                OAUTH_APPLICATION -> Value.OAUTH_APPLICATION
+                USER -> Value.USER
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    API_KEY -> Known.API_KEY
-                    OAUTH_APPLICATION -> Known.OAUTH_APPLICATION
-                    USER -> Known.USER
-                    else -> throw IncreaseInvalidDataException("Unknown Category: $value")
-                }
+            fun known(): Known = when (this) {
+                API_KEY -> Known.API_KEY
+                OAUTH_APPLICATION -> Known.OAUTH_APPLICATION
+                USER -> Known.USER
+                else -> throw IncreaseInvalidDataException("Unknown Category: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
@@ -2479,11 +2527,7 @@ private constructor(
         /** If present, details about the OAuth Application that created the transfer. */
         @JsonDeserialize(builder = OAuthApplication.Builder::class)
         @NoAutoDetect
-        class OAuthApplication
-        private constructor(
-            private val name: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        class OAuthApplication private constructor(private val name: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
             private var validated: Boolean = false
 
@@ -2493,7 +2537,9 @@ private constructor(
             fun name(): String = name.getRequired("name")
 
             /** The name of the OAuth Application. */
-            @JsonProperty("name") @ExcludeMissing fun _name() = name
+            @JsonProperty("name")
+            @ExcludeMissing
+            fun _name() = name
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2501,32 +2547,31 @@ private constructor(
 
             fun validate(): OAuthApplication = apply {
                 if (!validated) {
-                    name()
-                    validated = true
+                  name()
+                  validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is OAuthApplication &&
-                    this.name == other.name &&
-                    this.additionalProperties == other.additionalProperties
+              return other is OAuthApplication &&
+                  this.name == other.name &&
+                  this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(name, additionalProperties)
-                }
-                return hashCode
+              if (hashCode == 0) {
+                hashCode = Objects.hash(name, additionalProperties)
+              }
+              return hashCode
             }
 
-            override fun toString() =
-                "OAuthApplication{name=$name, additionalProperties=$additionalProperties}"
+            override fun toString() = "OAuthApplication{name=$name, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2549,7 +2594,9 @@ private constructor(
                 /** The name of the OAuth Application. */
                 @JsonProperty("name")
                 @ExcludeMissing
-                fun name(name: JsonField<String>) = apply { this.name = name }
+                fun name(name: JsonField<String>) = apply {
+                    this.name = name
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2561,24 +2608,18 @@ private constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-                fun build(): OAuthApplication =
-                    OAuthApplication(name, additionalProperties.toUnmodifiable())
+                fun build(): OAuthApplication = OAuthApplication(name, additionalProperties.toUnmodifiable())
             }
         }
 
         /** If present, details about the User that created the transfer. */
         @JsonDeserialize(builder = User.Builder::class)
         @NoAutoDetect
-        class User
-        private constructor(
-            private val email: JsonField<String>,
-            private val additionalProperties: Map<String, JsonValue>,
-        ) {
+        class User private constructor(private val email: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
             private var validated: Boolean = false
 
@@ -2588,7 +2629,9 @@ private constructor(
             fun email(): String = email.getRequired("email")
 
             /** The email address of the User. */
-            @JsonProperty("email") @ExcludeMissing fun _email() = email
+            @JsonProperty("email")
+            @ExcludeMissing
+            fun _email() = email
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -2596,32 +2639,31 @@ private constructor(
 
             fun validate(): User = apply {
                 if (!validated) {
-                    email()
-                    validated = true
+                  email()
+                  validated = true
                 }
             }
 
             fun toBuilder() = Builder().from(this)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is User &&
-                    this.email == other.email &&
-                    this.additionalProperties == other.additionalProperties
+              return other is User &&
+                  this.email == other.email &&
+                  this.additionalProperties == other.additionalProperties
             }
 
             override fun hashCode(): Int {
-                if (hashCode == 0) {
-                    hashCode = Objects.hash(email, additionalProperties)
-                }
-                return hashCode
+              if (hashCode == 0) {
+                hashCode = Objects.hash(email, additionalProperties)
+              }
+              return hashCode
             }
 
-            override fun toString() =
-                "User{email=$email, additionalProperties=$additionalProperties}"
+            override fun toString() = "User{email=$email, additionalProperties=$additionalProperties}"
 
             companion object {
 
@@ -2644,7 +2686,9 @@ private constructor(
                 /** The email address of the User. */
                 @JsonProperty("email")
                 @ExcludeMissing
-                fun email(email: JsonField<String>) = apply { this.email = email }
+                fun email(email: JsonField<String>) = apply {
+                    this.email = email
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2656,30 +2700,27 @@ private constructor(
                     this.additionalProperties.put(key, value)
                 }
 
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
                 fun build(): User = User(email, additionalProperties.toUnmodifiable())
             }
         }
     }
 
-    class Currency
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Currency @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Currency && this.value == other.value
+          return other is Currency &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -2722,45 +2763,41 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                CAD -> Value.CAD
-                CHF -> Value.CHF
-                EUR -> Value.EUR
-                GBP -> Value.GBP
-                JPY -> Value.JPY
-                USD -> Value.USD
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            CAD -> Value.CAD
+            CHF -> Value.CHF
+            EUR -> Value.EUR
+            GBP -> Value.GBP
+            JPY -> Value.JPY
+            USD -> Value.USD
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                CAD -> Known.CAD
-                CHF -> Known.CHF
-                EUR -> Known.EUR
-                GBP -> Known.GBP
-                JPY -> Known.JPY
-                USD -> Known.USD
-                else -> throw IncreaseInvalidDataException("Unknown Currency: $value")
-            }
+        fun known(): Known = when (this) {
+            CAD -> Known.CAD
+            CHF -> Known.CHF
+            EUR -> Known.EUR
+            GBP -> Known.GBP
+            JPY -> Known.JPY
+            USD -> Known.USD
+            else -> throw IncreaseInvalidDataException("Unknown Currency: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class DestinationAccountHolder
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class DestinationAccountHolder @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is DestinationAccountHolder && this.value == other.value
+          return other is DestinationAccountHolder &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -2791,40 +2828,35 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                BUSINESS -> Value.BUSINESS
-                INDIVIDUAL -> Value.INDIVIDUAL
-                UNKNOWN -> Value.UNKNOWN
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            BUSINESS -> Value.BUSINESS
+            INDIVIDUAL -> Value.INDIVIDUAL
+            UNKNOWN -> Value.UNKNOWN
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                BUSINESS -> Known.BUSINESS
-                INDIVIDUAL -> Known.INDIVIDUAL
-                UNKNOWN -> Known.UNKNOWN
-                else ->
-                    throw IncreaseInvalidDataException("Unknown DestinationAccountHolder: $value")
-            }
+        fun known(): Known = when (this) {
+            BUSINESS -> Known.BUSINESS
+            INDIVIDUAL -> Known.INDIVIDUAL
+            UNKNOWN -> Known.UNKNOWN
+            else -> throw IncreaseInvalidDataException("Unknown DestinationAccountHolder: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class Funding
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Funding @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Funding && this.value == other.value
+          return other is Funding &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -2851,37 +2883,33 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                CHECKING -> Value.CHECKING
-                SAVINGS -> Value.SAVINGS
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            CHECKING -> Value.CHECKING
+            SAVINGS -> Value.SAVINGS
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                CHECKING -> Known.CHECKING
-                SAVINGS -> Known.SAVINGS
-                else -> throw IncreaseInvalidDataException("Unknown Funding: $value")
-            }
+        fun known(): Known = when (this) {
+            CHECKING -> Known.CHECKING
+            SAVINGS -> Known.SAVINGS
+            else -> throw IncreaseInvalidDataException("Unknown Funding: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class Network
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Network @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Network && this.value == other.value
+          return other is Network &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -2904,29 +2932,27 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                ACH -> Value.ACH
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            ACH -> Value.ACH
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                ACH -> Known.ACH
-                else -> throw IncreaseInvalidDataException("Unknown Network: $value")
-            }
+        fun known(): Known = when (this) {
+            ACH -> Known.ACH
+            else -> throw IncreaseInvalidDataException("Unknown Network: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = NotificationsOfChange.Builder::class)
     @NoAutoDetect
-    class NotificationsOfChange
-    private constructor(
-        private val changeCode: JsonField<ChangeCode>,
-        private val correctedData: JsonField<String>,
-        private val createdAt: JsonField<OffsetDateTime>,
-        private val additionalProperties: Map<String, JsonValue>,
+    class NotificationsOfChange private constructor(
+      private val changeCode: JsonField<ChangeCode>,
+      private val correctedData: JsonField<String>,
+      private val createdAt: JsonField<OffsetDateTime>,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var validated: Boolean = false
@@ -2940,17 +2966,17 @@ private constructor(
         fun changeCode(): ChangeCode = changeCode.getRequired("change_code")
 
         /**
-         * The corrected data that should be used in future ACHs to this account. This may contain
-         * the suggested new account number or routing number. When the `change_code` is
-         * `incorrect_transaction_code`, this field contains an integer. Numbers starting with a 2
-         * encourage changing the `funding` parameter to checking; numbers starting with a 3
-         * encourage changing to savings.
+         * The corrected data that should be used in future ACHs to this account. This may
+         * contain the suggested new account number or routing number. When the
+         * `change_code` is `incorrect_transaction_code`, this field contains an integer.
+         * Numbers starting with a 2 encourage changing the `funding` parameter to
+         * checking; numbers starting with a 3 encourage changing to savings.
          */
         fun correctedData(): String = correctedData.getRequired("corrected_data")
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * notification occurred.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the notification occurred.
          */
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
@@ -2958,22 +2984,28 @@ private constructor(
          * The required type of change that is being signaled by the receiving financial
          * institution.
          */
-        @JsonProperty("change_code") @ExcludeMissing fun _changeCode() = changeCode
+        @JsonProperty("change_code")
+        @ExcludeMissing
+        fun _changeCode() = changeCode
 
         /**
-         * The corrected data that should be used in future ACHs to this account. This may contain
-         * the suggested new account number or routing number. When the `change_code` is
-         * `incorrect_transaction_code`, this field contains an integer. Numbers starting with a 2
-         * encourage changing the `funding` parameter to checking; numbers starting with a 3
-         * encourage changing to savings.
+         * The corrected data that should be used in future ACHs to this account. This may
+         * contain the suggested new account number or routing number. When the
+         * `change_code` is `incorrect_transaction_code`, this field contains an integer.
+         * Numbers starting with a 2 encourage changing the `funding` parameter to
+         * checking; numbers starting with a 3 encourage changing to savings.
          */
-        @JsonProperty("corrected_data") @ExcludeMissing fun _correctedData() = correctedData
+        @JsonProperty("corrected_data")
+        @ExcludeMissing
+        fun _correctedData() = correctedData
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * notification occurred.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the notification occurred.
          */
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt() = createdAt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -2981,42 +3013,40 @@ private constructor(
 
         fun validate(): NotificationsOfChange = apply {
             if (!validated) {
-                changeCode()
-                correctedData()
-                createdAt()
-                validated = true
+              changeCode()
+              correctedData()
+              createdAt()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is NotificationsOfChange &&
-                this.changeCode == other.changeCode &&
-                this.correctedData == other.correctedData &&
-                this.createdAt == other.createdAt &&
-                this.additionalProperties == other.additionalProperties
+          return other is NotificationsOfChange &&
+              this.changeCode == other.changeCode &&
+              this.correctedData == other.correctedData &&
+              this.createdAt == other.createdAt &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        changeCode,
-                        correctedData,
-                        createdAt,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                changeCode,
+                correctedData,
+                createdAt,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "NotificationsOfChange{changeCode=$changeCode, correctedData=$correctedData, createdAt=$createdAt, additionalProperties=$additionalProperties}"
+        override fun toString() = "NotificationsOfChange{changeCode=$changeCode, correctedData=$correctedData, createdAt=$createdAt, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3055,19 +3085,19 @@ private constructor(
 
             /**
              * The corrected data that should be used in future ACHs to this account. This may
-             * contain the suggested new account number or routing number. When the `change_code` is
-             * `incorrect_transaction_code`, this field contains an integer. Numbers starting with a
-             * 2 encourage changing the `funding` parameter to checking; numbers starting with a 3
-             * encourage changing to savings.
+             * contain the suggested new account number or routing number. When the
+             * `change_code` is `incorrect_transaction_code`, this field contains an integer.
+             * Numbers starting with a 2 encourage changing the `funding` parameter to
+             * checking; numbers starting with a 3 encourage changing to savings.
              */
             fun correctedData(correctedData: String) = correctedData(JsonField.of(correctedData))
 
             /**
              * The corrected data that should be used in future ACHs to this account. This may
-             * contain the suggested new account number or routing number. When the `change_code` is
-             * `incorrect_transaction_code`, this field contains an integer. Numbers starting with a
-             * 2 encourage changing the `funding` parameter to checking; numbers starting with a 3
-             * encourage changing to savings.
+             * contain the suggested new account number or routing number. When the
+             * `change_code` is `incorrect_transaction_code`, this field contains an integer.
+             * Numbers starting with a 2 encourage changing the `funding` parameter to
+             * checking; numbers starting with a 3 encourage changing to savings.
              */
             @JsonProperty("corrected_data")
             @ExcludeMissing
@@ -3076,14 +3106,14 @@ private constructor(
             }
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * notification occurred.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the notification occurred.
              */
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * notification occurred.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the notification occurred.
              */
             @JsonProperty("created_at")
             @ExcludeMissing
@@ -3105,29 +3135,26 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): NotificationsOfChange =
-                NotificationsOfChange(
-                    changeCode,
-                    correctedData,
-                    createdAt,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): NotificationsOfChange = NotificationsOfChange(
+                changeCode,
+                correctedData,
+                createdAt,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
-        class ChangeCode
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class ChangeCode @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is ChangeCode && this.value == other.value
+              return other is ChangeCode &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3140,72 +3167,39 @@ private constructor(
 
                 val INCORRECT_ROUTING_NUMBER = ChangeCode(JsonField.of("incorrect_routing_number"))
 
-                val INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER =
-                    ChangeCode(JsonField.of("incorrect_routing_number_and_account_number"))
+                val INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER = ChangeCode(JsonField.of("incorrect_routing_number_and_account_number"))
 
-                val INCORRECT_TRANSACTION_CODE =
-                    ChangeCode(JsonField.of("incorrect_transaction_code"))
+                val INCORRECT_TRANSACTION_CODE = ChangeCode(JsonField.of("incorrect_transaction_code"))
 
-                val INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE =
-                    ChangeCode(JsonField.of("incorrect_account_number_and_transaction_code"))
+                val INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE = ChangeCode(JsonField.of("incorrect_account_number_and_transaction_code"))
 
-                val INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE =
-                    ChangeCode(
-                        JsonField.of("incorrect_routing_number_account_number_and_transaction_code")
-                    )
+                val INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE = ChangeCode(JsonField.of("incorrect_routing_number_account_number_and_transaction_code"))
 
-                val INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION =
-                    ChangeCode(
-                        JsonField.of(
-                            "incorrect_receiving_depository_financial_institution_identification"
-                        )
-                    )
+                val INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION = ChangeCode(JsonField.of("incorrect_receiving_depository_financial_institution_identification"))
 
-                val INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER =
-                    ChangeCode(JsonField.of("incorrect_individual_identification_number"))
+                val INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER = ChangeCode(JsonField.of("incorrect_individual_identification_number"))
 
                 val ADDENDA_FORMAT_ERROR = ChangeCode(JsonField.of("addenda_format_error"))
 
-                val INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT =
-                    ChangeCode(
-                        JsonField.of(
-                            "incorrect_standard_entry_class_code_for_outbound_international_payment"
-                        )
-                    )
+                val INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT = ChangeCode(JsonField.of("incorrect_standard_entry_class_code_for_outbound_international_payment"))
 
-                val MISROUTED_NOTIFICATION_OF_CHANGE =
-                    ChangeCode(JsonField.of("misrouted_notification_of_change"))
+                val MISROUTED_NOTIFICATION_OF_CHANGE = ChangeCode(JsonField.of("misrouted_notification_of_change"))
 
                 val INCORRECT_TRACE_NUMBER = ChangeCode(JsonField.of("incorrect_trace_number"))
 
-                val INCORRECT_COMPANY_IDENTIFICATION_NUMBER =
-                    ChangeCode(JsonField.of("incorrect_company_identification_number"))
+                val INCORRECT_COMPANY_IDENTIFICATION_NUMBER = ChangeCode(JsonField.of("incorrect_company_identification_number"))
 
-                val INCORRECT_IDENTIFICATION_NUMBER =
-                    ChangeCode(JsonField.of("incorrect_identification_number"))
+                val INCORRECT_IDENTIFICATION_NUMBER = ChangeCode(JsonField.of("incorrect_identification_number"))
 
-                val INCORRECTLY_FORMATTED_CORRECTED_DATA =
-                    ChangeCode(JsonField.of("incorrectly_formatted_corrected_data"))
+                val INCORRECTLY_FORMATTED_CORRECTED_DATA = ChangeCode(JsonField.of("incorrectly_formatted_corrected_data"))
 
-                val INCORRECT_DISCRETIONARY_DATA =
-                    ChangeCode(JsonField.of("incorrect_discretionary_data"))
+                val INCORRECT_DISCRETIONARY_DATA = ChangeCode(JsonField.of("incorrect_discretionary_data"))
 
-                val ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD =
-                    ChangeCode(JsonField.of("routing_number_not_from_original_entry_detail_record"))
+                val ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD = ChangeCode(JsonField.of("routing_number_not_from_original_entry_detail_record"))
 
-                val DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD =
-                    ChangeCode(
-                        JsonField.of(
-                            "depository_financial_institution_account_number_not_from_original_entry_detail_record"
-                        )
-                    )
+                val DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD = ChangeCode(JsonField.of("depository_financial_institution_account_number_not_from_original_entry_detail_record"))
 
-                val INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION =
-                    ChangeCode(
-                        JsonField.of(
-                            "incorrect_transaction_code_by_originating_depository_financial_institution"
-                        )
-                    )
+                val INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION = ChangeCode(JsonField.of("incorrect_transaction_code_by_originating_depository_financial_institution"))
 
                 fun of(value: String) = ChangeCode(JsonField.of(value))
             }
@@ -3255,117 +3249,86 @@ private constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    INCORRECT_ACCOUNT_NUMBER -> Value.INCORRECT_ACCOUNT_NUMBER
-                    INCORRECT_ROUTING_NUMBER -> Value.INCORRECT_ROUTING_NUMBER
-                    INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER ->
-                        Value.INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER
-                    INCORRECT_TRANSACTION_CODE -> Value.INCORRECT_TRANSACTION_CODE
-                    INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE ->
-                        Value.INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
-                    INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE ->
-                        Value.INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
-                    INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION ->
-                        Value.INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION
-                    INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER ->
-                        Value.INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER
-                    ADDENDA_FORMAT_ERROR -> Value.ADDENDA_FORMAT_ERROR
-                    INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT ->
-                        Value.INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT
-                    MISROUTED_NOTIFICATION_OF_CHANGE -> Value.MISROUTED_NOTIFICATION_OF_CHANGE
-                    INCORRECT_TRACE_NUMBER -> Value.INCORRECT_TRACE_NUMBER
-                    INCORRECT_COMPANY_IDENTIFICATION_NUMBER ->
-                        Value.INCORRECT_COMPANY_IDENTIFICATION_NUMBER
-                    INCORRECT_IDENTIFICATION_NUMBER -> Value.INCORRECT_IDENTIFICATION_NUMBER
-                    INCORRECTLY_FORMATTED_CORRECTED_DATA ->
-                        Value.INCORRECTLY_FORMATTED_CORRECTED_DATA
-                    INCORRECT_DISCRETIONARY_DATA -> Value.INCORRECT_DISCRETIONARY_DATA
-                    ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD ->
-                        Value.ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
-                    DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD ->
-                        Value
-                            .DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
-                    INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION ->
-                        Value
-                            .INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                INCORRECT_ACCOUNT_NUMBER -> Value.INCORRECT_ACCOUNT_NUMBER
+                INCORRECT_ROUTING_NUMBER -> Value.INCORRECT_ROUTING_NUMBER
+                INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER -> Value.INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER
+                INCORRECT_TRANSACTION_CODE -> Value.INCORRECT_TRANSACTION_CODE
+                INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE -> Value.INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
+                INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE -> Value.INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
+                INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION -> Value.INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION
+                INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER -> Value.INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER
+                ADDENDA_FORMAT_ERROR -> Value.ADDENDA_FORMAT_ERROR
+                INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT -> Value.INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT
+                MISROUTED_NOTIFICATION_OF_CHANGE -> Value.MISROUTED_NOTIFICATION_OF_CHANGE
+                INCORRECT_TRACE_NUMBER -> Value.INCORRECT_TRACE_NUMBER
+                INCORRECT_COMPANY_IDENTIFICATION_NUMBER -> Value.INCORRECT_COMPANY_IDENTIFICATION_NUMBER
+                INCORRECT_IDENTIFICATION_NUMBER -> Value.INCORRECT_IDENTIFICATION_NUMBER
+                INCORRECTLY_FORMATTED_CORRECTED_DATA -> Value.INCORRECTLY_FORMATTED_CORRECTED_DATA
+                INCORRECT_DISCRETIONARY_DATA -> Value.INCORRECT_DISCRETIONARY_DATA
+                ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD -> Value.ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
+                DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD -> Value.DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
+                INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION -> Value.INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    INCORRECT_ACCOUNT_NUMBER -> Known.INCORRECT_ACCOUNT_NUMBER
-                    INCORRECT_ROUTING_NUMBER -> Known.INCORRECT_ROUTING_NUMBER
-                    INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER ->
-                        Known.INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER
-                    INCORRECT_TRANSACTION_CODE -> Known.INCORRECT_TRANSACTION_CODE
-                    INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE ->
-                        Known.INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
-                    INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE ->
-                        Known.INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
-                    INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION ->
-                        Known.INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION
-                    INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER ->
-                        Known.INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER
-                    ADDENDA_FORMAT_ERROR -> Known.ADDENDA_FORMAT_ERROR
-                    INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT ->
-                        Known.INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT
-                    MISROUTED_NOTIFICATION_OF_CHANGE -> Known.MISROUTED_NOTIFICATION_OF_CHANGE
-                    INCORRECT_TRACE_NUMBER -> Known.INCORRECT_TRACE_NUMBER
-                    INCORRECT_COMPANY_IDENTIFICATION_NUMBER ->
-                        Known.INCORRECT_COMPANY_IDENTIFICATION_NUMBER
-                    INCORRECT_IDENTIFICATION_NUMBER -> Known.INCORRECT_IDENTIFICATION_NUMBER
-                    INCORRECTLY_FORMATTED_CORRECTED_DATA ->
-                        Known.INCORRECTLY_FORMATTED_CORRECTED_DATA
-                    INCORRECT_DISCRETIONARY_DATA -> Known.INCORRECT_DISCRETIONARY_DATA
-                    ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD ->
-                        Known.ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
-                    DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD ->
-                        Known
-                            .DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
-                    INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION ->
-                        Known
-                            .INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION
-                    else -> throw IncreaseInvalidDataException("Unknown ChangeCode: $value")
-                }
+            fun known(): Known = when (this) {
+                INCORRECT_ACCOUNT_NUMBER -> Known.INCORRECT_ACCOUNT_NUMBER
+                INCORRECT_ROUTING_NUMBER -> Known.INCORRECT_ROUTING_NUMBER
+                INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER -> Known.INCORRECT_ROUTING_NUMBER_AND_ACCOUNT_NUMBER
+                INCORRECT_TRANSACTION_CODE -> Known.INCORRECT_TRANSACTION_CODE
+                INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE -> Known.INCORRECT_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
+                INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE -> Known.INCORRECT_ROUTING_NUMBER_ACCOUNT_NUMBER_AND_TRANSACTION_CODE
+                INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION -> Known.INCORRECT_RECEIVING_DEPOSITORY_FINANCIAL_INSTITUTION_IDENTIFICATION
+                INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER -> Known.INCORRECT_INDIVIDUAL_IDENTIFICATION_NUMBER
+                ADDENDA_FORMAT_ERROR -> Known.ADDENDA_FORMAT_ERROR
+                INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT -> Known.INCORRECT_STANDARD_ENTRY_CLASS_CODE_FOR_OUTBOUND_INTERNATIONAL_PAYMENT
+                MISROUTED_NOTIFICATION_OF_CHANGE -> Known.MISROUTED_NOTIFICATION_OF_CHANGE
+                INCORRECT_TRACE_NUMBER -> Known.INCORRECT_TRACE_NUMBER
+                INCORRECT_COMPANY_IDENTIFICATION_NUMBER -> Known.INCORRECT_COMPANY_IDENTIFICATION_NUMBER
+                INCORRECT_IDENTIFICATION_NUMBER -> Known.INCORRECT_IDENTIFICATION_NUMBER
+                INCORRECTLY_FORMATTED_CORRECTED_DATA -> Known.INCORRECTLY_FORMATTED_CORRECTED_DATA
+                INCORRECT_DISCRETIONARY_DATA -> Known.INCORRECT_DISCRETIONARY_DATA
+                ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD -> Known.ROUTING_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
+                DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD -> Known.DEPOSITORY_FINANCIAL_INSTITUTION_ACCOUNT_NUMBER_NOT_FROM_ORIGINAL_ENTRY_DETAIL_RECORD
+                INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION -> Known.INCORRECT_TRANSACTION_CODE_BY_ORIGINATING_DEPOSITORY_FINANCIAL_INSTITUTION
+                else -> throw IncreaseInvalidDataException("Unknown ChangeCode: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
     }
 
     /**
-     * Configuration for how the effective date of the transfer will be set. This determines
-     * same-day vs future-dated settlement timing. If not set, defaults to a `settlement_schedule`
-     * of `same_day`. If set, exactly one of the child atributes must be set.
+     * Configuration for how the effective date of the transfer will be set. This
+     * determines same-day vs future-dated settlement timing. If not set, defaults to a
+     * `settlement_schedule` of `same_day`. If set, exactly one of the child atributes
+     * must be set.
      */
     @JsonDeserialize(builder = PreferredEffectiveDate.Builder::class)
     @NoAutoDetect
-    class PreferredEffectiveDate
-    private constructor(
-        private val date: JsonField<LocalDate>,
-        private val settlementSchedule: JsonField<SettlementSchedule>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class PreferredEffectiveDate private constructor(private val date: JsonField<LocalDate>, private val settlementSchedule: JsonField<SettlementSchedule>, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var validated: Boolean = false
 
         private var hashCode: Int = 0
 
         /**
-         * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to use as
-         * the effective date when submitting this transfer.
+         * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to
+         * use as the effective date when submitting this transfer.
          */
         fun date(): LocalDate? = date.getNullable("date")
 
         /** A schedule by which Increase whill choose an effective date for the transfer. */
-        fun settlementSchedule(): SettlementSchedule? =
-            settlementSchedule.getNullable("settlement_schedule")
+        fun settlementSchedule(): SettlementSchedule? = settlementSchedule.getNullable("settlement_schedule")
 
         /**
-         * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to use as
-         * the effective date when submitting this transfer.
+         * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to
+         * use as the effective date when submitting this transfer.
          */
-        @JsonProperty("date") @ExcludeMissing fun _date() = date
+        @JsonProperty("date")
+        @ExcludeMissing
+        fun _date() = date
 
         /** A schedule by which Increase whill choose an effective date for the transfer. */
         @JsonProperty("settlement_schedule")
@@ -3378,39 +3341,37 @@ private constructor(
 
         fun validate(): PreferredEffectiveDate = apply {
             if (!validated) {
-                date()
-                settlementSchedule()
-                validated = true
+              date()
+              settlementSchedule()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is PreferredEffectiveDate &&
-                this.date == other.date &&
-                this.settlementSchedule == other.settlementSchedule &&
-                this.additionalProperties == other.additionalProperties
+          return other is PreferredEffectiveDate &&
+              this.date == other.date &&
+              this.settlementSchedule == other.settlementSchedule &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        date,
-                        settlementSchedule,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                date,
+                settlementSchedule,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "PreferredEffectiveDate{date=$date, settlementSchedule=$settlementSchedule, additionalProperties=$additionalProperties}"
+        override fun toString() = "PreferredEffectiveDate{date=$date, settlementSchedule=$settlementSchedule, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3430,22 +3391,23 @@ private constructor(
             }
 
             /**
-             * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to use
-             * as the effective date when submitting this transfer.
+             * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to
+             * use as the effective date when submitting this transfer.
              */
             fun date(date: LocalDate) = date(JsonField.of(date))
 
             /**
-             * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to use
-             * as the effective date when submitting this transfer.
+             * A specific date in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format to
+             * use as the effective date when submitting this transfer.
              */
             @JsonProperty("date")
             @ExcludeMissing
-            fun date(date: JsonField<LocalDate>) = apply { this.date = date }
+            fun date(date: JsonField<LocalDate>) = apply {
+                this.date = date
+            }
 
             /** A schedule by which Increase whill choose an effective date for the transfer. */
-            fun settlementSchedule(settlementSchedule: SettlementSchedule) =
-                settlementSchedule(JsonField.of(settlementSchedule))
+            fun settlementSchedule(settlementSchedule: SettlementSchedule) = settlementSchedule(JsonField.of(settlementSchedule))
 
             /** A schedule by which Increase whill choose an effective date for the transfer. */
             @JsonProperty("settlement_schedule")
@@ -3468,28 +3430,25 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): PreferredEffectiveDate =
-                PreferredEffectiveDate(
-                    date,
-                    settlementSchedule,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): PreferredEffectiveDate = PreferredEffectiveDate(
+                date,
+                settlementSchedule,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
-        class SettlementSchedule
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class SettlementSchedule @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is SettlementSchedule && this.value == other.value
+              return other is SettlementSchedule &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3516,19 +3475,17 @@ private constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    SAME_DAY -> Value.SAME_DAY
-                    FUTURE_DATED -> Value.FUTURE_DATED
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                SAME_DAY -> Value.SAME_DAY
+                FUTURE_DATED -> Value.FUTURE_DATED
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    SAME_DAY -> Known.SAME_DAY
-                    FUTURE_DATED -> Known.FUTURE_DATED
-                    else -> throw IncreaseInvalidDataException("Unknown SettlementSchedule: $value")
-                }
+            fun known(): Known = when (this) {
+                SAME_DAY -> Known.SAME_DAY
+                FUTURE_DATED -> Known.FUTURE_DATED
+                else -> throw IncreaseInvalidDataException("Unknown SettlementSchedule: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
@@ -3537,15 +3494,15 @@ private constructor(
     /** If your transfer is returned, this will contain details of the return. */
     @JsonDeserialize(builder = Return.Builder::class)
     @NoAutoDetect
-    class Return
-    private constructor(
-        private val createdAt: JsonField<OffsetDateTime>,
-        private val rawReturnReasonCode: JsonField<String>,
-        private val returnReasonCode: JsonField<ReturnReasonCode>,
-        private val traceNumber: JsonField<String>,
-        private val transactionId: JsonField<String>,
-        private val transferId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+    class Return private constructor(
+      private val createdAt: JsonField<OffsetDateTime>,
+      private val rawReturnReasonCode: JsonField<String>,
+      private val returnReasonCode: JsonField<ReturnReasonCode>,
+      private val traceNumber: JsonField<String>,
+      private val transactionId: JsonField<String>,
+      private val transferId: JsonField<String>,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var validated: Boolean = false
@@ -3553,27 +3510,25 @@ private constructor(
         private var hashCode: Int = 0
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * transfer was created.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the transfer was created.
          */
         fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         /** The three character ACH return code, in the range R01 to R85. */
-        fun rawReturnReasonCode(): String =
-            rawReturnReasonCode.getRequired("raw_return_reason_code")
+        fun rawReturnReasonCode(): String = rawReturnReasonCode.getRequired("raw_return_reason_code")
 
         /**
-         * Why the ACH Transfer was returned. This reason code is sent by the receiving bank back to
-         * Increase.
+         * Why the ACH Transfer was returned. This reason code is sent by the receiving
+         * bank back to Increase.
          */
-        fun returnReasonCode(): ReturnReasonCode =
-            returnReasonCode.getRequired("return_reason_code")
+        fun returnReasonCode(): ReturnReasonCode = returnReasonCode.getRequired("return_reason_code")
 
         /**
-         * A 15 digit number that was generated by the bank that initiated the return. The trace
-         * number of the return is different than that of the original transfer. ACH trace numbers
-         * are not unique, but along with the amount and date this number can be used to identify
-         * the ACH return at the bank that initiated it.
+         * A 15 digit number that was generated by the bank that initiated the return. The
+         * trace number of the return is different than that of the original transfer. ACH
+         * trace numbers are not unique, but along with the amount and date this number can
+         * be used to identify the ACH return at the bank that initiated it.
          */
         fun traceNumber(): String = traceNumber.getRequired("trace_number")
 
@@ -3584,10 +3539,12 @@ private constructor(
         fun transferId(): String = transferId.getRequired("transfer_id")
 
         /**
-         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-         * transfer was created.
+         * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+         * the transfer was created.
          */
-        @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt() = createdAt
 
         /** The three character ACH return code, in the range R01 to R85. */
         @JsonProperty("raw_return_reason_code")
@@ -3595,26 +3552,32 @@ private constructor(
         fun _rawReturnReasonCode() = rawReturnReasonCode
 
         /**
-         * Why the ACH Transfer was returned. This reason code is sent by the receiving bank back to
-         * Increase.
+         * Why the ACH Transfer was returned. This reason code is sent by the receiving
+         * bank back to Increase.
          */
         @JsonProperty("return_reason_code")
         @ExcludeMissing
         fun _returnReasonCode() = returnReasonCode
 
         /**
-         * A 15 digit number that was generated by the bank that initiated the return. The trace
-         * number of the return is different than that of the original transfer. ACH trace numbers
-         * are not unique, but along with the amount and date this number can be used to identify
-         * the ACH return at the bank that initiated it.
+         * A 15 digit number that was generated by the bank that initiated the return. The
+         * trace number of the return is different than that of the original transfer. ACH
+         * trace numbers are not unique, but along with the amount and date this number can
+         * be used to identify the ACH return at the bank that initiated it.
          */
-        @JsonProperty("trace_number") @ExcludeMissing fun _traceNumber() = traceNumber
+        @JsonProperty("trace_number")
+        @ExcludeMissing
+        fun _traceNumber() = traceNumber
 
         /** The identifier of the Transaction associated with this return. */
-        @JsonProperty("transaction_id") @ExcludeMissing fun _transactionId() = transactionId
+        @JsonProperty("transaction_id")
+        @ExcludeMissing
+        fun _transactionId() = transactionId
 
         /** The identifier of the ACH Transfer associated with this return. */
-        @JsonProperty("transfer_id") @ExcludeMissing fun _transferId() = transferId
+        @JsonProperty("transfer_id")
+        @ExcludeMissing
+        fun _transferId() = transferId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -3622,51 +3585,49 @@ private constructor(
 
         fun validate(): Return = apply {
             if (!validated) {
-                createdAt()
-                rawReturnReasonCode()
-                returnReasonCode()
-                traceNumber()
-                transactionId()
-                transferId()
-                validated = true
+              createdAt()
+              rawReturnReasonCode()
+              returnReasonCode()
+              traceNumber()
+              transactionId()
+              transferId()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Return &&
-                this.createdAt == other.createdAt &&
-                this.rawReturnReasonCode == other.rawReturnReasonCode &&
-                this.returnReasonCode == other.returnReasonCode &&
-                this.traceNumber == other.traceNumber &&
-                this.transactionId == other.transactionId &&
-                this.transferId == other.transferId &&
-                this.additionalProperties == other.additionalProperties
+          return other is Return &&
+              this.createdAt == other.createdAt &&
+              this.rawReturnReasonCode == other.rawReturnReasonCode &&
+              this.returnReasonCode == other.returnReasonCode &&
+              this.traceNumber == other.traceNumber &&
+              this.transactionId == other.transactionId &&
+              this.transferId == other.transferId &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        createdAt,
-                        rawReturnReasonCode,
-                        returnReasonCode,
-                        traceNumber,
-                        transactionId,
-                        transferId,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                createdAt,
+                rawReturnReasonCode,
+                returnReasonCode,
+                traceNumber,
+                transactionId,
+                transferId,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "Return{createdAt=$createdAt, rawReturnReasonCode=$rawReturnReasonCode, returnReasonCode=$returnReasonCode, traceNumber=$traceNumber, transactionId=$transactionId, transferId=$transferId, additionalProperties=$additionalProperties}"
+        override fun toString() = "Return{createdAt=$createdAt, rawReturnReasonCode=$rawReturnReasonCode, returnReasonCode=$returnReasonCode, traceNumber=$traceNumber, transactionId=$transactionId, transferId=$transferId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -3694,14 +3655,14 @@ private constructor(
             }
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * transfer was created.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the transfer was created.
              */
             fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
             /**
-             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which the
-             * transfer was created.
+             * The [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date and time at which
+             * the transfer was created.
              */
             @JsonProperty("created_at")
             @ExcludeMissing
@@ -3710,8 +3671,7 @@ private constructor(
             }
 
             /** The three character ACH return code, in the range R01 to R85. */
-            fun rawReturnReasonCode(rawReturnReasonCode: String) =
-                rawReturnReasonCode(JsonField.of(rawReturnReasonCode))
+            fun rawReturnReasonCode(rawReturnReasonCode: String) = rawReturnReasonCode(JsonField.of(rawReturnReasonCode))
 
             /** The three character ACH return code, in the range R01 to R85. */
             @JsonProperty("raw_return_reason_code")
@@ -3721,15 +3681,14 @@ private constructor(
             }
 
             /**
-             * Why the ACH Transfer was returned. This reason code is sent by the receiving bank
-             * back to Increase.
+             * Why the ACH Transfer was returned. This reason code is sent by the receiving
+             * bank back to Increase.
              */
-            fun returnReasonCode(returnReasonCode: ReturnReasonCode) =
-                returnReasonCode(JsonField.of(returnReasonCode))
+            fun returnReasonCode(returnReasonCode: ReturnReasonCode) = returnReasonCode(JsonField.of(returnReasonCode))
 
             /**
-             * Why the ACH Transfer was returned. This reason code is sent by the receiving bank
-             * back to Increase.
+             * Why the ACH Transfer was returned. This reason code is sent by the receiving
+             * bank back to Increase.
              */
             @JsonProperty("return_reason_code")
             @ExcludeMissing
@@ -3738,18 +3697,18 @@ private constructor(
             }
 
             /**
-             * A 15 digit number that was generated by the bank that initiated the return. The trace
-             * number of the return is different than that of the original transfer. ACH trace
-             * numbers are not unique, but along with the amount and date this number can be used to
-             * identify the ACH return at the bank that initiated it.
+             * A 15 digit number that was generated by the bank that initiated the return. The
+             * trace number of the return is different than that of the original transfer. ACH
+             * trace numbers are not unique, but along with the amount and date this number can
+             * be used to identify the ACH return at the bank that initiated it.
              */
             fun traceNumber(traceNumber: String) = traceNumber(JsonField.of(traceNumber))
 
             /**
-             * A 15 digit number that was generated by the bank that initiated the return. The trace
-             * number of the return is different than that of the original transfer. ACH trace
-             * numbers are not unique, but along with the amount and date this number can be used to
-             * identify the ACH return at the bank that initiated it.
+             * A 15 digit number that was generated by the bank that initiated the return. The
+             * trace number of the return is different than that of the original transfer. ACH
+             * trace numbers are not unique, but along with the amount and date this number can
+             * be used to identify the ACH return at the bank that initiated it.
              */
             @JsonProperty("trace_number")
             @ExcludeMissing
@@ -3773,7 +3732,9 @@ private constructor(
             /** The identifier of the ACH Transfer associated with this return. */
             @JsonProperty("transfer_id")
             @ExcludeMissing
-            fun transferId(transferId: JsonField<String>) = apply { this.transferId = transferId }
+            fun transferId(transferId: JsonField<String>) = apply {
+                this.transferId = transferId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -3789,32 +3750,29 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Return =
-                Return(
-                    createdAt,
-                    rawReturnReasonCode,
-                    returnReasonCode,
-                    traceNumber,
-                    transactionId,
-                    transferId,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): Return = Return(
+                createdAt,
+                rawReturnReasonCode,
+                returnReasonCode,
+                traceNumber,
+                transactionId,
+                transferId,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
-        class ReturnReasonCode
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class ReturnReasonCode @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is ReturnReasonCode && this.value == other.value
+              return other is ReturnReasonCode &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3829,81 +3787,49 @@ private constructor(
 
                 val ACCOUNT_CLOSED = ReturnReasonCode(JsonField.of("account_closed"))
 
-                val INVALID_ACCOUNT_NUMBER_STRUCTURE =
-                    ReturnReasonCode(JsonField.of("invalid_account_number_structure"))
+                val INVALID_ACCOUNT_NUMBER_STRUCTURE = ReturnReasonCode(JsonField.of("invalid_account_number_structure"))
 
-                val ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION =
-                    ReturnReasonCode(
-                        JsonField.of("account_frozen_entry_returned_per_ofac_instruction")
-                    )
+                val ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION = ReturnReasonCode(JsonField.of("account_frozen_entry_returned_per_ofac_instruction"))
 
-                val CREDIT_ENTRY_REFUSED_BY_RECEIVER =
-                    ReturnReasonCode(JsonField.of("credit_entry_refused_by_receiver"))
+                val CREDIT_ENTRY_REFUSED_BY_RECEIVER = ReturnReasonCode(JsonField.of("credit_entry_refused_by_receiver"))
 
-                val UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE =
-                    ReturnReasonCode(
-                        JsonField.of(
-                            "unauthorized_debit_to_consumer_account_using_corporate_sec_code"
-                        )
-                    )
+                val UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE = ReturnReasonCode(JsonField.of("unauthorized_debit_to_consumer_account_using_corporate_sec_code"))
 
-                val CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED =
-                    ReturnReasonCode(JsonField.of("corporate_customer_advised_not_authorized"))
+                val CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED = ReturnReasonCode(JsonField.of("corporate_customer_advised_not_authorized"))
 
                 val PAYMENT_STOPPED = ReturnReasonCode(JsonField.of("payment_stopped"))
 
-                val NON_TRANSACTION_ACCOUNT =
-                    ReturnReasonCode(JsonField.of("non_transaction_account"))
+                val NON_TRANSACTION_ACCOUNT = ReturnReasonCode(JsonField.of("non_transaction_account"))
 
                 val UNCOLLECTED_FUNDS = ReturnReasonCode(JsonField.of("uncollected_funds"))
 
-                val ROUTING_NUMBER_CHECK_DIGIT_ERROR =
-                    ReturnReasonCode(JsonField.of("routing_number_check_digit_error"))
+                val ROUTING_NUMBER_CHECK_DIGIT_ERROR = ReturnReasonCode(JsonField.of("routing_number_check_digit_error"))
 
-                val CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE =
-                    ReturnReasonCode(
-                        JsonField.of(
-                            "customer_advised_unauthorized_improper_ineligible_or_incomplete"
-                        )
-                    )
+                val CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE = ReturnReasonCode(JsonField.of("customer_advised_unauthorized_improper_ineligible_or_incomplete"))
 
                 val AMOUNT_FIELD_ERROR = ReturnReasonCode(JsonField.of("amount_field_error"))
 
-                val AUTHORIZATION_REVOKED_BY_CUSTOMER =
-                    ReturnReasonCode(JsonField.of("authorization_revoked_by_customer"))
+                val AUTHORIZATION_REVOKED_BY_CUSTOMER = ReturnReasonCode(JsonField.of("authorization_revoked_by_customer"))
 
-                val INVALID_ACH_ROUTING_NUMBER =
-                    ReturnReasonCode(JsonField.of("invalid_ach_routing_number"))
+                val INVALID_ACH_ROUTING_NUMBER = ReturnReasonCode(JsonField.of("invalid_ach_routing_number"))
 
-                val FILE_RECORD_EDIT_CRITERIA =
-                    ReturnReasonCode(JsonField.of("file_record_edit_criteria"))
+                val FILE_RECORD_EDIT_CRITERIA = ReturnReasonCode(JsonField.of("file_record_edit_criteria"))
 
-                val ENR_INVALID_INDIVIDUAL_NAME =
-                    ReturnReasonCode(JsonField.of("enr_invalid_individual_name"))
+                val ENR_INVALID_INDIVIDUAL_NAME = ReturnReasonCode(JsonField.of("enr_invalid_individual_name"))
 
-                val RETURNED_PER_ODFI_REQUEST =
-                    ReturnReasonCode(JsonField.of("returned_per_odfi_request"))
+                val RETURNED_PER_ODFI_REQUEST = ReturnReasonCode(JsonField.of("returned_per_odfi_request"))
 
-                val LIMITED_PARTICIPATION_DFI =
-                    ReturnReasonCode(JsonField.of("limited_participation_dfi"))
+                val LIMITED_PARTICIPATION_DFI = ReturnReasonCode(JsonField.of("limited_participation_dfi"))
 
-                val INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT =
-                    ReturnReasonCode(
-                        JsonField.of("incorrectly_coded_outbound_international_payment")
-                    )
+                val INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT = ReturnReasonCode(JsonField.of("incorrectly_coded_outbound_international_payment"))
 
-                val ACCOUNT_SOLD_TO_ANOTHER_DFI =
-                    ReturnReasonCode(JsonField.of("account_sold_to_another_dfi"))
+                val ACCOUNT_SOLD_TO_ANOTHER_DFI = ReturnReasonCode(JsonField.of("account_sold_to_another_dfi"))
 
                 val ADDENDA_ERROR = ReturnReasonCode(JsonField.of("addenda_error"))
 
-                val BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED =
-                    ReturnReasonCode(JsonField.of("beneficiary_or_account_holder_deceased"))
+                val BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED = ReturnReasonCode(JsonField.of("beneficiary_or_account_holder_deceased"))
 
-                val CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS =
-                    ReturnReasonCode(
-                        JsonField.of("customer_advised_not_within_authorization_terms")
-                    )
+                val CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS = ReturnReasonCode(JsonField.of("customer_advised_not_within_authorization_terms"))
 
                 val CORRECTED_RETURN = ReturnReasonCode(JsonField.of("corrected_return"))
 
@@ -3911,126 +3837,87 @@ private constructor(
 
                 val DUPLICATE_RETURN = ReturnReasonCode(JsonField.of("duplicate_return"))
 
-                val ENR_DUPLICATE_ENROLLMENT =
-                    ReturnReasonCode(JsonField.of("enr_duplicate_enrollment"))
+                val ENR_DUPLICATE_ENROLLMENT = ReturnReasonCode(JsonField.of("enr_duplicate_enrollment"))
 
-                val ENR_INVALID_DFI_ACCOUNT_NUMBER =
-                    ReturnReasonCode(JsonField.of("enr_invalid_dfi_account_number"))
+                val ENR_INVALID_DFI_ACCOUNT_NUMBER = ReturnReasonCode(JsonField.of("enr_invalid_dfi_account_number"))
 
-                val ENR_INVALID_INDIVIDUAL_ID_NUMBER =
-                    ReturnReasonCode(JsonField.of("enr_invalid_individual_id_number"))
+                val ENR_INVALID_INDIVIDUAL_ID_NUMBER = ReturnReasonCode(JsonField.of("enr_invalid_individual_id_number"))
 
-                val ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR =
-                    ReturnReasonCode(JsonField.of("enr_invalid_representative_payee_indicator"))
+                val ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR = ReturnReasonCode(JsonField.of("enr_invalid_representative_payee_indicator"))
 
-                val ENR_INVALID_TRANSACTION_CODE =
-                    ReturnReasonCode(JsonField.of("enr_invalid_transaction_code"))
+                val ENR_INVALID_TRANSACTION_CODE = ReturnReasonCode(JsonField.of("enr_invalid_transaction_code"))
 
-                val ENR_RETURN_OF_ENR_ENTRY =
-                    ReturnReasonCode(JsonField.of("enr_return_of_enr_entry"))
+                val ENR_RETURN_OF_ENR_ENTRY = ReturnReasonCode(JsonField.of("enr_return_of_enr_entry"))
 
-                val ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR =
-                    ReturnReasonCode(JsonField.of("enr_routing_number_check_digit_error"))
+                val ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR = ReturnReasonCode(JsonField.of("enr_routing_number_check_digit_error"))
 
-                val ENTRY_NOT_PROCESSED_BY_GATEWAY =
-                    ReturnReasonCode(JsonField.of("entry_not_processed_by_gateway"))
+                val ENTRY_NOT_PROCESSED_BY_GATEWAY = ReturnReasonCode(JsonField.of("entry_not_processed_by_gateway"))
 
                 val FIELD_ERROR = ReturnReasonCode(JsonField.of("field_error"))
 
-                val FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE =
-                    ReturnReasonCode(JsonField.of("foreign_receiving_dfi_unable_to_settle"))
+                val FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE = ReturnReasonCode(JsonField.of("foreign_receiving_dfi_unable_to_settle"))
 
-                val IAT_ENTRY_CODING_ERROR =
-                    ReturnReasonCode(JsonField.of("iat_entry_coding_error"))
+                val IAT_ENTRY_CODING_ERROR = ReturnReasonCode(JsonField.of("iat_entry_coding_error"))
 
-                val IMPROPER_EFFECTIVE_ENTRY_DATE =
-                    ReturnReasonCode(JsonField.of("improper_effective_entry_date"))
+                val IMPROPER_EFFECTIVE_ENTRY_DATE = ReturnReasonCode(JsonField.of("improper_effective_entry_date"))
 
-                val IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED =
-                    ReturnReasonCode(
-                        JsonField.of("improper_source_document_source_document_presented")
-                    )
+                val IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED = ReturnReasonCode(JsonField.of("improper_source_document_source_document_presented"))
 
                 val INVALID_COMPANY_ID = ReturnReasonCode(JsonField.of("invalid_company_id"))
 
-                val INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION =
-                    ReturnReasonCode(JsonField.of("invalid_foreign_receiving_dfi_identification"))
+                val INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION = ReturnReasonCode(JsonField.of("invalid_foreign_receiving_dfi_identification"))
 
-                val INVALID_INDIVIDUAL_ID_NUMBER =
-                    ReturnReasonCode(JsonField.of("invalid_individual_id_number"))
+                val INVALID_INDIVIDUAL_ID_NUMBER = ReturnReasonCode(JsonField.of("invalid_individual_id_number"))
 
-                val ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT =
-                    ReturnReasonCode(JsonField.of("item_and_rck_entry_presented_for_payment"))
+                val ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT = ReturnReasonCode(JsonField.of("item_and_rck_entry_presented_for_payment"))
 
-                val ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE =
-                    ReturnReasonCode(JsonField.of("item_related_to_rck_entry_is_ineligible"))
+                val ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE = ReturnReasonCode(JsonField.of("item_related_to_rck_entry_is_ineligible"))
 
                 val MANDATORY_FIELD_ERROR = ReturnReasonCode(JsonField.of("mandatory_field_error"))
 
-                val MISROUTED_DISHONORED_RETURN =
-                    ReturnReasonCode(JsonField.of("misrouted_dishonored_return"))
+                val MISROUTED_DISHONORED_RETURN = ReturnReasonCode(JsonField.of("misrouted_dishonored_return"))
 
                 val MISROUTED_RETURN = ReturnReasonCode(JsonField.of("misrouted_return"))
 
                 val NO_ERRORS_FOUND = ReturnReasonCode(JsonField.of("no_errors_found"))
 
-                val NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN =
-                    ReturnReasonCode(JsonField.of("non_acceptance_of_r62_dishonored_return"))
+                val NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN = ReturnReasonCode(JsonField.of("non_acceptance_of_r62_dishonored_return"))
 
-                val NON_PARTICIPANT_IN_IAT_PROGRAM =
-                    ReturnReasonCode(JsonField.of("non_participant_in_iat_program"))
+                val NON_PARTICIPANT_IN_IAT_PROGRAM = ReturnReasonCode(JsonField.of("non_participant_in_iat_program"))
 
-                val PERMISSIBLE_RETURN_ENTRY =
-                    ReturnReasonCode(JsonField.of("permissible_return_entry"))
+                val PERMISSIBLE_RETURN_ENTRY = ReturnReasonCode(JsonField.of("permissible_return_entry"))
 
-                val PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED =
-                    ReturnReasonCode(JsonField.of("permissible_return_entry_not_accepted"))
+                val PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED = ReturnReasonCode(JsonField.of("permissible_return_entry_not_accepted"))
 
                 val RDFI_NON_SETTLEMENT = ReturnReasonCode(JsonField.of("rdfi_non_settlement"))
 
-                val RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM =
-                    ReturnReasonCode(JsonField.of("rdfi_participant_in_check_truncation_program"))
+                val RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM = ReturnReasonCode(JsonField.of("rdfi_participant_in_check_truncation_program"))
 
-                val REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY =
-                    ReturnReasonCode(
-                        JsonField.of(
-                            "representative_payee_deceased_or_unable_to_continue_in_that_capacity"
-                        )
-                    )
+                val REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY = ReturnReasonCode(JsonField.of("representative_payee_deceased_or_unable_to_continue_in_that_capacity"))
 
-                val RETURN_NOT_A_DUPLICATE =
-                    ReturnReasonCode(JsonField.of("return_not_a_duplicate"))
+                val RETURN_NOT_A_DUPLICATE = ReturnReasonCode(JsonField.of("return_not_a_duplicate"))
 
-                val RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT =
-                    ReturnReasonCode(JsonField.of("return_of_erroneous_or_reversing_debit"))
+                val RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT = ReturnReasonCode(JsonField.of("return_of_erroneous_or_reversing_debit"))
 
-                val RETURN_OF_IMPROPER_CREDIT_ENTRY =
-                    ReturnReasonCode(JsonField.of("return_of_improper_credit_entry"))
+                val RETURN_OF_IMPROPER_CREDIT_ENTRY = ReturnReasonCode(JsonField.of("return_of_improper_credit_entry"))
 
-                val RETURN_OF_IMPROPER_DEBIT_ENTRY =
-                    ReturnReasonCode(JsonField.of("return_of_improper_debit_entry"))
+                val RETURN_OF_IMPROPER_DEBIT_ENTRY = ReturnReasonCode(JsonField.of("return_of_improper_debit_entry"))
 
                 val RETURN_OF_XCK_ENTRY = ReturnReasonCode(JsonField.of("return_of_xck_entry"))
 
-                val SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT =
-                    ReturnReasonCode(JsonField.of("source_document_presented_for_payment"))
+                val SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT = ReturnReasonCode(JsonField.of("source_document_presented_for_payment"))
 
-                val STATE_LAW_AFFECTING_RCK_ACCEPTANCE =
-                    ReturnReasonCode(JsonField.of("state_law_affecting_rck_acceptance"))
+                val STATE_LAW_AFFECTING_RCK_ACCEPTANCE = ReturnReasonCode(JsonField.of("state_law_affecting_rck_acceptance"))
 
-                val STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY =
-                    ReturnReasonCode(JsonField.of("stop_payment_on_item_related_to_rck_entry"))
+                val STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY = ReturnReasonCode(JsonField.of("stop_payment_on_item_related_to_rck_entry"))
 
-                val STOP_PAYMENT_ON_SOURCE_DOCUMENT =
-                    ReturnReasonCode(JsonField.of("stop_payment_on_source_document"))
+                val STOP_PAYMENT_ON_SOURCE_DOCUMENT = ReturnReasonCode(JsonField.of("stop_payment_on_source_document"))
 
-                val TIMELY_ORIGINAL_RETURN =
-                    ReturnReasonCode(JsonField.of("timely_original_return"))
+                val TIMELY_ORIGINAL_RETURN = ReturnReasonCode(JsonField.of("timely_original_return"))
 
                 val TRACE_NUMBER_ERROR = ReturnReasonCode(JsonField.of("trace_number_error"))
 
-                val UNTIMELY_DISHONORED_RETURN =
-                    ReturnReasonCode(JsonField.of("untimely_dishonored_return"))
+                val UNTIMELY_DISHONORED_RETURN = ReturnReasonCode(JsonField.of("untimely_dishonored_return"))
 
                 val UNTIMELY_RETURN = ReturnReasonCode(JsonField.of("untimely_return"))
 
@@ -4184,216 +4071,170 @@ private constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    INSUFFICIENT_FUND -> Value.INSUFFICIENT_FUND
-                    NO_ACCOUNT -> Value.NO_ACCOUNT
-                    ACCOUNT_CLOSED -> Value.ACCOUNT_CLOSED
-                    INVALID_ACCOUNT_NUMBER_STRUCTURE -> Value.INVALID_ACCOUNT_NUMBER_STRUCTURE
-                    ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION ->
-                        Value.ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION
-                    CREDIT_ENTRY_REFUSED_BY_RECEIVER -> Value.CREDIT_ENTRY_REFUSED_BY_RECEIVER
-                    UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE ->
-                        Value.UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE
-                    CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED ->
-                        Value.CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED
-                    PAYMENT_STOPPED -> Value.PAYMENT_STOPPED
-                    NON_TRANSACTION_ACCOUNT -> Value.NON_TRANSACTION_ACCOUNT
-                    UNCOLLECTED_FUNDS -> Value.UNCOLLECTED_FUNDS
-                    ROUTING_NUMBER_CHECK_DIGIT_ERROR -> Value.ROUTING_NUMBER_CHECK_DIGIT_ERROR
-                    CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE ->
-                        Value.CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE
-                    AMOUNT_FIELD_ERROR -> Value.AMOUNT_FIELD_ERROR
-                    AUTHORIZATION_REVOKED_BY_CUSTOMER -> Value.AUTHORIZATION_REVOKED_BY_CUSTOMER
-                    INVALID_ACH_ROUTING_NUMBER -> Value.INVALID_ACH_ROUTING_NUMBER
-                    FILE_RECORD_EDIT_CRITERIA -> Value.FILE_RECORD_EDIT_CRITERIA
-                    ENR_INVALID_INDIVIDUAL_NAME -> Value.ENR_INVALID_INDIVIDUAL_NAME
-                    RETURNED_PER_ODFI_REQUEST -> Value.RETURNED_PER_ODFI_REQUEST
-                    LIMITED_PARTICIPATION_DFI -> Value.LIMITED_PARTICIPATION_DFI
-                    INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT ->
-                        Value.INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT
-                    ACCOUNT_SOLD_TO_ANOTHER_DFI -> Value.ACCOUNT_SOLD_TO_ANOTHER_DFI
-                    ADDENDA_ERROR -> Value.ADDENDA_ERROR
-                    BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED ->
-                        Value.BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED
-                    CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS ->
-                        Value.CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS
-                    CORRECTED_RETURN -> Value.CORRECTED_RETURN
-                    DUPLICATE_ENTRY -> Value.DUPLICATE_ENTRY
-                    DUPLICATE_RETURN -> Value.DUPLICATE_RETURN
-                    ENR_DUPLICATE_ENROLLMENT -> Value.ENR_DUPLICATE_ENROLLMENT
-                    ENR_INVALID_DFI_ACCOUNT_NUMBER -> Value.ENR_INVALID_DFI_ACCOUNT_NUMBER
-                    ENR_INVALID_INDIVIDUAL_ID_NUMBER -> Value.ENR_INVALID_INDIVIDUAL_ID_NUMBER
-                    ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR ->
-                        Value.ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR
-                    ENR_INVALID_TRANSACTION_CODE -> Value.ENR_INVALID_TRANSACTION_CODE
-                    ENR_RETURN_OF_ENR_ENTRY -> Value.ENR_RETURN_OF_ENR_ENTRY
-                    ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR ->
-                        Value.ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR
-                    ENTRY_NOT_PROCESSED_BY_GATEWAY -> Value.ENTRY_NOT_PROCESSED_BY_GATEWAY
-                    FIELD_ERROR -> Value.FIELD_ERROR
-                    FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE ->
-                        Value.FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE
-                    IAT_ENTRY_CODING_ERROR -> Value.IAT_ENTRY_CODING_ERROR
-                    IMPROPER_EFFECTIVE_ENTRY_DATE -> Value.IMPROPER_EFFECTIVE_ENTRY_DATE
-                    IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED ->
-                        Value.IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED
-                    INVALID_COMPANY_ID -> Value.INVALID_COMPANY_ID
-                    INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION ->
-                        Value.INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION
-                    INVALID_INDIVIDUAL_ID_NUMBER -> Value.INVALID_INDIVIDUAL_ID_NUMBER
-                    ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT ->
-                        Value.ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT
-                    ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE ->
-                        Value.ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE
-                    MANDATORY_FIELD_ERROR -> Value.MANDATORY_FIELD_ERROR
-                    MISROUTED_DISHONORED_RETURN -> Value.MISROUTED_DISHONORED_RETURN
-                    MISROUTED_RETURN -> Value.MISROUTED_RETURN
-                    NO_ERRORS_FOUND -> Value.NO_ERRORS_FOUND
-                    NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN ->
-                        Value.NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN
-                    NON_PARTICIPANT_IN_IAT_PROGRAM -> Value.NON_PARTICIPANT_IN_IAT_PROGRAM
-                    PERMISSIBLE_RETURN_ENTRY -> Value.PERMISSIBLE_RETURN_ENTRY
-                    PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED ->
-                        Value.PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED
-                    RDFI_NON_SETTLEMENT -> Value.RDFI_NON_SETTLEMENT
-                    RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM ->
-                        Value.RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM
-                    REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY ->
-                        Value.REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY
-                    RETURN_NOT_A_DUPLICATE -> Value.RETURN_NOT_A_DUPLICATE
-                    RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT ->
-                        Value.RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT
-                    RETURN_OF_IMPROPER_CREDIT_ENTRY -> Value.RETURN_OF_IMPROPER_CREDIT_ENTRY
-                    RETURN_OF_IMPROPER_DEBIT_ENTRY -> Value.RETURN_OF_IMPROPER_DEBIT_ENTRY
-                    RETURN_OF_XCK_ENTRY -> Value.RETURN_OF_XCK_ENTRY
-                    SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT ->
-                        Value.SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT
-                    STATE_LAW_AFFECTING_RCK_ACCEPTANCE -> Value.STATE_LAW_AFFECTING_RCK_ACCEPTANCE
-                    STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY ->
-                        Value.STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY
-                    STOP_PAYMENT_ON_SOURCE_DOCUMENT -> Value.STOP_PAYMENT_ON_SOURCE_DOCUMENT
-                    TIMELY_ORIGINAL_RETURN -> Value.TIMELY_ORIGINAL_RETURN
-                    TRACE_NUMBER_ERROR -> Value.TRACE_NUMBER_ERROR
-                    UNTIMELY_DISHONORED_RETURN -> Value.UNTIMELY_DISHONORED_RETURN
-                    UNTIMELY_RETURN -> Value.UNTIMELY_RETURN
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                INSUFFICIENT_FUND -> Value.INSUFFICIENT_FUND
+                NO_ACCOUNT -> Value.NO_ACCOUNT
+                ACCOUNT_CLOSED -> Value.ACCOUNT_CLOSED
+                INVALID_ACCOUNT_NUMBER_STRUCTURE -> Value.INVALID_ACCOUNT_NUMBER_STRUCTURE
+                ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION -> Value.ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION
+                CREDIT_ENTRY_REFUSED_BY_RECEIVER -> Value.CREDIT_ENTRY_REFUSED_BY_RECEIVER
+                UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE -> Value.UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE
+                CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED -> Value.CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED
+                PAYMENT_STOPPED -> Value.PAYMENT_STOPPED
+                NON_TRANSACTION_ACCOUNT -> Value.NON_TRANSACTION_ACCOUNT
+                UNCOLLECTED_FUNDS -> Value.UNCOLLECTED_FUNDS
+                ROUTING_NUMBER_CHECK_DIGIT_ERROR -> Value.ROUTING_NUMBER_CHECK_DIGIT_ERROR
+                CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE -> Value.CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE
+                AMOUNT_FIELD_ERROR -> Value.AMOUNT_FIELD_ERROR
+                AUTHORIZATION_REVOKED_BY_CUSTOMER -> Value.AUTHORIZATION_REVOKED_BY_CUSTOMER
+                INVALID_ACH_ROUTING_NUMBER -> Value.INVALID_ACH_ROUTING_NUMBER
+                FILE_RECORD_EDIT_CRITERIA -> Value.FILE_RECORD_EDIT_CRITERIA
+                ENR_INVALID_INDIVIDUAL_NAME -> Value.ENR_INVALID_INDIVIDUAL_NAME
+                RETURNED_PER_ODFI_REQUEST -> Value.RETURNED_PER_ODFI_REQUEST
+                LIMITED_PARTICIPATION_DFI -> Value.LIMITED_PARTICIPATION_DFI
+                INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT -> Value.INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT
+                ACCOUNT_SOLD_TO_ANOTHER_DFI -> Value.ACCOUNT_SOLD_TO_ANOTHER_DFI
+                ADDENDA_ERROR -> Value.ADDENDA_ERROR
+                BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED -> Value.BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED
+                CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS -> Value.CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS
+                CORRECTED_RETURN -> Value.CORRECTED_RETURN
+                DUPLICATE_ENTRY -> Value.DUPLICATE_ENTRY
+                DUPLICATE_RETURN -> Value.DUPLICATE_RETURN
+                ENR_DUPLICATE_ENROLLMENT -> Value.ENR_DUPLICATE_ENROLLMENT
+                ENR_INVALID_DFI_ACCOUNT_NUMBER -> Value.ENR_INVALID_DFI_ACCOUNT_NUMBER
+                ENR_INVALID_INDIVIDUAL_ID_NUMBER -> Value.ENR_INVALID_INDIVIDUAL_ID_NUMBER
+                ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR -> Value.ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR
+                ENR_INVALID_TRANSACTION_CODE -> Value.ENR_INVALID_TRANSACTION_CODE
+                ENR_RETURN_OF_ENR_ENTRY -> Value.ENR_RETURN_OF_ENR_ENTRY
+                ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR -> Value.ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR
+                ENTRY_NOT_PROCESSED_BY_GATEWAY -> Value.ENTRY_NOT_PROCESSED_BY_GATEWAY
+                FIELD_ERROR -> Value.FIELD_ERROR
+                FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE -> Value.FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE
+                IAT_ENTRY_CODING_ERROR -> Value.IAT_ENTRY_CODING_ERROR
+                IMPROPER_EFFECTIVE_ENTRY_DATE -> Value.IMPROPER_EFFECTIVE_ENTRY_DATE
+                IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED -> Value.IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED
+                INVALID_COMPANY_ID -> Value.INVALID_COMPANY_ID
+                INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION -> Value.INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION
+                INVALID_INDIVIDUAL_ID_NUMBER -> Value.INVALID_INDIVIDUAL_ID_NUMBER
+                ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT -> Value.ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT
+                ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE -> Value.ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE
+                MANDATORY_FIELD_ERROR -> Value.MANDATORY_FIELD_ERROR
+                MISROUTED_DISHONORED_RETURN -> Value.MISROUTED_DISHONORED_RETURN
+                MISROUTED_RETURN -> Value.MISROUTED_RETURN
+                NO_ERRORS_FOUND -> Value.NO_ERRORS_FOUND
+                NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN -> Value.NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN
+                NON_PARTICIPANT_IN_IAT_PROGRAM -> Value.NON_PARTICIPANT_IN_IAT_PROGRAM
+                PERMISSIBLE_RETURN_ENTRY -> Value.PERMISSIBLE_RETURN_ENTRY
+                PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED -> Value.PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED
+                RDFI_NON_SETTLEMENT -> Value.RDFI_NON_SETTLEMENT
+                RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM -> Value.RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM
+                REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY -> Value.REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY
+                RETURN_NOT_A_DUPLICATE -> Value.RETURN_NOT_A_DUPLICATE
+                RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT -> Value.RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT
+                RETURN_OF_IMPROPER_CREDIT_ENTRY -> Value.RETURN_OF_IMPROPER_CREDIT_ENTRY
+                RETURN_OF_IMPROPER_DEBIT_ENTRY -> Value.RETURN_OF_IMPROPER_DEBIT_ENTRY
+                RETURN_OF_XCK_ENTRY -> Value.RETURN_OF_XCK_ENTRY
+                SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT -> Value.SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT
+                STATE_LAW_AFFECTING_RCK_ACCEPTANCE -> Value.STATE_LAW_AFFECTING_RCK_ACCEPTANCE
+                STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY -> Value.STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY
+                STOP_PAYMENT_ON_SOURCE_DOCUMENT -> Value.STOP_PAYMENT_ON_SOURCE_DOCUMENT
+                TIMELY_ORIGINAL_RETURN -> Value.TIMELY_ORIGINAL_RETURN
+                TRACE_NUMBER_ERROR -> Value.TRACE_NUMBER_ERROR
+                UNTIMELY_DISHONORED_RETURN -> Value.UNTIMELY_DISHONORED_RETURN
+                UNTIMELY_RETURN -> Value.UNTIMELY_RETURN
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    INSUFFICIENT_FUND -> Known.INSUFFICIENT_FUND
-                    NO_ACCOUNT -> Known.NO_ACCOUNT
-                    ACCOUNT_CLOSED -> Known.ACCOUNT_CLOSED
-                    INVALID_ACCOUNT_NUMBER_STRUCTURE -> Known.INVALID_ACCOUNT_NUMBER_STRUCTURE
-                    ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION ->
-                        Known.ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION
-                    CREDIT_ENTRY_REFUSED_BY_RECEIVER -> Known.CREDIT_ENTRY_REFUSED_BY_RECEIVER
-                    UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE ->
-                        Known.UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE
-                    CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED ->
-                        Known.CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED
-                    PAYMENT_STOPPED -> Known.PAYMENT_STOPPED
-                    NON_TRANSACTION_ACCOUNT -> Known.NON_TRANSACTION_ACCOUNT
-                    UNCOLLECTED_FUNDS -> Known.UNCOLLECTED_FUNDS
-                    ROUTING_NUMBER_CHECK_DIGIT_ERROR -> Known.ROUTING_NUMBER_CHECK_DIGIT_ERROR
-                    CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE ->
-                        Known.CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE
-                    AMOUNT_FIELD_ERROR -> Known.AMOUNT_FIELD_ERROR
-                    AUTHORIZATION_REVOKED_BY_CUSTOMER -> Known.AUTHORIZATION_REVOKED_BY_CUSTOMER
-                    INVALID_ACH_ROUTING_NUMBER -> Known.INVALID_ACH_ROUTING_NUMBER
-                    FILE_RECORD_EDIT_CRITERIA -> Known.FILE_RECORD_EDIT_CRITERIA
-                    ENR_INVALID_INDIVIDUAL_NAME -> Known.ENR_INVALID_INDIVIDUAL_NAME
-                    RETURNED_PER_ODFI_REQUEST -> Known.RETURNED_PER_ODFI_REQUEST
-                    LIMITED_PARTICIPATION_DFI -> Known.LIMITED_PARTICIPATION_DFI
-                    INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT ->
-                        Known.INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT
-                    ACCOUNT_SOLD_TO_ANOTHER_DFI -> Known.ACCOUNT_SOLD_TO_ANOTHER_DFI
-                    ADDENDA_ERROR -> Known.ADDENDA_ERROR
-                    BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED ->
-                        Known.BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED
-                    CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS ->
-                        Known.CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS
-                    CORRECTED_RETURN -> Known.CORRECTED_RETURN
-                    DUPLICATE_ENTRY -> Known.DUPLICATE_ENTRY
-                    DUPLICATE_RETURN -> Known.DUPLICATE_RETURN
-                    ENR_DUPLICATE_ENROLLMENT -> Known.ENR_DUPLICATE_ENROLLMENT
-                    ENR_INVALID_DFI_ACCOUNT_NUMBER -> Known.ENR_INVALID_DFI_ACCOUNT_NUMBER
-                    ENR_INVALID_INDIVIDUAL_ID_NUMBER -> Known.ENR_INVALID_INDIVIDUAL_ID_NUMBER
-                    ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR ->
-                        Known.ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR
-                    ENR_INVALID_TRANSACTION_CODE -> Known.ENR_INVALID_TRANSACTION_CODE
-                    ENR_RETURN_OF_ENR_ENTRY -> Known.ENR_RETURN_OF_ENR_ENTRY
-                    ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR ->
-                        Known.ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR
-                    ENTRY_NOT_PROCESSED_BY_GATEWAY -> Known.ENTRY_NOT_PROCESSED_BY_GATEWAY
-                    FIELD_ERROR -> Known.FIELD_ERROR
-                    FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE ->
-                        Known.FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE
-                    IAT_ENTRY_CODING_ERROR -> Known.IAT_ENTRY_CODING_ERROR
-                    IMPROPER_EFFECTIVE_ENTRY_DATE -> Known.IMPROPER_EFFECTIVE_ENTRY_DATE
-                    IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED ->
-                        Known.IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED
-                    INVALID_COMPANY_ID -> Known.INVALID_COMPANY_ID
-                    INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION ->
-                        Known.INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION
-                    INVALID_INDIVIDUAL_ID_NUMBER -> Known.INVALID_INDIVIDUAL_ID_NUMBER
-                    ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT ->
-                        Known.ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT
-                    ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE ->
-                        Known.ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE
-                    MANDATORY_FIELD_ERROR -> Known.MANDATORY_FIELD_ERROR
-                    MISROUTED_DISHONORED_RETURN -> Known.MISROUTED_DISHONORED_RETURN
-                    MISROUTED_RETURN -> Known.MISROUTED_RETURN
-                    NO_ERRORS_FOUND -> Known.NO_ERRORS_FOUND
-                    NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN ->
-                        Known.NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN
-                    NON_PARTICIPANT_IN_IAT_PROGRAM -> Known.NON_PARTICIPANT_IN_IAT_PROGRAM
-                    PERMISSIBLE_RETURN_ENTRY -> Known.PERMISSIBLE_RETURN_ENTRY
-                    PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED ->
-                        Known.PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED
-                    RDFI_NON_SETTLEMENT -> Known.RDFI_NON_SETTLEMENT
-                    RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM ->
-                        Known.RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM
-                    REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY ->
-                        Known.REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY
-                    RETURN_NOT_A_DUPLICATE -> Known.RETURN_NOT_A_DUPLICATE
-                    RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT ->
-                        Known.RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT
-                    RETURN_OF_IMPROPER_CREDIT_ENTRY -> Known.RETURN_OF_IMPROPER_CREDIT_ENTRY
-                    RETURN_OF_IMPROPER_DEBIT_ENTRY -> Known.RETURN_OF_IMPROPER_DEBIT_ENTRY
-                    RETURN_OF_XCK_ENTRY -> Known.RETURN_OF_XCK_ENTRY
-                    SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT ->
-                        Known.SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT
-                    STATE_LAW_AFFECTING_RCK_ACCEPTANCE -> Known.STATE_LAW_AFFECTING_RCK_ACCEPTANCE
-                    STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY ->
-                        Known.STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY
-                    STOP_PAYMENT_ON_SOURCE_DOCUMENT -> Known.STOP_PAYMENT_ON_SOURCE_DOCUMENT
-                    TIMELY_ORIGINAL_RETURN -> Known.TIMELY_ORIGINAL_RETURN
-                    TRACE_NUMBER_ERROR -> Known.TRACE_NUMBER_ERROR
-                    UNTIMELY_DISHONORED_RETURN -> Known.UNTIMELY_DISHONORED_RETURN
-                    UNTIMELY_RETURN -> Known.UNTIMELY_RETURN
-                    else -> throw IncreaseInvalidDataException("Unknown ReturnReasonCode: $value")
-                }
+            fun known(): Known = when (this) {
+                INSUFFICIENT_FUND -> Known.INSUFFICIENT_FUND
+                NO_ACCOUNT -> Known.NO_ACCOUNT
+                ACCOUNT_CLOSED -> Known.ACCOUNT_CLOSED
+                INVALID_ACCOUNT_NUMBER_STRUCTURE -> Known.INVALID_ACCOUNT_NUMBER_STRUCTURE
+                ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION -> Known.ACCOUNT_FROZEN_ENTRY_RETURNED_PER_OFAC_INSTRUCTION
+                CREDIT_ENTRY_REFUSED_BY_RECEIVER -> Known.CREDIT_ENTRY_REFUSED_BY_RECEIVER
+                UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE -> Known.UNAUTHORIZED_DEBIT_TO_CONSUMER_ACCOUNT_USING_CORPORATE_SEC_CODE
+                CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED -> Known.CORPORATE_CUSTOMER_ADVISED_NOT_AUTHORIZED
+                PAYMENT_STOPPED -> Known.PAYMENT_STOPPED
+                NON_TRANSACTION_ACCOUNT -> Known.NON_TRANSACTION_ACCOUNT
+                UNCOLLECTED_FUNDS -> Known.UNCOLLECTED_FUNDS
+                ROUTING_NUMBER_CHECK_DIGIT_ERROR -> Known.ROUTING_NUMBER_CHECK_DIGIT_ERROR
+                CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE -> Known.CUSTOMER_ADVISED_UNAUTHORIZED_IMPROPER_INELIGIBLE_OR_INCOMPLETE
+                AMOUNT_FIELD_ERROR -> Known.AMOUNT_FIELD_ERROR
+                AUTHORIZATION_REVOKED_BY_CUSTOMER -> Known.AUTHORIZATION_REVOKED_BY_CUSTOMER
+                INVALID_ACH_ROUTING_NUMBER -> Known.INVALID_ACH_ROUTING_NUMBER
+                FILE_RECORD_EDIT_CRITERIA -> Known.FILE_RECORD_EDIT_CRITERIA
+                ENR_INVALID_INDIVIDUAL_NAME -> Known.ENR_INVALID_INDIVIDUAL_NAME
+                RETURNED_PER_ODFI_REQUEST -> Known.RETURNED_PER_ODFI_REQUEST
+                LIMITED_PARTICIPATION_DFI -> Known.LIMITED_PARTICIPATION_DFI
+                INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT -> Known.INCORRECTLY_CODED_OUTBOUND_INTERNATIONAL_PAYMENT
+                ACCOUNT_SOLD_TO_ANOTHER_DFI -> Known.ACCOUNT_SOLD_TO_ANOTHER_DFI
+                ADDENDA_ERROR -> Known.ADDENDA_ERROR
+                BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED -> Known.BENEFICIARY_OR_ACCOUNT_HOLDER_DECEASED
+                CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS -> Known.CUSTOMER_ADVISED_NOT_WITHIN_AUTHORIZATION_TERMS
+                CORRECTED_RETURN -> Known.CORRECTED_RETURN
+                DUPLICATE_ENTRY -> Known.DUPLICATE_ENTRY
+                DUPLICATE_RETURN -> Known.DUPLICATE_RETURN
+                ENR_DUPLICATE_ENROLLMENT -> Known.ENR_DUPLICATE_ENROLLMENT
+                ENR_INVALID_DFI_ACCOUNT_NUMBER -> Known.ENR_INVALID_DFI_ACCOUNT_NUMBER
+                ENR_INVALID_INDIVIDUAL_ID_NUMBER -> Known.ENR_INVALID_INDIVIDUAL_ID_NUMBER
+                ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR -> Known.ENR_INVALID_REPRESENTATIVE_PAYEE_INDICATOR
+                ENR_INVALID_TRANSACTION_CODE -> Known.ENR_INVALID_TRANSACTION_CODE
+                ENR_RETURN_OF_ENR_ENTRY -> Known.ENR_RETURN_OF_ENR_ENTRY
+                ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR -> Known.ENR_ROUTING_NUMBER_CHECK_DIGIT_ERROR
+                ENTRY_NOT_PROCESSED_BY_GATEWAY -> Known.ENTRY_NOT_PROCESSED_BY_GATEWAY
+                FIELD_ERROR -> Known.FIELD_ERROR
+                FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE -> Known.FOREIGN_RECEIVING_DFI_UNABLE_TO_SETTLE
+                IAT_ENTRY_CODING_ERROR -> Known.IAT_ENTRY_CODING_ERROR
+                IMPROPER_EFFECTIVE_ENTRY_DATE -> Known.IMPROPER_EFFECTIVE_ENTRY_DATE
+                IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED -> Known.IMPROPER_SOURCE_DOCUMENT_SOURCE_DOCUMENT_PRESENTED
+                INVALID_COMPANY_ID -> Known.INVALID_COMPANY_ID
+                INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION -> Known.INVALID_FOREIGN_RECEIVING_DFI_IDENTIFICATION
+                INVALID_INDIVIDUAL_ID_NUMBER -> Known.INVALID_INDIVIDUAL_ID_NUMBER
+                ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT -> Known.ITEM_AND_RCK_ENTRY_PRESENTED_FOR_PAYMENT
+                ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE -> Known.ITEM_RELATED_TO_RCK_ENTRY_IS_INELIGIBLE
+                MANDATORY_FIELD_ERROR -> Known.MANDATORY_FIELD_ERROR
+                MISROUTED_DISHONORED_RETURN -> Known.MISROUTED_DISHONORED_RETURN
+                MISROUTED_RETURN -> Known.MISROUTED_RETURN
+                NO_ERRORS_FOUND -> Known.NO_ERRORS_FOUND
+                NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN -> Known.NON_ACCEPTANCE_OF_R62_DISHONORED_RETURN
+                NON_PARTICIPANT_IN_IAT_PROGRAM -> Known.NON_PARTICIPANT_IN_IAT_PROGRAM
+                PERMISSIBLE_RETURN_ENTRY -> Known.PERMISSIBLE_RETURN_ENTRY
+                PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED -> Known.PERMISSIBLE_RETURN_ENTRY_NOT_ACCEPTED
+                RDFI_NON_SETTLEMENT -> Known.RDFI_NON_SETTLEMENT
+                RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM -> Known.RDFI_PARTICIPANT_IN_CHECK_TRUNCATION_PROGRAM
+                REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY -> Known.REPRESENTATIVE_PAYEE_DECEASED_OR_UNABLE_TO_CONTINUE_IN_THAT_CAPACITY
+                RETURN_NOT_A_DUPLICATE -> Known.RETURN_NOT_A_DUPLICATE
+                RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT -> Known.RETURN_OF_ERRONEOUS_OR_REVERSING_DEBIT
+                RETURN_OF_IMPROPER_CREDIT_ENTRY -> Known.RETURN_OF_IMPROPER_CREDIT_ENTRY
+                RETURN_OF_IMPROPER_DEBIT_ENTRY -> Known.RETURN_OF_IMPROPER_DEBIT_ENTRY
+                RETURN_OF_XCK_ENTRY -> Known.RETURN_OF_XCK_ENTRY
+                SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT -> Known.SOURCE_DOCUMENT_PRESENTED_FOR_PAYMENT
+                STATE_LAW_AFFECTING_RCK_ACCEPTANCE -> Known.STATE_LAW_AFFECTING_RCK_ACCEPTANCE
+                STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY -> Known.STOP_PAYMENT_ON_ITEM_RELATED_TO_RCK_ENTRY
+                STOP_PAYMENT_ON_SOURCE_DOCUMENT -> Known.STOP_PAYMENT_ON_SOURCE_DOCUMENT
+                TIMELY_ORIGINAL_RETURN -> Known.TIMELY_ORIGINAL_RETURN
+                TRACE_NUMBER_ERROR -> Known.TRACE_NUMBER_ERROR
+                UNTIMELY_DISHONORED_RETURN -> Known.UNTIMELY_DISHONORED_RETURN
+                UNTIMELY_RETURN -> Known.UNTIMELY_RETURN
+                else -> throw IncreaseInvalidDataException("Unknown ReturnReasonCode: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
     }
 
-    class StandardEntryClassCode
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class StandardEntryClassCode @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is StandardEntryClassCode && this.value == other.value
+          return other is StandardEntryClassCode &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -4402,14 +4243,11 @@ private constructor(
 
         companion object {
 
-            val CORPORATE_CREDIT_OR_DEBIT =
-                StandardEntryClassCode(JsonField.of("corporate_credit_or_debit"))
+            val CORPORATE_CREDIT_OR_DEBIT = StandardEntryClassCode(JsonField.of("corporate_credit_or_debit"))
 
-            val CORPORATE_TRADE_EXCHANGE =
-                StandardEntryClassCode(JsonField.of("corporate_trade_exchange"))
+            val CORPORATE_TRADE_EXCHANGE = StandardEntryClassCode(JsonField.of("corporate_trade_exchange"))
 
-            val PREARRANGED_PAYMENTS_AND_DEPOSIT =
-                StandardEntryClassCode(JsonField.of("prearranged_payments_and_deposit"))
+            val PREARRANGED_PAYMENTS_AND_DEPOSIT = StandardEntryClassCode(JsonField.of("prearranged_payments_and_deposit"))
 
             val INTERNET_INITIATED = StandardEntryClassCode(JsonField.of("internet_initiated"))
 
@@ -4431,41 +4269,37 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                CORPORATE_CREDIT_OR_DEBIT -> Value.CORPORATE_CREDIT_OR_DEBIT
-                CORPORATE_TRADE_EXCHANGE -> Value.CORPORATE_TRADE_EXCHANGE
-                PREARRANGED_PAYMENTS_AND_DEPOSIT -> Value.PREARRANGED_PAYMENTS_AND_DEPOSIT
-                INTERNET_INITIATED -> Value.INTERNET_INITIATED
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            CORPORATE_CREDIT_OR_DEBIT -> Value.CORPORATE_CREDIT_OR_DEBIT
+            CORPORATE_TRADE_EXCHANGE -> Value.CORPORATE_TRADE_EXCHANGE
+            PREARRANGED_PAYMENTS_AND_DEPOSIT -> Value.PREARRANGED_PAYMENTS_AND_DEPOSIT
+            INTERNET_INITIATED -> Value.INTERNET_INITIATED
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                CORPORATE_CREDIT_OR_DEBIT -> Known.CORPORATE_CREDIT_OR_DEBIT
-                CORPORATE_TRADE_EXCHANGE -> Known.CORPORATE_TRADE_EXCHANGE
-                PREARRANGED_PAYMENTS_AND_DEPOSIT -> Known.PREARRANGED_PAYMENTS_AND_DEPOSIT
-                INTERNET_INITIATED -> Known.INTERNET_INITIATED
-                else -> throw IncreaseInvalidDataException("Unknown StandardEntryClassCode: $value")
-            }
+        fun known(): Known = when (this) {
+            CORPORATE_CREDIT_OR_DEBIT -> Known.CORPORATE_CREDIT_OR_DEBIT
+            CORPORATE_TRADE_EXCHANGE -> Known.CORPORATE_TRADE_EXCHANGE
+            PREARRANGED_PAYMENTS_AND_DEPOSIT -> Known.PREARRANGED_PAYMENTS_AND_DEPOSIT
+            INTERNET_INITIATED -> Known.INTERNET_INITIATED
+            else -> throw IncreaseInvalidDataException("Unknown StandardEntryClassCode: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
-    class Status
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Status @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Status && this.value == other.value
+          return other is Status &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -4516,51 +4350,50 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                PENDING_APPROVAL -> Value.PENDING_APPROVAL
-                CANCELED -> Value.CANCELED
-                PENDING_REVIEWING -> Value.PENDING_REVIEWING
-                PENDING_SUBMISSION -> Value.PENDING_SUBMISSION
-                SUBMITTED -> Value.SUBMITTED
-                RETURNED -> Value.RETURNED
-                REQUIRES_ATTENTION -> Value.REQUIRES_ATTENTION
-                REJECTED -> Value.REJECTED
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            PENDING_APPROVAL -> Value.PENDING_APPROVAL
+            CANCELED -> Value.CANCELED
+            PENDING_REVIEWING -> Value.PENDING_REVIEWING
+            PENDING_SUBMISSION -> Value.PENDING_SUBMISSION
+            SUBMITTED -> Value.SUBMITTED
+            RETURNED -> Value.RETURNED
+            REQUIRES_ATTENTION -> Value.REQUIRES_ATTENTION
+            REJECTED -> Value.REJECTED
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                PENDING_APPROVAL -> Known.PENDING_APPROVAL
-                CANCELED -> Known.CANCELED
-                PENDING_REVIEWING -> Known.PENDING_REVIEWING
-                PENDING_SUBMISSION -> Known.PENDING_SUBMISSION
-                SUBMITTED -> Known.SUBMITTED
-                RETURNED -> Known.RETURNED
-                REQUIRES_ATTENTION -> Known.REQUIRES_ATTENTION
-                REJECTED -> Known.REJECTED
-                else -> throw IncreaseInvalidDataException("Unknown Status: $value")
-            }
+        fun known(): Known = when (this) {
+            PENDING_APPROVAL -> Known.PENDING_APPROVAL
+            CANCELED -> Known.CANCELED
+            PENDING_REVIEWING -> Known.PENDING_REVIEWING
+            PENDING_SUBMISSION -> Known.PENDING_SUBMISSION
+            SUBMITTED -> Known.SUBMITTED
+            RETURNED -> Known.RETURNED
+            REQUIRES_ATTENTION -> Known.REQUIRES_ATTENTION
+            REJECTED -> Known.REJECTED
+            else -> throw IncreaseInvalidDataException("Unknown Status: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
     /**
-     * After the transfer is submitted to FedACH, this will contain supplemental details. Increase
-     * batches transfers and submits a file to the Federal Reserve roughly every 30 minutes. The
-     * Federal Reserve processes ACH transfers during weekdays according to their
+     * After the transfer is submitted to FedACH, this will contain supplemental
+     * details. Increase batches transfers and submits a file to the Federal Reserve
+     * roughly every 30 minutes. The Federal Reserve processes ACH transfers during
+     * weekdays according to their
      * [posted schedule](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
      */
     @JsonDeserialize(builder = Submission.Builder::class)
     @NoAutoDetect
-    class Submission
-    private constructor(
-        private val effectiveDate: JsonField<LocalDate>,
-        private val expectedFundsSettlementAt: JsonField<OffsetDateTime>,
-        private val expectedSettlementSchedule: JsonField<ExpectedSettlementSchedule>,
-        private val submittedAt: JsonField<OffsetDateTime>,
-        private val traceNumber: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+    class Submission private constructor(
+      private val effectiveDate: JsonField<LocalDate>,
+      private val expectedFundsSettlementAt: JsonField<OffsetDateTime>,
+      private val expectedSettlementSchedule: JsonField<ExpectedSettlementSchedule>,
+      private val submittedAt: JsonField<OffsetDateTime>,
+      private val traceNumber: JsonField<String>,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var validated: Boolean = false
@@ -4568,50 +4401,54 @@ private constructor(
         private var hashCode: Int = 0
 
         /**
-         * The ACH transfer's effective date as sent to the Federal Reserve. If a specific date was
-         * configured using `preferred_effective_date`, this will match that value. Otherwise, it
-         * will be the date selected (following the specified settlement schedule) at the time the
-         * transfer was submitted.
+         * The ACH transfer's effective date as sent to the Federal Reserve. If a specific
+         * date was configured using `preferred_effective_date`, this will match that
+         * value. Otherwise, it will be the date selected (following the specified
+         * settlement schedule) at the time the transfer was submitted.
          */
         fun effectiveDate(): LocalDate = effectiveDate.getRequired("effective_date")
 
         /**
-         * When the transfer is expected to settle in the recipient's account. Credits may be
-         * available sooner, at the receiving banks discretion. The FedACH schedule is published
+         * When the transfer is expected to settle in the recipient's account. Credits may
+         * be available sooner, at the receiving banks discretion. The FedACH schedule is
+         * published
          * [here](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
          */
-        fun expectedFundsSettlementAt(): OffsetDateTime =
-            expectedFundsSettlementAt.getRequired("expected_funds_settlement_at")
+        fun expectedFundsSettlementAt(): OffsetDateTime = expectedFundsSettlementAt.getRequired("expected_funds_settlement_at")
 
         /**
-         * The settlement schedule the transfer is expected to follow. This expectation takes into
-         * account the `effective_date`, `submitted_at`, and the amount of the transfer.
+         * The settlement schedule the transfer is expected to follow. This expectation
+         * takes into account the `effective_date`, `submitted_at`, and the amount of the
+         * transfer.
          */
-        fun expectedSettlementSchedule(): ExpectedSettlementSchedule =
-            expectedSettlementSchedule.getRequired("expected_settlement_schedule")
+        fun expectedSettlementSchedule(): ExpectedSettlementSchedule = expectedSettlementSchedule.getRequired("expected_settlement_schedule")
 
         /** When the ACH transfer was sent to FedACH. */
         fun submittedAt(): OffsetDateTime = submittedAt.getRequired("submitted_at")
 
         /**
-         * A 15 digit number recorded in the Nacha file and transmitted to the receiving bank. Along
-         * with the amount, date, and originating routing number, this can be used to identify the
-         * ACH transfer at the receiving bank. ACH trace numbers are not unique, but are
+         * A 15 digit number recorded in the Nacha file and transmitted to the receiving
+         * bank. Along with the amount, date, and originating routing number, this can be
+         * used to identify the ACH transfer at the receiving bank. ACH trace numbers are
+         * not unique, but are
          * [used to correlate returns](https://increase.com/documentation/ach-returns#ach-returns).
          */
         fun traceNumber(): String = traceNumber.getRequired("trace_number")
 
         /**
-         * The ACH transfer's effective date as sent to the Federal Reserve. If a specific date was
-         * configured using `preferred_effective_date`, this will match that value. Otherwise, it
-         * will be the date selected (following the specified settlement schedule) at the time the
-         * transfer was submitted.
+         * The ACH transfer's effective date as sent to the Federal Reserve. If a specific
+         * date was configured using `preferred_effective_date`, this will match that
+         * value. Otherwise, it will be the date selected (following the specified
+         * settlement schedule) at the time the transfer was submitted.
          */
-        @JsonProperty("effective_date") @ExcludeMissing fun _effectiveDate() = effectiveDate
+        @JsonProperty("effective_date")
+        @ExcludeMissing
+        fun _effectiveDate() = effectiveDate
 
         /**
-         * When the transfer is expected to settle in the recipient's account. Credits may be
-         * available sooner, at the receiving banks discretion. The FedACH schedule is published
+         * When the transfer is expected to settle in the recipient's account. Credits may
+         * be available sooner, at the receiving banks discretion. The FedACH schedule is
+         * published
          * [here](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
          */
         @JsonProperty("expected_funds_settlement_at")
@@ -4619,23 +4456,29 @@ private constructor(
         fun _expectedFundsSettlementAt() = expectedFundsSettlementAt
 
         /**
-         * The settlement schedule the transfer is expected to follow. This expectation takes into
-         * account the `effective_date`, `submitted_at`, and the amount of the transfer.
+         * The settlement schedule the transfer is expected to follow. This expectation
+         * takes into account the `effective_date`, `submitted_at`, and the amount of the
+         * transfer.
          */
         @JsonProperty("expected_settlement_schedule")
         @ExcludeMissing
         fun _expectedSettlementSchedule() = expectedSettlementSchedule
 
         /** When the ACH transfer was sent to FedACH. */
-        @JsonProperty("submitted_at") @ExcludeMissing fun _submittedAt() = submittedAt
+        @JsonProperty("submitted_at")
+        @ExcludeMissing
+        fun _submittedAt() = submittedAt
 
         /**
-         * A 15 digit number recorded in the Nacha file and transmitted to the receiving bank. Along
-         * with the amount, date, and originating routing number, this can be used to identify the
-         * ACH transfer at the receiving bank. ACH trace numbers are not unique, but are
+         * A 15 digit number recorded in the Nacha file and transmitted to the receiving
+         * bank. Along with the amount, date, and originating routing number, this can be
+         * used to identify the ACH transfer at the receiving bank. ACH trace numbers are
+         * not unique, but are
          * [used to correlate returns](https://increase.com/documentation/ach-returns#ach-returns).
          */
-        @JsonProperty("trace_number") @ExcludeMissing fun _traceNumber() = traceNumber
+        @JsonProperty("trace_number")
+        @ExcludeMissing
+        fun _traceNumber() = traceNumber
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -4643,48 +4486,46 @@ private constructor(
 
         fun validate(): Submission = apply {
             if (!validated) {
-                effectiveDate()
-                expectedFundsSettlementAt()
-                expectedSettlementSchedule()
-                submittedAt()
-                traceNumber()
-                validated = true
+              effectiveDate()
+              expectedFundsSettlementAt()
+              expectedSettlementSchedule()
+              submittedAt()
+              traceNumber()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Submission &&
-                this.effectiveDate == other.effectiveDate &&
-                this.expectedFundsSettlementAt == other.expectedFundsSettlementAt &&
-                this.expectedSettlementSchedule == other.expectedSettlementSchedule &&
-                this.submittedAt == other.submittedAt &&
-                this.traceNumber == other.traceNumber &&
-                this.additionalProperties == other.additionalProperties
+          return other is Submission &&
+              this.effectiveDate == other.effectiveDate &&
+              this.expectedFundsSettlementAt == other.expectedFundsSettlementAt &&
+              this.expectedSettlementSchedule == other.expectedSettlementSchedule &&
+              this.submittedAt == other.submittedAt &&
+              this.traceNumber == other.traceNumber &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        effectiveDate,
-                        expectedFundsSettlementAt,
-                        expectedSettlementSchedule,
-                        submittedAt,
-                        traceNumber,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                effectiveDate,
+                expectedFundsSettlementAt,
+                expectedSettlementSchedule,
+                submittedAt,
+                traceNumber,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "Submission{effectiveDate=$effectiveDate, expectedFundsSettlementAt=$expectedFundsSettlementAt, expectedSettlementSchedule=$expectedSettlementSchedule, submittedAt=$submittedAt, traceNumber=$traceNumber, additionalProperties=$additionalProperties}"
+        override fun toString() = "Submission{effectiveDate=$effectiveDate, expectedFundsSettlementAt=$expectedFundsSettlementAt, expectedSettlementSchedule=$expectedSettlementSchedule, submittedAt=$submittedAt, traceNumber=$traceNumber, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -4695,8 +4536,7 @@ private constructor(
 
             private var effectiveDate: JsonField<LocalDate> = JsonMissing.of()
             private var expectedFundsSettlementAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var expectedSettlementSchedule: JsonField<ExpectedSettlementSchedule> =
-                JsonMissing.of()
+            private var expectedSettlementSchedule: JsonField<ExpectedSettlementSchedule> = JsonMissing.of()
             private var submittedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var traceNumber: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -4711,18 +4551,18 @@ private constructor(
             }
 
             /**
-             * The ACH transfer's effective date as sent to the Federal Reserve. If a specific date
-             * was configured using `preferred_effective_date`, this will match that value.
-             * Otherwise, it will be the date selected (following the specified settlement schedule)
-             * at the time the transfer was submitted.
+             * The ACH transfer's effective date as sent to the Federal Reserve. If a specific
+             * date was configured using `preferred_effective_date`, this will match that
+             * value. Otherwise, it will be the date selected (following the specified
+             * settlement schedule) at the time the transfer was submitted.
              */
             fun effectiveDate(effectiveDate: LocalDate) = effectiveDate(JsonField.of(effectiveDate))
 
             /**
-             * The ACH transfer's effective date as sent to the Federal Reserve. If a specific date
-             * was configured using `preferred_effective_date`, this will match that value.
-             * Otherwise, it will be the date selected (following the specified settlement schedule)
-             * at the time the transfer was submitted.
+             * The ACH transfer's effective date as sent to the Federal Reserve. If a specific
+             * date was configured using `preferred_effective_date`, this will match that
+             * value. Otherwise, it will be the date selected (following the specified
+             * settlement schedule) at the time the transfer was submitted.
              */
             @JsonProperty("effective_date")
             @ExcludeMissing
@@ -4731,41 +4571,42 @@ private constructor(
             }
 
             /**
-             * When the transfer is expected to settle in the recipient's account. Credits may be
-             * available sooner, at the receiving banks discretion. The FedACH schedule is published
+             * When the transfer is expected to settle in the recipient's account. Credits may
+             * be available sooner, at the receiving banks discretion. The FedACH schedule is
+             * published
              * [here](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
              */
-            fun expectedFundsSettlementAt(expectedFundsSettlementAt: OffsetDateTime) =
-                expectedFundsSettlementAt(JsonField.of(expectedFundsSettlementAt))
+            fun expectedFundsSettlementAt(expectedFundsSettlementAt: OffsetDateTime) = expectedFundsSettlementAt(JsonField.of(expectedFundsSettlementAt))
 
             /**
-             * When the transfer is expected to settle in the recipient's account. Credits may be
-             * available sooner, at the receiving banks discretion. The FedACH schedule is published
+             * When the transfer is expected to settle in the recipient's account. Credits may
+             * be available sooner, at the receiving banks discretion. The FedACH schedule is
+             * published
              * [here](https://www.frbservices.org/resources/resource-centers/same-day-ach/fedach-processing-schedule.html).
              */
             @JsonProperty("expected_funds_settlement_at")
             @ExcludeMissing
-            fun expectedFundsSettlementAt(expectedFundsSettlementAt: JsonField<OffsetDateTime>) =
-                apply {
-                    this.expectedFundsSettlementAt = expectedFundsSettlementAt
-                }
+            fun expectedFundsSettlementAt(expectedFundsSettlementAt: JsonField<OffsetDateTime>) = apply {
+                this.expectedFundsSettlementAt = expectedFundsSettlementAt
+            }
 
             /**
-             * The settlement schedule the transfer is expected to follow. This expectation takes
-             * into account the `effective_date`, `submitted_at`, and the amount of the transfer.
+             * The settlement schedule the transfer is expected to follow. This expectation
+             * takes into account the `effective_date`, `submitted_at`, and the amount of the
+             * transfer.
              */
-            fun expectedSettlementSchedule(expectedSettlementSchedule: ExpectedSettlementSchedule) =
-                expectedSettlementSchedule(JsonField.of(expectedSettlementSchedule))
+            fun expectedSettlementSchedule(expectedSettlementSchedule: ExpectedSettlementSchedule) = expectedSettlementSchedule(JsonField.of(expectedSettlementSchedule))
 
             /**
-             * The settlement schedule the transfer is expected to follow. This expectation takes
-             * into account the `effective_date`, `submitted_at`, and the amount of the transfer.
+             * The settlement schedule the transfer is expected to follow. This expectation
+             * takes into account the `effective_date`, `submitted_at`, and the amount of the
+             * transfer.
              */
             @JsonProperty("expected_settlement_schedule")
             @ExcludeMissing
-            fun expectedSettlementSchedule(
-                expectedSettlementSchedule: JsonField<ExpectedSettlementSchedule>
-            ) = apply { this.expectedSettlementSchedule = expectedSettlementSchedule }
+            fun expectedSettlementSchedule(expectedSettlementSchedule: JsonField<ExpectedSettlementSchedule>) = apply {
+                this.expectedSettlementSchedule = expectedSettlementSchedule
+            }
 
             /** When the ACH transfer was sent to FedACH. */
             fun submittedAt(submittedAt: OffsetDateTime) = submittedAt(JsonField.of(submittedAt))
@@ -4778,19 +4619,19 @@ private constructor(
             }
 
             /**
-             * A 15 digit number recorded in the Nacha file and transmitted to the receiving bank.
-             * Along with the amount, date, and originating routing number, this can be used to
-             * identify the ACH transfer at the receiving bank. ACH trace numbers are not unique,
-             * but are
+             * A 15 digit number recorded in the Nacha file and transmitted to the receiving
+             * bank. Along with the amount, date, and originating routing number, this can be
+             * used to identify the ACH transfer at the receiving bank. ACH trace numbers are
+             * not unique, but are
              * [used to correlate returns](https://increase.com/documentation/ach-returns#ach-returns).
              */
             fun traceNumber(traceNumber: String) = traceNumber(JsonField.of(traceNumber))
 
             /**
-             * A 15 digit number recorded in the Nacha file and transmitted to the receiving bank.
-             * Along with the amount, date, and originating routing number, this can be used to
-             * identify the ACH transfer at the receiving bank. ACH trace numbers are not unique,
-             * but are
+             * A 15 digit number recorded in the Nacha file and transmitted to the receiving
+             * bank. Along with the amount, date, and originating routing number, this can be
+             * used to identify the ACH transfer at the receiving bank. ACH trace numbers are
+             * not unique, but are
              * [used to correlate returns](https://increase.com/documentation/ach-returns#ach-returns).
              */
             @JsonProperty("trace_number")
@@ -4813,31 +4654,28 @@ private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Submission =
-                Submission(
-                    effectiveDate,
-                    expectedFundsSettlementAt,
-                    expectedSettlementSchedule,
-                    submittedAt,
-                    traceNumber,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): Submission = Submission(
+                effectiveDate,
+                expectedFundsSettlementAt,
+                expectedSettlementSchedule,
+                submittedAt,
+                traceNumber,
+                additionalProperties.toUnmodifiable(),
+            )
         }
 
-        class ExpectedSettlementSchedule
-        @JsonCreator
-        private constructor(
-            private val value: JsonField<String>,
-        ) : Enum {
+        class ExpectedSettlementSchedule @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is ExpectedSettlementSchedule && this.value == other.value
+              return other is ExpectedSettlementSchedule &&
+                  this.value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -4864,41 +4702,34 @@ private constructor(
                 _UNKNOWN,
             }
 
-            fun value(): Value =
-                when (this) {
-                    SAME_DAY -> Value.SAME_DAY
-                    FUTURE_DATED -> Value.FUTURE_DATED
-                    else -> Value._UNKNOWN
-                }
+            fun value(): Value = when (this) {
+                SAME_DAY -> Value.SAME_DAY
+                FUTURE_DATED -> Value.FUTURE_DATED
+                else -> Value._UNKNOWN
+            }
 
-            fun known(): Known =
-                when (this) {
-                    SAME_DAY -> Known.SAME_DAY
-                    FUTURE_DATED -> Known.FUTURE_DATED
-                    else ->
-                        throw IncreaseInvalidDataException(
-                            "Unknown ExpectedSettlementSchedule: $value"
-                        )
-                }
+            fun known(): Known = when (this) {
+                SAME_DAY -> Known.SAME_DAY
+                FUTURE_DATED -> Known.FUTURE_DATED
+                else -> throw IncreaseInvalidDataException("Unknown ExpectedSettlementSchedule: $value")
+            }
 
             fun asString(): String = _value().asStringOrThrow()
         }
     }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Type && this.value == other.value
+          return other is Type &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -4921,17 +4752,15 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                ACH_TRANSFER -> Value.ACH_TRANSFER
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            ACH_TRANSFER -> Value.ACH_TRANSFER
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                ACH_TRANSFER -> Known.ACH_TRANSFER
-                else -> throw IncreaseInvalidDataException("Unknown Type: $value")
-            }
+        fun known(): Known = when (this) {
+            ACH_TRANSFER -> Known.ACH_TRANSFER
+            else -> throw IncreaseInvalidDataException("Unknown Type: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }

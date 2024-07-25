@@ -5,31 +5,46 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
-import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.Enum
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
 import software.elborai.api.errors.IncreaseInvalidDataException
 
 /** A request for proof of authorization for one or more ACH debit transfers. */
 @JsonDeserialize(builder = ProofOfAuthorizationRequest.Builder::class)
 @NoAutoDetect
-class ProofOfAuthorizationRequest
-private constructor(
-    private val achTransfers: JsonField<List<AchTransfer>>,
-    private val createdAt: JsonField<OffsetDateTime>,
-    private val dueOn: JsonField<OffsetDateTime>,
-    private val id: JsonField<String>,
-    private val type: JsonField<Type>,
-    private val updatedAt: JsonField<OffsetDateTime>,
-    private val additionalProperties: Map<String, JsonValue>,
+class ProofOfAuthorizationRequest private constructor(
+  private val achTransfers: JsonField<List<AchTransfer>>,
+  private val createdAt: JsonField<OffsetDateTime>,
+  private val dueOn: JsonField<OffsetDateTime>,
+  private val id: JsonField<String>,
+  private val type: JsonField<Type>,
+  private val updatedAt: JsonField<OffsetDateTime>,
+  private val additionalProperties: Map<String, JsonValue>,
+
 ) {
 
     private var validated: Boolean = false
@@ -58,25 +73,37 @@ private constructor(
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /** The ACH Transfers associated with the request. */
-    @JsonProperty("ach_transfers") @ExcludeMissing fun _achTransfers() = achTransfers
+    @JsonProperty("ach_transfers")
+    @ExcludeMissing
+    fun _achTransfers() = achTransfers
 
     /** The time the Proof of Authorization Request was created. */
-    @JsonProperty("created_at") @ExcludeMissing fun _createdAt() = createdAt
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt() = createdAt
 
     /** The time the Proof of Authorization Request is due. */
-    @JsonProperty("due_on") @ExcludeMissing fun _dueOn() = dueOn
+    @JsonProperty("due_on")
+    @ExcludeMissing
+    fun _dueOn() = dueOn
 
     /** The Proof of Authorization Request identifier. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id() = id
 
     /**
      * A constant representing the object's type. For this resource it will always be
      * `proof_of_authorization_request`.
      */
-    @JsonProperty("type") @ExcludeMissing fun _type() = type
+    @JsonProperty("type")
+    @ExcludeMissing
+    fun _type() = type
 
     /** The time the Proof of Authorization Request was last updated. */
-    @JsonProperty("updated_at") @ExcludeMissing fun _updatedAt() = updatedAt
+    @JsonProperty("updated_at")
+    @ExcludeMissing
+    fun _updatedAt() = updatedAt
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -84,51 +111,49 @@ private constructor(
 
     fun validate(): ProofOfAuthorizationRequest = apply {
         if (!validated) {
-            achTransfers().forEach { it.validate() }
-            createdAt()
-            dueOn()
-            id()
-            type()
-            updatedAt()
-            validated = true
+          achTransfers().forEach { it.validate() }
+          createdAt()
+          dueOn()
+          id()
+          type()
+          updatedAt()
+          validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is ProofOfAuthorizationRequest &&
-            this.achTransfers == other.achTransfers &&
-            this.createdAt == other.createdAt &&
-            this.dueOn == other.dueOn &&
-            this.id == other.id &&
-            this.type == other.type &&
-            this.updatedAt == other.updatedAt &&
-            this.additionalProperties == other.additionalProperties
+      return other is ProofOfAuthorizationRequest &&
+          this.achTransfers == other.achTransfers &&
+          this.createdAt == other.createdAt &&
+          this.dueOn == other.dueOn &&
+          this.id == other.id &&
+          this.type == other.type &&
+          this.updatedAt == other.updatedAt &&
+          this.additionalProperties == other.additionalProperties
     }
 
     override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    achTransfers,
-                    createdAt,
-                    dueOn,
-                    id,
-                    type,
-                    updatedAt,
-                    additionalProperties,
-                )
-        }
-        return hashCode
+      if (hashCode == 0) {
+        hashCode = Objects.hash(
+            achTransfers,
+            createdAt,
+            dueOn,
+            id,
+            type,
+            updatedAt,
+            additionalProperties,
+        )
+      }
+      return hashCode
     }
 
-    override fun toString() =
-        "ProofOfAuthorizationRequest{achTransfers=$achTransfers, createdAt=$createdAt, dueOn=$dueOn, id=$id, type=$type, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+    override fun toString() = "ProofOfAuthorizationRequest{achTransfers=$achTransfers, createdAt=$createdAt, dueOn=$dueOn, id=$id, type=$type, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -171,7 +196,9 @@ private constructor(
         /** The time the Proof of Authorization Request was created. */
         @JsonProperty("created_at")
         @ExcludeMissing
-        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+            this.createdAt = createdAt
+        }
 
         /** The time the Proof of Authorization Request is due. */
         fun dueOn(dueOn: OffsetDateTime) = dueOn(JsonField.of(dueOn))
@@ -179,13 +206,19 @@ private constructor(
         /** The time the Proof of Authorization Request is due. */
         @JsonProperty("due_on")
         @ExcludeMissing
-        fun dueOn(dueOn: JsonField<OffsetDateTime>) = apply { this.dueOn = dueOn }
+        fun dueOn(dueOn: JsonField<OffsetDateTime>) = apply {
+            this.dueOn = dueOn
+        }
 
         /** The Proof of Authorization Request identifier. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** The Proof of Authorization Request identifier. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        @JsonProperty("id")
+        @ExcludeMissing
+        fun id(id: JsonField<String>) = apply {
+            this.id = id
+        }
 
         /**
          * A constant representing the object's type. For this resource it will always be
@@ -199,7 +232,9 @@ private constructor(
          */
         @JsonProperty("type")
         @ExcludeMissing
-        fun type(type: JsonField<Type>) = apply { this.type = type }
+        fun type(type: JsonField<Type>) = apply {
+            this.type = type
+        }
 
         /** The time the Proof of Authorization Request was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
@@ -207,7 +242,9 @@ private constructor(
         /** The time the Proof of Authorization Request was last updated. */
         @JsonProperty("updated_at")
         @ExcludeMissing
-        fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
+        fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply {
+            this.updatedAt = updatedAt
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -223,25 +260,20 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): ProofOfAuthorizationRequest =
-            ProofOfAuthorizationRequest(
-                achTransfers.map { it.toUnmodifiable() },
-                createdAt,
-                dueOn,
-                id,
-                type,
-                updatedAt,
-                additionalProperties.toUnmodifiable(),
-            )
+        fun build(): ProofOfAuthorizationRequest = ProofOfAuthorizationRequest(
+            achTransfers.map { it.toUnmodifiable() },
+            createdAt,
+            dueOn,
+            id,
+            type,
+            updatedAt,
+            additionalProperties.toUnmodifiable(),
+        )
     }
 
     @JsonDeserialize(builder = AchTransfer.Builder::class)
     @NoAutoDetect
-    class AchTransfer
-    private constructor(
-        private val id: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class AchTransfer private constructor(private val id: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var validated: Boolean = false
 
@@ -251,7 +283,9 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /** The ACH Transfer identifier. */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id")
+        @ExcludeMissing
+        fun _id() = id
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -259,28 +293,28 @@ private constructor(
 
         fun validate(): AchTransfer = apply {
             if (!validated) {
-                id()
-                validated = true
+              id()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is AchTransfer &&
-                this.id == other.id &&
-                this.additionalProperties == other.additionalProperties
+          return other is AchTransfer &&
+              this.id == other.id &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(id, additionalProperties)
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(id, additionalProperties)
+          }
+          return hashCode
         }
 
         override fun toString() = "AchTransfer{id=$id, additionalProperties=$additionalProperties}"
@@ -306,7 +340,9 @@ private constructor(
             /** The ACH Transfer identifier. */
             @JsonProperty("id")
             @ExcludeMissing
-            fun id(id: JsonField<String>) = apply { this.id = id }
+            fun id(id: JsonField<String>) = apply {
+                this.id = id
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -326,20 +362,18 @@ private constructor(
         }
     }
 
-    class Type
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Type && this.value == other.value
+          return other is Type &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -348,8 +382,7 @@ private constructor(
 
         companion object {
 
-            val PROOF_OF_AUTHORIZATION_REQUEST =
-                Type(JsonField.of("proof_of_authorization_request"))
+            val PROOF_OF_AUTHORIZATION_REQUEST = Type(JsonField.of("proof_of_authorization_request"))
 
             fun of(value: String) = Type(JsonField.of(value))
         }
@@ -363,17 +396,15 @@ private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                PROOF_OF_AUTHORIZATION_REQUEST -> Value.PROOF_OF_AUTHORIZATION_REQUEST
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            PROOF_OF_AUTHORIZATION_REQUEST -> Value.PROOF_OF_AUTHORIZATION_REQUEST
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                PROOF_OF_AUTHORIZATION_REQUEST -> Known.PROOF_OF_AUTHORIZATION_REQUEST
-                else -> throw IncreaseInvalidDataException("Unknown Type: $value")
-            }
+        fun known(): Known = when (this) {
+            PROOF_OF_AUTHORIZATION_REQUEST -> Known.PROOF_OF_AUTHORIZATION_REQUEST
+            else -> throw IncreaseInvalidDataException("Unknown Type: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }

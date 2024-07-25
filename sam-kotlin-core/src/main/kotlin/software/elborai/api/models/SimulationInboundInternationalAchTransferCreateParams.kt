@@ -4,27 +4,50 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.*
 
-class SimulationInboundInternationalAchTransferCreateParams
-constructor(
-    private val accountNumberId: String,
-    private val amount: Long,
-    private val foreignPaymentAmount: Long,
-    private val originatingCurrencyCode: String,
-    private val originatorCompanyEntryDescription: String?,
-    private val originatorName: String?,
-    private val receivingCompanyOrIndividualName: String?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class SimulationInboundInternationalAchTransferCreateParams constructor(
+  private val accountNumberId: String,
+  private val amount: Long,
+  private val foreignPaymentAmount: Long,
+  private val originatingCurrencyCode: String,
+  private val originatorCompanyEntryDescription: String?,
+  private val originatorName: String?,
+  private val receivingCompanyOrIndividualName: String?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun accountNumberId(): String = accountNumberId
@@ -42,16 +65,16 @@ constructor(
     fun receivingCompanyOrIndividualName(): String? = receivingCompanyOrIndividualName
 
     internal fun getBody(): SimulationInboundInternationalAchTransferCreateBody {
-        return SimulationInboundInternationalAchTransferCreateBody(
-            accountNumberId,
-            amount,
-            foreignPaymentAmount,
-            originatingCurrencyCode,
-            originatorCompanyEntryDescription,
-            originatorName,
-            receivingCompanyOrIndividualName,
-            additionalBodyProperties,
-        )
+      return SimulationInboundInternationalAchTransferCreateBody(
+          accountNumberId,
+          amount,
+          foreignPaymentAmount,
+          originatingCurrencyCode,
+          originatorCompanyEntryDescription,
+          originatorName,
+          receivingCompanyOrIndividualName,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -60,40 +83,45 @@ constructor(
 
     @JsonDeserialize(builder = SimulationInboundInternationalAchTransferCreateBody.Builder::class)
     @NoAutoDetect
-    class SimulationInboundInternationalAchTransferCreateBody
-    internal constructor(
-        private val accountNumberId: String?,
-        private val amount: Long?,
-        private val foreignPaymentAmount: Long?,
-        private val originatingCurrencyCode: String?,
-        private val originatorCompanyEntryDescription: String?,
-        private val originatorName: String?,
-        private val receivingCompanyOrIndividualName: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class SimulationInboundInternationalAchTransferCreateBody internal constructor(
+      private val accountNumberId: String?,
+      private val amount: Long?,
+      private val foreignPaymentAmount: Long?,
+      private val originatingCurrencyCode: String?,
+      private val originatorCompanyEntryDescription: String?,
+      private val originatorName: String?,
+      private val receivingCompanyOrIndividualName: String?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
-        /** The identifier of the Account Number the inbound international ACH Transfer is for. */
-        @JsonProperty("account_number_id") fun accountNumberId(): String? = accountNumberId
-
         /**
-         * The transfer amount in cents. A positive amount originates a credit transfer pushing
-         * funds to the receiving account. A negative amount originates a debit transfer pulling
-         * funds from the receiving account.
+         * The identifier of the Account Number the inbound international ACH Transfer is
+         * for.
          */
-        @JsonProperty("amount") fun amount(): Long? = amount
+        @JsonProperty("account_number_id")
+        fun accountNumberId(): String? = accountNumberId
 
         /**
-         * The amount in the minor unit of the foreign payment currency. For dollars, for example,
-         * this is cents.
+         * The transfer amount in cents. A positive amount originates a credit transfer
+         * pushing funds to the receiving account. A negative amount originates a debit
+         * transfer pulling funds from the receiving account.
+         */
+        @JsonProperty("amount")
+        fun amount(): Long? = amount
+
+        /**
+         * The amount in the minor unit of the foreign payment currency. For dollars, for
+         * example, this is cents.
          */
         @JsonProperty("foreign_payment_amount")
         fun foreignPaymentAmount(): Long? = foreignPaymentAmount
 
         /**
-         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code for the originating
-         * bank account.
+         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code for the
+         * originating bank account.
          */
         @JsonProperty("originating_currency_code")
         fun originatingCurrencyCode(): String? = originatingCurrencyCode
@@ -103,7 +131,8 @@ constructor(
         fun originatorCompanyEntryDescription(): String? = originatorCompanyEntryDescription
 
         /** Either the name of the originator or an intermediary money transmitter. */
-        @JsonProperty("originator_name") fun originatorName(): String? = originatorName
+        @JsonProperty("originator_name")
+        fun originatorName(): String? = originatorName
 
         /** The name of the receiver of the transfer. */
         @JsonProperty("receiving_company_or_individual_name")
@@ -116,40 +145,38 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is SimulationInboundInternationalAchTransferCreateBody &&
-                this.accountNumberId == other.accountNumberId &&
-                this.amount == other.amount &&
-                this.foreignPaymentAmount == other.foreignPaymentAmount &&
-                this.originatingCurrencyCode == other.originatingCurrencyCode &&
-                this.originatorCompanyEntryDescription == other.originatorCompanyEntryDescription &&
-                this.originatorName == other.originatorName &&
-                this.receivingCompanyOrIndividualName == other.receivingCompanyOrIndividualName &&
-                this.additionalProperties == other.additionalProperties
+          return other is SimulationInboundInternationalAchTransferCreateBody &&
+              this.accountNumberId == other.accountNumberId &&
+              this.amount == other.amount &&
+              this.foreignPaymentAmount == other.foreignPaymentAmount &&
+              this.originatingCurrencyCode == other.originatingCurrencyCode &&
+              this.originatorCompanyEntryDescription == other.originatorCompanyEntryDescription &&
+              this.originatorName == other.originatorName &&
+              this.receivingCompanyOrIndividualName == other.receivingCompanyOrIndividualName &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        accountNumberId,
-                        amount,
-                        foreignPaymentAmount,
-                        originatingCurrencyCode,
-                        originatorCompanyEntryDescription,
-                        originatorName,
-                        receivingCompanyOrIndividualName,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                accountNumberId,
+                amount,
+                foreignPaymentAmount,
+                originatingCurrencyCode,
+                originatorCompanyEntryDescription,
+                originatorName,
+                receivingCompanyOrIndividualName,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "SimulationInboundInternationalAchTransferCreateBody{accountNumberId=$accountNumberId, amount=$amount, foreignPaymentAmount=$foreignPaymentAmount, originatingCurrencyCode=$originatingCurrencyCode, originatorCompanyEntryDescription=$originatorCompanyEntryDescription, originatorName=$originatorName, receivingCompanyOrIndividualName=$receivingCompanyOrIndividualName, additionalProperties=$additionalProperties}"
+        override fun toString() = "SimulationInboundInternationalAchTransferCreateBody{accountNumberId=$accountNumberId, amount=$amount, foreignPaymentAmount=$foreignPaymentAmount, originatingCurrencyCode=$originatingCurrencyCode, originatorCompanyEntryDescription=$originatorCompanyEntryDescription, originatorName=$originatorName, receivingCompanyOrIndividualName=$receivingCompanyOrIndividualName, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -167,32 +194,20 @@ constructor(
             private var receivingCompanyOrIndividualName: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(
-                simulationInboundInternationalAchTransferCreateBody:
-                    SimulationInboundInternationalAchTransferCreateBody
-            ) = apply {
-                this.accountNumberId =
-                    simulationInboundInternationalAchTransferCreateBody.accountNumberId
+            internal fun from(simulationInboundInternationalAchTransferCreateBody: SimulationInboundInternationalAchTransferCreateBody) = apply {
+                this.accountNumberId = simulationInboundInternationalAchTransferCreateBody.accountNumberId
                 this.amount = simulationInboundInternationalAchTransferCreateBody.amount
-                this.foreignPaymentAmount =
-                    simulationInboundInternationalAchTransferCreateBody.foreignPaymentAmount
-                this.originatingCurrencyCode =
-                    simulationInboundInternationalAchTransferCreateBody.originatingCurrencyCode
-                this.originatorCompanyEntryDescription =
-                    simulationInboundInternationalAchTransferCreateBody
-                        .originatorCompanyEntryDescription
-                this.originatorName =
-                    simulationInboundInternationalAchTransferCreateBody.originatorName
-                this.receivingCompanyOrIndividualName =
-                    simulationInboundInternationalAchTransferCreateBody
-                        .receivingCompanyOrIndividualName
-                additionalProperties(
-                    simulationInboundInternationalAchTransferCreateBody.additionalProperties
-                )
+                this.foreignPaymentAmount = simulationInboundInternationalAchTransferCreateBody.foreignPaymentAmount
+                this.originatingCurrencyCode = simulationInboundInternationalAchTransferCreateBody.originatingCurrencyCode
+                this.originatorCompanyEntryDescription = simulationInboundInternationalAchTransferCreateBody.originatorCompanyEntryDescription
+                this.originatorName = simulationInboundInternationalAchTransferCreateBody.originatorName
+                this.receivingCompanyOrIndividualName = simulationInboundInternationalAchTransferCreateBody.receivingCompanyOrIndividualName
+                additionalProperties(simulationInboundInternationalAchTransferCreateBody.additionalProperties)
             }
 
             /**
-             * The identifier of the Account Number the inbound international ACH Transfer is for.
+             * The identifier of the Account Number the inbound international ACH Transfer is
+             * for.
              */
             @JsonProperty("account_number_id")
             fun accountNumberId(accountNumberId: String) = apply {
@@ -200,11 +215,14 @@ constructor(
             }
 
             /**
-             * The transfer amount in cents. A positive amount originates a credit transfer pushing
-             * funds to the receiving account. A negative amount originates a debit transfer pulling
-             * funds from the receiving account.
+             * The transfer amount in cents. A positive amount originates a credit transfer
+             * pushing funds to the receiving account. A negative amount originates a debit
+             * transfer pulling funds from the receiving account.
              */
-            @JsonProperty("amount") fun amount(amount: Long) = apply { this.amount = amount }
+            @JsonProperty("amount")
+            fun amount(amount: Long) = apply {
+                this.amount = amount
+            }
 
             /**
              * The amount in the minor unit of the foreign payment currency. For dollars, for
@@ -226,10 +244,9 @@ constructor(
 
             /** A description field set by the originator. */
             @JsonProperty("originator_company_entry_description")
-            fun originatorCompanyEntryDescription(originatorCompanyEntryDescription: String) =
-                apply {
-                    this.originatorCompanyEntryDescription = originatorCompanyEntryDescription
-                }
+            fun originatorCompanyEntryDescription(originatorCompanyEntryDescription: String) = apply {
+                this.originatorCompanyEntryDescription = originatorCompanyEntryDescription
+            }
 
             /** Either the name of the originator or an intermediary money transmitter. */
             @JsonProperty("originator_name")
@@ -257,23 +274,24 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): SimulationInboundInternationalAchTransferCreateBody =
-                SimulationInboundInternationalAchTransferCreateBody(
-                    checkNotNull(accountNumberId) {
-                        "`accountNumberId` is required but was not set"
-                    },
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(foreignPaymentAmount) {
-                        "`foreignPaymentAmount` is required but was not set"
-                    },
-                    checkNotNull(originatingCurrencyCode) {
-                        "`originatingCurrencyCode` is required but was not set"
-                    },
-                    originatorCompanyEntryDescription,
-                    originatorName,
-                    receivingCompanyOrIndividualName,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): SimulationInboundInternationalAchTransferCreateBody = SimulationInboundInternationalAchTransferCreateBody(
+                checkNotNull(accountNumberId) {
+                    "`accountNumberId` is required but was not set"
+                },
+                checkNotNull(amount) {
+                    "`amount` is required but was not set"
+                },
+                checkNotNull(foreignPaymentAmount) {
+                    "`foreignPaymentAmount` is required but was not set"
+                },
+                checkNotNull(originatingCurrencyCode) {
+                    "`originatingCurrencyCode` is required but was not set"
+                },
+                originatorCompanyEntryDescription,
+                originatorName,
+                receivingCompanyOrIndividualName,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -284,40 +302,39 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is SimulationInboundInternationalAchTransferCreateParams &&
-            this.accountNumberId == other.accountNumberId &&
-            this.amount == other.amount &&
-            this.foreignPaymentAmount == other.foreignPaymentAmount &&
-            this.originatingCurrencyCode == other.originatingCurrencyCode &&
-            this.originatorCompanyEntryDescription == other.originatorCompanyEntryDescription &&
-            this.originatorName == other.originatorName &&
-            this.receivingCompanyOrIndividualName == other.receivingCompanyOrIndividualName &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is SimulationInboundInternationalAchTransferCreateParams &&
+          this.accountNumberId == other.accountNumberId &&
+          this.amount == other.amount &&
+          this.foreignPaymentAmount == other.foreignPaymentAmount &&
+          this.originatingCurrencyCode == other.originatingCurrencyCode &&
+          this.originatorCompanyEntryDescription == other.originatorCompanyEntryDescription &&
+          this.originatorName == other.originatorName &&
+          this.receivingCompanyOrIndividualName == other.receivingCompanyOrIndividualName &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            accountNumberId,
-            amount,
-            foreignPaymentAmount,
-            originatingCurrencyCode,
-            originatorCompanyEntryDescription,
-            originatorName,
-            receivingCompanyOrIndividualName,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          accountNumberId,
+          amount,
+          foreignPaymentAmount,
+          originatingCurrencyCode,
+          originatorCompanyEntryDescription,
+          originatorName,
+          receivingCompanyOrIndividualName,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "SimulationInboundInternationalAchTransferCreateParams{accountNumberId=$accountNumberId, amount=$amount, foreignPaymentAmount=$foreignPaymentAmount, originatingCurrencyCode=$originatingCurrencyCode, originatorCompanyEntryDescription=$originatorCompanyEntryDescription, originatorName=$originatorName, receivingCompanyOrIndividualName=$receivingCompanyOrIndividualName, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "SimulationInboundInternationalAchTransferCreateParams{accountNumberId=$accountNumberId, amount=$amount, foreignPaymentAmount=$foreignPaymentAmount, originatingCurrencyCode=$originatingCurrencyCode, originatorCompanyEntryDescription=$originatorCompanyEntryDescription, originatorName=$originatorName, receivingCompanyOrIndividualName=$receivingCompanyOrIndividualName, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -340,59 +357,47 @@ constructor(
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(
-            simulationInboundInternationalAchTransferCreateParams:
-                SimulationInboundInternationalAchTransferCreateParams
-        ) = apply {
-            this.accountNumberId =
-                simulationInboundInternationalAchTransferCreateParams.accountNumberId
+        internal fun from(simulationInboundInternationalAchTransferCreateParams: SimulationInboundInternationalAchTransferCreateParams) = apply {
+            this.accountNumberId = simulationInboundInternationalAchTransferCreateParams.accountNumberId
             this.amount = simulationInboundInternationalAchTransferCreateParams.amount
-            this.foreignPaymentAmount =
-                simulationInboundInternationalAchTransferCreateParams.foreignPaymentAmount
-            this.originatingCurrencyCode =
-                simulationInboundInternationalAchTransferCreateParams.originatingCurrencyCode
-            this.originatorCompanyEntryDescription =
-                simulationInboundInternationalAchTransferCreateParams
-                    .originatorCompanyEntryDescription
-            this.originatorName =
-                simulationInboundInternationalAchTransferCreateParams.originatorName
-            this.receivingCompanyOrIndividualName =
-                simulationInboundInternationalAchTransferCreateParams
-                    .receivingCompanyOrIndividualName
-            additionalQueryParams(
-                simulationInboundInternationalAchTransferCreateParams.additionalQueryParams
-            )
-            additionalHeaders(
-                simulationInboundInternationalAchTransferCreateParams.additionalHeaders
-            )
-            additionalBodyProperties(
-                simulationInboundInternationalAchTransferCreateParams.additionalBodyProperties
-            )
+            this.foreignPaymentAmount = simulationInboundInternationalAchTransferCreateParams.foreignPaymentAmount
+            this.originatingCurrencyCode = simulationInboundInternationalAchTransferCreateParams.originatingCurrencyCode
+            this.originatorCompanyEntryDescription = simulationInboundInternationalAchTransferCreateParams.originatorCompanyEntryDescription
+            this.originatorName = simulationInboundInternationalAchTransferCreateParams.originatorName
+            this.receivingCompanyOrIndividualName = simulationInboundInternationalAchTransferCreateParams.receivingCompanyOrIndividualName
+            additionalQueryParams(simulationInboundInternationalAchTransferCreateParams.additionalQueryParams)
+            additionalHeaders(simulationInboundInternationalAchTransferCreateParams.additionalHeaders)
+            additionalBodyProperties(simulationInboundInternationalAchTransferCreateParams.additionalBodyProperties)
         }
 
-        /** The identifier of the Account Number the inbound international ACH Transfer is for. */
+        /**
+         * The identifier of the Account Number the inbound international ACH Transfer is
+         * for.
+         */
         fun accountNumberId(accountNumberId: String) = apply {
             this.accountNumberId = accountNumberId
         }
 
         /**
-         * The transfer amount in cents. A positive amount originates a credit transfer pushing
-         * funds to the receiving account. A negative amount originates a debit transfer pulling
-         * funds from the receiving account.
+         * The transfer amount in cents. A positive amount originates a credit transfer
+         * pushing funds to the receiving account. A negative amount originates a debit
+         * transfer pulling funds from the receiving account.
          */
-        fun amount(amount: Long) = apply { this.amount = amount }
+        fun amount(amount: Long) = apply {
+            this.amount = amount
+        }
 
         /**
-         * The amount in the minor unit of the foreign payment currency. For dollars, for example,
-         * this is cents.
+         * The amount in the minor unit of the foreign payment currency. For dollars, for
+         * example, this is cents.
          */
         fun foreignPaymentAmount(foreignPaymentAmount: Long) = apply {
             this.foreignPaymentAmount = foreignPaymentAmount
         }
 
         /**
-         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code for the originating
-         * bank account.
+         * The [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code for the
+         * originating bank account.
          */
         fun originatingCurrencyCode(originatingCurrencyCode: String) = apply {
             this.originatingCurrencyCode = originatingCurrencyCode
@@ -404,7 +409,9 @@ constructor(
         }
 
         /** Either the name of the originator or an intermediary money transmitter. */
-        fun originatorName(originatorName: String) = apply { this.originatorName = originatorName }
+        fun originatorName(originatorName: String) = apply {
+            this.originatorName = originatorName
+        }
 
         /** The name of the receiver of the transfer. */
         fun receivingCompanyOrIndividualName(receivingCompanyOrIndividualName: String) = apply {
@@ -449,7 +456,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -460,27 +469,29 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): SimulationInboundInternationalAchTransferCreateParams =
-            SimulationInboundInternationalAchTransferCreateParams(
-                checkNotNull(accountNumberId) { "`accountNumberId` is required but was not set" },
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(foreignPaymentAmount) {
-                    "`foreignPaymentAmount` is required but was not set"
-                },
-                checkNotNull(originatingCurrencyCode) {
-                    "`originatingCurrencyCode` is required but was not set"
-                },
-                originatorCompanyEntryDescription,
-                originatorName,
-                receivingCompanyOrIndividualName,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): SimulationInboundInternationalAchTransferCreateParams = SimulationInboundInternationalAchTransferCreateParams(
+            checkNotNull(accountNumberId) {
+                "`accountNumberId` is required but was not set"
+            },
+            checkNotNull(amount) {
+                "`amount` is required but was not set"
+            },
+            checkNotNull(foreignPaymentAmount) {
+                "`foreignPaymentAmount` is required but was not set"
+            },
+            checkNotNull(originatingCurrencyCode) {
+                "`originatingCurrencyCode` is required but was not set"
+            },
+            originatorCompanyEntryDescription,
+            originatorName,
+            receivingCompanyOrIndividualName,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 }

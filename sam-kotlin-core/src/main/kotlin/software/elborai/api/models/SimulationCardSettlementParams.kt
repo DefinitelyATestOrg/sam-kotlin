@@ -4,23 +4,46 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.*
 
-class SimulationCardSettlementParams
-constructor(
-    private val cardId: String,
-    private val pendingTransactionId: String,
-    private val amount: Long?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class SimulationCardSettlementParams constructor(
+  private val cardId: String,
+  private val pendingTransactionId: String,
+  private val amount: Long?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun cardId(): String = cardId
@@ -30,12 +53,12 @@ constructor(
     fun amount(): Long? = amount
 
     internal fun getBody(): SimulationCardSettlementBody {
-        return SimulationCardSettlementBody(
-            cardId,
-            pendingTransactionId,
-            amount,
-            additionalBodyProperties,
-        )
+      return SimulationCardSettlementBody(
+          cardId,
+          pendingTransactionId,
+          amount,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -44,30 +67,33 @@ constructor(
 
     @JsonDeserialize(builder = SimulationCardSettlementBody.Builder::class)
     @NoAutoDetect
-    class SimulationCardSettlementBody
-    internal constructor(
-        private val cardId: String?,
-        private val pendingTransactionId: String?,
-        private val amount: Long?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class SimulationCardSettlementBody internal constructor(
+      private val cardId: String?,
+      private val pendingTransactionId: String?,
+      private val amount: Long?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
         /** The identifier of the Card to create a settlement on. */
-        @JsonProperty("card_id") fun cardId(): String? = cardId
+        @JsonProperty("card_id")
+        fun cardId(): String? = cardId
 
         /**
-         * The identifier of the Pending Transaction for the Card Authorization you wish to settle.
+         * The identifier of the Pending Transaction for the Card Authorization you wish to
+         * settle.
          */
         @JsonProperty("pending_transaction_id")
         fun pendingTransactionId(): String? = pendingTransactionId
 
         /**
-         * The amount to be settled. This defaults to the amount of the Pending Transaction being
-         * settled.
+         * The amount to be settled. This defaults to the amount of the Pending Transaction
+         * being settled.
          */
-        @JsonProperty("amount") fun amount(): Long? = amount
+        @JsonProperty("amount")
+        fun amount(): Long? = amount
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -76,32 +102,30 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is SimulationCardSettlementBody &&
-                this.cardId == other.cardId &&
-                this.pendingTransactionId == other.pendingTransactionId &&
-                this.amount == other.amount &&
-                this.additionalProperties == other.additionalProperties
+          return other is SimulationCardSettlementBody &&
+              this.cardId == other.cardId &&
+              this.pendingTransactionId == other.pendingTransactionId &&
+              this.amount == other.amount &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        cardId,
-                        pendingTransactionId,
-                        amount,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                cardId,
+                pendingTransactionId,
+                amount,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "SimulationCardSettlementBody{cardId=$cardId, pendingTransactionId=$pendingTransactionId, amount=$amount, additionalProperties=$additionalProperties}"
+        override fun toString() = "SimulationCardSettlementBody{cardId=$cardId, pendingTransactionId=$pendingTransactionId, amount=$amount, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -123,7 +147,10 @@ constructor(
             }
 
             /** The identifier of the Card to create a settlement on. */
-            @JsonProperty("card_id") fun cardId(cardId: String) = apply { this.cardId = cardId }
+            @JsonProperty("card_id")
+            fun cardId(cardId: String) = apply {
+                this.cardId = cardId
+            }
 
             /**
              * The identifier of the Pending Transaction for the Card Authorization you wish to
@@ -138,7 +165,10 @@ constructor(
              * The amount to be settled. This defaults to the amount of the Pending Transaction
              * being settled.
              */
-            @JsonProperty("amount") fun amount(amount: Long) = apply { this.amount = amount }
+            @JsonProperty("amount")
+            fun amount(amount: Long) = apply {
+                this.amount = amount
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -154,15 +184,16 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): SimulationCardSettlementBody =
-                SimulationCardSettlementBody(
-                    checkNotNull(cardId) { "`cardId` is required but was not set" },
-                    checkNotNull(pendingTransactionId) {
-                        "`pendingTransactionId` is required but was not set"
-                    },
-                    amount,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): SimulationCardSettlementBody = SimulationCardSettlementBody(
+                checkNotNull(cardId) {
+                    "`cardId` is required but was not set"
+                },
+                checkNotNull(pendingTransactionId) {
+                    "`pendingTransactionId` is required but was not set"
+                },
+                amount,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -173,32 +204,31 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is SimulationCardSettlementParams &&
-            this.cardId == other.cardId &&
-            this.pendingTransactionId == other.pendingTransactionId &&
-            this.amount == other.amount &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is SimulationCardSettlementParams &&
+          this.cardId == other.cardId &&
+          this.pendingTransactionId == other.pendingTransactionId &&
+          this.amount == other.amount &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            cardId,
-            pendingTransactionId,
-            amount,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          cardId,
+          pendingTransactionId,
+          amount,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "SimulationCardSettlementParams{cardId=$cardId, pendingTransactionId=$pendingTransactionId, amount=$amount, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "SimulationCardSettlementParams{cardId=$cardId, pendingTransactionId=$pendingTransactionId, amount=$amount, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -227,20 +257,25 @@ constructor(
         }
 
         /** The identifier of the Card to create a settlement on. */
-        fun cardId(cardId: String) = apply { this.cardId = cardId }
+        fun cardId(cardId: String) = apply {
+            this.cardId = cardId
+        }
 
         /**
-         * The identifier of the Pending Transaction for the Card Authorization you wish to settle.
+         * The identifier of the Pending Transaction for the Card Authorization you wish to
+         * settle.
          */
         fun pendingTransactionId(pendingTransactionId: String) = apply {
             this.pendingTransactionId = pendingTransactionId
         }
 
         /**
-         * The amount to be settled. This defaults to the amount of the Pending Transaction being
-         * settled.
+         * The amount to be settled. This defaults to the amount of the Pending Transaction
+         * being settled.
          */
-        fun amount(amount: Long) = apply { this.amount = amount }
+        fun amount(amount: Long) = apply {
+            this.amount = amount
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -280,7 +315,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -291,21 +328,21 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): SimulationCardSettlementParams =
-            SimulationCardSettlementParams(
-                checkNotNull(cardId) { "`cardId` is required but was not set" },
-                checkNotNull(pendingTransactionId) {
-                    "`pendingTransactionId` is required but was not set"
-                },
-                amount,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): SimulationCardSettlementParams = SimulationCardSettlementParams(
+            checkNotNull(cardId) {
+                "`cardId` is required but was not set"
+            },
+            checkNotNull(pendingTransactionId) {
+                "`pendingTransactionId` is required but was not set"
+            },
+            amount,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 }
