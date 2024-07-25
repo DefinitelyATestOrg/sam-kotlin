@@ -4,30 +4,53 @@
 
 package software.elborai.api.services.blocking
 
-import software.elborai.api.core.RequestOptions
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import kotlin.LazyThreadSafetyMode.PUBLICATION
+import java.time.LocalDate
+import java.time.Duration
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Base64
+import java.util.Optional
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import java.util.stream.Stream
+import software.elborai.api.core.Enum
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.InboundCheckDeposit
 import software.elborai.api.models.InboundCheckDepositDeclineParams
 import software.elborai.api.models.InboundCheckDepositListPage
 import software.elborai.api.models.InboundCheckDepositListParams
 import software.elborai.api.models.InboundCheckDepositRetrieveParams
+import software.elborai.api.core.ClientOptions
+import software.elborai.api.core.http.HttpMethod
+import software.elborai.api.core.http.HttpRequest
+import software.elborai.api.core.http.HttpResponse.Handler
+import software.elborai.api.core.http.BinaryResponseContent
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.RequestOptions
+import software.elborai.api.errors.IncreaseError
+import software.elborai.api.services.emptyHandler
+import software.elborai.api.services.errorHandler
+import software.elborai.api.services.json
+import software.elborai.api.services.jsonHandler
+import software.elborai.api.services.multipartFormData
+import software.elborai.api.services.stringHandler
+import software.elborai.api.services.binaryHandler
+import software.elborai.api.services.withErrorHandler
 
 interface InboundCheckDepositService {
 
     /** Retrieve an Inbound Check Deposit */
-    fun retrieve(
-        params: InboundCheckDepositRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): InboundCheckDeposit
+    fun retrieve(params: InboundCheckDepositRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): InboundCheckDeposit
 
     /** List Inbound Check Deposits */
-    fun list(
-        params: InboundCheckDepositListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): InboundCheckDepositListPage
+    fun list(params: InboundCheckDepositListParams, requestOptions: RequestOptions = RequestOptions.none()): InboundCheckDepositListPage
 
     /** Decline an Inbound Check Deposit */
-    fun decline(
-        params: InboundCheckDepositDeclineParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): InboundCheckDeposit
+    fun decline(params: InboundCheckDepositDeclineParams, requestOptions: RequestOptions = RequestOptions.none()): InboundCheckDeposit
 }

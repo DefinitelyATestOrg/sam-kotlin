@@ -2,17 +2,18 @@
 
 package software.elborai.api.services
 
-import com.fasterxml.jackson.databind.json.JsonMapper
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.io.InputStream
 import java.io.OutputStream
-import software.elborai.api.core.http.BinaryResponseContent
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import software.elborai.api.core.http.HttpResponse
 import software.elborai.api.core.http.HttpResponse.Handler
-import software.elborai.api.errors.BadRequestException
+import software.elborai.api.core.http.BinaryResponseContent
 import software.elborai.api.errors.IncreaseError
 import software.elborai.api.errors.IncreaseException
+import software.elborai.api.errors.IncreaseServiceException
 import software.elborai.api.errors.InternalServerException
+import software.elborai.api.errors.BadRequestException
 import software.elborai.api.errors.NotFoundException
 import software.elborai.api.errors.PermissionDeniedException
 import software.elborai.api.errors.RateLimitException
@@ -38,7 +39,7 @@ private object StringHandler : Handler<String> {
 
 private object BinaryHandler : Handler<BinaryResponseContent> {
     override fun handle(response: HttpResponse): BinaryResponseContent {
-        return BinaryResponseContentImpl(response)
+        return BinaryResponseContentImpl(response);
     }
 }
 
@@ -74,19 +75,10 @@ internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<IncreaseError
             when (val statusCode = response.statusCode()) {
                 in 200..299 -> return this@withErrorHandler.handle(response)
                 400 -> throw BadRequestException(response.headers(), errorHandler.handle(response))
-                401 ->
-                    throw UnauthorizedException(response.headers(), errorHandler.handle(response))
-                403 ->
-                    throw PermissionDeniedException(
-                        response.headers(),
-                        errorHandler.handle(response)
-                    )
+                401 -> throw UnauthorizedException(response.headers(), errorHandler.handle(response))
+                403 -> throw PermissionDeniedException(response.headers(), errorHandler.handle(response))
                 404 -> throw NotFoundException(response.headers(), errorHandler.handle(response))
-                422 ->
-                    throw UnprocessableEntityException(
-                        response.headers(),
-                        errorHandler.handle(response)
-                    )
+                422 -> throw UnprocessableEntityException(response.headers(), errorHandler.handle(response))
                 429 -> throw RateLimitException(response.headers(), errorHandler.handle(response))
                 in 500..599 ->
                     throw InternalServerException(
@@ -107,21 +99,22 @@ internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<IncreaseError
 
 class BinaryResponseContentImpl
 constructor(
-    private val response: HttpResponse,
-) : BinaryResponseContent {
+        private val response: HttpResponse,
+): BinaryResponseContent {
     override fun contentType(): String? {
         return response.headers().get("Content-Type").firstOrNull()
     }
 
     override fun body(): InputStream {
-        return response.body()
+        return response.body();
     }
 
     override fun writeTo(outputStream: OutputStream) {
-        response.body().copyTo(outputStream)
+        response.body().copyTo(outputStream);
     }
 
     override fun close() {
         response.body().close()
     }
 }
+

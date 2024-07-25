@@ -4,31 +4,53 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.*
 
-class SimulationAchTransferCreateInboundParams
-constructor(
-    private val accountNumberId: String,
-    private val amount: Long,
-    private val companyDescriptiveDate: String?,
-    private val companyDiscretionaryData: String?,
-    private val companyEntryDescription: String?,
-    private val companyId: String?,
-    private val companyName: String?,
-    private val receiverIdNumber: String?,
-    private val receiverName: String?,
-    private val resolveAt: OffsetDateTime?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class SimulationAchTransferCreateInboundParams constructor(
+  private val accountNumberId: String,
+  private val amount: Long,
+  private val companyDescriptiveDate: String?,
+  private val companyDiscretionaryData: String?,
+  private val companyEntryDescription: String?,
+  private val companyId: String?,
+  private val companyName: String?,
+  private val receiverIdNumber: String?,
+  private val receiverName: String?,
+  private val resolveAt: OffsetDateTime?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun accountNumberId(): String = accountNumberId
@@ -52,19 +74,19 @@ constructor(
     fun resolveAt(): OffsetDateTime? = resolveAt
 
     internal fun getBody(): SimulationAchTransferCreateInboundBody {
-        return SimulationAchTransferCreateInboundBody(
-            accountNumberId,
-            amount,
-            companyDescriptiveDate,
-            companyDiscretionaryData,
-            companyEntryDescription,
-            companyId,
-            companyName,
-            receiverIdNumber,
-            receiverName,
-            resolveAt,
-            additionalBodyProperties,
-        )
+      return SimulationAchTransferCreateInboundBody(
+          accountNumberId,
+          amount,
+          companyDescriptiveDate,
+          companyDiscretionaryData,
+          companyEntryDescription,
+          companyId,
+          companyName,
+          receiverIdNumber,
+          receiverName,
+          resolveAt,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -73,32 +95,34 @@ constructor(
 
     @JsonDeserialize(builder = SimulationAchTransferCreateInboundBody.Builder::class)
     @NoAutoDetect
-    class SimulationAchTransferCreateInboundBody
-    internal constructor(
-        private val accountNumberId: String?,
-        private val amount: Long?,
-        private val companyDescriptiveDate: String?,
-        private val companyDiscretionaryData: String?,
-        private val companyEntryDescription: String?,
-        private val companyId: String?,
-        private val companyName: String?,
-        private val receiverIdNumber: String?,
-        private val receiverName: String?,
-        private val resolveAt: OffsetDateTime?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class SimulationAchTransferCreateInboundBody internal constructor(
+      private val accountNumberId: String?,
+      private val amount: Long?,
+      private val companyDescriptiveDate: String?,
+      private val companyDiscretionaryData: String?,
+      private val companyEntryDescription: String?,
+      private val companyId: String?,
+      private val companyName: String?,
+      private val receiverIdNumber: String?,
+      private val receiverName: String?,
+      private val resolveAt: OffsetDateTime?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
         /** The identifier of the Account Number the inbound ACH Transfer is for. */
-        @JsonProperty("account_number_id") fun accountNumberId(): String? = accountNumberId
+        @JsonProperty("account_number_id")
+        fun accountNumberId(): String? = accountNumberId
 
         /**
-         * The transfer amount in cents. A positive amount originates a credit transfer pushing
-         * funds to the receiving account. A negative amount originates a debit transfer pulling
-         * funds from the receiving account.
+         * The transfer amount in cents. A positive amount originates a credit transfer
+         * pushing funds to the receiving account. A negative amount originates a debit
+         * transfer pulling funds from the receiving account.
          */
-        @JsonProperty("amount") fun amount(): Long? = amount
+        @JsonProperty("amount")
+        fun amount(): Long? = amount
 
         /** The description of the date of the transfer. */
         @JsonProperty("company_descriptive_date")
@@ -113,22 +137,27 @@ constructor(
         fun companyEntryDescription(): String? = companyEntryDescription
 
         /** The sender's company ID. */
-        @JsonProperty("company_id") fun companyId(): String? = companyId
+        @JsonProperty("company_id")
+        fun companyId(): String? = companyId
 
         /** The name of the sender. */
-        @JsonProperty("company_name") fun companyName(): String? = companyName
+        @JsonProperty("company_name")
+        fun companyName(): String? = companyName
 
         /** The ID of the receiver of the transfer. */
-        @JsonProperty("receiver_id_number") fun receiverIdNumber(): String? = receiverIdNumber
+        @JsonProperty("receiver_id_number")
+        fun receiverIdNumber(): String? = receiverIdNumber
 
         /** The name of the receiver of the transfer. */
-        @JsonProperty("receiver_name") fun receiverName(): String? = receiverName
+        @JsonProperty("receiver_name")
+        fun receiverName(): String? = receiverName
 
         /**
          * The time at which the transfer should be resolved. If not provided will resolve
          * immediately.
          */
-        @JsonProperty("resolve_at") fun resolveAt(): OffsetDateTime? = resolveAt
+        @JsonProperty("resolve_at")
+        fun resolveAt(): OffsetDateTime? = resolveAt
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -137,46 +166,44 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is SimulationAchTransferCreateInboundBody &&
-                this.accountNumberId == other.accountNumberId &&
-                this.amount == other.amount &&
-                this.companyDescriptiveDate == other.companyDescriptiveDate &&
-                this.companyDiscretionaryData == other.companyDiscretionaryData &&
-                this.companyEntryDescription == other.companyEntryDescription &&
-                this.companyId == other.companyId &&
-                this.companyName == other.companyName &&
-                this.receiverIdNumber == other.receiverIdNumber &&
-                this.receiverName == other.receiverName &&
-                this.resolveAt == other.resolveAt &&
-                this.additionalProperties == other.additionalProperties
+          return other is SimulationAchTransferCreateInboundBody &&
+              this.accountNumberId == other.accountNumberId &&
+              this.amount == other.amount &&
+              this.companyDescriptiveDate == other.companyDescriptiveDate &&
+              this.companyDiscretionaryData == other.companyDiscretionaryData &&
+              this.companyEntryDescription == other.companyEntryDescription &&
+              this.companyId == other.companyId &&
+              this.companyName == other.companyName &&
+              this.receiverIdNumber == other.receiverIdNumber &&
+              this.receiverName == other.receiverName &&
+              this.resolveAt == other.resolveAt &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        accountNumberId,
-                        amount,
-                        companyDescriptiveDate,
-                        companyDiscretionaryData,
-                        companyEntryDescription,
-                        companyId,
-                        companyName,
-                        receiverIdNumber,
-                        receiverName,
-                        resolveAt,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                accountNumberId,
+                amount,
+                companyDescriptiveDate,
+                companyDiscretionaryData,
+                companyEntryDescription,
+                companyId,
+                companyName,
+                receiverIdNumber,
+                receiverName,
+                resolveAt,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "SimulationAchTransferCreateInboundBody{accountNumberId=$accountNumberId, amount=$amount, companyDescriptiveDate=$companyDescriptiveDate, companyDiscretionaryData=$companyDiscretionaryData, companyEntryDescription=$companyEntryDescription, companyId=$companyId, companyName=$companyName, receiverIdNumber=$receiverIdNumber, receiverName=$receiverName, resolveAt=$resolveAt, additionalProperties=$additionalProperties}"
+        override fun toString() = "SimulationAchTransferCreateInboundBody{accountNumberId=$accountNumberId, amount=$amount, companyDescriptiveDate=$companyDescriptiveDate, companyDiscretionaryData=$companyDiscretionaryData, companyEntryDescription=$companyEntryDescription, companyId=$companyId, companyName=$companyName, receiverIdNumber=$receiverIdNumber, receiverName=$receiverName, resolveAt=$resolveAt, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -197,17 +224,12 @@ constructor(
             private var resolveAt: OffsetDateTime? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(
-                simulationAchTransferCreateInboundBody: SimulationAchTransferCreateInboundBody
-            ) = apply {
+            internal fun from(simulationAchTransferCreateInboundBody: SimulationAchTransferCreateInboundBody) = apply {
                 this.accountNumberId = simulationAchTransferCreateInboundBody.accountNumberId
                 this.amount = simulationAchTransferCreateInboundBody.amount
-                this.companyDescriptiveDate =
-                    simulationAchTransferCreateInboundBody.companyDescriptiveDate
-                this.companyDiscretionaryData =
-                    simulationAchTransferCreateInboundBody.companyDiscretionaryData
-                this.companyEntryDescription =
-                    simulationAchTransferCreateInboundBody.companyEntryDescription
+                this.companyDescriptiveDate = simulationAchTransferCreateInboundBody.companyDescriptiveDate
+                this.companyDiscretionaryData = simulationAchTransferCreateInboundBody.companyDiscretionaryData
+                this.companyEntryDescription = simulationAchTransferCreateInboundBody.companyEntryDescription
                 this.companyId = simulationAchTransferCreateInboundBody.companyId
                 this.companyName = simulationAchTransferCreateInboundBody.companyName
                 this.receiverIdNumber = simulationAchTransferCreateInboundBody.receiverIdNumber
@@ -223,11 +245,14 @@ constructor(
             }
 
             /**
-             * The transfer amount in cents. A positive amount originates a credit transfer pushing
-             * funds to the receiving account. A negative amount originates a debit transfer pulling
-             * funds from the receiving account.
+             * The transfer amount in cents. A positive amount originates a credit transfer
+             * pushing funds to the receiving account. A negative amount originates a debit
+             * transfer pulling funds from the receiving account.
              */
-            @JsonProperty("amount") fun amount(amount: Long) = apply { this.amount = amount }
+            @JsonProperty("amount")
+            fun amount(amount: Long) = apply {
+                this.amount = amount
+            }
 
             /** The description of the date of the transfer. */
             @JsonProperty("company_descriptive_date")
@@ -249,11 +274,15 @@ constructor(
 
             /** The sender's company ID. */
             @JsonProperty("company_id")
-            fun companyId(companyId: String) = apply { this.companyId = companyId }
+            fun companyId(companyId: String) = apply {
+                this.companyId = companyId
+            }
 
             /** The name of the sender. */
             @JsonProperty("company_name")
-            fun companyName(companyName: String) = apply { this.companyName = companyName }
+            fun companyName(companyName: String) = apply {
+                this.companyName = companyName
+            }
 
             /** The ID of the receiver of the transfer. */
             @JsonProperty("receiver_id_number")
@@ -263,14 +292,18 @@ constructor(
 
             /** The name of the receiver of the transfer. */
             @JsonProperty("receiver_name")
-            fun receiverName(receiverName: String) = apply { this.receiverName = receiverName }
+            fun receiverName(receiverName: String) = apply {
+                this.receiverName = receiverName
+            }
 
             /**
              * The time at which the transfer should be resolved. If not provided will resolve
              * immediately.
              */
             @JsonProperty("resolve_at")
-            fun resolveAt(resolveAt: OffsetDateTime) = apply { this.resolveAt = resolveAt }
+            fun resolveAt(resolveAt: OffsetDateTime) = apply {
+                this.resolveAt = resolveAt
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -286,22 +319,23 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): SimulationAchTransferCreateInboundBody =
-                SimulationAchTransferCreateInboundBody(
-                    checkNotNull(accountNumberId) {
-                        "`accountNumberId` is required but was not set"
-                    },
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    companyDescriptiveDate,
-                    companyDiscretionaryData,
-                    companyEntryDescription,
-                    companyId,
-                    companyName,
-                    receiverIdNumber,
-                    receiverName,
-                    resolveAt,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): SimulationAchTransferCreateInboundBody = SimulationAchTransferCreateInboundBody(
+                checkNotNull(accountNumberId) {
+                    "`accountNumberId` is required but was not set"
+                },
+                checkNotNull(amount) {
+                    "`amount` is required but was not set"
+                },
+                companyDescriptiveDate,
+                companyDiscretionaryData,
+                companyEntryDescription,
+                companyId,
+                companyName,
+                receiverIdNumber,
+                receiverName,
+                resolveAt,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -312,46 +346,45 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is SimulationAchTransferCreateInboundParams &&
-            this.accountNumberId == other.accountNumberId &&
-            this.amount == other.amount &&
-            this.companyDescriptiveDate == other.companyDescriptiveDate &&
-            this.companyDiscretionaryData == other.companyDiscretionaryData &&
-            this.companyEntryDescription == other.companyEntryDescription &&
-            this.companyId == other.companyId &&
-            this.companyName == other.companyName &&
-            this.receiverIdNumber == other.receiverIdNumber &&
-            this.receiverName == other.receiverName &&
-            this.resolveAt == other.resolveAt &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is SimulationAchTransferCreateInboundParams &&
+          this.accountNumberId == other.accountNumberId &&
+          this.amount == other.amount &&
+          this.companyDescriptiveDate == other.companyDescriptiveDate &&
+          this.companyDiscretionaryData == other.companyDiscretionaryData &&
+          this.companyEntryDescription == other.companyEntryDescription &&
+          this.companyId == other.companyId &&
+          this.companyName == other.companyName &&
+          this.receiverIdNumber == other.receiverIdNumber &&
+          this.receiverName == other.receiverName &&
+          this.resolveAt == other.resolveAt &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            accountNumberId,
-            amount,
-            companyDescriptiveDate,
-            companyDiscretionaryData,
-            companyEntryDescription,
-            companyId,
-            companyName,
-            receiverIdNumber,
-            receiverName,
-            resolveAt,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          accountNumberId,
+          amount,
+          companyDescriptiveDate,
+          companyDiscretionaryData,
+          companyEntryDescription,
+          companyId,
+          companyName,
+          receiverIdNumber,
+          receiverName,
+          resolveAt,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "SimulationAchTransferCreateInboundParams{accountNumberId=$accountNumberId, amount=$amount, companyDescriptiveDate=$companyDescriptiveDate, companyDiscretionaryData=$companyDiscretionaryData, companyEntryDescription=$companyEntryDescription, companyId=$companyId, companyName=$companyName, receiverIdNumber=$receiverIdNumber, receiverName=$receiverName, resolveAt=$resolveAt, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "SimulationAchTransferCreateInboundParams{accountNumberId=$accountNumberId, amount=$amount, companyDescriptiveDate=$companyDescriptiveDate, companyDiscretionaryData=$companyDiscretionaryData, companyEntryDescription=$companyEntryDescription, companyId=$companyId, companyName=$companyName, receiverIdNumber=$receiverIdNumber, receiverName=$receiverName, resolveAt=$resolveAt, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -377,17 +410,12 @@ constructor(
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(
-            simulationAchTransferCreateInboundParams: SimulationAchTransferCreateInboundParams
-        ) = apply {
+        internal fun from(simulationAchTransferCreateInboundParams: SimulationAchTransferCreateInboundParams) = apply {
             this.accountNumberId = simulationAchTransferCreateInboundParams.accountNumberId
             this.amount = simulationAchTransferCreateInboundParams.amount
-            this.companyDescriptiveDate =
-                simulationAchTransferCreateInboundParams.companyDescriptiveDate
-            this.companyDiscretionaryData =
-                simulationAchTransferCreateInboundParams.companyDiscretionaryData
-            this.companyEntryDescription =
-                simulationAchTransferCreateInboundParams.companyEntryDescription
+            this.companyDescriptiveDate = simulationAchTransferCreateInboundParams.companyDescriptiveDate
+            this.companyDiscretionaryData = simulationAchTransferCreateInboundParams.companyDiscretionaryData
+            this.companyEntryDescription = simulationAchTransferCreateInboundParams.companyEntryDescription
             this.companyId = simulationAchTransferCreateInboundParams.companyId
             this.companyName = simulationAchTransferCreateInboundParams.companyName
             this.receiverIdNumber = simulationAchTransferCreateInboundParams.receiverIdNumber
@@ -395,9 +423,7 @@ constructor(
             this.resolveAt = simulationAchTransferCreateInboundParams.resolveAt
             additionalQueryParams(simulationAchTransferCreateInboundParams.additionalQueryParams)
             additionalHeaders(simulationAchTransferCreateInboundParams.additionalHeaders)
-            additionalBodyProperties(
-                simulationAchTransferCreateInboundParams.additionalBodyProperties
-            )
+            additionalBodyProperties(simulationAchTransferCreateInboundParams.additionalBodyProperties)
         }
 
         /** The identifier of the Account Number the inbound ACH Transfer is for. */
@@ -406,11 +432,13 @@ constructor(
         }
 
         /**
-         * The transfer amount in cents. A positive amount originates a credit transfer pushing
-         * funds to the receiving account. A negative amount originates a debit transfer pulling
-         * funds from the receiving account.
+         * The transfer amount in cents. A positive amount originates a credit transfer
+         * pushing funds to the receiving account. A negative amount originates a debit
+         * transfer pulling funds from the receiving account.
          */
-        fun amount(amount: Long) = apply { this.amount = amount }
+        fun amount(amount: Long) = apply {
+            this.amount = amount
+        }
 
         /** The description of the date of the transfer. */
         fun companyDescriptiveDate(companyDescriptiveDate: String) = apply {
@@ -428,10 +456,14 @@ constructor(
         }
 
         /** The sender's company ID. */
-        fun companyId(companyId: String) = apply { this.companyId = companyId }
+        fun companyId(companyId: String) = apply {
+            this.companyId = companyId
+        }
 
         /** The name of the sender. */
-        fun companyName(companyName: String) = apply { this.companyName = companyName }
+        fun companyName(companyName: String) = apply {
+            this.companyName = companyName
+        }
 
         /** The ID of the receiver of the transfer. */
         fun receiverIdNumber(receiverIdNumber: String) = apply {
@@ -439,13 +471,17 @@ constructor(
         }
 
         /** The name of the receiver of the transfer. */
-        fun receiverName(receiverName: String) = apply { this.receiverName = receiverName }
+        fun receiverName(receiverName: String) = apply {
+            this.receiverName = receiverName
+        }
 
         /**
          * The time at which the transfer should be resolved. If not provided will resolve
          * immediately.
          */
-        fun resolveAt(resolveAt: OffsetDateTime) = apply { this.resolveAt = resolveAt }
+        fun resolveAt(resolveAt: OffsetDateTime) = apply {
+            this.resolveAt = resolveAt
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -485,7 +521,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -496,26 +534,28 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): SimulationAchTransferCreateInboundParams =
-            SimulationAchTransferCreateInboundParams(
-                checkNotNull(accountNumberId) { "`accountNumberId` is required but was not set" },
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                companyDescriptiveDate,
-                companyDiscretionaryData,
-                companyEntryDescription,
-                companyId,
-                companyName,
-                receiverIdNumber,
-                receiverName,
-                resolveAt,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): SimulationAchTransferCreateInboundParams = SimulationAchTransferCreateInboundParams(
+            checkNotNull(accountNumberId) {
+                "`accountNumberId` is required but was not set"
+            },
+            checkNotNull(amount) {
+                "`amount` is required but was not set"
+            },
+            companyDescriptiveDate,
+            companyDiscretionaryData,
+            companyEntryDescription,
+            companyId,
+            companyName,
+            receiverIdNumber,
+            receiverName,
+            resolveAt,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 }

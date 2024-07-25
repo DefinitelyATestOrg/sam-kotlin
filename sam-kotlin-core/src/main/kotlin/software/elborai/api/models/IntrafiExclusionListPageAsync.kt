@@ -6,23 +6,31 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.Spliterator
+import java.util.Spliterators
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
+import java.util.function.Predicate
+import java.util.stream.Stream
+import java.util.stream.StreamSupport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import software.elborai.api.core.ExcludeMissing
-import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
+import software.elborai.api.core.JsonField
 import software.elborai.api.core.NoAutoDetect
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.models.IntrafiExclusion
 import software.elborai.api.services.async.intrafi.ExclusionServiceAsync
 
-class IntrafiExclusionListPageAsync
-private constructor(
-    private val exclusionsService: ExclusionServiceAsync,
-    private val params: IntrafiExclusionListParams,
-    private val response: Response,
-) {
+class IntrafiExclusionListPageAsync private constructor(private val exclusionsService: ExclusionServiceAsync, private val params: IntrafiExclusionListParams, private val response: Response, ) {
 
     fun response(): Response = response
 
@@ -31,74 +39,62 @@ private constructor(
     fun nextCursor(): String? = response().nextCursor()
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is IntrafiExclusionListPageAsync &&
-            this.exclusionsService == other.exclusionsService &&
-            this.params == other.params &&
-            this.response == other.response
+      return other is IntrafiExclusionListPageAsync &&
+          this.exclusionsService == other.exclusionsService &&
+          this.params == other.params &&
+          this.response == other.response
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            exclusionsService,
-            params,
-            response,
-        )
+      return Objects.hash(
+          exclusionsService,
+          params,
+          response,
+      )
     }
 
-    override fun toString() =
-        "IntrafiExclusionListPageAsync{exclusionsService=$exclusionsService, params=$params, response=$response}"
+    override fun toString() = "IntrafiExclusionListPageAsync{exclusionsService=$exclusionsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-        if (data().isEmpty()) {
-            return false
-        }
+      if (data().isEmpty()) {
+        return false;
+      }
 
-        return nextCursor() != null
+      return nextCursor() != null
     }
 
     fun getNextPageParams(): IntrafiExclusionListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
+      if (!hasNextPage()) {
+        return null
+      }
 
-        return IntrafiExclusionListParams.builder()
-            .from(params)
-            .apply { nextCursor()?.let { this.cursor(it) } }
-            .build()
+      return IntrafiExclusionListParams.builder().from(params).apply {nextCursor()?.let{ this.cursor(it) } }.build()
     }
 
     suspend fun getNextPage(): IntrafiExclusionListPageAsync? {
-        return getNextPageParams()?.let { exclusionsService.list(it) }
+      return getNextPageParams()?.let {
+          exclusionsService.list(it)
+      }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
     companion object {
 
-        fun of(
-            exclusionsService: ExclusionServiceAsync,
-            params: IntrafiExclusionListParams,
-            response: Response
-        ) =
-            IntrafiExclusionListPageAsync(
-                exclusionsService,
-                params,
-                response,
-            )
+        fun of(exclusionsService: ExclusionServiceAsync, params: IntrafiExclusionListParams, response: Response) = IntrafiExclusionListPageAsync(
+            exclusionsService,
+            params,
+            response,
+        )
     }
 
     @JsonDeserialize(builder = Response.Builder::class)
     @NoAutoDetect
-    class Response
-    constructor(
-        private val data: JsonField<List<IntrafiExclusion>>,
-        private val nextCursor: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class Response constructor(private val data: JsonField<List<IntrafiExclusion>>, private val nextCursor: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var validated: Boolean = false
 
@@ -106,9 +102,11 @@ private constructor(
 
         fun nextCursor(): String? = nextCursor.getNullable("next_cursor")
 
-        @JsonProperty("data") fun _data(): JsonField<List<IntrafiExclusion>>? = data
+        @JsonProperty("data")
+        fun _data(): JsonField<List<IntrafiExclusion>>? = data
 
-        @JsonProperty("next_cursor") fun _nextCursor(): JsonField<String>? = nextCursor
+        @JsonProperty("next_cursor")
+        fun _nextCursor(): JsonField<String>? = nextCursor
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -116,35 +114,34 @@ private constructor(
 
         fun validate(): Response = apply {
             if (!validated) {
-                data().map { it.validate() }
-                nextCursor()
-                validated = true
+              data().map { it.validate() }
+              nextCursor()
+              validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Response &&
-                this.data == other.data &&
-                this.nextCursor == other.nextCursor &&
-                this.additionalProperties == other.additionalProperties
+          return other is Response &&
+              this.data == other.data &&
+              this.nextCursor == other.nextCursor &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            return Objects.hash(
-                data,
-                nextCursor,
-                additionalProperties,
-            )
+          return Objects.hash(
+              data,
+              nextCursor,
+              additionalProperties,
+          )
         }
 
-        override fun toString() =
-            "IntrafiExclusionListPageAsync.Response{data=$data, nextCursor=$nextCursor, additionalProperties=$additionalProperties}"
+        override fun toString() = "IntrafiExclusionListPageAsync.Response{data=$data, nextCursor=$nextCursor, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -178,30 +175,26 @@ private constructor(
                 this.additionalProperties.put(key, value)
             }
 
-            fun build() =
-                Response(
-                    data,
-                    nextCursor,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build() = Response(
+                data,
+                nextCursor,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
-    class AutoPager
-    constructor(
-        private val firstPage: IntrafiExclusionListPageAsync,
-    ) : Flow<IntrafiExclusion> {
+    class AutoPager constructor(private val firstPage: IntrafiExclusionListPageAsync, ) : Flow<IntrafiExclusion> {
 
         override suspend fun collect(collector: FlowCollector<IntrafiExclusion>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.data().size) {
-                    collector.emit(page.data()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
+          var page = firstPage
+          var index = 0
+          while (true) {
+            while (index < page.data().size) {
+              collector.emit(page.data()[index++])
             }
+            page = page.getNextPage() ?: break
+            index = 0
+          }
         }
     }
 }

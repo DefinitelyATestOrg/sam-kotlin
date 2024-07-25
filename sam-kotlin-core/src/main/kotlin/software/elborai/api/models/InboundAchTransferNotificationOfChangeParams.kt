@@ -4,23 +4,46 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.*
 
-class InboundAchTransferNotificationOfChangeParams
-constructor(
-    private val inboundAchTransferId: String,
-    private val updatedAccountNumber: String?,
-    private val updatedRoutingNumber: String?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class InboundAchTransferNotificationOfChangeParams constructor(
+  private val inboundAchTransferId: String,
+  private val updatedAccountNumber: String?,
+  private val updatedRoutingNumber: String?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun inboundAchTransferId(): String = inboundAchTransferId
@@ -30,11 +53,11 @@ constructor(
     fun updatedRoutingNumber(): String? = updatedRoutingNumber
 
     internal fun getBody(): InboundAchTransferNotificationOfChangeBody {
-        return InboundAchTransferNotificationOfChangeBody(
-            updatedAccountNumber,
-            updatedRoutingNumber,
-            additionalBodyProperties,
-        )
+      return InboundAchTransferNotificationOfChangeBody(
+          updatedAccountNumber,
+          updatedRoutingNumber,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -42,20 +65,15 @@ constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> inboundAchTransferId
-            else -> ""
-        }
+      return when (index) {
+          0 -> inboundAchTransferId
+          else -> ""
+      }
     }
 
     @JsonDeserialize(builder = InboundAchTransferNotificationOfChangeBody.Builder::class)
     @NoAutoDetect
-    class InboundAchTransferNotificationOfChangeBody
-    internal constructor(
-        private val updatedAccountNumber: String?,
-        private val updatedRoutingNumber: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class InboundAchTransferNotificationOfChangeBody internal constructor(private val updatedAccountNumber: String?, private val updatedRoutingNumber: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
@@ -74,30 +92,28 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is InboundAchTransferNotificationOfChangeBody &&
-                this.updatedAccountNumber == other.updatedAccountNumber &&
-                this.updatedRoutingNumber == other.updatedRoutingNumber &&
-                this.additionalProperties == other.additionalProperties
+          return other is InboundAchTransferNotificationOfChangeBody &&
+              this.updatedAccountNumber == other.updatedAccountNumber &&
+              this.updatedRoutingNumber == other.updatedRoutingNumber &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        updatedAccountNumber,
-                        updatedRoutingNumber,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                updatedAccountNumber,
+                updatedRoutingNumber,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "InboundAchTransferNotificationOfChangeBody{updatedAccountNumber=$updatedAccountNumber, updatedRoutingNumber=$updatedRoutingNumber, additionalProperties=$additionalProperties}"
+        override fun toString() = "InboundAchTransferNotificationOfChangeBody{updatedAccountNumber=$updatedAccountNumber, updatedRoutingNumber=$updatedRoutingNumber, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -110,17 +126,10 @@ constructor(
             private var updatedRoutingNumber: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(
-                inboundAchTransferNotificationOfChangeBody:
-                    InboundAchTransferNotificationOfChangeBody
-            ) = apply {
-                this.updatedAccountNumber =
-                    inboundAchTransferNotificationOfChangeBody.updatedAccountNumber
-                this.updatedRoutingNumber =
-                    inboundAchTransferNotificationOfChangeBody.updatedRoutingNumber
-                additionalProperties(
-                    inboundAchTransferNotificationOfChangeBody.additionalProperties
-                )
+            internal fun from(inboundAchTransferNotificationOfChangeBody: InboundAchTransferNotificationOfChangeBody) = apply {
+                this.updatedAccountNumber = inboundAchTransferNotificationOfChangeBody.updatedAccountNumber
+                this.updatedRoutingNumber = inboundAchTransferNotificationOfChangeBody.updatedRoutingNumber
+                additionalProperties(inboundAchTransferNotificationOfChangeBody.additionalProperties)
             }
 
             /** The updated account number to send in the notification of change. */
@@ -149,12 +158,11 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): InboundAchTransferNotificationOfChangeBody =
-                InboundAchTransferNotificationOfChangeBody(
-                    updatedAccountNumber,
-                    updatedRoutingNumber,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): InboundAchTransferNotificationOfChangeBody = InboundAchTransferNotificationOfChangeBody(
+                updatedAccountNumber,
+                updatedRoutingNumber,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -165,32 +173,31 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is InboundAchTransferNotificationOfChangeParams &&
-            this.inboundAchTransferId == other.inboundAchTransferId &&
-            this.updatedAccountNumber == other.updatedAccountNumber &&
-            this.updatedRoutingNumber == other.updatedRoutingNumber &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is InboundAchTransferNotificationOfChangeParams &&
+          this.inboundAchTransferId == other.inboundAchTransferId &&
+          this.updatedAccountNumber == other.updatedAccountNumber &&
+          this.updatedRoutingNumber == other.updatedRoutingNumber &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            inboundAchTransferId,
-            updatedAccountNumber,
-            updatedRoutingNumber,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          inboundAchTransferId,
+          updatedAccountNumber,
+          updatedRoutingNumber,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "InboundAchTransferNotificationOfChangeParams{inboundAchTransferId=$inboundAchTransferId, updatedAccountNumber=$updatedAccountNumber, updatedRoutingNumber=$updatedRoutingNumber, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "InboundAchTransferNotificationOfChangeParams{inboundAchTransferId=$inboundAchTransferId, updatedAccountNumber=$updatedAccountNumber, updatedRoutingNumber=$updatedRoutingNumber, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -209,27 +216,18 @@ constructor(
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(
-            inboundAchTransferNotificationOfChangeParams:
-                InboundAchTransferNotificationOfChangeParams
-        ) = apply {
-            this.inboundAchTransferId =
-                inboundAchTransferNotificationOfChangeParams.inboundAchTransferId
-            this.updatedAccountNumber =
-                inboundAchTransferNotificationOfChangeParams.updatedAccountNumber
-            this.updatedRoutingNumber =
-                inboundAchTransferNotificationOfChangeParams.updatedRoutingNumber
-            additionalQueryParams(
-                inboundAchTransferNotificationOfChangeParams.additionalQueryParams
-            )
+        internal fun from(inboundAchTransferNotificationOfChangeParams: InboundAchTransferNotificationOfChangeParams) = apply {
+            this.inboundAchTransferId = inboundAchTransferNotificationOfChangeParams.inboundAchTransferId
+            this.updatedAccountNumber = inboundAchTransferNotificationOfChangeParams.updatedAccountNumber
+            this.updatedRoutingNumber = inboundAchTransferNotificationOfChangeParams.updatedRoutingNumber
+            additionalQueryParams(inboundAchTransferNotificationOfChangeParams.additionalQueryParams)
             additionalHeaders(inboundAchTransferNotificationOfChangeParams.additionalHeaders)
-            additionalBodyProperties(
-                inboundAchTransferNotificationOfChangeParams.additionalBodyProperties
-            )
+            additionalBodyProperties(inboundAchTransferNotificationOfChangeParams.additionalBodyProperties)
         }
 
         /**
-         * The identifier of the Inbound ACH Transfer for which to create a notification of change.
+         * The identifier of the Inbound ACH Transfer for which to create a notification of
+         * change.
          */
         fun inboundAchTransferId(inboundAchTransferId: String) = apply {
             this.inboundAchTransferId = inboundAchTransferId
@@ -283,7 +281,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -294,21 +294,19 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): InboundAchTransferNotificationOfChangeParams =
-            InboundAchTransferNotificationOfChangeParams(
-                checkNotNull(inboundAchTransferId) {
-                    "`inboundAchTransferId` is required but was not set"
-                },
-                updatedAccountNumber,
-                updatedRoutingNumber,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): InboundAchTransferNotificationOfChangeParams = InboundAchTransferNotificationOfChangeParams(
+            checkNotNull(inboundAchTransferId) {
+                "`inboundAchTransferId` is required but was not set"
+            },
+            updatedAccountNumber,
+            updatedRoutingNumber,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 }
