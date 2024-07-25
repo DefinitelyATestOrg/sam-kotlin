@@ -4,27 +4,50 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.*
 
-class SimulationCardAuthorizationExpirationsParams
-constructor(
-    private val cardPaymentId: String,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class SimulationCardAuthorizationExpirationsParams constructor(
+  private val cardPaymentId: String,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun cardPaymentId(): String = cardPaymentId
 
     internal fun getBody(): SimulationCardAuthorizationExpirationsBody {
-        return SimulationCardAuthorizationExpirationsBody(cardPaymentId, additionalBodyProperties)
+      return SimulationCardAuthorizationExpirationsBody(cardPaymentId, additionalBodyProperties)
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -33,16 +56,13 @@ constructor(
 
     @JsonDeserialize(builder = SimulationCardAuthorizationExpirationsBody.Builder::class)
     @NoAutoDetect
-    class SimulationCardAuthorizationExpirationsBody
-    internal constructor(
-        private val cardPaymentId: String?,
-        private val additionalProperties: Map<String, JsonValue>,
-    ) {
+    class SimulationCardAuthorizationExpirationsBody internal constructor(private val cardPaymentId: String?, private val additionalProperties: Map<String, JsonValue>, ) {
 
         private var hashCode: Int = 0
 
         /** The identifier of the Card Payment to expire. */
-        @JsonProperty("card_payment_id") fun cardPaymentId(): String? = cardPaymentId
+        @JsonProperty("card_payment_id")
+        fun cardPaymentId(): String? = cardPaymentId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -51,24 +71,23 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is SimulationCardAuthorizationExpirationsBody &&
-                this.cardPaymentId == other.cardPaymentId &&
-                this.additionalProperties == other.additionalProperties
+          return other is SimulationCardAuthorizationExpirationsBody &&
+              this.cardPaymentId == other.cardPaymentId &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(cardPaymentId, additionalProperties)
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(cardPaymentId, additionalProperties)
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "SimulationCardAuthorizationExpirationsBody{cardPaymentId=$cardPaymentId, additionalProperties=$additionalProperties}"
+        override fun toString() = "SimulationCardAuthorizationExpirationsBody{cardPaymentId=$cardPaymentId, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -80,19 +99,16 @@ constructor(
             private var cardPaymentId: String? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(
-                simulationCardAuthorizationExpirationsBody:
-                    SimulationCardAuthorizationExpirationsBody
-            ) = apply {
+            internal fun from(simulationCardAuthorizationExpirationsBody: SimulationCardAuthorizationExpirationsBody) = apply {
                 this.cardPaymentId = simulationCardAuthorizationExpirationsBody.cardPaymentId
-                additionalProperties(
-                    simulationCardAuthorizationExpirationsBody.additionalProperties
-                )
+                additionalProperties(simulationCardAuthorizationExpirationsBody.additionalProperties)
             }
 
             /** The identifier of the Card Payment to expire. */
             @JsonProperty("card_payment_id")
-            fun cardPaymentId(cardPaymentId: String) = apply { this.cardPaymentId = cardPaymentId }
+            fun cardPaymentId(cardPaymentId: String) = apply {
+                this.cardPaymentId = cardPaymentId
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -108,11 +124,9 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): SimulationCardAuthorizationExpirationsBody =
-                SimulationCardAuthorizationExpirationsBody(
-                    checkNotNull(cardPaymentId) { "`cardPaymentId` is required but was not set" },
-                    additionalProperties.toUnmodifiable()
-                )
+            fun build(): SimulationCardAuthorizationExpirationsBody = SimulationCardAuthorizationExpirationsBody(checkNotNull(cardPaymentId) {
+                "`cardPaymentId` is required but was not set"
+            }, additionalProperties.toUnmodifiable())
         }
     }
 
@@ -123,28 +137,27 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is SimulationCardAuthorizationExpirationsParams &&
-            this.cardPaymentId == other.cardPaymentId &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is SimulationCardAuthorizationExpirationsParams &&
+          this.cardPaymentId == other.cardPaymentId &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            cardPaymentId,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          cardPaymentId,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "SimulationCardAuthorizationExpirationsParams{cardPaymentId=$cardPaymentId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "SimulationCardAuthorizationExpirationsParams{cardPaymentId=$cardPaymentId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -161,22 +174,17 @@ constructor(
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(
-            simulationCardAuthorizationExpirationsParams:
-                SimulationCardAuthorizationExpirationsParams
-        ) = apply {
+        internal fun from(simulationCardAuthorizationExpirationsParams: SimulationCardAuthorizationExpirationsParams) = apply {
             this.cardPaymentId = simulationCardAuthorizationExpirationsParams.cardPaymentId
-            additionalQueryParams(
-                simulationCardAuthorizationExpirationsParams.additionalQueryParams
-            )
+            additionalQueryParams(simulationCardAuthorizationExpirationsParams.additionalQueryParams)
             additionalHeaders(simulationCardAuthorizationExpirationsParams.additionalHeaders)
-            additionalBodyProperties(
-                simulationCardAuthorizationExpirationsParams.additionalBodyProperties
-            )
+            additionalBodyProperties(simulationCardAuthorizationExpirationsParams.additionalBodyProperties)
         }
 
         /** The identifier of the Card Payment to expire. */
-        fun cardPaymentId(cardPaymentId: String) = apply { this.cardPaymentId = cardPaymentId }
+        fun cardPaymentId(cardPaymentId: String) = apply {
+            this.cardPaymentId = cardPaymentId
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -216,7 +224,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -227,17 +237,17 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): SimulationCardAuthorizationExpirationsParams =
-            SimulationCardAuthorizationExpirationsParams(
-                checkNotNull(cardPaymentId) { "`cardPaymentId` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): SimulationCardAuthorizationExpirationsParams = SimulationCardAuthorizationExpirationsParams(
+            checkNotNull(cardPaymentId) {
+                "`cardPaymentId` is required but was not set"
+            },
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 }

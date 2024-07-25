@@ -2,27 +2,39 @@
 
 package software.elborai.api.models
 
-import org.assertj.core.api.Assertions.assertThat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.apache.hc.core5.http.ContentType
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.models.*
+import software.elborai.api.models.InboundMailItemRetrieveParams
 
 class InboundMailItemRetrieveParamsTest {
 
     @Test
     fun createInboundMailItemRetrieveParams() {
-        InboundMailItemRetrieveParams.builder().inboundMailItemId("inbound_mail_item_id").build()
+      InboundMailItemRetrieveParams.builder()
+          .inboundMailItemId("inbound_mail_item_id")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            InboundMailItemRetrieveParams.builder()
-                .inboundMailItemId("inbound_mail_item_id")
-                .build()
-        assertThat(params).isNotNull
-        // path param "inboundMailItemId"
-        assertThat(params.getPathParam(0)).isEqualTo("inbound_mail_item_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = InboundMailItemRetrieveParams.builder()
+          .inboundMailItemId("inbound_mail_item_id")
+          .build()
+      assertThat(params).isNotNull
+      // path param "inboundMailItemId"
+      assertThat(params.getPathParam(0)).isEqualTo("inbound_mail_item_id")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

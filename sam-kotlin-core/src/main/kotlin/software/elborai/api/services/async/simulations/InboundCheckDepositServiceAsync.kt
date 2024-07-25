@@ -4,21 +4,51 @@
 
 package software.elborai.api.services.async.simulations
 
-import software.elborai.api.core.RequestOptions
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import kotlin.LazyThreadSafetyMode.PUBLICATION
+import java.time.LocalDate
+import java.time.Duration
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Base64
+import java.util.Optional
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import java.util.stream.Stream
+import software.elborai.api.core.Enum
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.InboundCheckDeposit
 import software.elborai.api.models.SimulationInboundCheckDepositCreateParams
+import software.elborai.api.core.ClientOptions
+import software.elborai.api.core.http.HttpMethod
+import software.elborai.api.core.http.HttpRequest
+import software.elborai.api.core.http.HttpResponse.Handler
+import software.elborai.api.core.http.BinaryResponseContent
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.RequestOptions
+import software.elborai.api.errors.IncreaseError
+import software.elborai.api.services.emptyHandler
+import software.elborai.api.services.errorHandler
+import software.elborai.api.services.json
+import software.elborai.api.services.jsonHandler
+import software.elborai.api.services.multipartFormData
+import software.elborai.api.services.stringHandler
+import software.elborai.api.services.binaryHandler
+import software.elborai.api.services.withErrorHandler
 
 interface InboundCheckDepositServiceAsync {
 
     /**
-     * Simulates an Inbound Check Deposit against your account. This imitates someone depositing a
-     * check at their bank that was issued from your account. It may or may not be associated with a
-     * Check Transfer. Increase will evaluate the Check Deposit as we would in production and either
-     * create a Transaction or a Declined Transaction as a result. You can inspect the resulting
-     * Inbound Check Deposit object to see the result.
+     * Simulates an Inbound Check Deposit against your account. This imitates someone
+     * depositing a check at their bank that was issued from your account. It may or
+     * may not be associated with a Check Transfer. Increase will evaluate the Check
+     * Deposit as we would in production and either create a Transaction or a Declined
+     * Transaction as a result. You can inspect the resulting Inbound Check Deposit
+     * object to see the result.
      */
-    suspend fun create(
-        params: SimulationInboundCheckDepositCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): InboundCheckDeposit
+    suspend fun create(params: SimulationInboundCheckDepositCreateParams, requestOptions: RequestOptions = RequestOptions.none()): InboundCheckDeposit
 }

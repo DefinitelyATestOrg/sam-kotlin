@@ -4,7 +4,22 @@
 
 package software.elborai.api.services.async
 
-import software.elborai.api.core.RequestOptions
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import kotlin.LazyThreadSafetyMode.PUBLICATION
+import java.time.LocalDate
+import java.time.Duration
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Base64
+import java.util.Optional
+import java.util.UUID
+import java.util.concurrent.CompletableFuture
+import java.util.stream.Stream
+import software.elborai.api.core.Enum
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.errors.IncreaseInvalidDataException
 import software.elborai.api.models.AchTransfer
 import software.elborai.api.models.AchTransferApproveParams
 import software.elborai.api.models.AchTransferCancelParams
@@ -12,36 +27,38 @@ import software.elborai.api.models.AchTransferCreateParams
 import software.elborai.api.models.AchTransferListPageAsync
 import software.elborai.api.models.AchTransferListParams
 import software.elborai.api.models.AchTransferRetrieveParams
+import software.elborai.api.core.ClientOptions
+import software.elborai.api.core.http.HttpMethod
+import software.elborai.api.core.http.HttpRequest
+import software.elborai.api.core.http.HttpResponse.Handler
+import software.elborai.api.core.http.BinaryResponseContent
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.RequestOptions
+import software.elborai.api.errors.IncreaseError
+import software.elborai.api.services.emptyHandler
+import software.elborai.api.services.errorHandler
+import software.elborai.api.services.json
+import software.elborai.api.services.jsonHandler
+import software.elborai.api.services.multipartFormData
+import software.elborai.api.services.stringHandler
+import software.elborai.api.services.binaryHandler
+import software.elborai.api.services.withErrorHandler
 
 interface AchTransferServiceAsync {
 
     /** Create an ACH Transfer */
-    suspend fun create(
-        params: AchTransferCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): AchTransfer
+    suspend fun create(params: AchTransferCreateParams, requestOptions: RequestOptions = RequestOptions.none()): AchTransfer
 
     /** Retrieve an ACH Transfer */
-    suspend fun retrieve(
-        params: AchTransferRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): AchTransfer
+    suspend fun retrieve(params: AchTransferRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): AchTransfer
 
     /** List ACH Transfers */
-    suspend fun list(
-        params: AchTransferListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): AchTransferListPageAsync
+    suspend fun list(params: AchTransferListParams, requestOptions: RequestOptions = RequestOptions.none()): AchTransferListPageAsync
 
     /** Approves an ACH Transfer in a pending_approval state. */
-    suspend fun approve(
-        params: AchTransferApproveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): AchTransfer
+    suspend fun approve(params: AchTransferApproveParams, requestOptions: RequestOptions = RequestOptions.none()): AchTransfer
 
     /** Cancels an ACH Transfer in a pending_approval state. */
-    suspend fun cancel(
-        params: AchTransferCancelParams,
-        requestOptions: RequestOptions = RequestOptions.none()
-    ): AchTransfer
+    suspend fun cancel(params: AchTransferCancelParams, requestOptions: RequestOptions = RequestOptions.none()): AchTransfer
 }

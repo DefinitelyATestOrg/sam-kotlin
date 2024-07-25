@@ -2,24 +2,39 @@
 
 package software.elborai.api.models
 
-import org.assertj.core.api.Assertions.assertThat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.apache.hc.core5.http.ContentType
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.models.*
+import software.elborai.api.models.CardDisputeRetrieveParams
 
 class CardDisputeRetrieveParamsTest {
 
     @Test
     fun createCardDisputeRetrieveParams() {
-        CardDisputeRetrieveParams.builder().cardDisputeId("card_dispute_id").build()
+      CardDisputeRetrieveParams.builder()
+          .cardDisputeId("card_dispute_id")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params = CardDisputeRetrieveParams.builder().cardDisputeId("card_dispute_id").build()
-        assertThat(params).isNotNull
-        // path param "cardDisputeId"
-        assertThat(params.getPathParam(0)).isEqualTo("card_dispute_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = CardDisputeRetrieveParams.builder()
+          .cardDisputeId("card_dispute_id")
+          .build()
+      assertThat(params).isNotNull
+      // path param "cardDisputeId"
+      assertThat(params.getPathParam(0)).isEqualTo("card_dispute_id")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }
