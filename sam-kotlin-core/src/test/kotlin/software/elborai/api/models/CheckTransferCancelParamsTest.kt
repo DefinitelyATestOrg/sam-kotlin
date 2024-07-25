@@ -2,25 +2,39 @@
 
 package software.elborai.api.models
 
-import org.assertj.core.api.Assertions.assertThat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.apache.hc.core5.http.ContentType
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.models.*
+import software.elborai.api.models.CheckTransferCancelParams
 
 class CheckTransferCancelParamsTest {
 
     @Test
     fun createCheckTransferCancelParams() {
-        CheckTransferCancelParams.builder().checkTransferId("check_transfer_id").build()
+      CheckTransferCancelParams.builder()
+          .checkTransferId("check_transfer_id")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            CheckTransferCancelParams.builder().checkTransferId("check_transfer_id").build()
-        assertThat(params).isNotNull
-        // path param "checkTransferId"
-        assertThat(params.getPathParam(0)).isEqualTo("check_transfer_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = CheckTransferCancelParams.builder()
+          .checkTransferId("check_transfer_id")
+          .build()
+      assertThat(params).isNotNull
+      // path param "checkTransferId"
+      assertThat(params.getPathParam(0)).isEqualTo("check_transfer_id")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

@@ -2,10 +2,25 @@
 
 package software.elborai.api.services.blocking
 
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Base64
+import java.util.Optional
+import java.util.UUID
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.BeforeEach
 import software.elborai.api.TestServerExtension
+import software.elborai.api.client.IncreaseClient
 import software.elborai.api.client.okhttp.IncreaseOkHttpClient
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.http.BinaryResponseContent
+import software.elborai.api.services.blocking.GroupService
 import software.elborai.api.models.*
 
 @ExtendWith(TestServerExtension::class)
@@ -13,14 +28,13 @@ class GroupServiceTest {
 
     @Test
     fun callRetrieveDetails() {
-        val client =
-            IncreaseOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val groupService = client.groups()
-        val group = groupService.retrieveDetails(GroupRetrieveDetailsParams.builder().build())
-        println(group)
-        group.validate()
+      val client = IncreaseOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .apiKey("My API Key")
+          .build()
+      val groupService = client.groups()
+      val group = groupService.retrieveDetails(GroupRetrieveDetailsParams.builder().build())
+      println(group)
+      group.validate()
     }
 }

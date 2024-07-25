@@ -2,88 +2,86 @@
 
 package software.elborai.api.models
 
-import org.assertj.core.api.Assertions.assertThat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.apache.hc.core5.http.ContentType
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.models.*
+import software.elborai.api.models.EntityBeneficialOwnerUpdateAddressParams
+import software.elborai.api.models.EntityBeneficialOwnerUpdateAddressParams.EntityBeneficialOwnerUpdateAddressBody
 
 class EntityBeneficialOwnerUpdateAddressParamsTest {
 
     @Test
     fun createEntityBeneficialOwnerUpdateAddressParams() {
-        EntityBeneficialOwnerUpdateAddressParams.builder()
-            .address(
-                EntityBeneficialOwnerUpdateAddressParams.Address.builder()
-                    .city("x")
-                    .line1("x")
-                    .state("x")
-                    .zip("x")
-                    .line2("x")
-                    .build()
-            )
-            .beneficialOwnerId("beneficial_owner_id")
-            .entityId("entity_id")
-            .build()
+      EntityBeneficialOwnerUpdateAddressParams.builder()
+          .address(EntityBeneficialOwnerUpdateAddressParams.Address.builder()
+              .city("x")
+              .line1("x")
+              .state("x")
+              .zip("x")
+              .line2("x")
+              .build())
+          .beneficialOwnerId("beneficial_owner_id")
+          .entityId("entity_id")
+          .build()
     }
 
     @Test
     fun getBody() {
-        val params =
-            EntityBeneficialOwnerUpdateAddressParams.builder()
-                .address(
-                    EntityBeneficialOwnerUpdateAddressParams.Address.builder()
-                        .city("x")
-                        .line1("x")
-                        .state("x")
-                        .zip("x")
-                        .line2("x")
-                        .build()
-                )
-                .beneficialOwnerId("beneficial_owner_id")
-                .entityId("entity_id")
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.address())
-            .isEqualTo(
-                EntityBeneficialOwnerUpdateAddressParams.Address.builder()
-                    .city("x")
-                    .line1("x")
-                    .state("x")
-                    .zip("x")
-                    .line2("x")
-                    .build()
-            )
-        assertThat(body.beneficialOwnerId()).isEqualTo("beneficial_owner_id")
-        assertThat(body.entityId()).isEqualTo("entity_id")
+      val params = EntityBeneficialOwnerUpdateAddressParams.builder()
+          .address(EntityBeneficialOwnerUpdateAddressParams.Address.builder()
+              .city("x")
+              .line1("x")
+              .state("x")
+              .zip("x")
+              .line2("x")
+              .build())
+          .beneficialOwnerId("beneficial_owner_id")
+          .entityId("entity_id")
+          .build()
+      val body = params.getBody()
+      assertThat(body).isNotNull
+      assertThat(body.address()).isEqualTo(EntityBeneficialOwnerUpdateAddressParams.Address.builder()
+          .city("x")
+          .line1("x")
+          .state("x")
+          .zip("x")
+          .line2("x")
+          .build())
+      assertThat(body.beneficialOwnerId()).isEqualTo("beneficial_owner_id")
+      assertThat(body.entityId()).isEqualTo("entity_id")
     }
 
     @Test
     fun getBodyWithoutOptionalFields() {
-        val params =
-            EntityBeneficialOwnerUpdateAddressParams.builder()
-                .address(
-                    EntityBeneficialOwnerUpdateAddressParams.Address.builder()
-                        .city("x")
-                        .line1("x")
-                        .state("x")
-                        .zip("x")
-                        .build()
-                )
-                .beneficialOwnerId("beneficial_owner_id")
-                .entityId("entity_id")
-                .build()
-        val body = params.getBody()
-        assertThat(body).isNotNull
-        assertThat(body.address())
-            .isEqualTo(
-                EntityBeneficialOwnerUpdateAddressParams.Address.builder()
-                    .city("x")
-                    .line1("x")
-                    .state("x")
-                    .zip("x")
-                    .build()
-            )
-        assertThat(body.beneficialOwnerId()).isEqualTo("beneficial_owner_id")
-        assertThat(body.entityId()).isEqualTo("entity_id")
+      val params = EntityBeneficialOwnerUpdateAddressParams.builder()
+          .address(EntityBeneficialOwnerUpdateAddressParams.Address.builder()
+              .city("x")
+              .line1("x")
+              .state("x")
+              .zip("x")
+              .build())
+          .beneficialOwnerId("beneficial_owner_id")
+          .entityId("entity_id")
+          .build()
+      val body = params.getBody()
+      assertThat(body).isNotNull
+      assertThat(body.address()).isEqualTo(EntityBeneficialOwnerUpdateAddressParams.Address.builder()
+          .city("x")
+          .line1("x")
+          .state("x")
+          .zip("x")
+          .build())
+      assertThat(body.beneficialOwnerId()).isEqualTo("beneficial_owner_id")
+      assertThat(body.entityId()).isEqualTo("entity_id")
     }
 }

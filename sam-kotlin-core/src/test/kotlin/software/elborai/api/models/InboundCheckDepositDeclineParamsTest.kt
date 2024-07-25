@@ -2,29 +2,39 @@
 
 package software.elborai.api.models
 
-import org.assertj.core.api.Assertions.assertThat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.apache.hc.core5.http.ContentType
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonString
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.models.*
+import software.elborai.api.models.InboundCheckDepositDeclineParams
 
 class InboundCheckDepositDeclineParamsTest {
 
     @Test
     fun createInboundCheckDepositDeclineParams() {
-        InboundCheckDepositDeclineParams.builder()
-            .inboundCheckDepositId("inbound_check_deposit_id")
-            .build()
+      InboundCheckDepositDeclineParams.builder()
+          .inboundCheckDepositId("inbound_check_deposit_id")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            InboundCheckDepositDeclineParams.builder()
-                .inboundCheckDepositId("inbound_check_deposit_id")
-                .build()
-        assertThat(params).isNotNull
-        // path param "inboundCheckDepositId"
-        assertThat(params.getPathParam(0)).isEqualTo("inbound_check_deposit_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = InboundCheckDepositDeclineParams.builder()
+          .inboundCheckDepositId("inbound_check_deposit_id")
+          .build()
+      assertThat(params).isNotNull
+      // path param "inboundCheckDepositId"
+      assertThat(params.getPathParam(0)).isEqualTo("inbound_check_deposit_id")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }
