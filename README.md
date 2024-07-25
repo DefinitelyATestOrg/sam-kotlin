@@ -19,7 +19,7 @@ The REST API documentation can be found on [increase.com](https://increase.com)
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("software.elborai.api:sam-kotlin:0.0.1-alpha.0")
+implementation("software.elborai.api:sam-kotlin:0.1.0-alpha.1")
 ```
 
 #### Maven
@@ -28,7 +28,7 @@ implementation("software.elborai.api:sam-kotlin:0.0.1-alpha.0")
 <dependency>
     <groupId>software.elborai.api</groupId>
     <artifactId>sam-kotlin</artifactId>
-    <version>0.0.1-alpha.0</version>
+    <version>0.1.0-alpha.1</version>
 </dependency>
 ```
 
