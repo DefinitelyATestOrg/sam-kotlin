@@ -17,7 +17,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Increase API")
                 description.set("An SDK library for increase")
-                url.set("https://increase.com/documentation")
+                url.set("https://increase.com")
 
                 licenses {
                     license {
