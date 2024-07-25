@@ -6,16 +6,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import software.elborai.api.models.*
 
-class StoreOrderDeleteParamsTest {
+class StoreDeleteParamsTest {
 
     @Test
-    fun createStoreOrderDeleteParams() {
-        StoreOrderDeleteParams.builder().orderId(123L).build()
+    fun createStoreDeleteParams() {
+        StoreDeleteParams.builder().orderId(123L).build()
     }
 
     @Test
     fun getPathParam() {
-        val params = StoreOrderDeleteParams.builder().orderId(123L).build()
+        val params = StoreDeleteParams.builder().orderId(123L).build()
         assertThat(params).isNotNull
         // path param "orderId"
         assertThat(params.getPathParam(0)).isEqualTo("123")

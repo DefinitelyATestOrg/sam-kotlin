@@ -6,16 +6,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import software.elborai.api.models.*
 
-class StoreOrderRetrieveParamsTest {
+class StoreRetrieveParamsTest {
 
     @Test
-    fun createStoreOrderRetrieveParams() {
-        StoreOrderRetrieveParams.builder().orderId(123L).build()
+    fun createStoreRetrieveParams() {
+        StoreRetrieveParams.builder().orderId(123L).build()
     }
 
     @Test
     fun getPathParam() {
-        val params = StoreOrderRetrieveParams.builder().orderId(123L).build()
+        val params = StoreRetrieveParams.builder().orderId(123L).build()
         assertThat(params).isNotNull
         // path param "orderId"
         assertThat(params.getPathParam(0)).isEqualTo("123")

@@ -15,7 +15,5 @@ interface SamClient {
 
     fun stores(): StoreService
 
-    fun store(): StoreService
-
     fun users(): UserService
 }

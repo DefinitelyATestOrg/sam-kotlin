@@ -13,6 +13,22 @@ import software.elborai.api.models.*
 class StoreServiceTest {
 
     @Test
+    fun callRetrieve() {
+        val client = SamOkHttpClient.builder().baseUrl(TestServerExtension.BASE_URL).build()
+        val storeService = client.stores()
+        val order = storeService.retrieve(StoreRetrieveParams.builder().orderId(123L).build())
+        println(order)
+        order.validate()
+    }
+
+    @Test
+    fun callDelete() {
+        val client = SamOkHttpClient.builder().baseUrl(TestServerExtension.BASE_URL).build()
+        val storeService = client.stores()
+        storeService.delete(StoreDeleteParams.builder().orderId(123L).build())
+    }
+
+    @Test
     fun callCreateOrder() {
         val client = SamOkHttpClient.builder().baseUrl(TestServerExtension.BASE_URL).build()
         val storeService = client.stores()
