@@ -15,7 +15,5 @@ interface SamClientAsync {
 
     fun stores(): StoreServiceAsync
 
-    fun store(): StoreServiceAsync
-
     fun users(): UserServiceAsync
 }

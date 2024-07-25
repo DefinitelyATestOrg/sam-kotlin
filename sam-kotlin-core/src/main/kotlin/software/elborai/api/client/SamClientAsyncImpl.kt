@@ -22,8 +22,6 @@ constructor(
 
     private val stores: StoreServiceAsync by lazy { StoreServiceAsyncImpl(clientOptions) }
 
-    private val store: StoreServiceAsync by lazy { StoreServiceAsyncImpl(clientOptions) }
-
     private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptions) }
 
     override fun sync(): SamClient = sync
@@ -31,8 +29,6 @@ constructor(
     override fun pets(): PetServiceAsync = pets
 
     override fun stores(): StoreServiceAsync = stores
-
-    override fun store(): StoreServiceAsync = store
 
     override fun users(): UserServiceAsync = users
 }
