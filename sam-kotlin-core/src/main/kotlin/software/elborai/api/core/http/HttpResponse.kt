@@ -1,10 +1,10 @@
 package software.elborai.api.core.http
 
 import com.google.common.collect.ListMultimap
-import java.io.Closeable
 import java.io.InputStream
+import java.lang.AutoCloseable
 
-interface HttpResponse : Closeable {
+interface HttpResponse : AutoCloseable {
 
     fun statusCode(): Int
 
