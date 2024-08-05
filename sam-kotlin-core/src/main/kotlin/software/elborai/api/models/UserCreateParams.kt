@@ -4,28 +4,51 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class UserCreateParams
-constructor(
-    private val id: Long?,
-    private val email: String?,
-    private val firstName: String?,
-    private val lastName: String?,
-    private val password: String?,
-    private val phone: String?,
-    private val username: String?,
-    private val userStatus: Long?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class UserCreateParams constructor(
+  private val id: Long?,
+  private val email: String?,
+  private val firstName: String?,
+  private val lastName: String?,
+  private val password: String?,
+  private val phone: String?,
+  private val username: String?,
+  private val userStatus: Long?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun id(): Long? = id
@@ -45,17 +68,17 @@ constructor(
     fun userStatus(): Long? = userStatus
 
     internal fun getBody(): UserCreateBody {
-        return UserCreateBody(
-            id,
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            username,
-            userStatus,
-            additionalBodyProperties,
-        )
+      return UserCreateBody(
+          id,
+          email,
+          firstName,
+          lastName,
+          password,
+          phone,
+          username,
+          userStatus,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -64,37 +87,45 @@ constructor(
 
     @JsonDeserialize(builder = UserCreateBody.Builder::class)
     @NoAutoDetect
-    class UserCreateBody
-    internal constructor(
-        private val id: Long?,
-        private val email: String?,
-        private val firstName: String?,
-        private val lastName: String?,
-        private val password: String?,
-        private val phone: String?,
-        private val username: String?,
-        private val userStatus: Long?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class UserCreateBody internal constructor(
+      private val id: Long?,
+      private val email: String?,
+      private val firstName: String?,
+      private val lastName: String?,
+      private val password: String?,
+      private val phone: String?,
+      private val username: String?,
+      private val userStatus: Long?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): Long? = id
+        @JsonProperty("id")
+        fun id(): Long? = id
 
-        @JsonProperty("email") fun email(): String? = email
+        @JsonProperty("email")
+        fun email(): String? = email
 
-        @JsonProperty("firstName") fun firstName(): String? = firstName
+        @JsonProperty("firstName")
+        fun firstName(): String? = firstName
 
-        @JsonProperty("lastName") fun lastName(): String? = lastName
+        @JsonProperty("lastName")
+        fun lastName(): String? = lastName
 
-        @JsonProperty("password") fun password(): String? = password
+        @JsonProperty("password")
+        fun password(): String? = password
 
-        @JsonProperty("phone") fun phone(): String? = phone
+        @JsonProperty("phone")
+        fun phone(): String? = phone
 
-        @JsonProperty("username") fun username(): String? = username
+        @JsonProperty("username")
+        fun username(): String? = username
 
         /** User Status */
-        @JsonProperty("userStatus") fun userStatus(): Long? = userStatus
+        @JsonProperty("userStatus")
+        fun userStatus(): Long? = userStatus
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -103,42 +134,40 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is UserCreateBody &&
-                this.id == other.id &&
-                this.email == other.email &&
-                this.firstName == other.firstName &&
-                this.lastName == other.lastName &&
-                this.password == other.password &&
-                this.phone == other.phone &&
-                this.username == other.username &&
-                this.userStatus == other.userStatus &&
-                this.additionalProperties == other.additionalProperties
+          return other is UserCreateBody &&
+              this.id == other.id &&
+              this.email == other.email &&
+              this.firstName == other.firstName &&
+              this.lastName == other.lastName &&
+              this.password == other.password &&
+              this.phone == other.phone &&
+              this.username == other.username &&
+              this.userStatus == other.userStatus &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        email,
-                        firstName,
-                        lastName,
-                        password,
-                        phone,
-                        username,
-                        userStatus,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                email,
+                firstName,
+                lastName,
+                password,
+                phone,
+                username,
+                userStatus,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "UserCreateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalProperties=$additionalProperties}"
+        override fun toString() = "UserCreateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -169,27 +198,46 @@ constructor(
                 additionalProperties(userCreateBody.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: Long) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: Long) = apply {
+                this.id = id
+            }
 
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            @JsonProperty("email")
+            fun email(email: String) = apply {
+                this.email = email
+            }
 
             @JsonProperty("firstName")
-            fun firstName(firstName: String) = apply { this.firstName = firstName }
+            fun firstName(firstName: String) = apply {
+                this.firstName = firstName
+            }
 
             @JsonProperty("lastName")
-            fun lastName(lastName: String) = apply { this.lastName = lastName }
+            fun lastName(lastName: String) = apply {
+                this.lastName = lastName
+            }
 
             @JsonProperty("password")
-            fun password(password: String) = apply { this.password = password }
+            fun password(password: String) = apply {
+                this.password = password
+            }
 
-            @JsonProperty("phone") fun phone(phone: String) = apply { this.phone = phone }
+            @JsonProperty("phone")
+            fun phone(phone: String) = apply {
+                this.phone = phone
+            }
 
             @JsonProperty("username")
-            fun username(username: String) = apply { this.username = username }
+            fun username(username: String) = apply {
+                this.username = username
+            }
 
             /** User Status */
             @JsonProperty("userStatus")
-            fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
+            fun userStatus(userStatus: Long) = apply {
+                this.userStatus = userStatus
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -205,18 +253,17 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): UserCreateBody =
-                UserCreateBody(
-                    id,
-                    email,
-                    firstName,
-                    lastName,
-                    password,
-                    phone,
-                    username,
-                    userStatus,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): UserCreateBody = UserCreateBody(
+                id,
+                email,
+                firstName,
+                lastName,
+                password,
+                phone,
+                username,
+                userStatus,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -227,42 +274,41 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is UserCreateParams &&
-            this.id == other.id &&
-            this.email == other.email &&
-            this.firstName == other.firstName &&
-            this.lastName == other.lastName &&
-            this.password == other.password &&
-            this.phone == other.phone &&
-            this.username == other.username &&
-            this.userStatus == other.userStatus &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is UserCreateParams &&
+          this.id == other.id &&
+          this.email == other.email &&
+          this.firstName == other.firstName &&
+          this.lastName == other.lastName &&
+          this.password == other.password &&
+          this.phone == other.phone &&
+          this.username == other.username &&
+          this.userStatus == other.userStatus &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            id,
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            username,
-            userStatus,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          id,
+          email,
+          firstName,
+          lastName,
+          password,
+          phone,
+          username,
+          userStatus,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "UserCreateParams{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "UserCreateParams{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -300,22 +346,38 @@ constructor(
             additionalBodyProperties(userCreateParams.additionalBodyProperties)
         }
 
-        fun id(id: Long) = apply { this.id = id }
+        fun id(id: Long) = apply {
+            this.id = id
+        }
 
-        fun email(email: String) = apply { this.email = email }
+        fun email(email: String) = apply {
+            this.email = email
+        }
 
-        fun firstName(firstName: String) = apply { this.firstName = firstName }
+        fun firstName(firstName: String) = apply {
+            this.firstName = firstName
+        }
 
-        fun lastName(lastName: String) = apply { this.lastName = lastName }
+        fun lastName(lastName: String) = apply {
+            this.lastName = lastName
+        }
 
-        fun password(password: String) = apply { this.password = password }
+        fun password(password: String) = apply {
+            this.password = password
+        }
 
-        fun phone(phone: String) = apply { this.phone = phone }
+        fun phone(phone: String) = apply {
+            this.phone = phone
+        }
 
-        fun username(username: String) = apply { this.username = username }
+        fun username(username: String) = apply {
+            this.username = username
+        }
 
         /** User Status */
-        fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
+        fun userStatus(userStatus: Long) = apply {
+            this.userStatus = userStatus
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -355,7 +417,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -366,24 +430,22 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): UserCreateParams =
-            UserCreateParams(
-                id,
-                email,
-                firstName,
-                lastName,
-                password,
-                phone,
-                username,
-                userStatus,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): UserCreateParams = UserCreateParams(
+            id,
+            email,
+            firstName,
+            lastName,
+            password,
+            phone,
+            username,
+            userStatus,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 }

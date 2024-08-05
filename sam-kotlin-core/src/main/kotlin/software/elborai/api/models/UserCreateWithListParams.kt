@@ -2,24 +2,46 @@
 
 package software.elborai.api.models
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.NoAutoDetect
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
+import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
+import software.elborai.api.core.JsonValue
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
+import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class UserCreateWithListParams
-constructor(
-    private val body: List<User>,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-) {
+class UserCreateWithListParams constructor(private val body: List<User>, private val additionalQueryParams: Map<String, List<String>>, private val additionalHeaders: Map<String, List<String>>, ) {
 
     fun body(): List<User> = body
 
     internal fun getBody(): List<User> {
-        return body
+      return body
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -28,30 +50,29 @@ constructor(
 
     @JsonDeserialize(builder = UserCreateWithListBody.Builder::class)
     @NoAutoDetect
-    class UserCreateWithListBody
-    internal constructor(
-        private val body: List<User>?,
-    ) {
+    class UserCreateWithListBody internal constructor(private val body: List<User>?, ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("body") fun body(): List<User>? = body
+        @JsonProperty("body")
+        fun body(): List<User>? = body
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is UserCreateWithListBody && this.body == other.body
+          return other is UserCreateWithListBody &&
+              this.body == other.body
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode = Objects.hash(body)
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(body)
+          }
+          return hashCode
         }
 
         override fun toString() = "UserCreateWithListBody{body=$body}"
@@ -69,7 +90,10 @@ constructor(
                 this.body = userCreateWithListBody.body
             }
 
-            @JsonProperty("body") fun body(body: List<User>) = apply { this.body = body }
+            @JsonProperty("body")
+            fun body(body: List<User>) = apply {
+                this.body = body
+            }
         }
     }
 
@@ -78,26 +102,25 @@ constructor(
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is UserCreateWithListParams &&
-            this.body == other.body &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders
+      return other is UserCreateWithListParams &&
+          this.body == other.body &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            body,
-            additionalQueryParams,
-            additionalHeaders,
-        )
+      return Objects.hash(
+          body,
+          additionalQueryParams,
+          additionalHeaders,
+      )
     }
 
-    override fun toString() =
-        "UserCreateWithListParams{body=$body, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
+    override fun toString() = "UserCreateWithListParams{body=$body, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -124,7 +147,9 @@ constructor(
             this.body.addAll(body)
         }
 
-        fun addBody(body: User) = apply { this.body.add(body) }
+        fun addBody(body: User) = apply {
+            this.body.add(body)
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -164,13 +189,16 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
-        fun build(): UserCreateWithListParams =
-            UserCreateWithListParams(
-                checkNotNull(body) { "`body` is required but was not set" }.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            )
+        fun build(): UserCreateWithListParams = UserCreateWithListParams(
+            checkNotNull(body) {
+                "`body` is required but was not set"
+            }.toUnmodifiable(),
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+        )
     }
 }
