@@ -5,45 +5,29 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import software.elborai.api.core.BaseDeserializer
-import software.elborai.api.core.BaseSerializer
-import software.elborai.api.core.getOrThrow
+import software.elborai.api.core.Enum
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.JsonNull
-import software.elborai.api.core.JsonField
-import software.elborai.api.core.Enum
-import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.errors.SamInvalidDataException
 
 @JsonDeserialize(builder = Pet.Builder::class)
 @NoAutoDetect
-class Pet private constructor(
-  private val id: JsonField<Long>,
-  private val name: JsonField<String>,
-  private val category: JsonField<Category>,
-  private val photoUrls: JsonField<List<String>>,
-  private val tags: JsonField<List<Tag>>,
-  private val status: JsonField<Status>,
-  private val additionalProperties: Map<String, JsonValue>,
-
+class Pet
+private constructor(
+    private val id: JsonField<Long>,
+    private val name: JsonField<String>,
+    private val category: JsonField<Category>,
+    private val photoUrls: JsonField<List<String>>,
+    private val tags: JsonField<List<Tag>>,
+    private val status: JsonField<Status>,
+    private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
@@ -63,30 +47,18 @@ class Pet private constructor(
     /** pet status in the store */
     fun status(): Status? = status.getNullable("status")
 
-    @JsonProperty("id")
-    @ExcludeMissing
-    fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-    @JsonProperty("name")
-    @ExcludeMissing
-    fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
 
-    @JsonProperty("category")
-    @ExcludeMissing
-    fun _category() = category
+    @JsonProperty("category") @ExcludeMissing fun _category() = category
 
-    @JsonProperty("photoUrls")
-    @ExcludeMissing
-    fun _photoUrls() = photoUrls
+    @JsonProperty("photoUrls") @ExcludeMissing fun _photoUrls() = photoUrls
 
-    @JsonProperty("tags")
-    @ExcludeMissing
-    fun _tags() = tags
+    @JsonProperty("tags") @ExcludeMissing fun _tags() = tags
 
     /** pet status in the store */
-    @JsonProperty("status")
-    @ExcludeMissing
-    fun _status() = status
+    @JsonProperty("status") @ExcludeMissing fun _status() = status
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -94,49 +66,51 @@ class Pet private constructor(
 
     fun validate(): Pet = apply {
         if (!validated) {
-          id()
-          name()
-          category()?.validate()
-          photoUrls()
-          tags()?.forEach { it.validate() }
-          status()
-          validated = true
+            id()
+            name()
+            category()?.validate()
+            photoUrls()
+            tags()?.forEach { it.validate() }
+            status()
+            validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is Pet &&
-          this.id == other.id &&
-          this.name == other.name &&
-          this.category == other.category &&
-          this.photoUrls == other.photoUrls &&
-          this.tags == other.tags &&
-          this.status == other.status &&
-          this.additionalProperties == other.additionalProperties
+        return other is Pet &&
+            this.id == other.id &&
+            this.name == other.name &&
+            this.category == other.category &&
+            this.photoUrls == other.photoUrls &&
+            this.tags == other.tags &&
+            this.status == other.status &&
+            this.additionalProperties == other.additionalProperties
     }
 
     override fun hashCode(): Int {
-      if (hashCode == 0) {
-        hashCode = Objects.hash(
-            id,
-            name,
-            category,
-            photoUrls,
-            tags,
-            status,
-            additionalProperties,
-        )
-      }
-      return hashCode
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    name,
+                    category,
+                    photoUrls,
+                    tags,
+                    status,
+                    additionalProperties,
+                )
+        }
+        return hashCode
     }
 
-    override fun toString() = "Pet{id=$id, name=$name, category=$category, photoUrls=$photoUrls, tags=$tags, status=$status, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "Pet{id=$id, name=$name, category=$category, photoUrls=$photoUrls, tags=$tags, status=$status, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -165,43 +139,31 @@ class Pet private constructor(
 
         fun id(id: Long) = id(JsonField.of(id))
 
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun id(id: JsonField<Long>) = apply {
-            this.id = id
-        }
+        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
 
         fun name(name: String) = name(JsonField.of(name))
 
         @JsonProperty("name")
         @ExcludeMissing
-        fun name(name: JsonField<String>) = apply {
-            this.name = name
-        }
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun category(category: Category) = category(JsonField.of(category))
 
         @JsonProperty("category")
         @ExcludeMissing
-        fun category(category: JsonField<Category>) = apply {
-            this.category = category
-        }
+        fun category(category: JsonField<Category>) = apply { this.category = category }
 
         fun photoUrls(photoUrls: List<String>) = photoUrls(JsonField.of(photoUrls))
 
         @JsonProperty("photoUrls")
         @ExcludeMissing
-        fun photoUrls(photoUrls: JsonField<List<String>>) = apply {
-            this.photoUrls = photoUrls
-        }
+        fun photoUrls(photoUrls: JsonField<List<String>>) = apply { this.photoUrls = photoUrls }
 
         fun tags(tags: List<Tag>) = tags(JsonField.of(tags))
 
         @JsonProperty("tags")
         @ExcludeMissing
-        fun tags(tags: JsonField<List<Tag>>) = apply {
-            this.tags = tags
-        }
+        fun tags(tags: JsonField<List<Tag>>) = apply { this.tags = tags }
 
         /** pet status in the store */
         fun status(status: Status) = status(JsonField.of(status))
@@ -209,9 +171,7 @@ class Pet private constructor(
         /** pet status in the store */
         @JsonProperty("status")
         @ExcludeMissing
-        fun status(status: JsonField<Status>) = apply {
-            this.status = status
-        }
+        fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -227,20 +187,26 @@ class Pet private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): Pet = Pet(
-            id,
-            name,
-            category,
-            photoUrls.map { it.toUnmodifiable() },
-            tags.map { it.toUnmodifiable() },
-            status,
-            additionalProperties.toUnmodifiable(),
-        )
+        fun build(): Pet =
+            Pet(
+                id,
+                name,
+                category,
+                photoUrls.map { it.toUnmodifiable() },
+                tags.map { it.toUnmodifiable() },
+                status,
+                additionalProperties.toUnmodifiable(),
+            )
     }
 
     @JsonDeserialize(builder = Category.Builder::class)
     @NoAutoDetect
-    class Category private constructor(private val id: JsonField<Long>, private val name: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
+    class Category
+    private constructor(
+        private val id: JsonField<Long>,
+        private val name: JsonField<String>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
 
         private var validated: Boolean = false
 
@@ -250,13 +216,9 @@ class Pet private constructor(
 
         fun name(): String? = name.getNullable("name")
 
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -264,37 +226,39 @@ class Pet private constructor(
 
         fun validate(): Category = apply {
             if (!validated) {
-              id()
-              name()
-              validated = true
+                id()
+                name()
+                validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Category &&
-              this.id == other.id &&
-              this.name == other.name &&
-              this.additionalProperties == other.additionalProperties
+            return other is Category &&
+                this.id == other.id &&
+                this.name == other.name &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                id,
-                name,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        name,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "Category{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Category{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -315,19 +279,13 @@ class Pet private constructor(
 
             fun id(id: Long) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<Long>) = apply {
-                this.id = id
-            }
+            @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
 
             fun name(name: String) = name(JsonField.of(name))
 
             @JsonProperty("name")
             @ExcludeMissing
-            fun name(name: JsonField<String>) = apply {
-                this.name = name
-            }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -343,26 +301,29 @@ class Pet private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Category = Category(
-                id,
-                name,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): Category =
+                Category(
+                    id,
+                    name,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 
-    class Status @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+    class Status
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Status &&
-              this.value == other.value
+            return other is Status && this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -393,26 +354,33 @@ class Pet private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value = when (this) {
-            AVAILABLE -> Value.AVAILABLE
-            PENDING -> Value.PENDING
-            SOLD -> Value.SOLD
-            else -> Value._UNKNOWN
-        }
+        fun value(): Value =
+            when (this) {
+                AVAILABLE -> Value.AVAILABLE
+                PENDING -> Value.PENDING
+                SOLD -> Value.SOLD
+                else -> Value._UNKNOWN
+            }
 
-        fun known(): Known = when (this) {
-            AVAILABLE -> Known.AVAILABLE
-            PENDING -> Known.PENDING
-            SOLD -> Known.SOLD
-            else -> throw SamInvalidDataException("Unknown Status: $value")
-        }
+        fun known(): Known =
+            when (this) {
+                AVAILABLE -> Known.AVAILABLE
+                PENDING -> Known.PENDING
+                SOLD -> Known.SOLD
+                else -> throw SamInvalidDataException("Unknown Status: $value")
+            }
 
         fun asString(): String = _value().asStringOrThrow()
     }
 
     @JsonDeserialize(builder = Tag.Builder::class)
     @NoAutoDetect
-    class Tag private constructor(private val id: JsonField<Long>, private val name: JsonField<String>, private val additionalProperties: Map<String, JsonValue>, ) {
+    class Tag
+    private constructor(
+        private val id: JsonField<Long>,
+        private val name: JsonField<String>,
+        private val additionalProperties: Map<String, JsonValue>,
+    ) {
 
         private var validated: Boolean = false
 
@@ -422,13 +390,9 @@ class Pet private constructor(
 
         fun name(): String? = name.getNullable("name")
 
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -436,37 +400,39 @@ class Pet private constructor(
 
         fun validate(): Tag = apply {
             if (!validated) {
-              id()
-              name()
-              validated = true
+                id()
+                name()
+                validated = true
             }
         }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Tag &&
-              this.id == other.id &&
-              this.name == other.name &&
-              this.additionalProperties == other.additionalProperties
+            return other is Tag &&
+                this.id == other.id &&
+                this.name == other.name &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                id,
-                name,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        name,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "Tag{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Tag{id=$id, name=$name, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -487,19 +453,13 @@ class Pet private constructor(
 
             fun id(id: Long) = id(JsonField.of(id))
 
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun id(id: JsonField<Long>) = apply {
-                this.id = id
-            }
+            @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
 
             fun name(name: String) = name(JsonField.of(name))
 
             @JsonProperty("name")
             @ExcludeMissing
-            fun name(name: JsonField<String>) = apply {
-                this.name = name
-            }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -515,11 +475,12 @@ class Pet private constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): Tag = Tag(
-                id,
-                name,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): Tag =
+                Tag(
+                    id,
+                    name,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 }

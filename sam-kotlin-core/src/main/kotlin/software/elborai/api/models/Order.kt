@@ -5,45 +5,30 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import java.time.LocalDate
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import software.elborai.api.core.BaseDeserializer
-import software.elborai.api.core.BaseSerializer
-import software.elborai.api.core.getOrThrow
+import software.elborai.api.core.Enum
 import software.elborai.api.core.ExcludeMissing
+import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.JsonNull
-import software.elborai.api.core.JsonField
-import software.elborai.api.core.Enum
-import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.errors.SamInvalidDataException
 
 @JsonDeserialize(builder = Order.Builder::class)
 @NoAutoDetect
-class Order private constructor(
-  private val id: JsonField<Long>,
-  private val petId: JsonField<Long>,
-  private val quantity: JsonField<Long>,
-  private val shipDate: JsonField<OffsetDateTime>,
-  private val status: JsonField<Status>,
-  private val complete: JsonField<Boolean>,
-  private val additionalProperties: Map<String, JsonValue>,
-
+class Order
+private constructor(
+    private val id: JsonField<Long>,
+    private val petId: JsonField<Long>,
+    private val quantity: JsonField<Long>,
+    private val shipDate: JsonField<OffsetDateTime>,
+    private val status: JsonField<Status>,
+    private val complete: JsonField<Boolean>,
+    private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
@@ -63,30 +48,18 @@ class Order private constructor(
 
     fun complete(): Boolean? = complete.getNullable("complete")
 
-    @JsonProperty("id")
-    @ExcludeMissing
-    fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-    @JsonProperty("petId")
-    @ExcludeMissing
-    fun _petId() = petId
+    @JsonProperty("petId") @ExcludeMissing fun _petId() = petId
 
-    @JsonProperty("quantity")
-    @ExcludeMissing
-    fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
 
-    @JsonProperty("shipDate")
-    @ExcludeMissing
-    fun _shipDate() = shipDate
+    @JsonProperty("shipDate") @ExcludeMissing fun _shipDate() = shipDate
 
     /** Order Status */
-    @JsonProperty("status")
-    @ExcludeMissing
-    fun _status() = status
+    @JsonProperty("status") @ExcludeMissing fun _status() = status
 
-    @JsonProperty("complete")
-    @ExcludeMissing
-    fun _complete() = complete
+    @JsonProperty("complete") @ExcludeMissing fun _complete() = complete
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -94,49 +67,51 @@ class Order private constructor(
 
     fun validate(): Order = apply {
         if (!validated) {
-          id()
-          petId()
-          quantity()
-          shipDate()
-          status()
-          complete()
-          validated = true
+            id()
+            petId()
+            quantity()
+            shipDate()
+            status()
+            complete()
+            validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is Order &&
-          this.id == other.id &&
-          this.petId == other.petId &&
-          this.quantity == other.quantity &&
-          this.shipDate == other.shipDate &&
-          this.status == other.status &&
-          this.complete == other.complete &&
-          this.additionalProperties == other.additionalProperties
+        return other is Order &&
+            this.id == other.id &&
+            this.petId == other.petId &&
+            this.quantity == other.quantity &&
+            this.shipDate == other.shipDate &&
+            this.status == other.status &&
+            this.complete == other.complete &&
+            this.additionalProperties == other.additionalProperties
     }
 
     override fun hashCode(): Int {
-      if (hashCode == 0) {
-        hashCode = Objects.hash(
-            id,
-            petId,
-            quantity,
-            shipDate,
-            status,
-            complete,
-            additionalProperties,
-        )
-      }
-      return hashCode
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    petId,
+                    quantity,
+                    shipDate,
+                    status,
+                    complete,
+                    additionalProperties,
+                )
+        }
+        return hashCode
     }
 
-    override fun toString() = "Order{id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "Order{id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -165,35 +140,25 @@ class Order private constructor(
 
         fun id(id: Long) = id(JsonField.of(id))
 
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun id(id: JsonField<Long>) = apply {
-            this.id = id
-        }
+        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
 
         fun petId(petId: Long) = petId(JsonField.of(petId))
 
         @JsonProperty("petId")
         @ExcludeMissing
-        fun petId(petId: JsonField<Long>) = apply {
-            this.petId = petId
-        }
+        fun petId(petId: JsonField<Long>) = apply { this.petId = petId }
 
         fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
         @JsonProperty("quantity")
         @ExcludeMissing
-        fun quantity(quantity: JsonField<Long>) = apply {
-            this.quantity = quantity
-        }
+        fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
         fun shipDate(shipDate: OffsetDateTime) = shipDate(JsonField.of(shipDate))
 
         @JsonProperty("shipDate")
         @ExcludeMissing
-        fun shipDate(shipDate: JsonField<OffsetDateTime>) = apply {
-            this.shipDate = shipDate
-        }
+        fun shipDate(shipDate: JsonField<OffsetDateTime>) = apply { this.shipDate = shipDate }
 
         /** Order Status */
         fun status(status: Status) = status(JsonField.of(status))
@@ -201,17 +166,13 @@ class Order private constructor(
         /** Order Status */
         @JsonProperty("status")
         @ExcludeMissing
-        fun status(status: JsonField<Status>) = apply {
-            this.status = status
-        }
+        fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun complete(complete: Boolean) = complete(JsonField.of(complete))
 
         @JsonProperty("complete")
         @ExcludeMissing
-        fun complete(complete: JsonField<Boolean>) = apply {
-            this.complete = complete
-        }
+        fun complete(complete: JsonField<Boolean>) = apply { this.complete = complete }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -227,29 +188,32 @@ class Order private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): Order = Order(
-            id,
-            petId,
-            quantity,
-            shipDate,
-            status,
-            complete,
-            additionalProperties.toUnmodifiable(),
-        )
+        fun build(): Order =
+            Order(
+                id,
+                petId,
+                quantity,
+                shipDate,
+                status,
+                complete,
+                additionalProperties.toUnmodifiable(),
+            )
     }
 
-    class Status @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
+    class Status
+    @JsonCreator
+    private constructor(
+        private val value: JsonField<String>,
+    ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Status &&
-              this.value == other.value
+            return other is Status && this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -280,19 +244,21 @@ class Order private constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value = when (this) {
-            PLACED -> Value.PLACED
-            APPROVED -> Value.APPROVED
-            DELIVERED -> Value.DELIVERED
-            else -> Value._UNKNOWN
-        }
+        fun value(): Value =
+            when (this) {
+                PLACED -> Value.PLACED
+                APPROVED -> Value.APPROVED
+                DELIVERED -> Value.DELIVERED
+                else -> Value._UNKNOWN
+            }
 
-        fun known(): Known = when (this) {
-            PLACED -> Known.PLACED
-            APPROVED -> Known.APPROVED
-            DELIVERED -> Known.DELIVERED
-            else -> throw SamInvalidDataException("Unknown Status: $value")
-        }
+        fun known(): Known =
+            when (this) {
+                PLACED -> Known.PLACED
+                APPROVED -> Known.APPROVED
+                DELIVERED -> Known.DELIVERED
+                else -> throw SamInvalidDataException("Unknown Status: $value")
+            }
 
         fun asString(): String = _value().asStringOrThrow()
     }
