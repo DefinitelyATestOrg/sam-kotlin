@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2024-08-09)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/DefinitelyATestOrg/sam-kotlin/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** manual updates ([#28](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/28)) ([2108097](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/2108097d2d7bfc3e47a42c5f7a90b710eb6ad39d))
+* **api:** manual updates ([#30](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/30)) ([732856f](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/732856f7b092b3375c260a6997014d694248e512))
+* **client:** improve binary return values ([#32](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/32)) ([a209788](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/a209788881f166b2bf2624a4d17f152048a1ebe7))
+
+
+### Chores
+
+* **ci:** bump prism mock server version ([#36](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/36)) ([68ec8bd](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/68ec8bdb94f18741fa0471a828264b5db002b88b))
+* **ci:** run tests in CI ([#33](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/33)) ([97d5c03](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/97d5c0322f674a45985586fff6007ba56c34b0e1))
+* **internal:** codegen related update ([#35](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/35)) ([c91e0b7](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/c91e0b7d7cdb34980071355aed52bd931b2001cd))
+* **internal:** remove unused test file ([#31](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/31)) ([f56e9a5](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/f56e9a5b77e806d9e8c473b48f111da3217ed142))
+* rebuild project due to codegen change ([#34](https://github.com/DefinitelyATestOrg/sam-kotlin/issues/34)) ([cae4191](https://github.com/DefinitelyATestOrg/sam-kotlin/commit/cae419134662051bcfca8ac5dd765843bbc20354))
+
 ## 0.1.0-alpha.1 (2024-07-25)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/DefinitelyATestOrg/sam-kotlin/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)
