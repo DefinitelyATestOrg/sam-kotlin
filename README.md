@@ -8,7 +8,7 @@ It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ## Documentation
 
-The REST API documentation can be found on [docs.sam.com](https://docs.sam.com).
+The REST API documentation can be found on [docs.sam.com.](https://docs.sam.com.).
 
 ---
 
