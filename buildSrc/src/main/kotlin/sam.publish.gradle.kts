@@ -28,7 +28,7 @@ configure<PublishingExtension> {
                 developers {
                     developer {
                         name.set("Sam")
-                        email.set("apiteam@swagger.io.")
+                        email.set("apiteam@swagger.io")
                     }
                 }
 
