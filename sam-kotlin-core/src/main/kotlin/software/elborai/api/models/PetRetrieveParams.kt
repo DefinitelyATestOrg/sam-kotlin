@@ -3,7 +3,6 @@
 package software.elborai.api.models
 
 import java.util.Objects
-import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
 import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.models.*
@@ -13,7 +12,6 @@ constructor(
     private val petId: Long,
     private val additionalQueryParams: Map<String, List<String>>,
     private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun petId(): Long = petId
@@ -33,8 +31,6 @@ constructor(
 
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -43,8 +39,7 @@ constructor(
         return other is PetRetrieveParams &&
             this.petId == other.petId &&
             this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+            this.additionalHeaders == other.additionalHeaders
     }
 
     override fun hashCode(): Int {
@@ -52,12 +47,11 @@ constructor(
             petId,
             additionalQueryParams,
             additionalHeaders,
-            additionalBodyProperties,
         )
     }
 
     override fun toString() =
-        "PetRetrieveParams{petId=$petId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+        "PetRetrieveParams{petId=$petId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -72,13 +66,11 @@ constructor(
         private var petId: Long? = null
         private var additionalQueryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var additionalHeaders: MutableMap<String, MutableList<String>> = mutableMapOf()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(petRetrieveParams: PetRetrieveParams) = apply {
             this.petId = petRetrieveParams.petId
             additionalQueryParams(petRetrieveParams.additionalQueryParams)
             additionalHeaders(petRetrieveParams.additionalHeaders)
-            additionalBodyProperties(petRetrieveParams.additionalBodyProperties)
         }
 
         fun petId(petId: Long) = apply { this.petId = petId }
@@ -123,26 +115,11 @@ constructor(
 
         fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            this.additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
         fun build(): PetRetrieveParams =
             PetRetrieveParams(
                 checkNotNull(petId) { "`petId` is required but was not set" },
                 additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
                 additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
             )
     }
 }
