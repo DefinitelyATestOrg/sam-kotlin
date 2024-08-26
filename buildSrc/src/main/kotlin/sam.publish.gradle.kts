@@ -16,7 +16,7 @@ configure<PublishingExtension> {
 
             pom {
                 name.set("Swagger Petstore - OpenAPI 3.0")
-                description.set("This is a sample Pet Store Server based on the OpenAPI 3.0 specification. You\ncan find out more about Swagger at [http://swagger.io](http://swagger.io). In\nthe third iteration of the pet store, we\'ve switched to the design first\napproach! You can now help us improve the API whether it\'s by making changes to\nthe definition itself or to the code. That way, with time, we can improve the\nAPI in general, and expose some of the new features in OAS3.\n\nSome useful links:\n\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)")
+                description.set("This is a sample Pet Store Server based on the OpenAPI 3.0 specification. You\ncan find out more about Swagger at [http://swagger.io](http://swagger.io). In\nthe third iteration of the pet store, we've switched to the design first\napproach! You can now help us improve the API whether it's by making changes to\nthe definition itself or to the code. That way, with time, we can improve the\nAPI in general, and expose some of the new features in OAS3.\n\nSome useful links:\n\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)")
                 url.set("https://docs.sam.com")
 
                 licenses {
