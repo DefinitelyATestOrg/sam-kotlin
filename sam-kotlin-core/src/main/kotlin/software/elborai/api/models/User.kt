@@ -4,29 +4,48 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
-import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.JsonNull
+import software.elborai.api.core.JsonField
+import software.elborai.api.core.Enum
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.errors.SamInvalidDataException
 
 @JsonDeserialize(builder = User.Builder::class)
 @NoAutoDetect
-class User
-private constructor(
-    private val id: JsonField<Long>,
-    private val username: JsonField<String>,
-    private val firstName: JsonField<String>,
-    private val lastName: JsonField<String>,
-    private val email: JsonField<String>,
-    private val password: JsonField<String>,
-    private val phone: JsonField<String>,
-    private val userStatus: JsonField<Long>,
-    private val additionalProperties: Map<String, JsonValue>,
+class User private constructor(
+  private val id: JsonField<Long>,
+  private val username: JsonField<String>,
+  private val firstName: JsonField<String>,
+  private val lastName: JsonField<String>,
+  private val email: JsonField<String>,
+  private val password: JsonField<String>,
+  private val phone: JsonField<String>,
+  private val userStatus: JsonField<Long>,
+  private val additionalProperties: Map<String, JsonValue>,
+
 ) {
 
     private var validated: Boolean = false
@@ -50,22 +69,38 @@ private constructor(
     /** User Status */
     fun userStatus(): Long? = userStatus.getNullable("userStatus")
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id() = id
 
-    @JsonProperty("username") @ExcludeMissing fun _username() = username
+    @JsonProperty("username")
+    @ExcludeMissing
+    fun _username() = username
 
-    @JsonProperty("firstName") @ExcludeMissing fun _firstName() = firstName
+    @JsonProperty("firstName")
+    @ExcludeMissing
+    fun _firstName() = firstName
 
-    @JsonProperty("lastName") @ExcludeMissing fun _lastName() = lastName
+    @JsonProperty("lastName")
+    @ExcludeMissing
+    fun _lastName() = lastName
 
-    @JsonProperty("email") @ExcludeMissing fun _email() = email
+    @JsonProperty("email")
+    @ExcludeMissing
+    fun _email() = email
 
-    @JsonProperty("password") @ExcludeMissing fun _password() = password
+    @JsonProperty("password")
+    @ExcludeMissing
+    fun _password() = password
 
-    @JsonProperty("phone") @ExcludeMissing fun _phone() = phone
+    @JsonProperty("phone")
+    @ExcludeMissing
+    fun _phone() = phone
 
     /** User Status */
-    @JsonProperty("userStatus") @ExcludeMissing fun _userStatus() = userStatus
+    @JsonProperty("userStatus")
+    @ExcludeMissing
+    fun _userStatus() = userStatus
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -73,57 +108,55 @@ private constructor(
 
     fun validate(): User = apply {
         if (!validated) {
-            id()
-            username()
-            firstName()
-            lastName()
-            email()
-            password()
-            phone()
-            userStatus()
-            validated = true
+          id()
+          username()
+          firstName()
+          lastName()
+          email()
+          password()
+          phone()
+          userStatus()
+          validated = true
         }
     }
 
     fun toBuilder() = Builder().from(this)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is User &&
-            this.id == other.id &&
-            this.username == other.username &&
-            this.firstName == other.firstName &&
-            this.lastName == other.lastName &&
-            this.email == other.email &&
-            this.password == other.password &&
-            this.phone == other.phone &&
-            this.userStatus == other.userStatus &&
-            this.additionalProperties == other.additionalProperties
+      return other is User &&
+          this.id == other.id &&
+          this.username == other.username &&
+          this.firstName == other.firstName &&
+          this.lastName == other.lastName &&
+          this.email == other.email &&
+          this.password == other.password &&
+          this.phone == other.phone &&
+          this.userStatus == other.userStatus &&
+          this.additionalProperties == other.additionalProperties
     }
 
     override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    username,
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    phone,
-                    userStatus,
-                    additionalProperties,
-                )
-        }
-        return hashCode
+      if (hashCode == 0) {
+        hashCode = Objects.hash(
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+            userStatus,
+            additionalProperties,
+        )
+      }
+      return hashCode
     }
 
-    override fun toString() =
-        "User{id=$id, username=$username, firstName=$firstName, lastName=$lastName, email=$email, password=$password, phone=$phone, userStatus=$userStatus, additionalProperties=$additionalProperties}"
+    override fun toString() = "User{id=$id, username=$username, firstName=$firstName, lastName=$lastName, email=$email, password=$password, phone=$phone, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -156,43 +189,59 @@ private constructor(
 
         fun id(id: Long) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
+        @JsonProperty("id")
+        @ExcludeMissing
+        fun id(id: JsonField<Long>) = apply {
+            this.id = id
+        }
 
         fun username(username: String) = username(JsonField.of(username))
 
         @JsonProperty("username")
         @ExcludeMissing
-        fun username(username: JsonField<String>) = apply { this.username = username }
+        fun username(username: JsonField<String>) = apply {
+            this.username = username
+        }
 
         fun firstName(firstName: String) = firstName(JsonField.of(firstName))
 
         @JsonProperty("firstName")
         @ExcludeMissing
-        fun firstName(firstName: JsonField<String>) = apply { this.firstName = firstName }
+        fun firstName(firstName: JsonField<String>) = apply {
+            this.firstName = firstName
+        }
 
         fun lastName(lastName: String) = lastName(JsonField.of(lastName))
 
         @JsonProperty("lastName")
         @ExcludeMissing
-        fun lastName(lastName: JsonField<String>) = apply { this.lastName = lastName }
+        fun lastName(lastName: JsonField<String>) = apply {
+            this.lastName = lastName
+        }
 
         fun email(email: String) = email(JsonField.of(email))
 
         @JsonProperty("email")
         @ExcludeMissing
-        fun email(email: JsonField<String>) = apply { this.email = email }
+        fun email(email: JsonField<String>) = apply {
+            this.email = email
+        }
 
         fun password(password: String) = password(JsonField.of(password))
 
         @JsonProperty("password")
         @ExcludeMissing
-        fun password(password: JsonField<String>) = apply { this.password = password }
+        fun password(password: JsonField<String>) = apply {
+            this.password = password
+        }
 
         fun phone(phone: String) = phone(JsonField.of(phone))
 
         @JsonProperty("phone")
         @ExcludeMissing
-        fun phone(phone: JsonField<String>) = apply { this.phone = phone }
+        fun phone(phone: JsonField<String>) = apply {
+            this.phone = phone
+        }
 
         /** User Status */
         fun userStatus(userStatus: Long) = userStatus(JsonField.of(userStatus))
@@ -200,7 +249,9 @@ private constructor(
         /** User Status */
         @JsonProperty("userStatus")
         @ExcludeMissing
-        fun userStatus(userStatus: JsonField<Long>) = apply { this.userStatus = userStatus }
+        fun userStatus(userStatus: JsonField<Long>) = apply {
+            this.userStatus = userStatus
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -216,17 +267,16 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): User =
-            User(
-                id,
-                username,
-                firstName,
-                lastName,
-                email,
-                password,
-                phone,
-                userStatus,
-                additionalProperties.toUnmodifiable(),
-            )
+        fun build(): User = User(
+            id,
+            username,
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+            userStatus,
+            additionalProperties.toUnmodifiable(),
+        )
     }
 }

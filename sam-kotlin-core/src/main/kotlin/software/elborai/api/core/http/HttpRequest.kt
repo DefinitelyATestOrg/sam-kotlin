@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.MultimapBuilder
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.RequestOptions
 
 class HttpRequest
 private constructor(
