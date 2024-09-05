@@ -2,41 +2,17 @@
 
 package software.elborai.api.models
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import org.apache.hc.core5.http.ContentType
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import software.elborai.api.core.BaseDeserializer
-import software.elborai.api.core.BaseSerializer
-import software.elborai.api.core.getOrThrow
-import software.elborai.api.core.ExcludeMissing
-import software.elborai.api.core.JsonField
-import software.elborai.api.core.JsonMissing
-import software.elborai.api.core.JsonValue
-import software.elborai.api.core.MultipartFormValue
-import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.Enum
-import software.elborai.api.core.ContentTypes
-import software.elborai.api.errors.SamInvalidDataException
+import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.models.*
 
-class StoreRetrieveParams constructor(private val orderId: Long, private val additionalQueryParams: Map<String, List<String>>, private val additionalHeaders: Map<String, List<String>>, ) {
+class StoreRetrieveParams
+constructor(
+    private val orderId: Long,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+) {
 
     fun orderId(): Long = orderId
 
@@ -45,10 +21,10 @@ class StoreRetrieveParams constructor(private val orderId: Long, private val add
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-      return when (index) {
-          0 -> orderId.toString()
-          else -> ""
-      }
+        return when (index) {
+            0 -> orderId.toString()
+            else -> ""
+        }
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -56,25 +32,26 @@ class StoreRetrieveParams constructor(private val orderId: Long, private val add
     fun _additionalHeaders(): Map<String, List<String>> = additionalHeaders
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is StoreRetrieveParams &&
-          this.orderId == other.orderId &&
-          this.additionalQueryParams == other.additionalQueryParams &&
-          this.additionalHeaders == other.additionalHeaders
+        return other is StoreRetrieveParams &&
+            this.orderId == other.orderId &&
+            this.additionalQueryParams == other.additionalQueryParams &&
+            this.additionalHeaders == other.additionalHeaders
     }
 
     override fun hashCode(): Int {
-      return Objects.hash(
-          orderId,
-          additionalQueryParams,
-          additionalHeaders,
-      )
+        return Objects.hash(
+            orderId,
+            additionalQueryParams,
+            additionalHeaders,
+        )
     }
 
-    override fun toString() = "StoreRetrieveParams{orderId=$orderId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
+    override fun toString() =
+        "StoreRetrieveParams{orderId=$orderId, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -96,9 +73,7 @@ class StoreRetrieveParams constructor(private val orderId: Long, private val add
             additionalHeaders(storeRetrieveParams.additionalHeaders)
         }
 
-        fun orderId(orderId: Long) = apply {
-            this.orderId = orderId
-        }
+        fun orderId(orderId: Long) = apply { this.orderId = orderId }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -138,16 +113,13 @@ class StoreRetrieveParams constructor(private val orderId: Long, private val add
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply {
-            this.additionalHeaders.put(name, mutableListOf())
-        }
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
-        fun build(): StoreRetrieveParams = StoreRetrieveParams(
-            checkNotNull(orderId) {
-                "`orderId` is required but was not set"
-            },
-            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-        )
+        fun build(): StoreRetrieveParams =
+            StoreRetrieveParams(
+                checkNotNull(orderId) { "`orderId` is required but was not set" },
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            )
     }
 }

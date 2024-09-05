@@ -4,52 +4,29 @@ package software.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import org.apache.hc.core5.http.ContentType
-import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Objects
-import java.util.Optional
-import java.util.UUID
-import software.elborai.api.core.BaseDeserializer
-import software.elborai.api.core.BaseSerializer
-import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
-import software.elborai.api.core.JsonField
-import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.MultipartFormValue
-import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.Enum
-import software.elborai.api.core.ContentTypes
-import software.elborai.api.errors.SamInvalidDataException
+import software.elborai.api.core.toUnmodifiable
 import software.elborai.api.models.*
 
-class UserUpdateParams constructor(
-  private val pathUsername: String,
-  private val id: Long?,
-  private val email: String?,
-  private val firstName: String?,
-  private val lastName: String?,
-  private val password: String?,
-  private val phone: String?,
-  private val bodyUsername: String?,
-  private val userStatus: Long?,
-  private val additionalQueryParams: Map<String, List<String>>,
-  private val additionalHeaders: Map<String, List<String>>,
-  private val additionalBodyProperties: Map<String, JsonValue>,
-
+class UserUpdateParams
+constructor(
+    private val pathUsername: String,
+    private val id: Long?,
+    private val email: String?,
+    private val firstName: String?,
+    private val lastName: String?,
+    private val password: String?,
+    private val phone: String?,
+    private val bodyUsername: String?,
+    private val userStatus: Long?,
+    private val additionalQueryParams: Map<String, List<String>>,
+    private val additionalHeaders: Map<String, List<String>>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun pathUsername(): String = pathUsername
@@ -71,17 +48,17 @@ class UserUpdateParams constructor(
     fun userStatus(): Long? = userStatus
 
     internal fun getBody(): UserUpdateBody {
-      return UserUpdateBody(
-          id,
-          email,
-          firstName,
-          lastName,
-          password,
-          phone,
-          bodyUsername,
-          userStatus,
-          additionalBodyProperties,
-      )
+        return UserUpdateBody(
+            id,
+            email,
+            firstName,
+            lastName,
+            password,
+            phone,
+            bodyUsername,
+            userStatus,
+            additionalBodyProperties,
+        )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -89,53 +66,45 @@ class UserUpdateParams constructor(
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
 
     fun getPathParam(index: Int): String {
-      return when (index) {
-          0 -> pathUsername
-          else -> ""
-      }
+        return when (index) {
+            0 -> pathUsername
+            else -> ""
+        }
     }
 
     @JsonDeserialize(builder = UserUpdateBody.Builder::class)
     @NoAutoDetect
-    class UserUpdateBody internal constructor(
-      private val id: Long?,
-      private val email: String?,
-      private val firstName: String?,
-      private val lastName: String?,
-      private val password: String?,
-      private val phone: String?,
-      private val bodyUsername: String?,
-      private val userStatus: Long?,
-      private val additionalProperties: Map<String, JsonValue>,
-
+    class UserUpdateBody
+    internal constructor(
+        private val id: Long?,
+        private val email: String?,
+        private val firstName: String?,
+        private val lastName: String?,
+        private val password: String?,
+        private val phone: String?,
+        private val bodyUsername: String?,
+        private val userStatus: Long?,
+        private val additionalProperties: Map<String, JsonValue>,
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id")
-        fun id(): Long? = id
+        @JsonProperty("id") fun id(): Long? = id
 
-        @JsonProperty("email")
-        fun email(): String? = email
+        @JsonProperty("email") fun email(): String? = email
 
-        @JsonProperty("firstName")
-        fun firstName(): String? = firstName
+        @JsonProperty("firstName") fun firstName(): String? = firstName
 
-        @JsonProperty("lastName")
-        fun lastName(): String? = lastName
+        @JsonProperty("lastName") fun lastName(): String? = lastName
 
-        @JsonProperty("password")
-        fun password(): String? = password
+        @JsonProperty("password") fun password(): String? = password
 
-        @JsonProperty("phone")
-        fun phone(): String? = phone
+        @JsonProperty("phone") fun phone(): String? = phone
 
-        @JsonProperty("username")
-        fun bodyUsername(): String? = bodyUsername
+        @JsonProperty("username") fun bodyUsername(): String? = bodyUsername
 
         /** User Status */
-        @JsonProperty("userStatus")
-        fun userStatus(): Long? = userStatus
+        @JsonProperty("userStatus") fun userStatus(): Long? = userStatus
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -144,40 +113,42 @@ class UserUpdateParams constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is UserUpdateBody &&
-              this.id == other.id &&
-              this.email == other.email &&
-              this.firstName == other.firstName &&
-              this.lastName == other.lastName &&
-              this.password == other.password &&
-              this.phone == other.phone &&
-              this.bodyUsername == other.bodyUsername &&
-              this.userStatus == other.userStatus &&
-              this.additionalProperties == other.additionalProperties
+            return other is UserUpdateBody &&
+                this.id == other.id &&
+                this.email == other.email &&
+                this.firstName == other.firstName &&
+                this.lastName == other.lastName &&
+                this.password == other.password &&
+                this.phone == other.phone &&
+                this.bodyUsername == other.bodyUsername &&
+                this.userStatus == other.userStatus &&
+                this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-          if (hashCode == 0) {
-            hashCode = Objects.hash(
-                id,
-                email,
-                firstName,
-                lastName,
-                password,
-                phone,
-                bodyUsername,
-                userStatus,
-                additionalProperties,
-            )
-          }
-          return hashCode
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        email,
+                        firstName,
+                        lastName,
+                        password,
+                        phone,
+                        bodyUsername,
+                        userStatus,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
         }
 
-        override fun toString() = "UserUpdateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, bodyUsername=$bodyUsername, userStatus=$userStatus, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "UserUpdateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, bodyUsername=$bodyUsername, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -208,46 +179,27 @@ class UserUpdateParams constructor(
                 additionalProperties(userUpdateBody.additionalProperties)
             }
 
-            @JsonProperty("id")
-            fun id(id: Long) = apply {
-                this.id = id
-            }
+            @JsonProperty("id") fun id(id: Long) = apply { this.id = id }
 
-            @JsonProperty("email")
-            fun email(email: String) = apply {
-                this.email = email
-            }
+            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
 
             @JsonProperty("firstName")
-            fun firstName(firstName: String) = apply {
-                this.firstName = firstName
-            }
+            fun firstName(firstName: String) = apply { this.firstName = firstName }
 
             @JsonProperty("lastName")
-            fun lastName(lastName: String) = apply {
-                this.lastName = lastName
-            }
+            fun lastName(lastName: String) = apply { this.lastName = lastName }
 
             @JsonProperty("password")
-            fun password(password: String) = apply {
-                this.password = password
-            }
+            fun password(password: String) = apply { this.password = password }
 
-            @JsonProperty("phone")
-            fun phone(phone: String) = apply {
-                this.phone = phone
-            }
+            @JsonProperty("phone") fun phone(phone: String) = apply { this.phone = phone }
 
             @JsonProperty("username")
-            fun bodyUsername(bodyUsername: String) = apply {
-                this.bodyUsername = bodyUsername
-            }
+            fun bodyUsername(bodyUsername: String) = apply { this.bodyUsername = bodyUsername }
 
             /** User Status */
             @JsonProperty("userStatus")
-            fun userStatus(userStatus: Long) = apply {
-                this.userStatus = userStatus
-            }
+            fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -263,17 +215,18 @@ class UserUpdateParams constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): UserUpdateBody = UserUpdateBody(
-                id,
-                email,
-                firstName,
-                lastName,
-                password,
-                phone,
-                bodyUsername,
-                userStatus,
-                additionalProperties.toUnmodifiable(),
-            )
+            fun build(): UserUpdateBody =
+                UserUpdateBody(
+                    id,
+                    email,
+                    firstName,
+                    lastName,
+                    password,
+                    phone,
+                    bodyUsername,
+                    userStatus,
+                    additionalProperties.toUnmodifiable(),
+                )
         }
     }
 
@@ -284,43 +237,44 @@ class UserUpdateParams constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is UserUpdateParams &&
-          this.pathUsername == other.pathUsername &&
-          this.id == other.id &&
-          this.email == other.email &&
-          this.firstName == other.firstName &&
-          this.lastName == other.lastName &&
-          this.password == other.password &&
-          this.phone == other.phone &&
-          this.bodyUsername == other.bodyUsername &&
-          this.userStatus == other.userStatus &&
-          this.additionalQueryParams == other.additionalQueryParams &&
-          this.additionalHeaders == other.additionalHeaders &&
-          this.additionalBodyProperties == other.additionalBodyProperties
+        return other is UserUpdateParams &&
+            this.pathUsername == other.pathUsername &&
+            this.id == other.id &&
+            this.email == other.email &&
+            this.firstName == other.firstName &&
+            this.lastName == other.lastName &&
+            this.password == other.password &&
+            this.phone == other.phone &&
+            this.bodyUsername == other.bodyUsername &&
+            this.userStatus == other.userStatus &&
+            this.additionalQueryParams == other.additionalQueryParams &&
+            this.additionalHeaders == other.additionalHeaders &&
+            this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-      return Objects.hash(
-          pathUsername,
-          id,
-          email,
-          firstName,
-          lastName,
-          password,
-          phone,
-          bodyUsername,
-          userStatus,
-          additionalQueryParams,
-          additionalHeaders,
-          additionalBodyProperties,
-      )
+        return Objects.hash(
+            pathUsername,
+            id,
+            email,
+            firstName,
+            lastName,
+            password,
+            phone,
+            bodyUsername,
+            userStatus,
+            additionalQueryParams,
+            additionalHeaders,
+            additionalBodyProperties,
+        )
     }
 
-    override fun toString() = "UserUpdateParams{pathUsername=$pathUsername, id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, bodyUsername=$bodyUsername, userStatus=$userStatus, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() =
+        "UserUpdateParams{pathUsername=$pathUsername, id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, bodyUsername=$bodyUsername, userStatus=$userStatus, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -360,42 +314,24 @@ class UserUpdateParams constructor(
             additionalBodyProperties(userUpdateParams.additionalBodyProperties)
         }
 
-        fun pathUsername(pathUsername: String) = apply {
-            this.pathUsername = pathUsername
-        }
+        fun pathUsername(pathUsername: String) = apply { this.pathUsername = pathUsername }
 
-        fun id(id: Long) = apply {
-            this.id = id
-        }
+        fun id(id: Long) = apply { this.id = id }
 
-        fun email(email: String) = apply {
-            this.email = email
-        }
+        fun email(email: String) = apply { this.email = email }
 
-        fun firstName(firstName: String) = apply {
-            this.firstName = firstName
-        }
+        fun firstName(firstName: String) = apply { this.firstName = firstName }
 
-        fun lastName(lastName: String) = apply {
-            this.lastName = lastName
-        }
+        fun lastName(lastName: String) = apply { this.lastName = lastName }
 
-        fun password(password: String) = apply {
-            this.password = password
-        }
+        fun password(password: String) = apply { this.password = password }
 
-        fun phone(phone: String) = apply {
-            this.phone = phone
-        }
+        fun phone(phone: String) = apply { this.phone = phone }
 
-        fun bodyUsername(bodyUsername: String) = apply {
-            this.bodyUsername = bodyUsername
-        }
+        fun bodyUsername(bodyUsername: String) = apply { this.bodyUsername = bodyUsername }
 
         /** User Status */
-        fun userStatus(userStatus: Long) = apply {
-            this.userStatus = userStatus
-        }
+        fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -435,9 +371,7 @@ class UserUpdateParams constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply {
-            this.additionalHeaders.put(name, mutableListOf())
-        }
+        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -448,25 +382,25 @@ class UserUpdateParams constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.putAll(additionalBodyProperties)
-        }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
 
-        fun build(): UserUpdateParams = UserUpdateParams(
-            checkNotNull(pathUsername) {
-                "`pathUsername` is required but was not set"
-            },
-            id,
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            bodyUsername,
-            userStatus,
-            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-            additionalBodyProperties.toUnmodifiable(),
-        )
+        fun build(): UserUpdateParams =
+            UserUpdateParams(
+                checkNotNull(pathUsername) { "`pathUsername` is required but was not set" },
+                id,
+                email,
+                firstName,
+                lastName,
+                password,
+                phone,
+                bodyUsername,
+                userStatus,
+                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalBodyProperties.toUnmodifiable(),
+            )
     }
 }
