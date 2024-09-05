@@ -5,30 +5,48 @@ package software.elborai.api.models
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.apache.hc.core5.http.ContentType
+import java.time.LocalDate
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
-import software.elborai.api.core.Enum
+import java.util.Optional
+import java.util.UUID
+import software.elborai.api.core.BaseDeserializer
+import software.elborai.api.core.BaseSerializer
+import software.elborai.api.core.getOrThrow
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
+import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
-import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.MultipartFormValue
 import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.NoAutoDetect
+import software.elborai.api.core.Enum
+import software.elborai.api.core.ContentTypes
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
-class StoreCreateOrderParams
-constructor(
-    private val id: Long?,
-    private val complete: Boolean?,
-    private val petId: Long?,
-    private val quantity: Long?,
-    private val shipDate: OffsetDateTime?,
-    private val status: Status?,
-    private val additionalQueryParams: Map<String, List<String>>,
-    private val additionalHeaders: Map<String, List<String>>,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+class StoreCreateOrderParams constructor(
+  private val id: Long?,
+  private val complete: Boolean?,
+  private val petId: Long?,
+  private val quantity: Long?,
+  private val shipDate: OffsetDateTime?,
+  private val status: Status?,
+  private val additionalQueryParams: Map<String, List<String>>,
+  private val additionalHeaders: Map<String, List<String>>,
+  private val additionalBodyProperties: Map<String, JsonValue>,
+
 ) {
 
     fun id(): Long? = id
@@ -44,15 +62,15 @@ constructor(
     fun status(): Status? = status
 
     internal fun getBody(): StoreCreateOrderBody {
-        return StoreCreateOrderBody(
-            id,
-            complete,
-            petId,
-            quantity,
-            shipDate,
-            status,
-            additionalBodyProperties,
-        )
+      return StoreCreateOrderBody(
+          id,
+          complete,
+          petId,
+          quantity,
+          shipDate,
+          status,
+          additionalBodyProperties,
+      )
     }
 
     internal fun getQueryParams(): Map<String, List<String>> = additionalQueryParams
@@ -61,31 +79,37 @@ constructor(
 
     @JsonDeserialize(builder = StoreCreateOrderBody.Builder::class)
     @NoAutoDetect
-    class StoreCreateOrderBody
-    internal constructor(
-        private val id: Long?,
-        private val complete: Boolean?,
-        private val petId: Long?,
-        private val quantity: Long?,
-        private val shipDate: OffsetDateTime?,
-        private val status: Status?,
-        private val additionalProperties: Map<String, JsonValue>,
+    class StoreCreateOrderBody internal constructor(
+      private val id: Long?,
+      private val complete: Boolean?,
+      private val petId: Long?,
+      private val quantity: Long?,
+      private val shipDate: OffsetDateTime?,
+      private val status: Status?,
+      private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         private var hashCode: Int = 0
 
-        @JsonProperty("id") fun id(): Long? = id
+        @JsonProperty("id")
+        fun id(): Long? = id
 
-        @JsonProperty("complete") fun complete(): Boolean? = complete
+        @JsonProperty("complete")
+        fun complete(): Boolean? = complete
 
-        @JsonProperty("petId") fun petId(): Long? = petId
+        @JsonProperty("petId")
+        fun petId(): Long? = petId
 
-        @JsonProperty("quantity") fun quantity(): Long? = quantity
+        @JsonProperty("quantity")
+        fun quantity(): Long? = quantity
 
-        @JsonProperty("shipDate") fun shipDate(): OffsetDateTime? = shipDate
+        @JsonProperty("shipDate")
+        fun shipDate(): OffsetDateTime? = shipDate
 
         /** Order Status */
-        @JsonProperty("status") fun status(): Status? = status
+        @JsonProperty("status")
+        fun status(): Status? = status
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -94,38 +118,36 @@ constructor(
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is StoreCreateOrderBody &&
-                this.id == other.id &&
-                this.complete == other.complete &&
-                this.petId == other.petId &&
-                this.quantity == other.quantity &&
-                this.shipDate == other.shipDate &&
-                this.status == other.status &&
-                this.additionalProperties == other.additionalProperties
+          return other is StoreCreateOrderBody &&
+              this.id == other.id &&
+              this.complete == other.complete &&
+              this.petId == other.petId &&
+              this.quantity == other.quantity &&
+              this.shipDate == other.shipDate &&
+              this.status == other.status &&
+              this.additionalProperties == other.additionalProperties
         }
 
         override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        complete,
-                        petId,
-                        quantity,
-                        shipDate,
-                        status,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
+          if (hashCode == 0) {
+            hashCode = Objects.hash(
+                id,
+                complete,
+                petId,
+                quantity,
+                shipDate,
+                status,
+                additionalProperties,
+            )
+          }
+          return hashCode
         }
 
-        override fun toString() =
-            "StoreCreateOrderBody{id=$id, complete=$complete, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, additionalProperties=$additionalProperties}"
+        override fun toString() = "StoreCreateOrderBody{id=$id, complete=$complete, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -152,21 +174,36 @@ constructor(
                 additionalProperties(storeCreateOrderBody.additionalProperties)
             }
 
-            @JsonProperty("id") fun id(id: Long) = apply { this.id = id }
+            @JsonProperty("id")
+            fun id(id: Long) = apply {
+                this.id = id
+            }
 
             @JsonProperty("complete")
-            fun complete(complete: Boolean) = apply { this.complete = complete }
+            fun complete(complete: Boolean) = apply {
+                this.complete = complete
+            }
 
-            @JsonProperty("petId") fun petId(petId: Long) = apply { this.petId = petId }
+            @JsonProperty("petId")
+            fun petId(petId: Long) = apply {
+                this.petId = petId
+            }
 
             @JsonProperty("quantity")
-            fun quantity(quantity: Long) = apply { this.quantity = quantity }
+            fun quantity(quantity: Long) = apply {
+                this.quantity = quantity
+            }
 
             @JsonProperty("shipDate")
-            fun shipDate(shipDate: OffsetDateTime) = apply { this.shipDate = shipDate }
+            fun shipDate(shipDate: OffsetDateTime) = apply {
+                this.shipDate = shipDate
+            }
 
             /** Order Status */
-            @JsonProperty("status") fun status(status: Status) = apply { this.status = status }
+            @JsonProperty("status")
+            fun status(status: Status) = apply {
+                this.status = status
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -182,16 +219,15 @@ constructor(
                 this.additionalProperties.putAll(additionalProperties)
             }
 
-            fun build(): StoreCreateOrderBody =
-                StoreCreateOrderBody(
-                    id,
-                    complete,
-                    petId,
-                    quantity,
-                    shipDate,
-                    status,
-                    additionalProperties.toUnmodifiable(),
-                )
+            fun build(): StoreCreateOrderBody = StoreCreateOrderBody(
+                id,
+                complete,
+                petId,
+                quantity,
+                shipDate,
+                status,
+                additionalProperties.toUnmodifiable(),
+            )
         }
     }
 
@@ -202,38 +238,37 @@ constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is StoreCreateOrderParams &&
-            this.id == other.id &&
-            this.complete == other.complete &&
-            this.petId == other.petId &&
-            this.quantity == other.quantity &&
-            this.shipDate == other.shipDate &&
-            this.status == other.status &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+      return other is StoreCreateOrderParams &&
+          this.id == other.id &&
+          this.complete == other.complete &&
+          this.petId == other.petId &&
+          this.quantity == other.quantity &&
+          this.shipDate == other.shipDate &&
+          this.status == other.status &&
+          this.additionalQueryParams == other.additionalQueryParams &&
+          this.additionalHeaders == other.additionalHeaders &&
+          this.additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            id,
-            complete,
-            petId,
-            quantity,
-            shipDate,
-            status,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+      return Objects.hash(
+          id,
+          complete,
+          petId,
+          quantity,
+          shipDate,
+          status,
+          additionalQueryParams,
+          additionalHeaders,
+          additionalBodyProperties,
+      )
     }
 
-    override fun toString() =
-        "StoreCreateOrderParams{id=$id, complete=$complete, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
+    override fun toString() = "StoreCreateOrderParams{id=$id, complete=$complete, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, additionalQueryParams=$additionalQueryParams, additionalHeaders=$additionalHeaders, additionalBodyProperties=$additionalBodyProperties}"
 
     fun toBuilder() = Builder().from(this)
 
@@ -267,18 +302,30 @@ constructor(
             additionalBodyProperties(storeCreateOrderParams.additionalBodyProperties)
         }
 
-        fun id(id: Long) = apply { this.id = id }
+        fun id(id: Long) = apply {
+            this.id = id
+        }
 
-        fun complete(complete: Boolean) = apply { this.complete = complete }
+        fun complete(complete: Boolean) = apply {
+            this.complete = complete
+        }
 
-        fun petId(petId: Long) = apply { this.petId = petId }
+        fun petId(petId: Long) = apply {
+            this.petId = petId
+        }
 
-        fun quantity(quantity: Long) = apply { this.quantity = quantity }
+        fun quantity(quantity: Long) = apply {
+            this.quantity = quantity
+        }
 
-        fun shipDate(shipDate: OffsetDateTime) = apply { this.shipDate = shipDate }
+        fun shipDate(shipDate: OffsetDateTime) = apply {
+            this.shipDate = shipDate
+        }
 
         /** Order Status */
-        fun status(status: Status) = apply { this.status = status }
+        fun status(status: Status) = apply {
+            this.status = status
+        }
 
         fun additionalQueryParams(additionalQueryParams: Map<String, List<String>>) = apply {
             this.additionalQueryParams.clear()
@@ -318,7 +365,9 @@ constructor(
             additionalHeaders.forEach(this::putHeaders)
         }
 
-        fun removeHeader(name: String) = apply { this.additionalHeaders.put(name, mutableListOf()) }
+        fun removeHeader(name: String) = apply {
+            this.additionalHeaders.put(name, mutableListOf())
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             this.additionalBodyProperties.clear()
@@ -329,39 +378,35 @@ constructor(
             this.additionalBodyProperties.put(key, value)
         }
 
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.putAll(additionalBodyProperties)
+        }
 
-        fun build(): StoreCreateOrderParams =
-            StoreCreateOrderParams(
-                id,
-                complete,
-                petId,
-                quantity,
-                shipDate,
-                status,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
-            )
+        fun build(): StoreCreateOrderParams = StoreCreateOrderParams(
+            id,
+            complete,
+            petId,
+            quantity,
+            shipDate,
+            status,
+            additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+            additionalBodyProperties.toUnmodifiable(),
+        )
     }
 
-    class Status
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Status @JsonCreator private constructor(private val value: JsonField<String>, ) : Enum {
 
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Status && this.value == other.value
+          return other is Status &&
+              this.value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -392,21 +437,19 @@ constructor(
             _UNKNOWN,
         }
 
-        fun value(): Value =
-            when (this) {
-                PLACED -> Value.PLACED
-                APPROVED -> Value.APPROVED
-                DELIVERED -> Value.DELIVERED
-                else -> Value._UNKNOWN
-            }
+        fun value(): Value = when (this) {
+            PLACED -> Value.PLACED
+            APPROVED -> Value.APPROVED
+            DELIVERED -> Value.DELIVERED
+            else -> Value._UNKNOWN
+        }
 
-        fun known(): Known =
-            when (this) {
-                PLACED -> Known.PLACED
-                APPROVED -> Known.APPROVED
-                DELIVERED -> Known.DELIVERED
-                else -> throw SamInvalidDataException("Unknown Status: $value")
-            }
+        fun known(): Known = when (this) {
+            PLACED -> Known.PLACED
+            APPROVED -> Known.APPROVED
+            DELIVERED -> Known.DELIVERED
+            else -> throw SamInvalidDataException("Unknown Status: $value")
+        }
 
         fun asString(): String = _value().asStringOrThrow()
     }
