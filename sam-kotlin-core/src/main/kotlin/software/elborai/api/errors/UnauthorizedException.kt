@@ -2,12 +2,8 @@ package software.elborai.api.errors
 
 import com.google.common.collect.ListMultimap
 
-class UnauthorizedException
-constructor(
+class UnauthorizedException(
     headers: ListMultimap<String, String>,
-    private val error: SamError,
-) : SamServiceException(headers, "${error}") {
-    override fun statusCode(): Int = 401
-
-    fun error(): SamError = error
-}
+    body: String,
+    error: SamError,
+) : SamServiceException(401, headers, body, error)

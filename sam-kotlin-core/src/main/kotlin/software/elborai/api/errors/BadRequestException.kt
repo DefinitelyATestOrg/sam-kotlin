@@ -2,12 +2,8 @@ package software.elborai.api.errors
 
 import com.google.common.collect.ListMultimap
 
-class BadRequestException
-constructor(
+class BadRequestException(
     headers: ListMultimap<String, String>,
-    private val error: SamError,
-) : SamServiceException(headers, "${error}") {
-    override fun statusCode(): Int = 400
-
-    fun error(): SamError = error
-}
+    body: String,
+    error: SamError,
+) : SamServiceException(400, headers, body, error)
