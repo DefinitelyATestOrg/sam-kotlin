@@ -31,8 +31,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): Long? = id.getNullable("id")
 
     fun username(): String? = username.getNullable("username")
@@ -86,44 +84,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is User &&
-            this.id == other.id &&
-            this.username == other.username &&
-            this.firstName == other.firstName &&
-            this.lastName == other.lastName &&
-            this.email == other.email &&
-            this.password == other.password &&
-            this.phone == other.phone &&
-            this.userStatus == other.userStatus &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    username,
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    phone,
-                    userStatus,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "User{id=$id, username=$username, firstName=$firstName, lastName=$lastName, email=$email, password=$password, phone=$phone, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -229,4 +189,44 @@ private constructor(
                 additionalProperties.toUnmodifiable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is User &&
+            this.id == other.id &&
+            this.username == other.username &&
+            this.firstName == other.firstName &&
+            this.lastName == other.lastName &&
+            this.email == other.email &&
+            this.password == other.password &&
+            this.phone == other.phone &&
+            this.userStatus == other.userStatus &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    username,
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    phone,
+                    userStatus,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "User{id=$id, username=$username, firstName=$firstName, lastName=$lastName, email=$email, password=$password, phone=$phone, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 }

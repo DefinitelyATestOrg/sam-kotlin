@@ -77,8 +77,6 @@ constructor(
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
-        private var hashCode: Int = 0
-
         @JsonProperty("id") fun id(): Long? = id
 
         @JsonProperty("email") fun email(): String? = email
@@ -101,44 +99,6 @@ constructor(
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is UserCreateBody &&
-                this.id == other.id &&
-                this.email == other.email &&
-                this.firstName == other.firstName &&
-                this.lastName == other.lastName &&
-                this.password == other.password &&
-                this.phone == other.phone &&
-                this.username == other.username &&
-                this.userStatus == other.userStatus &&
-                this.additionalProperties == other.additionalProperties
-        }
-
-        override fun hashCode(): Int {
-            if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        email,
-                        firstName,
-                        lastName,
-                        password,
-                        phone,
-                        username,
-                        userStatus,
-                        additionalProperties,
-                    )
-            }
-            return hashCode
-        }
-
-        override fun toString() =
-            "UserCreateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -218,6 +178,46 @@ constructor(
                     additionalProperties.toUnmodifiable(),
                 )
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is UserCreateBody &&
+                this.id == other.id &&
+                this.email == other.email &&
+                this.firstName == other.firstName &&
+                this.lastName == other.lastName &&
+                this.password == other.password &&
+                this.phone == other.phone &&
+                this.username == other.username &&
+                this.userStatus == other.userStatus &&
+                this.additionalProperties == other.additionalProperties
+        }
+
+        private var hashCode: Int = 0
+
+        override fun hashCode(): Int {
+            if (hashCode == 0) {
+                hashCode =
+                    Objects.hash(
+                        id,
+                        email,
+                        firstName,
+                        lastName,
+                        password,
+                        phone,
+                        username,
+                        userStatus,
+                        additionalProperties,
+                    )
+            }
+            return hashCode
+        }
+
+        override fun toString() =
+            "UserCreateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalProperties=$additionalProperties}"
     }
 
     fun _additionalQueryParams(): Map<String, List<String>> = additionalQueryParams
