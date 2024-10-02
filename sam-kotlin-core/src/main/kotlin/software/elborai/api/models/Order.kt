@@ -33,8 +33,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun id(): Long? = id.getNullable("id")
 
     fun petId(): Long? = petId.getNullable("petId")
@@ -78,40 +76,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is Order &&
-            this.id == other.id &&
-            this.petId == other.petId &&
-            this.quantity == other.quantity &&
-            this.shipDate == other.shipDate &&
-            this.status == other.status &&
-            this.complete == other.complete &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    petId,
-                    quantity,
-                    shipDate,
-                    status,
-                    complete,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "Order{id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -262,4 +226,40 @@ private constructor(
 
         fun asString(): String = _value().asStringOrThrow()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is Order &&
+            this.id == other.id &&
+            this.petId == other.petId &&
+            this.quantity == other.quantity &&
+            this.shipDate == other.shipDate &&
+            this.status == other.status &&
+            this.complete == other.complete &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    id,
+                    petId,
+                    quantity,
+                    shipDate,
+                    status,
+                    complete,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "Order{id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete, additionalProperties=$additionalProperties}"
 }

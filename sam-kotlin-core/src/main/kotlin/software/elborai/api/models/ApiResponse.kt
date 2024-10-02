@@ -26,8 +26,6 @@ private constructor(
 
     private var validated: Boolean = false
 
-    private var hashCode: Int = 0
-
     fun code(): Long? = code.getNullable("code")
 
     fun type(): String? = type.getNullable("type")
@@ -54,34 +52,6 @@ private constructor(
     }
 
     fun toBuilder() = Builder().from(this)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return other is ApiResponse &&
-            this.code == other.code &&
-            this.type == other.type &&
-            this.message == other.message &&
-            this.additionalProperties == other.additionalProperties
-    }
-
-    override fun hashCode(): Int {
-        if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    code,
-                    type,
-                    message,
-                    additionalProperties,
-                )
-        }
-        return hashCode
-    }
-
-    override fun toString() =
-        "ApiResponse{code=$code, type=$type, message=$message, additionalProperties=$additionalProperties}"
 
     companion object {
 
@@ -142,4 +112,34 @@ private constructor(
                 additionalProperties.toUnmodifiable(),
             )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is ApiResponse &&
+            this.code == other.code &&
+            this.type == other.type &&
+            this.message == other.message &&
+            this.additionalProperties == other.additionalProperties
+    }
+
+    private var hashCode: Int = 0
+
+    override fun hashCode(): Int {
+        if (hashCode == 0) {
+            hashCode =
+                Objects.hash(
+                    code,
+                    type,
+                    message,
+                    additionalProperties,
+                )
+        }
+        return hashCode
+    }
+
+    override fun toString() =
+        "ApiResponse{code=$code, type=$type, message=$message, additionalProperties=$additionalProperties}"
 }
