@@ -58,14 +58,14 @@ constructor(
                 return true
             }
 
-            return other is UserCreateWithListBody && this.body == other.body
+            return /* spotless:off */ other is UserCreateWithListBody && this.body == other.body /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode = Objects.hash(body)
+                hashCode = /* spotless:off */ Objects.hash(body) /* spotless:on */
             }
             return hashCode
         }
@@ -82,18 +82,11 @@ constructor(
             return true
         }
 
-        return other is UserCreateWithListParams &&
-            this.body == other.body &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders
+        return /* spotless:off */ other is UserCreateWithListParams && this.body == other.body && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            body,
-            additionalQueryParams,
-            additionalHeaders,
-        )
+        return /* spotless:off */ Objects.hash(body, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =
