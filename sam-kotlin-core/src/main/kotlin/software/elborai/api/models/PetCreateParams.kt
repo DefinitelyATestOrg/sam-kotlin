@@ -56,24 +56,11 @@ constructor(
             return true
         }
 
-        return other is PetCreateParams &&
-            this.petId == other.petId &&
-            this.name == other.name &&
-            this.status == other.status &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is PetCreateParams && this.petId == other.petId && this.name == other.name && this.status == other.status && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            petId,
-            name,
-            status,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(petId, name, status, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =

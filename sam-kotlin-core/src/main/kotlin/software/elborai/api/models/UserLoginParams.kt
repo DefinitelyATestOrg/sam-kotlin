@@ -38,20 +38,11 @@ constructor(
             return true
         }
 
-        return other is UserLoginParams &&
-            this.password == other.password &&
-            this.username == other.username &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders
+        return /* spotless:off */ other is UserLoginParams && this.password == other.password && this.username == other.username && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            password,
-            username,
-            additionalQueryParams,
-            additionalHeaders,
-        )
+        return /* spotless:off */ Objects.hash(password, username, additionalQueryParams, additionalHeaders) /* spotless:on */
     }
 
     override fun toString() =

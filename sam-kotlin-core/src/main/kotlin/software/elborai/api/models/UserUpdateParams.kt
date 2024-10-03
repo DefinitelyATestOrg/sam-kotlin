@@ -194,34 +194,14 @@ constructor(
                 return true
             }
 
-            return other is UserUpdateBody &&
-                this.id == other.id &&
-                this.email == other.email &&
-                this.firstName == other.firstName &&
-                this.lastName == other.lastName &&
-                this.password == other.password &&
-                this.phone == other.phone &&
-                this.bodyUsername == other.bodyUsername &&
-                this.userStatus == other.userStatus &&
-                this.additionalProperties == other.additionalProperties
+            return /* spotless:off */ other is UserUpdateBody && this.id == other.id && this.email == other.email && this.firstName == other.firstName && this.lastName == other.lastName && this.password == other.password && this.phone == other.phone && this.bodyUsername == other.bodyUsername && this.userStatus == other.userStatus && this.additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         private var hashCode: Int = 0
 
         override fun hashCode(): Int {
             if (hashCode == 0) {
-                hashCode =
-                    Objects.hash(
-                        id,
-                        email,
-                        firstName,
-                        lastName,
-                        password,
-                        phone,
-                        bodyUsername,
-                        userStatus,
-                        additionalProperties,
-                    )
+                hashCode = /* spotless:off */ Objects.hash(id, email, firstName, lastName, password, phone, bodyUsername, userStatus, additionalProperties) /* spotless:on */
             }
             return hashCode
         }
@@ -241,36 +221,11 @@ constructor(
             return true
         }
 
-        return other is UserUpdateParams &&
-            this.pathUsername == other.pathUsername &&
-            this.id == other.id &&
-            this.email == other.email &&
-            this.firstName == other.firstName &&
-            this.lastName == other.lastName &&
-            this.password == other.password &&
-            this.phone == other.phone &&
-            this.bodyUsername == other.bodyUsername &&
-            this.userStatus == other.userStatus &&
-            this.additionalQueryParams == other.additionalQueryParams &&
-            this.additionalHeaders == other.additionalHeaders &&
-            this.additionalBodyProperties == other.additionalBodyProperties
+        return /* spotless:off */ other is UserUpdateParams && this.pathUsername == other.pathUsername && this.id == other.id && this.email == other.email && this.firstName == other.firstName && this.lastName == other.lastName && this.password == other.password && this.phone == other.phone && this.bodyUsername == other.bodyUsername && this.userStatus == other.userStatus && this.additionalQueryParams == other.additionalQueryParams && this.additionalHeaders == other.additionalHeaders && this.additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(
-            pathUsername,
-            id,
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            bodyUsername,
-            userStatus,
-            additionalQueryParams,
-            additionalHeaders,
-            additionalBodyProperties,
-        )
+        return /* spotless:off */ Objects.hash(pathUsername, id, email, firstName, lastName, password, phone, bodyUsername, userStatus, additionalQueryParams, additionalHeaders, additionalBodyProperties) /* spotless:on */
     }
 
     override fun toString() =

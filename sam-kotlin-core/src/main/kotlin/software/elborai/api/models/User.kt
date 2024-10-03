@@ -195,34 +195,14 @@ private constructor(
             return true
         }
 
-        return other is User &&
-            this.id == other.id &&
-            this.username == other.username &&
-            this.firstName == other.firstName &&
-            this.lastName == other.lastName &&
-            this.email == other.email &&
-            this.password == other.password &&
-            this.phone == other.phone &&
-            this.userStatus == other.userStatus &&
-            this.additionalProperties == other.additionalProperties
+        return /* spotless:off */ other is User && this.id == other.id && this.username == other.username && this.firstName == other.firstName && this.lastName == other.lastName && this.email == other.email && this.password == other.password && this.phone == other.phone && this.userStatus == other.userStatus && this.additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     private var hashCode: Int = 0
 
     override fun hashCode(): Int {
         if (hashCode == 0) {
-            hashCode =
-                Objects.hash(
-                    id,
-                    username,
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    phone,
-                    userStatus,
-                    additionalProperties,
-                )
+            hashCode = /* spotless:off */ Objects.hash(id, username, firstName, lastName, email, password, phone, userStatus, additionalProperties) /* spotless:on */
         }
         return hashCode
     }
