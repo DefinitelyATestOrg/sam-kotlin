@@ -4,9 +4,15 @@ package software.elborai.api.services.blocking
 
 import software.elborai.api.core.ClientOptions
 import software.elborai.api.core.RequestOptions
+import software.elborai.api.core.handlers.emptyHandler
+import software.elborai.api.core.handlers.errorHandler
+import software.elborai.api.core.handlers.jsonHandler
+import software.elborai.api.core.handlers.stringHandler
+import software.elborai.api.core.handlers.withErrorHandler
 import software.elborai.api.core.http.HttpMethod
 import software.elborai.api.core.http.HttpRequest
 import software.elborai.api.core.http.HttpResponse.Handler
+import software.elborai.api.core.json
 import software.elborai.api.errors.SamError
 import software.elborai.api.models.User
 import software.elborai.api.models.UserCreateParams
@@ -16,12 +22,6 @@ import software.elborai.api.models.UserLoginParams
 import software.elborai.api.models.UserLogoutParams
 import software.elborai.api.models.UserRetrieveParams
 import software.elborai.api.models.UserUpdateParams
-import software.elborai.api.services.emptyHandler
-import software.elborai.api.services.errorHandler
-import software.elborai.api.services.json
-import software.elborai.api.services.jsonHandler
-import software.elborai.api.services.stringHandler
-import software.elborai.api.services.withErrorHandler
 
 class UserServiceImpl
 constructor(
