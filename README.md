@@ -21,7 +21,7 @@ The REST API documentation can be found on [docs.sam.com](https://docs.sam.com)
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("software.elborai.api:sam-kotlin:0.1.0-alpha.1")
+implementation("software.elborai.api:sam-kotlin:0.1.0-alpha.2")
 ```
 
 #### Maven
@@ -30,7 +30,7 @@ implementation("software.elborai.api:sam-kotlin:0.1.0-alpha.1")
 <dependency>
     <groupId>software.elborai.api</groupId>
     <artifactId>sam-kotlin</artifactId>
-    <version>0.1.0-alpha.1</version>
+    <version>0.1.0-alpha.2</version>
 </dependency>
 ```
 
