@@ -5,12 +5,12 @@ package software.elborai.api.core
 import com.google.common.collect.ImmutableListMultimap
 import com.google.common.collect.ListMultimap
 import com.google.common.collect.Multimaps
-import software.elborai.api.errors.IncreaseInvalidDataException
 import java.util.Collections
+import software.elborai.api.errors.SamInvalidDataException
 
 internal fun <T : Any> T?.getOrThrow(name: String): T {
     if (this == null) {
-        throw IncreaseInvalidDataException("'${name}' is not present")
+        throw SamInvalidDataException("'${name}' is not present")
     }
 
     return this
@@ -43,12 +43,12 @@ internal fun <K, V> ListMultimap<K, V>.toUnmodifiable(): ListMultimap<K, V> {
 internal fun ListMultimap<String, String>.getRequiredHeader(header: String): String {
     val value =
         entries()
-        .stream()
-        .filter { entry -> entry.key.equals(header, ignoreCase = true) }
-        .map { entry -> entry.value }
-        .findFirst()
+            .stream()
+            .filter { entry -> entry.key.equals(header, ignoreCase = true) }
+            .map { entry -> entry.value }
+            .findFirst()
     if (!value.isPresent) {
-        throw IncreaseInvalidDataException("Could not find $header header")
+        throw SamInvalidDataException("Could not find $header header")
     }
     return value.get()
 }

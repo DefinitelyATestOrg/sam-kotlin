@@ -2,8 +2,6 @@
 
 package software.elborai.api.core.http
 
-import software.elborai.api.errors.IncreaseIoException
-import software.elborai.api.core.RequestOptions
 import java.io.IOException
 import java.time.Clock
 import java.time.Duration
@@ -18,18 +16,20 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.time.toKotlinDuration
 import kotlinx.coroutines.delay
+import software.elborai.api.core.RequestOptions
+import software.elborai.api.errors.SamIoException
 
 class RetryingHttpClient
 private constructor(
-        private val httpClient: HttpClient,
-        private val clock: Clock,
-        private val maxRetries: Int,
-        private val idempotencyHeader: String?,
+    private val httpClient: HttpClient,
+    private val clock: Clock,
+    private val maxRetries: Int,
+    private val idempotencyHeader: String?,
 ) : HttpClient {
 
     override fun execute(
-            request: HttpRequest,
-            requestOptions: RequestOptions,
+        request: HttpRequest,
+        requestOptions: RequestOptions,
     ): HttpResponse {
         if (!isRetryable(request) || maxRetries <= 0) {
             return httpClient.execute(request, requestOptions)
@@ -37,24 +37,31 @@ private constructor(
 
         maybeAddIdempotencyHeader(request)
 
+        // Don't send the current retry count in the headers if the caller set their own value.
+        val shouldSendRetryCount = !request.headers.containsKey("x-stainless-retry-count")
+
         var retries = 0
 
         while (true) {
+            if (shouldSendRetryCount) {
+                setRetryCountHeader(request, retries)
+            }
+
             val response =
-                    try {
-                        val response = httpClient.execute(request, requestOptions)
-                        if (++retries > maxRetries || !shouldRetry(response)) {
-                            return response
-                        }
-
-                        response
-                    } catch (t: Throwable) {
-                        if (++retries > maxRetries || !shouldRetry(t)) {
-                            throw t
-                        }
-
-                        null
+                try {
+                    val response = httpClient.execute(request, requestOptions)
+                    if (++retries > maxRetries || !shouldRetry(response)) {
+                        return response
                     }
+
+                    response
+                } catch (t: Throwable) {
+                    if (++retries > maxRetries || !shouldRetry(t)) {
+                        throw t
+                    }
+
+                    null
+                }
 
             val backoffMillis = getRetryBackoffMillis(retries, response)
             Thread.sleep(backoffMillis.toMillis())
@@ -62,8 +69,8 @@ private constructor(
     }
 
     override suspend fun executeAsync(
-            request: HttpRequest,
-            requestOptions: RequestOptions,
+        request: HttpRequest,
+        requestOptions: RequestOptions,
     ): HttpResponse {
         if (!isRetryable(request) || maxRetries <= 0) {
             return httpClient.executeAsync(request, requestOptions)
@@ -71,24 +78,31 @@ private constructor(
 
         maybeAddIdempotencyHeader(request)
 
+        // Don't send the current retry count in the headers if the caller set their own value.
+        val shouldSendRetryCount = !request.headers.containsKey("x-stainless-retry-count")
+
         var retries = 0
 
         while (true) {
+            if (shouldSendRetryCount) {
+                setRetryCountHeader(request, retries)
+            }
+
             val response =
-                    try {
-                        val response = httpClient.execute(request, requestOptions)
-                        if (++retries > maxRetries || !shouldRetry(response)) {
-                            return response
-                        }
-
-                        response
-                    } catch (t: Throwable) {
-                        if (++retries > maxRetries || !shouldRetry(t)) {
-                            throw t
-                        }
-
-                        null
+                try {
+                    val response = httpClient.execute(request, requestOptions)
+                    if (++retries > maxRetries || !shouldRetry(response)) {
+                        return response
                     }
+
+                    response
+                } catch (t: Throwable) {
+                    if (++retries > maxRetries || !shouldRetry(t)) {
+                        throw t
+                    }
+
+                    null
+                }
 
             val backoffMillis = getRetryBackoffMillis(retries, response)
             delay(backoffMillis.toKotlinDuration())
@@ -103,6 +117,11 @@ private constructor(
         // Some requests, such as when a request body is being streamed, cannot be retried because
         // the body data aren't available on subsequent attempts.
         return request.body?.repeatable() ?: true
+    }
+
+    private fun setRetryCountHeader(request: HttpRequest, retries: Int) {
+        request.headers.removeAll("x-stainless-retry-count")
+        request.headers.put("x-stainless-retry-count", retries.toString())
     }
 
     private fun idempotencyKey(): String = "stainless-java-retry-${UUID.randomUUID()}"
@@ -137,38 +156,46 @@ private constructor(
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean {
-        // Only retry IOException and IncreaseIoException, other exceptions are not intended to be
+        // Only retry IOException and SamIoException, other exceptions are not intended to be
         // retried.
-        return throwable is IOException || throwable is IncreaseIoException
+        return throwable is IOException || throwable is SamIoException
     }
 
     private fun getRetryBackoffMillis(retries: Int, response: HttpResponse?): Duration {
         // About the Retry-After header:
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
-        response?.headers()?.let { headers ->
-            headers.get("Retry-After-Ms").getOrNull(0)?.toFloatOrNull()?.times(TimeUnit.MILLISECONDS.toNanos(1))
+        response
+            ?.headers()
+            ?.let { headers ->
+                headers
+                    .get("Retry-After-Ms")
+                    .getOrNull(0)
+                    ?.toFloatOrNull()
+                    ?.times(TimeUnit.MILLISECONDS.toNanos(1))
                     ?: headers.get("Retry-After").getOrNull(0)?.let { retryAfter ->
                         retryAfter.toFloatOrNull()?.times(TimeUnit.SECONDS.toNanos(1))
-                                ?: try {
-                                    ChronoUnit.MILLIS.between(
-                                            OffsetDateTime.now(clock),
-                                            OffsetDateTime.parse(
-                                                    retryAfter,
-                                                    DateTimeFormatter.RFC_1123_DATE_TIME
-                                            )
+                            ?: try {
+                                ChronoUnit.MILLIS.between(
+                                    OffsetDateTime.now(clock),
+                                    OffsetDateTime.parse(
+                                        retryAfter,
+                                        DateTimeFormatter.RFC_1123_DATE_TIME
                                     )
-                                } catch (e: DateTimeParseException) {
-                                    null
-                                }
+                                )
+                            } catch (e: DateTimeParseException) {
+                                null
+                            }
                     }
-        }?.let { retryAfterNanos ->
-            // If the API asks us to wait a certain amount of time (and it's a reasonable amount), just
-            // do what it says.
-            val retryAfter = Duration.ofNanos(retryAfterNanos.toLong())
-            if (retryAfter in Duration.ofNanos(0)..Duration.ofMinutes(1)) {
-                return retryAfter
             }
-        }
+            ?.let { retryAfterNanos ->
+                // If the API asks us to wait a certain amount of time (and it's a reasonable
+                // amount), just
+                // do what it says.
+                val retryAfter = Duration.ofNanos(retryAfterNanos.toLong())
+                if (retryAfter in Duration.ofNanos(0)..Duration.ofMinutes(1)) {
+                    return retryAfter
+                }
+            }
 
         // Apply exponential backoff, but not more than the max.
         val backoffSeconds = min(0.5 * 2.0.pow(retries - 1), 8.0)
@@ -199,11 +226,11 @@ private constructor(
         fun idempotencyHeader(header: String) = apply { this.idempotencyHeader = header }
 
         fun build(): HttpClient =
-                RetryingHttpClient(
-                        checkNotNull(httpClient) { "`httpClient` is required but was not set" },
-                        clock,
-                        maxRetries,
-                        idempotencyHeader,
-                )
+            RetryingHttpClient(
+                checkNotNull(httpClient) { "`httpClient` is required but was not set" },
+                clock,
+                maxRetries,
+                idempotencyHeader,
+            )
     }
 }
