@@ -64,8 +64,8 @@ class SamOkHttpClient private constructor() {
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
-        fun build(): SamClient {
-            return SamClientImpl(
+        fun build(): SamClient =
+            SamClientImpl(
                 clientOptions
                     .httpClient(
                         OkHttpClient.builder()
@@ -76,6 +76,5 @@ class SamOkHttpClient private constructor() {
                     )
                     .build()
             )
-        }
     }
 }
