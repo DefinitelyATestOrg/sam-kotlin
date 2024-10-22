@@ -64,8 +64,8 @@ class SamOkHttpClientAsync private constructor() {
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
-        fun build(): SamClientAsync {
-            return SamClientAsyncImpl(
+        fun build(): SamClientAsync =
+            SamClientAsyncImpl(
                 clientOptions
                     .httpClient(
                         OkHttpClient.builder()
@@ -76,6 +76,5 @@ class SamOkHttpClientAsync private constructor() {
                     )
                     .build()
             )
-        }
     }
 }
