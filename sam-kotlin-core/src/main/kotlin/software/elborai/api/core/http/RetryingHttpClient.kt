@@ -1,5 +1,3 @@
-@file:JvmSynthetic
-
 package software.elborai.api.core.http
 
 import java.io.IOException
