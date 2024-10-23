@@ -2,11 +2,8 @@ package software.elborai.api.errors
 
 import com.google.common.collect.ListMultimap
 
-class PermissionDeniedException
-constructor(
-        headers: ListMultimap<String, String>,
-        private val error: IncreaseError,
-) : IncreaseServiceException(headers, "${error}") {
-    override fun statusCode(): Int = 403
-    fun error(): IncreaseError = error
-}
+class PermissionDeniedException(
+    headers: ListMultimap<String, String>,
+    body: String,
+    error: SamError,
+) : SamServiceException(403, headers, body, error)

@@ -2,11 +2,8 @@ package software.elborai.api.errors
 
 import com.google.common.collect.ListMultimap
 
-class UnprocessableEntityException
-constructor(
-        headers: ListMultimap<String, String>,
-        private val error: IncreaseError,
-) : IncreaseServiceException(headers, "${error}") {
-    override fun statusCode(): Int = 422
-    fun error(): IncreaseError = error
-}
+class UnprocessableEntityException(
+    headers: ListMultimap<String, String>,
+    body: String,
+    error: SamError,
+) : SamServiceException(422, headers, body, error)

@@ -2,9 +2,9 @@ package software.elborai.api.errors
 
 import com.google.common.collect.ListMultimap
 
-class UnexpectedStatusCodeException
-constructor(private val statusCode: Int, headers: ListMultimap<String, String>, private val body: String) :
-        IncreaseServiceException(headers, "Unexpected status code: ${statusCode}") {
-    override fun statusCode(): Int = statusCode
-    fun body() = body
-}
+class UnexpectedStatusCodeException(
+    statusCode: Int,
+    headers: ListMultimap<String, String>,
+    body: String,
+    error: SamError,
+) : SamServiceException(statusCode, headers, body, error)
