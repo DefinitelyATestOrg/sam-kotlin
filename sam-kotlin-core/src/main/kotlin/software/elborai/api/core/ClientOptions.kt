@@ -18,7 +18,10 @@ private constructor(
     val headers: ListMultimap<String, String>,
     val queryParams: ListMultimap<String, String>,
     val responseValidation: Boolean,
+    val maxRetries: Int,
 ) {
+
+    fun toBuilder() = Builder().from(this)
 
     companion object {
 
@@ -39,6 +42,23 @@ private constructor(
         private var queryParams: MutableMap<String, MutableList<String>> = mutableMapOf()
         private var responseValidation: Boolean = false
         private var maxRetries: Int = 2
+
+        internal fun from(clientOptions: ClientOptions) = apply {
+            httpClient = clientOptions.httpClient
+            jsonMapper = clientOptions.jsonMapper
+            clock = clientOptions.clock
+            baseUrl = clientOptions.baseUrl
+            headers =
+                clientOptions.headers.asMap().mapValuesTo(mutableMapOf()) { (_, value) ->
+                    value.toMutableList()
+                }
+            queryParams =
+                clientOptions.queryParams.asMap().mapValuesTo(mutableMapOf()) { (_, value) ->
+                    value.toMutableList()
+                }
+            responseValidation = clientOptions.responseValidation
+            maxRetries = clientOptions.maxRetries
+        }
 
         fun httpClient(httpClient: HttpClient) = apply { this.httpClient = httpClient }
 
@@ -121,6 +141,7 @@ private constructor(
                 headers.toUnmodifiable(),
                 queryParams.toUnmodifiable(),
                 responseValidation,
+                maxRetries,
             )
         }
     }
