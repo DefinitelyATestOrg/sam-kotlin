@@ -7,6 +7,7 @@ import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.ListMultimap
 import java.time.Clock
 import software.elborai.api.core.http.HttpClient
+import software.elborai.api.core.http.PhantomReachableClosingHttpClient
 import software.elborai.api.core.http.RetryingHttpClient
 
 class ClientOptions
@@ -132,11 +133,13 @@ private constructor(
 
             return ClientOptions(
                 httpClient!!,
-                RetryingHttpClient.builder()
-                    .httpClient(httpClient!!)
-                    .clock(clock)
-                    .maxRetries(maxRetries)
-                    .build(),
+                PhantomReachableClosingHttpClient(
+                    RetryingHttpClient.builder()
+                        .httpClient(httpClient!!)
+                        .clock(clock)
+                        .maxRetries(maxRetries)
+                        .build()
+                ),
                 jsonMapper ?: jsonMapper(),
                 clock,
                 baseUrl,
