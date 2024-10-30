@@ -8,13 +8,8 @@ import com.google.common.collect.Multimaps
 import java.util.Collections
 import software.elborai.api.errors.SamInvalidDataException
 
-internal fun <T : Any> T?.getOrThrow(name: String): T {
-    if (this == null) {
-        throw SamInvalidDataException("'${name}' is not present")
-    }
-
-    return this
-}
+internal fun <T : Any> T?.getOrThrow(name: String): T =
+    this ?: throw SamInvalidDataException("`${name}` is not present")
 
 internal fun <T> List<T>.toUnmodifiable(): List<T> {
     if (isEmpty()) {
