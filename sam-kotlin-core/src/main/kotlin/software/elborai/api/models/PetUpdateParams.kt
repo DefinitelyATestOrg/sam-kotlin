@@ -13,7 +13,7 @@ import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
@@ -148,12 +148,12 @@ constructor(
                 PetUpdateBody(
                     checkNotNull(name) { "`name` is required but was not set" },
                     checkNotNull(photoUrls) { "`photoUrls` is required but was not set" }
-                        .toUnmodifiable(),
+                        .toImmutable(),
                     id,
                     category,
                     status,
-                    tags?.toUnmodifiable(),
-                    additionalProperties.toUnmodifiable(),
+                    tags?.toImmutable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -311,15 +311,14 @@ constructor(
         fun build(): PetUpdateParams =
             PetUpdateParams(
                 checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(photoUrls) { "`photoUrls` is required but was not set" }
-                    .toUnmodifiable(),
+                checkNotNull(photoUrls) { "`photoUrls` is required but was not set" }.toImmutable(),
                 id,
                 category,
                 status,
-                if (tags.size == 0) null else tags.toUnmodifiable(),
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                if (tags.size == 0) null else tags.toImmutable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -381,7 +380,7 @@ constructor(
                 Category(
                     id,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -527,7 +526,7 @@ constructor(
                 Tag(
                     id,
                     name,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 

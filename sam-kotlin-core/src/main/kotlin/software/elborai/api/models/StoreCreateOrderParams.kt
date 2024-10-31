@@ -14,7 +14,7 @@ import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
@@ -154,7 +154,7 @@ constructor(
                     quantity,
                     shipDate,
                     status,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -307,9 +307,9 @@ constructor(
                 quantity,
                 shipDate,
                 status,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 

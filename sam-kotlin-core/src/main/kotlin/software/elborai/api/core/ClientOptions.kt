@@ -143,8 +143,8 @@ private constructor(
                 jsonMapper ?: jsonMapper(),
                 clock,
                 baseUrl,
-                headers.toUnmodifiable(),
-                queryParams.toUnmodifiable(),
+                headers.toImmutable(),
+                queryParams.toImmutable(),
                 responseValidation,
                 maxRetries,
             )

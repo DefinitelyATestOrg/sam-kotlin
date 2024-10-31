@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 
 @JsonDeserialize(builder = SamError.Builder::class)
 @NoAutoDetect
@@ -60,6 +60,6 @@ constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): SamError = SamError(additionalProperties.toUnmodifiable())
+        fun build(): SamError = SamError(additionalProperties.toImmutable())
     }
 }
