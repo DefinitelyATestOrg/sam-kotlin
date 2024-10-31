@@ -15,7 +15,7 @@ import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonMissing
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 import software.elborai.api.errors.SamInvalidDataException
 
 @JsonDeserialize(builder = Order.Builder::class)
@@ -160,7 +160,7 @@ private constructor(
                 shipDate,
                 status,
                 complete,
-                additionalProperties.toUnmodifiable(),
+                additionalProperties.toImmutable(),
             )
     }
 

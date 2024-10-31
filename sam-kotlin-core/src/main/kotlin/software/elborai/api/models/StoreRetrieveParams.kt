@@ -4,7 +4,7 @@ package software.elborai.api.models
 
 import java.util.Objects
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 import software.elborai.api.models.*
 
 class StoreRetrieveParams
@@ -111,8 +111,8 @@ constructor(
         fun build(): StoreRetrieveParams =
             StoreRetrieveParams(
                 checkNotNull(orderId) { "`orderId` is required but was not set" },
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 }

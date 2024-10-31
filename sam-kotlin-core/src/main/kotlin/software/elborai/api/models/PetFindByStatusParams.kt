@@ -8,7 +8,7 @@ import software.elborai.api.core.Enum
 import software.elborai.api.core.JsonField
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 import software.elborai.api.errors.SamInvalidDataException
 import software.elborai.api.models.*
 
@@ -25,7 +25,7 @@ constructor(
         val params = mutableMapOf<String, List<String>>()
         this.status?.let { params.put("status", listOf(it.toString())) }
         params.putAll(additionalQueryParams)
-        return params.toUnmodifiable()
+        return params.toImmutable()
     }
 
     internal fun getHeaders(): Map<String, List<String>> = additionalHeaders
@@ -115,8 +115,8 @@ constructor(
         fun build(): PetFindByStatusParams =
             PetFindByStatusParams(
                 status,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
             )
     }
 
