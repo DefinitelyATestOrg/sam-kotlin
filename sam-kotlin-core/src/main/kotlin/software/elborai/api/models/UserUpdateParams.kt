@@ -10,7 +10,7 @@ import java.util.Objects
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 import software.elborai.api.models.*
 
 class UserUpdateParams
@@ -185,7 +185,7 @@ constructor(
                     phone,
                     bodyUsername,
                     userStatus,
-                    additionalProperties.toUnmodifiable(),
+                    additionalProperties.toImmutable(),
                 )
         }
 
@@ -353,9 +353,9 @@ constructor(
                 phone,
                 bodyUsername,
                 userStatus,
-                additionalQueryParams.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalHeaders.mapValues { it.value.toUnmodifiable() }.toUnmodifiable(),
-                additionalBodyProperties.toUnmodifiable(),
+                additionalQueryParams.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalHeaders.mapValues { it.value.toImmutable() }.toImmutable(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 }

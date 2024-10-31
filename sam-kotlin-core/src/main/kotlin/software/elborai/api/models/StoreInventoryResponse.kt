@@ -9,7 +9,7 @@ import java.util.Objects
 import software.elborai.api.core.ExcludeMissing
 import software.elborai.api.core.JsonValue
 import software.elborai.api.core.NoAutoDetect
-import software.elborai.api.core.toUnmodifiable
+import software.elborai.api.core.toImmutable
 
 @JsonDeserialize(builder = StoreInventoryResponse.Builder::class)
 @NoAutoDetect
@@ -60,7 +60,7 @@ private constructor(
         }
 
         fun build(): StoreInventoryResponse =
-            StoreInventoryResponse(additionalProperties.toUnmodifiable())
+            StoreInventoryResponse(additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
