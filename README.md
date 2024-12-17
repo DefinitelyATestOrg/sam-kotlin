@@ -18,31 +18,48 @@ The REST API documentation can be found on [docs.sam.com](https://docs.sam.com)
 
 #### Gradle
 
-<!-- x-release-please-start-version -->
-
 ```kotlin
-implementation("software.elborai.api:sam-kotlin:0.1.0-alpha.1")
+implementation("com.sam.api:sam-kotlin:0.1.0-alpha.1")
 ```
 
 #### Maven
 
 ```xml
 <dependency>
-    <groupId>software.elborai.api</groupId>
+    <groupId>com.sam.api</groupId>
     <artifactId>sam-kotlin</artifactId>
     <version>0.1.0-alpha.1</version>
 </dependency>
 ```
 
-<!-- x-release-please-end -->
-
 ### Configure the client
 
-Use `SamOkHttpClient.builder()` to configure the client.
+Use `SamOkHttpClient.builder()` to configure the client. At a minimum you need to set `.apiKey()`:
+
+```kotlin
+import com.sam.api.client.SamClient
+import com.sam.api.client.okhttp.SamOkHttpClient
+
+val client = SamOkHttpClient.builder()
+    .apiKey("My API Key")
+    .build()
+```
+
+Alternately, set the environment with `API_KEY`, and use `SamOkHttpClient.fromEnv()` to read from the environment.
 
 ```kotlin
 val client = SamOkHttpClient.fromEnv()
+
+// Note: you can also call fromEnv() from the client builder, for example if you need to set additional properties
+val client = SamOkHttpClient.builder()
+    .fromEnv()
+    // ... set properties on the builder
+    .build()
 ```
+
+| Property | Environment variable | Required | Default value |
+| -------- | -------------------- | -------- | ------------- |
+| apiKey   | `API_KEY`            | true     | —             |
 
 Read the documentation for more configuration options.
 
@@ -50,15 +67,15 @@ Read the documentation for more configuration options.
 
 ### Example: creating a resource
 
-To create a new store, first use the `StoreCreateOrderParams` builder to specify attributes,
-then pass that to the `createOrder` method of the `stores` service.
+To create a new user, first use the `UserCreateParams` builder to specify attributes,
+then pass that to the `create` method of the `users` service.
 
 ```kotlin
-import software.elborai.api.models.Order
-import software.elborai.api.models.StoreCreateOrderParams
+import com.sam.api.models.User
+import com.sam.api.models.UserCreateParams
 
-val params = StoreCreateOrderParams.builder().build()
-val order = client.stores().createOrder(params)
+val params = UserCreateParams.builder().build()
+val user = client.users().create(params)
 ```
 
 ---
@@ -69,15 +86,15 @@ val order = client.stores().createOrder(params)
 
 To make a request to the Sam API, you generally build an instance of the appropriate `Params` class.
 
-In [Example: creating a resource](#example-creating-a-resource) above, we used the `StoreCreateOrderParams.builder()` to pass to
-the `createOrder` method of the `stores` service.
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `UserCreateParams.builder()` to pass to
+the `create` method of the `users` service.
 
 Sometimes, the API may support other properties that are not yet supported in the Kotlin SDK types. In that case,
 you can attach them using the `putAdditionalProperty` method.
 
 ```kotlin
-import software.elborai.api.models.core.JsonValue
-val params = StoreCreateOrderParams.builder()
+import com.sam.api.models.core.JsonValue
+val params = UserCreateParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", JsonValue.from("4242"))
     .build()
@@ -90,7 +107,7 @@ val params = StoreCreateOrderParams.builder()
 When receiving a response, the Sam Kotlin SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Kotlin type. If you directly access the mistaken property, the SDK will throw an unchecked `SamInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```kotlin
-val order = client.stores().createOrder().validate()
+val user = client.users().create().validate()
 ```
 
 ### Response properties as JSON
@@ -189,6 +206,22 @@ val client = SamOkHttpClient.builder()
     .build()
 ```
 
+## Logging
+
+We use the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
+
+You can enable logging by setting the environment variable `SAM_LOG` to `info`.
+
+```sh
+$ export SAM_LOG=info
+```
+
+Or to `debug` for more verbose logging.
+
+```sh
+$ export SAM_LOG=debug
+```
+
 ## Semantic versioning
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
@@ -198,7 +231,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/DefinitelyATestOrg/sam-kotlin/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/sam-kotlin/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
