@@ -18,27 +18,31 @@ The REST API documentation can be found on [docs.sam.com](https://docs.sam.com)
 
 #### Gradle
 
+<!-- x-release-please-start-version -->
+
 ```kotlin
-implementation("com.sam.api:sam-kotlin:0.1.0-alpha.1")
+implementation("me.elborai.api:sam-kotlin:0.1.0-alpha.1")
 ```
 
 #### Maven
 
 ```xml
 <dependency>
-    <groupId>com.sam.api</groupId>
+    <groupId>me.elborai.api</groupId>
     <artifactId>sam-kotlin</artifactId>
     <version>0.1.0-alpha.1</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ### Configure the client
 
 Use `SamOkHttpClient.builder()` to configure the client. At a minimum you need to set `.apiKey()`:
 
 ```kotlin
-import com.sam.api.client.SamClient
-import com.sam.api.client.okhttp.SamOkHttpClient
+import me.elborai.api.client.SamClient
+import me.elborai.api.client.okhttp.SamOkHttpClient
 
 val client = SamOkHttpClient.builder()
     .apiKey("My API Key")
@@ -71,8 +75,8 @@ To create a new user, first use the `UserCreateParams` builder to specify attrib
 then pass that to the `create` method of the `users` service.
 
 ```kotlin
-import com.sam.api.models.User
-import com.sam.api.models.UserCreateParams
+import me.elborai.api.models.User
+import me.elborai.api.models.UserCreateParams
 
 val params = UserCreateParams.builder().build()
 val user = client.users().create(params)
@@ -93,7 +97,7 @@ Sometimes, the API may support other properties that are not yet supported in th
 you can attach them using the `putAdditionalProperty` method.
 
 ```kotlin
-import com.sam.api.models.core.JsonValue
+import me.elborai.api.models.core.JsonValue
 val params = UserCreateParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", JsonValue.from("4242"))
@@ -231,7 +235,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/sam-kotlin/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/DefinitelyATestOrg/sam-kotlin/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
