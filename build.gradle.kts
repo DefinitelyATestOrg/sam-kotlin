@@ -3,8 +3,8 @@ plugins {
 }
 
 allprojects {
-    group = "com.sam.api"
-    version = "0.1.0-alpha.1" 
+    group = "me.elborai.api"
+    version = "0.1.0-alpha.1" // x-release-please-version
 }
 
 nexusPublishing {
