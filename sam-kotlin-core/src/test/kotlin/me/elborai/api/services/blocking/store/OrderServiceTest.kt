@@ -20,9 +20,10 @@ class OrderServiceTest {
                 .apiKey("My API Key")
                 .build()
         val orderService = client.store().orders()
-        val order = orderService.retrieve(StoreOrderRetrieveParams.builder().orderId(0L).build())
-        println(order)
-        order.validate()
+        val coolOrder =
+            orderService.retrieve(StoreOrderRetrieveParams.builder().orderId(0L).build())
+        println(coolOrder)
+        coolOrder.validate()
     }
 
     @Test
