@@ -141,7 +141,7 @@ if (field.isMissing()) {
 Sometimes, the server response may include additional properties that are not yet available in this library's types. You can access them using the model's `_additionalProperties` method:
 
 ```kotlin
-val secret = order._additionalProperties().get("secret_field")
+val secret = coolOrder._additionalProperties().get("secret_field")
 ```
 
 ---

@@ -18,9 +18,9 @@ import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
-@JsonDeserialize(builder = Order.Builder::class)
+@JsonDeserialize(builder = CoolOrder.Builder::class)
 @NoAutoDetect
-class Order
+class CoolOrder
 private constructor(
     private val id: JsonField<Long>,
     private val petId: JsonField<Long>,
@@ -63,7 +63,7 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-    fun validate(): Order = apply {
+    fun validate(): CoolOrder = apply {
         if (!validated) {
             id()
             petId()
@@ -92,14 +92,14 @@ private constructor(
         private var complete: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(order: Order) = apply {
-            this.id = order.id
-            this.petId = order.petId
-            this.quantity = order.quantity
-            this.shipDate = order.shipDate
-            this.status = order.status
-            this.complete = order.complete
-            additionalProperties(order.additionalProperties)
+        internal fun from(coolOrder: CoolOrder) = apply {
+            this.id = coolOrder.id
+            this.petId = coolOrder.petId
+            this.quantity = coolOrder.quantity
+            this.shipDate = coolOrder.shipDate
+            this.status = coolOrder.status
+            this.complete = coolOrder.complete
+            additionalProperties(coolOrder.additionalProperties)
         }
 
         fun id(id: Long) = id(JsonField.of(id))
@@ -152,8 +152,8 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): Order =
-            Order(
+        fun build(): CoolOrder =
+            CoolOrder(
                 id,
                 petId,
                 quantity,
@@ -232,7 +232,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Order && id == other.id && petId == other.petId && quantity == other.quantity && shipDate == other.shipDate && status == other.status && complete == other.complete && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CoolOrder && id == other.id && petId == other.petId && quantity == other.quantity && shipDate == other.shipDate && status == other.status && complete == other.complete && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -242,5 +242,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Order{id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete, additionalProperties=$additionalProperties}"
+        "CoolOrder{id=$id, petId=$petId, quantity=$quantity, shipDate=$shipDate, status=$status, complete=$complete, additionalProperties=$additionalProperties}"
 }
