@@ -33,9 +33,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/DefinitelyATestOrg/sam-kotlin.git")
-                    developerConnection.set("scm:git:git://github.com/DefinitelyATestOrg/sam-kotlin.git")
-                    url.set("https://github.com/DefinitelyATestOrg/sam-kotlin")
+                    connection.set("scm:git:git://github.com/stainless-sdks/sam-kotlin.git")
+                    developerConnection.set("scm:git:git://github.com/stainless-sdks/sam-kotlin.git")
+                    url.set("https://github.com/stainless-sdks/sam-kotlin")
                 }
 
                 versionMapping {
