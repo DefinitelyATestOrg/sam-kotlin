@@ -44,7 +44,7 @@ Use `SamOkHttpClient.builder()` to configure the client. At a minimum you need t
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
 
-val client = SamOkHttpClient.builder()
+val client: SamClient = SamOkHttpClient.builder()
     .apiKey("My API Key")
     .build()
 ```
@@ -55,10 +55,10 @@ Alternately, set the environment with `API_KEY`, and use `SamOkHttpClient.fromEn
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
 
-val client = SamOkHttpClient.fromEnv()
+val client: SamClient = SamOkHttpClient.fromEnv()
 
 // Note: you can also call fromEnv() from the client builder, for example if you need to set additional properties
-val client = SamOkHttpClient.builder()
+val client: SamClient = SamOkHttpClient.builder()
     .fromEnv()
     // ... set properties on the builder
     .build()
@@ -80,8 +80,8 @@ To create a new user, first use the `UserCreateParams` builder to specify attrib
 import me.elborai.api.models.User
 import me.elborai.api.models.UserCreateParams
 
-val params = UserCreateParams.builder().build()
-val user = client.users().create(params)
+val params: UserCreateParams = UserCreateParams.builder().build()
+val user: User = client.users().create(params)
 ```
 
 ---
@@ -100,7 +100,7 @@ Sometimes, the API may support other properties that are not yet supported in th
 import me.elborai.api.core.JsonValue
 import me.elborai.api.models.UserCreateParams
 
-val params = UserCreateParams.builder()
+val params: UserCreateParams = UserCreateParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", JsonValue.from("4242"))
     .build()
@@ -115,7 +115,7 @@ When receiving a response, the Sam Kotlin SDK will deserialize it into instances
 ```kotlin
 import me.elborai.api.models.User
 
-val user = client.users().create().validate()
+val user: User = client.users().create().validate()
 ```
 
 ### Response properties as JSON
@@ -126,7 +126,7 @@ In rare cases, you may want to access the underlying JSON value for a response p
 import java.util.Optional
 import me.elborai.api.core.JsonField
 
-val field = responseObj._field
+val field: JsonField = responseObj._field
 
 if (field.isMissing()) {
   // Value was not specified in the JSON response
@@ -138,7 +138,7 @@ if (field.isMissing()) {
 
   // If the value given by the API did not match the shape that the SDK expects
   // you can deserialise into a custom type
-  val myObj = responseObj._field.asUnknown()?.convert(MyClass.class)
+  val myObj: MyClass = responseObj._field.asUnknown()?.convert(MyClass.class)
 }
 ```
 
@@ -149,7 +149,7 @@ Sometimes, the server response may include additional properties that are not ye
 ```kotlin
 import me.elborai.api.core.JsonValue
 
-val secret = coolOrder._additionalProperties().get("secret_field")
+val secret: JsonValue = coolOrder._additionalProperties().get("secret_field")
 ```
 
 ---
@@ -189,7 +189,7 @@ Requests that experience certain errors are automatically retried 2 times by def
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
 
-val client = SamOkHttpClient.builder()
+val client: SamClient = SamOkHttpClient.builder()
     .fromEnv()
     .maxRetries(4)
     .build()
@@ -204,7 +204,7 @@ import java.time.Duration
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
 
-val client = SamOkHttpClient.builder()
+val client: SamClient = SamOkHttpClient.builder()
     .fromEnv()
     .timeout(Duration.ofSeconds(30))
     .build()
@@ -220,7 +220,7 @@ import java.net.Proxy
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
 
-val client = SamOkHttpClient.builder()
+val client: SamClient = SamOkHttpClient.builder()
     .fromEnv()
     .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("example.com", 8080)))
     .build()
