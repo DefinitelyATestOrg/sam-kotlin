@@ -125,51 +125,57 @@ constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(userCreateBody: UserCreateBody) = apply {
-                this.id = userCreateBody.id
-                this.email = userCreateBody.email
-                this.firstName = userCreateBody.firstName
-                this.lastName = userCreateBody.lastName
-                this.password = userCreateBody.password
-                this.phone = userCreateBody.phone
-                this.username = userCreateBody.username
-                this.userStatus = userCreateBody.userStatus
-                additionalProperties(userCreateBody.additionalProperties)
+                id = userCreateBody.id
+                email = userCreateBody.email
+                firstName = userCreateBody.firstName
+                lastName = userCreateBody.lastName
+                password = userCreateBody.password
+                phone = userCreateBody.phone
+                username = userCreateBody.username
+                userStatus = userCreateBody.userStatus
+                additionalProperties = userCreateBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("id") fun id(id: Long) = apply { this.id = id }
+            @JsonProperty("id") fun id(id: Long?) = apply { this.id = id }
 
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            @JsonProperty("email") fun email(email: String?) = apply { this.email = email }
 
             @JsonProperty("firstName")
-            fun firstName(firstName: String) = apply { this.firstName = firstName }
+            fun firstName(firstName: String?) = apply { this.firstName = firstName }
 
             @JsonProperty("lastName")
-            fun lastName(lastName: String) = apply { this.lastName = lastName }
+            fun lastName(lastName: String?) = apply { this.lastName = lastName }
 
             @JsonProperty("password")
-            fun password(password: String) = apply { this.password = password }
+            fun password(password: String?) = apply { this.password = password }
 
-            @JsonProperty("phone") fun phone(phone: String) = apply { this.phone = phone }
+            @JsonProperty("phone") fun phone(phone: String?) = apply { this.phone = phone }
 
             @JsonProperty("username")
-            fun username(username: String) = apply { this.username = username }
+            fun username(username: String?) = apply { this.username = username }
 
             /** User Status */
             @JsonProperty("userStatus")
-            fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
+            fun userStatus(userStatus: Long?) = apply { this.userStatus = userStatus }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
             @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): UserCreateBody =

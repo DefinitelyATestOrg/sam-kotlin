@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
+import me.elborai.api.core.ExcludeMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.toImmutable
@@ -14,7 +15,7 @@ import me.elborai.api.core.toImmutable
 @NoAutoDetect
 class SamError
 private constructor(
-    @JsonAnyGetter val additionalProperties: Map<String, JsonValue>,
+    @JsonAnyGetter @ExcludeMissing val additionalProperties: Map<String, JsonValue>,
 ) {
 
     fun toBuilder() = Builder().from(this)
