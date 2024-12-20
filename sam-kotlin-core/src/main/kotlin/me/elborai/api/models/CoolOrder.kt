@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.time.OffsetDateTime
 import java.util.Objects
 import me.elborai.api.core.Enum
@@ -15,20 +14,29 @@ import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
-@JsonDeserialize(builder = CoolOrder.Builder::class)
 @NoAutoDetect
 class CoolOrder
+@JsonCreator
 private constructor(
-    private val id: JsonField<Long>,
-    private val petId: JsonField<Long>,
-    private val quantity: JsonField<Long>,
-    private val shipDate: JsonField<OffsetDateTime>,
-    private val status: JsonField<Status>,
-    private val complete: JsonField<Boolean>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("petId") @ExcludeMissing private val petId: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("shipDate")
+    @ExcludeMissing
+    private val shipDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("status")
+    @ExcludeMissing
+    private val status: JsonField<Status> = JsonMissing.of(),
+    @JsonProperty("complete")
+    @ExcludeMissing
+    private val complete: JsonField<Boolean> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): Long? = id.getNullable("id")
@@ -104,38 +112,28 @@ private constructor(
 
         fun id(id: Long) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
+        fun id(id: JsonField<Long>) = apply { this.id = id }
 
         fun petId(petId: Long) = petId(JsonField.of(petId))
 
-        @JsonProperty("petId")
-        @ExcludeMissing
         fun petId(petId: JsonField<Long>) = apply { this.petId = petId }
 
         fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
-        @JsonProperty("quantity")
-        @ExcludeMissing
         fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
         fun shipDate(shipDate: OffsetDateTime) = shipDate(JsonField.of(shipDate))
 
-        @JsonProperty("shipDate")
-        @ExcludeMissing
         fun shipDate(shipDate: JsonField<OffsetDateTime>) = apply { this.shipDate = shipDate }
 
         /** Order Status */
         fun status(status: Status) = status(JsonField.of(status))
 
         /** Order Status */
-        @JsonProperty("status")
-        @ExcludeMissing
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun complete(complete: Boolean) = complete(JsonField.of(complete))
 
-        @JsonProperty("complete")
-        @ExcludeMissing
         fun complete(complete: JsonField<Boolean>) = apply { this.complete = complete }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -143,7 +141,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }
