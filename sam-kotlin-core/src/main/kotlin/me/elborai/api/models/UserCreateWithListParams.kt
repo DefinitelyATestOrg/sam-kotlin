@@ -35,10 +35,10 @@ constructor(
     @NoAutoDetect
     class UserCreateWithListBody
     internal constructor(
-        private val body: List<User>?,
+        private val body: List<User>,
     ) {
 
-        @JsonProperty("body") fun body(): List<User>? = body
+        @JsonProperty("body") fun body(): List<User> = body
 
         fun toBuilder() = Builder().from(this)
 
@@ -52,10 +52,15 @@ constructor(
             private var body: List<User>? = null
 
             internal fun from(userCreateWithListBody: UserCreateWithListBody) = apply {
-                this.body = userCreateWithListBody.body
+                body = userCreateWithListBody.body.toMutableList()
             }
 
             @JsonProperty("body") fun body(body: List<User>) = apply { this.body = body }
+
+            fun build(): UserCreateWithListBody =
+                UserCreateWithListBody(
+                    checkNotNull(body) { "`body` is required but was not set" }.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {
