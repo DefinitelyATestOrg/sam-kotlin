@@ -29,8 +29,6 @@ private constructor(
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
-    private var validated: Boolean = false
-
     fun id(): Long? = id.getNullable("id")
 
     fun username(): String? = username.getNullable("username")
@@ -69,6 +67,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): User = apply {
         if (!validated) {
             id()
@@ -103,15 +103,15 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(user: User) = apply {
-            this.id = user.id
-            this.username = user.username
-            this.firstName = user.firstName
-            this.lastName = user.lastName
-            this.email = user.email
-            this.password = user.password
-            this.phone = user.phone
-            this.userStatus = user.userStatus
-            additionalProperties(user.additionalProperties)
+            id = user.id
+            username = user.username
+            firstName = user.firstName
+            lastName = user.lastName
+            email = user.email
+            password = user.password
+            phone = user.phone
+            userStatus = user.userStatus
+            additionalProperties = user.additionalProperties.toMutableMap()
         }
 
         fun id(id: Long) = id(JsonField.of(id))
@@ -164,16 +164,22 @@ private constructor(
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
         @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): User =
