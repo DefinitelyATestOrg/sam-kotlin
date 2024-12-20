@@ -4,29 +4,40 @@ package me.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import me.elborai.api.core.ExcludeMissing
 import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
 
-@JsonDeserialize(builder = User.Builder::class)
 @NoAutoDetect
 class User
+@JsonCreator
 private constructor(
-    private val id: JsonField<Long>,
-    private val username: JsonField<String>,
-    private val firstName: JsonField<String>,
-    private val lastName: JsonField<String>,
-    private val email: JsonField<String>,
-    private val password: JsonField<String>,
-    private val phone: JsonField<String>,
-    private val userStatus: JsonField<Long>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("username")
+    @ExcludeMissing
+    private val username: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("firstName")
+    @ExcludeMissing
+    private val firstName: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("lastName")
+    @ExcludeMissing
+    private val lastName: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("email") @ExcludeMissing private val email: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("password")
+    @ExcludeMissing
+    private val password: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("phone") @ExcludeMissing private val phone: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("userStatus")
+    @ExcludeMissing
+    private val userStatus: JsonField<Long> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     fun id(): Long? = id.getNullable("id")
@@ -116,50 +127,36 @@ private constructor(
 
         fun id(id: Long) = id(JsonField.of(id))
 
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<Long>) = apply { this.id = id }
+        fun id(id: JsonField<Long>) = apply { this.id = id }
 
         fun username(username: String) = username(JsonField.of(username))
 
-        @JsonProperty("username")
-        @ExcludeMissing
         fun username(username: JsonField<String>) = apply { this.username = username }
 
         fun firstName(firstName: String) = firstName(JsonField.of(firstName))
 
-        @JsonProperty("firstName")
-        @ExcludeMissing
         fun firstName(firstName: JsonField<String>) = apply { this.firstName = firstName }
 
         fun lastName(lastName: String) = lastName(JsonField.of(lastName))
 
-        @JsonProperty("lastName")
-        @ExcludeMissing
         fun lastName(lastName: JsonField<String>) = apply { this.lastName = lastName }
 
         fun email(email: String) = email(JsonField.of(email))
 
-        @JsonProperty("email")
-        @ExcludeMissing
         fun email(email: JsonField<String>) = apply { this.email = email }
 
         fun password(password: String) = password(JsonField.of(password))
 
-        @JsonProperty("password")
-        @ExcludeMissing
         fun password(password: JsonField<String>) = apply { this.password = password }
 
         fun phone(phone: String) = phone(JsonField.of(phone))
 
-        @JsonProperty("phone")
-        @ExcludeMissing
         fun phone(phone: JsonField<String>) = apply { this.phone = phone }
 
         /** User Status */
         fun userStatus(userStatus: Long) = userStatus(JsonField.of(userStatus))
 
         /** User Status */
-        @JsonProperty("userStatus")
-        @ExcludeMissing
         fun userStatus(userStatus: JsonField<Long>) = apply { this.userStatus = userStatus }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -167,7 +164,6 @@ private constructor(
             putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
             additionalProperties.put(key, value)
         }

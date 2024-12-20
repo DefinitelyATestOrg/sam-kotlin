@@ -4,14 +4,15 @@ package me.elborai.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import me.elborai.api.core.ExcludeMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
+import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
 
 class UserCreateParams
@@ -69,19 +70,20 @@ constructor(
 
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = UserCreateBody.Builder::class)
     @NoAutoDetect
     class UserCreateBody
+    @JsonCreator
     internal constructor(
-        private val id: Long?,
-        private val email: String?,
-        private val firstName: String?,
-        private val lastName: String?,
-        private val password: String?,
-        private val phone: String?,
-        private val username: String?,
-        private val userStatus: Long?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") private val id: Long?,
+        @JsonProperty("email") private val email: String?,
+        @JsonProperty("firstName") private val firstName: String?,
+        @JsonProperty("lastName") private val lastName: String?,
+        @JsonProperty("password") private val password: String?,
+        @JsonProperty("phone") private val phone: String?,
+        @JsonProperty("username") private val username: String?,
+        @JsonProperty("userStatus") private val userStatus: Long?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         @JsonProperty("id") fun id(): Long? = id
@@ -136,26 +138,21 @@ constructor(
                 additionalProperties = userCreateBody.additionalProperties.toMutableMap()
             }
 
-            @JsonProperty("id") fun id(id: Long?) = apply { this.id = id }
+            fun id(id: Long?) = apply { this.id = id }
 
-            @JsonProperty("email") fun email(email: String?) = apply { this.email = email }
+            fun email(email: String?) = apply { this.email = email }
 
-            @JsonProperty("firstName")
             fun firstName(firstName: String?) = apply { this.firstName = firstName }
 
-            @JsonProperty("lastName")
             fun lastName(lastName: String?) = apply { this.lastName = lastName }
 
-            @JsonProperty("password")
             fun password(password: String?) = apply { this.password = password }
 
-            @JsonProperty("phone") fun phone(phone: String?) = apply { this.phone = phone }
+            fun phone(phone: String?) = apply { this.phone = phone }
 
-            @JsonProperty("username")
             fun username(username: String?) = apply { this.username = username }
 
             /** User Status */
-            @JsonProperty("userStatus")
             fun userStatus(userStatus: Long?) = apply { this.userStatus = userStatus }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -163,7 +160,6 @@ constructor(
                 putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
                 additionalProperties.put(key, value)
             }
