@@ -2,8 +2,6 @@
 
 package me.elborai.api.models
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
@@ -23,62 +21,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getBody(): List<User> {
-        return body
-    }
+    internal fun getBody(): List<User> = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
     internal fun getQueryParams(): QueryParams = additionalQueryParams
-
-    @NoAutoDetect
-    class UserCreateWithListBody
-    @JsonCreator
-    internal constructor(
-        @JsonProperty("body") private val body: List<User>,
-    ) {
-
-        @JsonProperty("body") fun body(): List<User> = body
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var body: List<User>? = null
-
-            internal fun from(userCreateWithListBody: UserCreateWithListBody) = apply {
-                body = userCreateWithListBody.body.toMutableList()
-            }
-
-            fun body(body: List<User>) = apply { this.body = body }
-
-            fun build(): UserCreateWithListBody =
-                UserCreateWithListBody(
-                    checkNotNull(body) { "`body` is required but was not set" }.toImmutable()
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is UserCreateWithListBody && body == other.body /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(body) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "UserCreateWithListBody{body=$body}"
-    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -90,7 +37,7 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var body: MutableList<User> = mutableListOf()
+        private var body: MutableList<User>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -100,12 +47,11 @@ constructor(
             additionalQueryParams = userCreateWithListParams.additionalQueryParams.toBuilder()
         }
 
-        fun body(body: List<User>) = apply {
-            this.body.clear()
-            this.body.addAll(body)
-        }
+        fun body(body: List<User>) = apply { this.body = body.toMutableList() }
 
-        fun addBody(body: User) = apply { this.body.add(body) }
+        fun addBody(body: User) = apply {
+            this.body = (this.body ?: mutableListOf()).apply { add(body) }
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -207,7 +153,7 @@ constructor(
 
         fun build(): UserCreateWithListParams =
             UserCreateWithListParams(
-                body.toImmutable(),
+                checkNotNull(body) { "`body` is required but was not set" }.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
