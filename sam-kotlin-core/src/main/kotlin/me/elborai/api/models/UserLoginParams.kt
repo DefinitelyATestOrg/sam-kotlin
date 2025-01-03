@@ -15,8 +15,10 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /** The password for login in clear text */
     fun password(): String? = password
 
+    /** The user name for login */
     fun username(): String? = username
 
     fun _additionalHeaders(): Headers = additionalHeaders

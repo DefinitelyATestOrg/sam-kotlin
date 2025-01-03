@@ -18,56 +18,37 @@ import me.elborai.api.core.toImmutable
 class UserUpdateParams
 constructor(
     private val pathUsername: String,
-    private val id: Long?,
-    private val email: String?,
-    private val firstName: String?,
-    private val lastName: String?,
-    private val password: String?,
-    private val phone: String?,
-    private val bodyUsername: String?,
-    private val userStatus: Long?,
+    private val body: UserUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
     fun pathUsername(): String = pathUsername
 
-    fun id(): Long? = id
+    fun id(): Long? = body.id()
 
-    fun email(): String? = email
+    fun email(): String? = body.email()
 
-    fun firstName(): String? = firstName
+    fun firstName(): String? = body.firstName()
 
-    fun lastName(): String? = lastName
+    fun lastName(): String? = body.lastName()
 
-    fun password(): String? = password
+    fun password(): String? = body.password()
 
-    fun phone(): String? = phone
+    fun phone(): String? = body.phone()
 
-    fun bodyUsername(): String? = bodyUsername
+    fun bodyUsername(): String? = body.bodyUsername()
 
-    fun userStatus(): Long? = userStatus
+    /** User Status */
+    fun userStatus(): Long? = body.userStatus()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    internal fun getBody(): UserUpdateBody {
-        return UserUpdateBody(
-            id,
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            bodyUsername,
-            userStatus,
-            additionalBodyProperties,
-        )
-    }
+    internal fun getBody(): UserUpdateBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
@@ -148,22 +129,22 @@ constructor(
                 additionalProperties = userUpdateBody.additionalProperties.toMutableMap()
             }
 
-            fun id(id: Long?) = apply { this.id = id }
+            fun id(id: Long) = apply { this.id = id }
 
-            fun email(email: String?) = apply { this.email = email }
+            fun email(email: String) = apply { this.email = email }
 
-            fun firstName(firstName: String?) = apply { this.firstName = firstName }
+            fun firstName(firstName: String) = apply { this.firstName = firstName }
 
-            fun lastName(lastName: String?) = apply { this.lastName = lastName }
+            fun lastName(lastName: String) = apply { this.lastName = lastName }
 
-            fun password(password: String?) = apply { this.password = password }
+            fun password(password: String) = apply { this.password = password }
 
-            fun phone(phone: String?) = apply { this.phone = phone }
+            fun phone(phone: String) = apply { this.phone = phone }
 
-            fun bodyUsername(bodyUsername: String?) = apply { this.bodyUsername = bodyUsername }
+            fun bodyUsername(bodyUsername: String) = apply { this.bodyUsername = bodyUsername }
 
             /** User Status */
-            fun userStatus(userStatus: Long?) = apply { this.userStatus = userStatus }
+            fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -227,51 +208,35 @@ constructor(
     class Builder {
 
         private var pathUsername: String? = null
-        private var id: Long? = null
-        private var email: String? = null
-        private var firstName: String? = null
-        private var lastName: String? = null
-        private var password: String? = null
-        private var phone: String? = null
-        private var bodyUsername: String? = null
-        private var userStatus: Long? = null
+        private var body: UserUpdateBody.Builder = UserUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(userUpdateParams: UserUpdateParams) = apply {
             pathUsername = userUpdateParams.pathUsername
-            id = userUpdateParams.id
-            email = userUpdateParams.email
-            firstName = userUpdateParams.firstName
-            lastName = userUpdateParams.lastName
-            password = userUpdateParams.password
-            phone = userUpdateParams.phone
-            bodyUsername = userUpdateParams.bodyUsername
-            userStatus = userUpdateParams.userStatus
+            body = userUpdateParams.body.toBuilder()
             additionalHeaders = userUpdateParams.additionalHeaders.toBuilder()
             additionalQueryParams = userUpdateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = userUpdateParams.additionalBodyProperties.toMutableMap()
         }
 
         fun pathUsername(pathUsername: String) = apply { this.pathUsername = pathUsername }
 
-        fun id(id: Long) = apply { this.id = id }
+        fun id(id: Long) = apply { body.id(id) }
 
-        fun email(email: String) = apply { this.email = email }
+        fun email(email: String) = apply { body.email(email) }
 
-        fun firstName(firstName: String) = apply { this.firstName = firstName }
+        fun firstName(firstName: String) = apply { body.firstName(firstName) }
 
-        fun lastName(lastName: String) = apply { this.lastName = lastName }
+        fun lastName(lastName: String) = apply { body.lastName(lastName) }
 
-        fun password(password: String) = apply { this.password = password }
+        fun password(password: String) = apply { body.password(password) }
 
-        fun phone(phone: String) = apply { this.phone = phone }
+        fun phone(phone: String) = apply { body.phone(phone) }
 
-        fun bodyUsername(bodyUsername: String) = apply { this.bodyUsername = bodyUsername }
+        fun bodyUsername(bodyUsername: String) = apply { body.bodyUsername(bodyUsername) }
 
         /** User Status */
-        fun userStatus(userStatus: Long) = apply { this.userStatus = userStatus }
+        fun userStatus(userStatus: Long) = apply { body.userStatus(userStatus) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -372,41 +337,30 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): UserUpdateParams =
             UserUpdateParams(
                 checkNotNull(pathUsername) { "`pathUsername` is required but was not set" },
-                id,
-                email,
-                firstName,
-                lastName,
-                password,
-                phone,
-                bodyUsername,
-                userStatus,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -415,11 +369,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserUpdateParams && pathUsername == other.pathUsername && id == other.id && email == other.email && firstName == other.firstName && lastName == other.lastName && password == other.password && phone == other.phone && bodyUsername == other.bodyUsername && userStatus == other.userStatus && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is UserUpdateParams && pathUsername == other.pathUsername && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(pathUsername, id, email, firstName, lastName, password, phone, bodyUsername, userStatus, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(pathUsername, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserUpdateParams{pathUsername=$pathUsername, id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, bodyUsername=$bodyUsername, userStatus=$userStatus, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "UserUpdateParams{pathUsername=$pathUsername, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
