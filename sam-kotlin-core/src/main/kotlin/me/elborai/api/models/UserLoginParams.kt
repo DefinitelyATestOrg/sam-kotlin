@@ -58,10 +58,10 @@ constructor(
         }
 
         /** The password for login in clear text */
-        fun password(password: String) = apply { this.password = password }
+        fun password(password: String?) = apply { this.password = password }
 
         /** The user name for login */
-        fun username(username: String) = apply { this.username = username }
+        fun username(username: String?) = apply { this.username = username }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
