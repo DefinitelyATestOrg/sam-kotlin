@@ -20,20 +20,20 @@ class User
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("username")
-    @ExcludeMissing
-    private val username: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("email") @ExcludeMissing private val email: JsonField<String> = JsonMissing.of(),
     @JsonProperty("firstName")
     @ExcludeMissing
     private val firstName: JsonField<String> = JsonMissing.of(),
     @JsonProperty("lastName")
     @ExcludeMissing
     private val lastName: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("email") @ExcludeMissing private val email: JsonField<String> = JsonMissing.of(),
     @JsonProperty("password")
     @ExcludeMissing
     private val password: JsonField<String> = JsonMissing.of(),
     @JsonProperty("phone") @ExcludeMissing private val phone: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("username")
+    @ExcludeMissing
+    private val username: JsonField<String> = JsonMissing.of(),
     @JsonProperty("userStatus")
     @ExcludeMissing
     private val userStatus: JsonField<Long> = JsonMissing.of(),
@@ -42,34 +42,34 @@ private constructor(
 
     fun id(): Long? = id.getNullable("id")
 
-    fun username(): String? = username.getNullable("username")
+    fun email(): String? = email.getNullable("email")
 
     fun firstName(): String? = firstName.getNullable("firstName")
 
     fun lastName(): String? = lastName.getNullable("lastName")
 
-    fun email(): String? = email.getNullable("email")
-
     fun password(): String? = password.getNullable("password")
 
     fun phone(): String? = phone.getNullable("phone")
+
+    fun username(): String? = username.getNullable("username")
 
     /** User Status */
     fun userStatus(): Long? = userStatus.getNullable("userStatus")
 
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-    @JsonProperty("username") @ExcludeMissing fun _username() = username
+    @JsonProperty("email") @ExcludeMissing fun _email() = email
 
     @JsonProperty("firstName") @ExcludeMissing fun _firstName() = firstName
 
     @JsonProperty("lastName") @ExcludeMissing fun _lastName() = lastName
 
-    @JsonProperty("email") @ExcludeMissing fun _email() = email
-
     @JsonProperty("password") @ExcludeMissing fun _password() = password
 
     @JsonProperty("phone") @ExcludeMissing fun _phone() = phone
+
+    @JsonProperty("username") @ExcludeMissing fun _username() = username
 
     /** User Status */
     @JsonProperty("userStatus") @ExcludeMissing fun _userStatus() = userStatus
@@ -83,12 +83,12 @@ private constructor(
     fun validate(): User = apply {
         if (!validated) {
             id()
-            username()
+            email()
             firstName()
             lastName()
-            email()
             password()
             phone()
+            username()
             userStatus()
             validated = true
         }
@@ -104,23 +104,23 @@ private constructor(
     class Builder {
 
         private var id: JsonField<Long> = JsonMissing.of()
-        private var username: JsonField<String> = JsonMissing.of()
+        private var email: JsonField<String> = JsonMissing.of()
         private var firstName: JsonField<String> = JsonMissing.of()
         private var lastName: JsonField<String> = JsonMissing.of()
-        private var email: JsonField<String> = JsonMissing.of()
         private var password: JsonField<String> = JsonMissing.of()
         private var phone: JsonField<String> = JsonMissing.of()
+        private var username: JsonField<String> = JsonMissing.of()
         private var userStatus: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(user: User) = apply {
             id = user.id
-            username = user.username
+            email = user.email
             firstName = user.firstName
             lastName = user.lastName
-            email = user.email
             password = user.password
             phone = user.phone
+            username = user.username
             userStatus = user.userStatus
             additionalProperties = user.additionalProperties.toMutableMap()
         }
@@ -129,9 +129,9 @@ private constructor(
 
         fun id(id: JsonField<Long>) = apply { this.id = id }
 
-        fun username(username: String) = username(JsonField.of(username))
+        fun email(email: String) = email(JsonField.of(email))
 
-        fun username(username: JsonField<String>) = apply { this.username = username }
+        fun email(email: JsonField<String>) = apply { this.email = email }
 
         fun firstName(firstName: String) = firstName(JsonField.of(firstName))
 
@@ -141,10 +141,6 @@ private constructor(
 
         fun lastName(lastName: JsonField<String>) = apply { this.lastName = lastName }
 
-        fun email(email: String) = email(JsonField.of(email))
-
-        fun email(email: JsonField<String>) = apply { this.email = email }
-
         fun password(password: String) = password(JsonField.of(password))
 
         fun password(password: JsonField<String>) = apply { this.password = password }
@@ -152,6 +148,10 @@ private constructor(
         fun phone(phone: String) = phone(JsonField.of(phone))
 
         fun phone(phone: JsonField<String>) = apply { this.phone = phone }
+
+        fun username(username: String) = username(JsonField.of(username))
+
+        fun username(username: JsonField<String>) = apply { this.username = username }
 
         /** User Status */
         fun userStatus(userStatus: Long) = userStatus(JsonField.of(userStatus))
@@ -181,12 +181,12 @@ private constructor(
         fun build(): User =
             User(
                 id,
-                username,
+                email,
                 firstName,
                 lastName,
-                email,
                 password,
                 phone,
+                username,
                 userStatus,
                 additionalProperties.toImmutable(),
             )
@@ -197,15 +197,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is User && id == other.id && username == other.username && firstName == other.firstName && lastName == other.lastName && email == other.email && password == other.password && phone == other.phone && userStatus == other.userStatus && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is User && id == other.id && email == other.email && firstName == other.firstName && lastName == other.lastName && password == other.password && phone == other.phone && username == other.username && userStatus == other.userStatus && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, username, firstName, lastName, email, password, phone, userStatus, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, email, firstName, lastName, password, phone, username, userStatus, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "User{id=$id, username=$username, firstName=$firstName, lastName=$lastName, email=$email, password=$password, phone=$phone, userStatus=$userStatus, additionalProperties=$additionalProperties}"
+        "User{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username=$username, userStatus=$userStatus, additionalProperties=$additionalProperties}"
 }
