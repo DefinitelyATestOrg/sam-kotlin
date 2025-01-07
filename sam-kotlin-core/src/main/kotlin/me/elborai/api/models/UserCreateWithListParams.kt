@@ -8,6 +8,7 @@ import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.toImmutable
 
+/** Creates list of users with given input array */
 class UserCreateWithListParams
 constructor(
     private val body: List<User>,

@@ -9,6 +9,10 @@ import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.toImmutable
 
+/**
+ * For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will
+ * generate API errors
+ */
 class StoreOrderDeleteParams
 constructor(
     private val orderId: Long,

@@ -7,6 +7,7 @@ import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 
+/** Logs out current logged in user session */
 class UserLogoutParams
 constructor(
     private val additionalHeaders: Headers,
