@@ -7,6 +7,7 @@ import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 
+/** Get user by user name */
 class UserRetrieveParams
 constructor(
     private val username: String,

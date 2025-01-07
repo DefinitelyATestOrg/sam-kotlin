@@ -7,6 +7,7 @@ import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 
+/** Logs user into the system */
 class UserLoginParams
 constructor(
     private val password: String?,
