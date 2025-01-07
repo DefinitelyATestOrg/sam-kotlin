@@ -15,6 +15,7 @@ import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
 
+/** This can only be done by the logged in user. */
 class UserCreateParams
 constructor(
     private val body: UserCreateBody,

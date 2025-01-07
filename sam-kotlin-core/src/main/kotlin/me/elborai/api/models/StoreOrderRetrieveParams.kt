@@ -7,6 +7,10 @@ import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 
+/**
+ * For valid response try integer IDs with value <= 5 or > 10. Other values will generate
+ * exceptions.
+ */
 class StoreOrderRetrieveParams
 constructor(
     private val orderId: Long,

@@ -9,6 +9,7 @@ import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.toImmutable
 
+/** This can only be done by the logged in user. */
 class UserDeleteParams
 constructor(
     private val username: String,
