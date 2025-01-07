@@ -52,18 +52,18 @@ private constructor(
     /** Order Status */
     fun status(): Status? = status.getNullable("status")
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<Long> = id
 
-    @JsonProperty("complete") @ExcludeMissing fun _complete() = complete
+    @JsonProperty("complete") @ExcludeMissing fun _complete(): JsonField<Boolean> = complete
 
-    @JsonProperty("petId") @ExcludeMissing fun _petId() = petId
+    @JsonProperty("petId") @ExcludeMissing fun _petId(): JsonField<Long> = petId
 
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
-    @JsonProperty("shipDate") @ExcludeMissing fun _shipDate() = shipDate
+    @JsonProperty("shipDate") @ExcludeMissing fun _shipDate(): JsonField<OffsetDateTime> = shipDate
 
     /** Order Status */
-    @JsonProperty("status") @ExcludeMissing fun _status() = status
+    @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
     @JsonAnyGetter
     @ExcludeMissing

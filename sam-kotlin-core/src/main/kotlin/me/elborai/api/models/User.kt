@@ -57,22 +57,22 @@ private constructor(
     /** User Status */
     fun userStatus(): Long? = userStatus.getNullable("userStatus")
 
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<Long> = id
 
-    @JsonProperty("email") @ExcludeMissing fun _email() = email
+    @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
-    @JsonProperty("firstName") @ExcludeMissing fun _firstName() = firstName
+    @JsonProperty("firstName") @ExcludeMissing fun _firstName(): JsonField<String> = firstName
 
-    @JsonProperty("lastName") @ExcludeMissing fun _lastName() = lastName
+    @JsonProperty("lastName") @ExcludeMissing fun _lastName(): JsonField<String> = lastName
 
-    @JsonProperty("password") @ExcludeMissing fun _password() = password
+    @JsonProperty("password") @ExcludeMissing fun _password(): JsonField<String> = password
 
-    @JsonProperty("phone") @ExcludeMissing fun _phone() = phone
+    @JsonProperty("phone") @ExcludeMissing fun _phone(): JsonField<String> = phone
 
-    @JsonProperty("username") @ExcludeMissing fun _username() = username
+    @JsonProperty("username") @ExcludeMissing fun _username(): JsonField<String> = username
 
     /** User Status */
-    @JsonProperty("userStatus") @ExcludeMissing fun _userStatus() = userStatus
+    @JsonProperty("userStatus") @ExcludeMissing fun _userStatus(): JsonField<Long> = userStatus
 
     @JsonAnyGetter
     @ExcludeMissing
