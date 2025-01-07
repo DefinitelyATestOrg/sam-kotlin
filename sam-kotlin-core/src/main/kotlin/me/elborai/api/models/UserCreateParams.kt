@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import me.elborai.api.core.ExcludeMissing
+import me.elborai.api.core.JsonField
+import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.http.Headers
@@ -40,11 +42,28 @@ constructor(
     /** User Status */
     fun userStatus(): Long? = body.userStatus()
 
+    fun _id(): JsonField<Long> = body._id()
+
+    fun _email(): JsonField<String> = body._email()
+
+    fun _firstName(): JsonField<String> = body._firstName()
+
+    fun _lastName(): JsonField<String> = body._lastName()
+
+    fun _password(): JsonField<String> = body._password()
+
+    fun _phone(): JsonField<String> = body._phone()
+
+    fun _username(): JsonField<String> = body._username()
+
+    /** User Status */
+    fun _userStatus(): JsonField<Long> = body._userStatus()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): UserCreateBody = body
 
@@ -56,38 +75,85 @@ constructor(
     class UserCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: Long?,
-        @JsonProperty("email") private val email: String?,
-        @JsonProperty("firstName") private val firstName: String?,
-        @JsonProperty("lastName") private val lastName: String?,
-        @JsonProperty("password") private val password: String?,
-        @JsonProperty("phone") private val phone: String?,
-        @JsonProperty("username") private val username: String?,
-        @JsonProperty("userStatus") private val userStatus: Long?,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("email")
+        @ExcludeMissing
+        private val email: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("firstName")
+        @ExcludeMissing
+        private val firstName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("lastName")
+        @ExcludeMissing
+        private val lastName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("password")
+        @ExcludeMissing
+        private val password: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("phone")
+        @ExcludeMissing
+        private val phone: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("username")
+        @ExcludeMissing
+        private val username: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("userStatus")
+        @ExcludeMissing
+        private val userStatus: JsonField<Long> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        @JsonProperty("id") fun id(): Long? = id
+        fun id(): Long? = id.getNullable("id")
 
-        @JsonProperty("email") fun email(): String? = email
+        fun email(): String? = email.getNullable("email")
 
-        @JsonProperty("firstName") fun firstName(): String? = firstName
+        fun firstName(): String? = firstName.getNullable("firstName")
 
-        @JsonProperty("lastName") fun lastName(): String? = lastName
+        fun lastName(): String? = lastName.getNullable("lastName")
 
-        @JsonProperty("password") fun password(): String? = password
+        fun password(): String? = password.getNullable("password")
 
-        @JsonProperty("phone") fun phone(): String? = phone
+        fun phone(): String? = phone.getNullable("phone")
 
-        @JsonProperty("username") fun username(): String? = username
+        fun username(): String? = username.getNullable("username")
 
         /** User Status */
-        @JsonProperty("userStatus") fun userStatus(): Long? = userStatus
+        fun userStatus(): Long? = userStatus.getNullable("userStatus")
+
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<Long> = id
+
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
+
+        @JsonProperty("firstName") @ExcludeMissing fun _firstName(): JsonField<String> = firstName
+
+        @JsonProperty("lastName") @ExcludeMissing fun _lastName(): JsonField<String> = lastName
+
+        @JsonProperty("password") @ExcludeMissing fun _password(): JsonField<String> = password
+
+        @JsonProperty("phone") @ExcludeMissing fun _phone(): JsonField<String> = phone
+
+        @JsonProperty("username") @ExcludeMissing fun _username(): JsonField<String> = username
+
+        /** User Status */
+        @JsonProperty("userStatus") @ExcludeMissing fun _userStatus(): JsonField<Long> = userStatus
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): UserCreateBody = apply {
+            if (!validated) {
+                id()
+                email()
+                firstName()
+                lastName()
+                password()
+                phone()
+                username()
+                userStatus()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -98,14 +164,14 @@ constructor(
 
         class Builder {
 
-            private var id: Long? = null
-            private var email: String? = null
-            private var firstName: String? = null
-            private var lastName: String? = null
-            private var password: String? = null
-            private var phone: String? = null
-            private var username: String? = null
-            private var userStatus: Long? = null
+            private var id: JsonField<Long> = JsonMissing.of()
+            private var email: JsonField<String> = JsonMissing.of()
+            private var firstName: JsonField<String> = JsonMissing.of()
+            private var lastName: JsonField<String> = JsonMissing.of()
+            private var password: JsonField<String> = JsonMissing.of()
+            private var phone: JsonField<String> = JsonMissing.of()
+            private var username: JsonField<String> = JsonMissing.of()
+            private var userStatus: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(userCreateBody: UserCreateBody) = apply {
@@ -120,27 +186,39 @@ constructor(
                 additionalProperties = userCreateBody.additionalProperties.toMutableMap()
             }
 
-            fun id(id: Long?) = apply { this.id = id }
+            fun id(id: Long) = id(JsonField.of(id))
 
-            fun id(id: Long) = id(id as Long?)
+            fun id(id: JsonField<Long>) = apply { this.id = id }
 
-            fun email(email: String?) = apply { this.email = email }
+            fun email(email: String) = email(JsonField.of(email))
 
-            fun firstName(firstName: String?) = apply { this.firstName = firstName }
+            fun email(email: JsonField<String>) = apply { this.email = email }
 
-            fun lastName(lastName: String?) = apply { this.lastName = lastName }
+            fun firstName(firstName: String) = firstName(JsonField.of(firstName))
 
-            fun password(password: String?) = apply { this.password = password }
+            fun firstName(firstName: JsonField<String>) = apply { this.firstName = firstName }
 
-            fun phone(phone: String?) = apply { this.phone = phone }
+            fun lastName(lastName: String) = lastName(JsonField.of(lastName))
 
-            fun username(username: String?) = apply { this.username = username }
+            fun lastName(lastName: JsonField<String>) = apply { this.lastName = lastName }
+
+            fun password(password: String) = password(JsonField.of(password))
+
+            fun password(password: JsonField<String>) = apply { this.password = password }
+
+            fun phone(phone: String) = phone(JsonField.of(phone))
+
+            fun phone(phone: JsonField<String>) = apply { this.phone = phone }
+
+            fun username(username: String) = username(JsonField.of(username))
+
+            fun username(username: JsonField<String>) = apply { this.username = username }
 
             /** User Status */
-            fun userStatus(userStatus: Long?) = apply { this.userStatus = userStatus }
+            fun userStatus(userStatus: Long) = userStatus(JsonField.of(userStatus))
 
             /** User Status */
-            fun userStatus(userStatus: Long) = userStatus(userStatus as Long?)
+            fun userStatus(userStatus: JsonField<Long>) = apply { this.userStatus = userStatus }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -213,27 +291,58 @@ constructor(
             additionalQueryParams = userCreateParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: Long?) = apply { body.id(id) }
+        fun id(id: Long) = apply { body.id(id) }
 
-        fun id(id: Long) = id(id as Long?)
+        fun id(id: JsonField<Long>) = apply { body.id(id) }
 
-        fun email(email: String?) = apply { body.email(email) }
+        fun email(email: String) = apply { body.email(email) }
 
-        fun firstName(firstName: String?) = apply { body.firstName(firstName) }
+        fun email(email: JsonField<String>) = apply { body.email(email) }
 
-        fun lastName(lastName: String?) = apply { body.lastName(lastName) }
+        fun firstName(firstName: String) = apply { body.firstName(firstName) }
 
-        fun password(password: String?) = apply { body.password(password) }
+        fun firstName(firstName: JsonField<String>) = apply { body.firstName(firstName) }
 
-        fun phone(phone: String?) = apply { body.phone(phone) }
+        fun lastName(lastName: String) = apply { body.lastName(lastName) }
 
-        fun username(username: String?) = apply { body.username(username) }
+        fun lastName(lastName: JsonField<String>) = apply { body.lastName(lastName) }
+
+        fun password(password: String) = apply { body.password(password) }
+
+        fun password(password: JsonField<String>) = apply { body.password(password) }
+
+        fun phone(phone: String) = apply { body.phone(phone) }
+
+        fun phone(phone: JsonField<String>) = apply { body.phone(phone) }
+
+        fun username(username: String) = apply { body.username(username) }
+
+        fun username(username: JsonField<String>) = apply { body.username(username) }
 
         /** User Status */
-        fun userStatus(userStatus: Long?) = apply { body.userStatus(userStatus) }
+        fun userStatus(userStatus: Long) = apply { body.userStatus(userStatus) }
 
         /** User Status */
-        fun userStatus(userStatus: Long) = userStatus(userStatus as Long?)
+        fun userStatus(userStatus: JsonField<Long>) = apply { body.userStatus(userStatus) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -331,25 +440,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): UserCreateParams =
