@@ -154,17 +154,19 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): UserUpdateBody = apply {
-            if (!validated) {
-                id()
-                email()
-                firstName()
-                lastName()
-                password()
-                phone()
-                bodyUsername()
-                userStatus()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            email()
+            firstName()
+            lastName()
+            password()
+            phone()
+            bodyUsername()
+            userStatus()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
