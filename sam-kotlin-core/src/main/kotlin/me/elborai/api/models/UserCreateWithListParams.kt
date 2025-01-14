@@ -4,6 +4,7 @@ package me.elborai.api.models
 
 import java.util.Objects
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.toImmutable
@@ -154,7 +155,7 @@ constructor(
 
         fun build(): UserCreateWithListParams =
             UserCreateWithListParams(
-                checkNotNull(body) { "`body` is required but was not set" }.toImmutable(),
+                checkRequired("body", body).toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
