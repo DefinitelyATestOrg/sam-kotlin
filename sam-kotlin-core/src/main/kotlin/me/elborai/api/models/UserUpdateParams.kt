@@ -12,6 +12,7 @@ import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.immutableEmptyMap
@@ -466,7 +467,7 @@ constructor(
 
         fun build(): UserUpdateParams =
             UserUpdateParams(
-                checkNotNull(pathUsername) { "`pathUsername` is required but was not set" },
+                checkRequired("pathUsername", pathUsername),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),

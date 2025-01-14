@@ -5,6 +5,7 @@ package me.elborai.api.models
 import java.util.Objects
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.toImmutable
@@ -189,7 +190,7 @@ constructor(
 
         fun build(): StoreOrderDeleteParams =
             StoreOrderDeleteParams(
-                checkNotNull(orderId) { "`orderId` is required but was not set" },
+                checkRequired("orderId", orderId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
