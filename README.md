@@ -2,8 +2,6 @@
 
 The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin. It includes helper classes with helpful types and documentation for every request and response property.
 
-The Sam Kotlin SDK is similar to the Sam Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
-
 It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ## Documentation
