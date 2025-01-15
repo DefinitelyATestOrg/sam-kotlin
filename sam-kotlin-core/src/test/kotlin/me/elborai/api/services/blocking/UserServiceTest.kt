@@ -102,19 +102,17 @@ class UserServiceTest {
         val user =
             userService.createWithList(
                 UserCreateWithListParams.builder()
-                    .body(
-                        listOf(
-                            User.builder()
-                                .id(10L)
-                                .email("john@email.com")
-                                .firstName("John")
-                                .lastName("James")
-                                .password("12345")
-                                .phone("12345")
-                                .username("theUser")
-                                .userStatus(1L)
-                                .build()
-                        )
+                    .addBody(
+                        User.builder()
+                            .id(10L)
+                            .email("john@email.com")
+                            .firstName("John")
+                            .lastName("James")
+                            .password("12345")
+                            .phone("12345")
+                            .username("theUser")
+                            .userStatus(1L)
+                            .build()
                     )
                     .build()
             )
