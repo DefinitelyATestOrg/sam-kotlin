@@ -1,5 +1,11 @@
 # Sam Kotlin API Library
 
+<!-- x-release-please-start-version -->
+
+[![Maven Central](https://img.shields.io/maven-central/v/me.elborai.api/sam-kotlin)](https://central.sonatype.com/artifact/me.elborai.api/sam-kotlin/0.1.0-alpha.1)
+
+<!-- x-release-please-end -->
+
 The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin. It includes helper classes with helpful types and documentation for every request and response property.
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
