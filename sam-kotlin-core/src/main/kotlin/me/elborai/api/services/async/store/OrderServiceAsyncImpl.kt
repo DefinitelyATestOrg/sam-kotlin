@@ -12,13 +12,14 @@ import me.elborai.api.core.http.HttpMethod
 import me.elborai.api.core.http.HttpRequest
 import me.elborai.api.core.http.HttpResponse.Handler
 import me.elborai.api.core.json
+import me.elborai.api.core.prepareAsync
 import me.elborai.api.errors.SamError
 import me.elborai.api.models.CoolOrder
 import me.elborai.api.models.StoreOrderDeleteParams
 import me.elborai.api.models.StoreOrderRetrieveParams
 
 class OrderServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : OrderServiceAsync {
 
@@ -39,11 +40,8 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .addPathSegments("store", "order", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
                 .build()
+                .prepareAsync(clientOptions, params)
         return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
             response
                 .use { retrieveHandler.handle(it) }
@@ -66,12 +64,9 @@ constructor(
             HttpRequest.builder()
                 .method(HttpMethod.DELETE)
                 .addPathSegments("store", "order", params.getPathParam(0))
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .apply { params.getBody()?.also { body(json(clientOptions.jsonMapper, it)) } }
+                .apply { params._body()?.also { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
+                .prepareAsync(clientOptions, params)
         return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
             response.use { deleteHandler.handle(it) }
         }

@@ -4,6 +4,7 @@ package me.elborai.api.models
 
 import java.util.Objects
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.Params
 import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
@@ -11,11 +12,11 @@ import me.elborai.api.core.toImmutable
 
 /** Creates list of users with given input array */
 class UserCreateWithListParams
-constructor(
+private constructor(
     private val body: List<User>,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun body(): List<User> = body
 
@@ -23,11 +24,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getBody(): List<User> = body
+    internal fun _body(): List<User> = body
 
-    internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
 
@@ -36,8 +37,9 @@ constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [UserCreateWithListParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: MutableList<User>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()

@@ -4,17 +4,18 @@ package me.elborai.api.models
 
 import java.util.Objects
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.Params
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 
 /** Logs user into the system */
 class UserLoginParams
-constructor(
+private constructor(
     private val password: String?,
     private val username: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     /** The password for login in clear text */
     fun password(): String? = password
@@ -26,9 +27,9 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    internal fun getQueryParams(): QueryParams {
+    override fun _queryParams(): QueryParams {
         val queryParams = QueryParams.builder()
         this.password?.let { queryParams.put("password", listOf(it.toString())) }
         this.username?.let { queryParams.put("username", listOf(it.toString())) }
@@ -43,8 +44,9 @@ constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [UserLoginParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var password: String? = null
         private var username: String? = null

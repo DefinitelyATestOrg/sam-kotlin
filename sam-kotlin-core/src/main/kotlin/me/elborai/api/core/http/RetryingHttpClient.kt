@@ -15,6 +15,7 @@ import kotlin.math.pow
 import kotlin.time.toKotlinDuration
 import kotlinx.coroutines.delay
 import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.checkRequired
 import me.elborai.api.errors.SamIoException
 
 class RetryingHttpClient
@@ -54,15 +55,17 @@ private constructor(
                     }
 
                     response
-                } catch (t: Throwable) {
-                    if (++retries > maxRetries || !shouldRetry(t)) {
-                        throw t
+                } catch (throwable: Throwable) {
+                    if (++retries > maxRetries || !shouldRetry(throwable)) {
+                        throw throwable
                     }
 
                     null
                 }
 
             val backoffMillis = getRetryBackoffMillis(retries, response)
+            // All responses must be closed, so close the failed one before retrying.
+            response?.close()
             Thread.sleep(backoffMillis.toMillis())
         }
     }
@@ -96,15 +99,17 @@ private constructor(
                     }
 
                     response
-                } catch (t: Throwable) {
-                    if (++retries > maxRetries || !shouldRetry(t)) {
-                        throw t
+                } catch (throwable: Throwable) {
+                    if (++retries > maxRetries || !shouldRetry(throwable)) {
+                        throw throwable
                     }
 
                     null
                 }
 
             val backoffMillis = getRetryBackoffMillis(retries, response)
+            // All responses must be closed, so close the failed one before retrying.
+            response?.close()
             delay(backoffMillis.toKotlinDuration())
         }
     }
@@ -206,10 +211,11 @@ private constructor(
     }
 
     companion object {
+
         fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var httpClient: HttpClient? = null
         private var clock: Clock = Clock.systemUTC()
@@ -226,7 +232,7 @@ private constructor(
 
         fun build(): HttpClient =
             RetryingHttpClient(
-                checkNotNull(httpClient) { "`httpClient` is required but was not set" },
+                checkRequired("httpClient", httpClient),
                 clock,
                 maxRetries,
                 idempotencyHeader,
