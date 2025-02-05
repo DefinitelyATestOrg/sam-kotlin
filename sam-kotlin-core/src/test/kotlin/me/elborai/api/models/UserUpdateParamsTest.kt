@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class UserUpdateParamsTest {
 
     @Test
-    fun createUserUpdateParams() {
+    fun create() {
         UserUpdateParams.builder()
             .pathUsername("username")
             .id(10L)
