@@ -7,7 +7,7 @@ import me.elborai.api.services.async.store.OrderServiceAsync
 import me.elborai.api.services.async.store.OrderServiceAsyncImpl
 
 class StoreServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : StoreServiceAsync {
 

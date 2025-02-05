@@ -14,18 +14,18 @@ class UserLoginParamsTest {
     }
 
     @Test
-    fun getQueryParams() {
+    fun queryParams() {
         val params = UserLoginParams.builder().password("password").username("username").build()
         val expected = QueryParams.builder()
         expected.put("password", "password")
         expected.put("username", "username")
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
-    fun getQueryParamsWithoutOptionalFields() {
+    fun queryParamsWithoutOptionalFields() {
         val params = UserLoginParams.builder().build()
         val expected = QueryParams.builder()
-        assertThat(params.getQueryParams()).isEqualTo(expected.build())
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 }

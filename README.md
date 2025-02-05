@@ -6,29 +6,23 @@
 
 <!-- x-release-please-end -->
 
-The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin. It includes helper classes with helpful types and documentation for every request and response property.
+The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin.
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
 
-## Documentation
+The REST API documentation can be found on [docs.sam.com](https://docs.sam.com).
 
-The REST API documentation can be found on [docs.sam.com](https://docs.sam.com).
-
----
-
-## Getting started
-
-### Install dependencies
-
-#### Gradle
+## Installation
 
 <!-- x-release-please-start-version -->
+
+### Gradle
 
 ```kotlin
 implementation("me.elborai.api:sam-kotlin:0.1.0-alpha.1")
 ```
 
-#### Maven
+### Maven
 
 ```xml
 <dependency>
@@ -39,6 +33,12 @@ implementation("me.elborai.api:sam-kotlin:0.1.0-alpha.1")
 ```
 
 <!-- x-release-please-end -->
+
+## Requirements
+
+This library requires Java 8 or later.
+
+## Usage
 
 ### Configure the client
 
@@ -256,7 +256,3 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
 We are keen for your feedback; please open an [issue](https://www.github.com/DefinitelyATestOrg/sam-kotlin/issues) with questions, bugs, or suggestions.
-
-## Requirements
-
-This library requires Java 8 or later.

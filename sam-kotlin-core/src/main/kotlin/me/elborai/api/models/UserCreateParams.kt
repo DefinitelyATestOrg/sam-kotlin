@@ -12,6 +12,7 @@ import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.Params
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.immutableEmptyMap
@@ -19,11 +20,11 @@ import me.elborai.api.core.toImmutable
 
 /** This can only be done by the logged in user. */
 class UserCreateParams
-constructor(
+private constructor(
     private val body: UserCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun id(): Long? = body.id()
 
@@ -65,11 +66,11 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getBody(): UserCreateBody = body
+    internal fun _body(): UserCreateBody = body
 
-    internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
     class UserCreateBody
@@ -164,7 +165,8 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [UserCreateBody]. */
+        class Builder internal constructor() {
 
             private var id: JsonField<Long> = JsonMissing.of()
             private var email: JsonField<String> = JsonMissing.of()
@@ -280,8 +282,9 @@ constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [UserCreateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: UserCreateBody.Builder = UserCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

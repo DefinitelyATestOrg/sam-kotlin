@@ -12,6 +12,7 @@ import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.Params
 import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
@@ -20,14 +21,14 @@ import me.elborai.api.core.toImmutable
 
 /** This can only be done by the logged in user. */
 class UserUpdateParams
-constructor(
-    private val pathUsername: String,
+private constructor(
+    private val username1: String,
     private val body: UserUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
-    fun pathUsername(): String = pathUsername
+    fun username1(): String = username1
 
     fun id(): Long? = body.id()
 
@@ -41,7 +42,7 @@ constructor(
 
     fun phone(): String? = body.phone()
 
-    fun bodyUsername(): String? = body.bodyUsername()
+    fun username2(): String? = body.username2()
 
     /** User Status */
     fun userStatus(): Long? = body.userStatus()
@@ -58,7 +59,7 @@ constructor(
 
     fun _phone(): JsonField<String> = body._phone()
 
-    fun _bodyUsername(): JsonField<String> = body._bodyUsername()
+    fun _username2(): JsonField<String> = body._username2()
 
     /** User Status */
     fun _userStatus(): JsonField<Long> = body._userStatus()
@@ -69,15 +70,15 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getBody(): UserUpdateBody = body
+    internal fun _body(): UserUpdateBody = body
 
-    internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
-            0 -> pathUsername
+            0 -> username1
             else -> ""
         }
     }
@@ -104,7 +105,7 @@ constructor(
         private val phone: JsonField<String> = JsonMissing.of(),
         @JsonProperty("username")
         @ExcludeMissing
-        private val bodyUsername: JsonField<String> = JsonMissing.of(),
+        private val username2: JsonField<String> = JsonMissing.of(),
         @JsonProperty("userStatus")
         @ExcludeMissing
         private val userStatus: JsonField<Long> = JsonMissing.of(),
@@ -124,7 +125,7 @@ constructor(
 
         fun phone(): String? = phone.getNullable("phone")
 
-        fun bodyUsername(): String? = bodyUsername.getNullable("username")
+        fun username2(): String? = username2.getNullable("username")
 
         /** User Status */
         fun userStatus(): Long? = userStatus.getNullable("userStatus")
@@ -141,9 +142,7 @@ constructor(
 
         @JsonProperty("phone") @ExcludeMissing fun _phone(): JsonField<String> = phone
 
-        @JsonProperty("username")
-        @ExcludeMissing
-        fun _bodyUsername(): JsonField<String> = bodyUsername
+        @JsonProperty("username") @ExcludeMissing fun _username2(): JsonField<String> = username2
 
         /** User Status */
         @JsonProperty("userStatus") @ExcludeMissing fun _userStatus(): JsonField<Long> = userStatus
@@ -165,7 +164,7 @@ constructor(
             lastName()
             password()
             phone()
-            bodyUsername()
+            username2()
             userStatus()
             validated = true
         }
@@ -177,7 +176,8 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        /** A builder for [UserUpdateBody]. */
+        class Builder internal constructor() {
 
             private var id: JsonField<Long> = JsonMissing.of()
             private var email: JsonField<String> = JsonMissing.of()
@@ -185,7 +185,7 @@ constructor(
             private var lastName: JsonField<String> = JsonMissing.of()
             private var password: JsonField<String> = JsonMissing.of()
             private var phone: JsonField<String> = JsonMissing.of()
-            private var bodyUsername: JsonField<String> = JsonMissing.of()
+            private var username2: JsonField<String> = JsonMissing.of()
             private var userStatus: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -196,7 +196,7 @@ constructor(
                 lastName = userUpdateBody.lastName
                 password = userUpdateBody.password
                 phone = userUpdateBody.phone
-                bodyUsername = userUpdateBody.bodyUsername
+                username2 = userUpdateBody.username2
                 userStatus = userUpdateBody.userStatus
                 additionalProperties = userUpdateBody.additionalProperties.toMutableMap()
             }
@@ -225,11 +225,9 @@ constructor(
 
             fun phone(phone: JsonField<String>) = apply { this.phone = phone }
 
-            fun bodyUsername(bodyUsername: String) = bodyUsername(JsonField.of(bodyUsername))
+            fun username2(username2: String) = username2(JsonField.of(username2))
 
-            fun bodyUsername(bodyUsername: JsonField<String>) = apply {
-                this.bodyUsername = bodyUsername
-            }
+            fun username2(username2: JsonField<String>) = apply { this.username2 = username2 }
 
             /** User Status */
             fun userStatus(userStatus: Long) = userStatus(JsonField.of(userStatus))
@@ -264,7 +262,7 @@ constructor(
                     lastName,
                     password,
                     phone,
-                    bodyUsername,
+                    username2,
                     userStatus,
                     additionalProperties.toImmutable(),
                 )
@@ -275,17 +273,17 @@ constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UserUpdateBody && id == other.id && email == other.email && firstName == other.firstName && lastName == other.lastName && password == other.password && phone == other.phone && bodyUsername == other.bodyUsername && userStatus == other.userStatus && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is UserUpdateBody && id == other.id && email == other.email && firstName == other.firstName && lastName == other.lastName && password == other.password && phone == other.phone && username2 == other.username2 && userStatus == other.userStatus && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, email, firstName, lastName, password, phone, bodyUsername, userStatus, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, email, firstName, lastName, password, phone, username2, userStatus, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UserUpdateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, bodyUsername=$bodyUsername, userStatus=$userStatus, additionalProperties=$additionalProperties}"
+            "UserUpdateBody{id=$id, email=$email, firstName=$firstName, lastName=$lastName, password=$password, phone=$phone, username2=$username2, userStatus=$userStatus, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -295,22 +293,23 @@ constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [UserUpdateParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
-        private var pathUsername: String? = null
+        private var username1: String? = null
         private var body: UserUpdateBody.Builder = UserUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(userUpdateParams: UserUpdateParams) = apply {
-            pathUsername = userUpdateParams.pathUsername
+            username1 = userUpdateParams.username1
             body = userUpdateParams.body.toBuilder()
             additionalHeaders = userUpdateParams.additionalHeaders.toBuilder()
             additionalQueryParams = userUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun pathUsername(pathUsername: String) = apply { this.pathUsername = pathUsername }
+        fun username1(username1: String) = apply { this.username1 = username1 }
 
         fun id(id: Long) = apply { body.id(id) }
 
@@ -336,11 +335,9 @@ constructor(
 
         fun phone(phone: JsonField<String>) = apply { body.phone(phone) }
 
-        fun bodyUsername(bodyUsername: String) = apply { body.bodyUsername(bodyUsername) }
+        fun username2(username2: String) = apply { body.username2(username2) }
 
-        fun bodyUsername(bodyUsername: JsonField<String>) = apply {
-            body.bodyUsername(bodyUsername)
-        }
+        fun username2(username2: JsonField<String>) = apply { body.username2(username2) }
 
         /** User Status */
         fun userStatus(userStatus: Long) = apply { body.userStatus(userStatus) }
@@ -467,7 +464,7 @@ constructor(
 
         fun build(): UserUpdateParams =
             UserUpdateParams(
-                checkRequired("pathUsername", pathUsername),
+                checkRequired("username1", username1),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -479,11 +476,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserUpdateParams && pathUsername == other.pathUsername && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserUpdateParams && username1 == other.username1 && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(pathUsername, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(username1, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserUpdateParams{pathUsername=$pathUsername, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserUpdateParams{username1=$username1, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

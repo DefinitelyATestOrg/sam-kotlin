@@ -4,6 +4,7 @@ package me.elborai.api.models
 
 import java.util.Objects
 import me.elborai.api.core.NoAutoDetect
+import me.elborai.api.core.Params
 import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
@@ -13,11 +14,11 @@ import me.elborai.api.core.http.QueryParams
  * exceptions.
  */
 class StoreOrderRetrieveParams
-constructor(
+private constructor(
     private val orderId: Long,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun orderId(): Long = orderId
 
@@ -25,9 +26,9 @@ constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -43,8 +44,9 @@ constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [StoreOrderRetrieveParams]. */
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var orderId: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()

@@ -26,7 +26,7 @@ class UserCreateWithListParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             UserCreateWithListParams.builder()
                 .addBody(
@@ -42,7 +42,7 @@ class UserCreateWithListParamsTest {
                         .build()
                 )
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
@@ -62,9 +62,9 @@ class UserCreateWithListParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = UserCreateWithListParams.builder().addBody(User.builder().build()).build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(listOf(User.builder().build()))
     }

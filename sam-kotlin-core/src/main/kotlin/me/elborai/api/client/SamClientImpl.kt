@@ -9,8 +9,7 @@ import me.elborai.api.services.blocking.StoreServiceImpl
 import me.elborai.api.services.blocking.UserService
 import me.elborai.api.services.blocking.UserServiceImpl
 
-class SamClientImpl
-constructor(
+class SamClientImpl(
     private val clientOptions: ClientOptions,
 ) : SamClient {
 
@@ -34,4 +33,6 @@ constructor(
     override fun store(): StoreService = store
 
     override fun users(): UserService = users
+
+    override fun close() = clientOptions.httpClient.close()
 }

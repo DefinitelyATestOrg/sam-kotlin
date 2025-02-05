@@ -10,33 +10,33 @@ class UserUpdateParamsTest {
     @Test
     fun createUserUpdateParams() {
         UserUpdateParams.builder()
-            .pathUsername("username")
+            .username1("username")
             .id(10L)
             .email("john@email.com")
             .firstName("John")
             .lastName("James")
             .password("12345")
             .phone("12345")
-            .bodyUsername("theUser")
+            .username2("theUser")
             .userStatus(1L)
             .build()
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             UserUpdateParams.builder()
-                .pathUsername("username")
+                .username1("username")
                 .id(10L)
                 .email("john@email.com")
                 .firstName("John")
                 .lastName("James")
                 .password("12345")
                 .phone("12345")
-                .bodyUsername("theUser")
+                .username2("theUser")
                 .userStatus(1L)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo(10L)
         assertThat(body.email()).isEqualTo("john@email.com")
@@ -44,22 +44,22 @@ class UserUpdateParamsTest {
         assertThat(body.lastName()).isEqualTo("James")
         assertThat(body.password()).isEqualTo("12345")
         assertThat(body.phone()).isEqualTo("12345")
-        assertThat(body.bodyUsername()).isEqualTo("theUser")
+        assertThat(body.username2()).isEqualTo("theUser")
         assertThat(body.userStatus()).isEqualTo(1L)
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
-        val params = UserUpdateParams.builder().pathUsername("username").build()
-        val body = params.getBody()
+    fun bodyWithoutOptionalFields() {
+        val params = UserUpdateParams.builder().username1("username").build()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 
     @Test
     fun getPathParam() {
-        val params = UserUpdateParams.builder().pathUsername("username").build()
+        val params = UserUpdateParams.builder().username1("username").build()
         assertThat(params).isNotNull
-        // path param "pathUsername"
+        // path param "username1"
         assertThat(params.getPathParam(0)).isEqualTo("username")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")

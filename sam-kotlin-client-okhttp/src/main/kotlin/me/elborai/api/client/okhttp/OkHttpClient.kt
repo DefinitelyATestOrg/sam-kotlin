@@ -6,6 +6,7 @@ import java.net.Proxy
 import java.time.Duration
 import kotlinx.coroutines.suspendCancellableCoroutine
 import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.HttpClient
 import me.elborai.api.core.http.HttpMethod
@@ -161,7 +162,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var baseUrl: HttpUrl? = null
         // The default timeout is 1 minute.
@@ -183,7 +184,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                     .callTimeout(if (timeout.seconds == 0L) timeout else timeout.plusSeconds(30))
                     .proxy(proxy)
                     .build(),
-                checkNotNull(baseUrl) { "`baseUrl` is required but was not set" },
+                checkRequired("baseUrl", baseUrl),
             )
     }
 
