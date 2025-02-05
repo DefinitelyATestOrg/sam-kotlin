@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class UserLoginParamsTest {
 
     @Test
-    fun createUserLoginParams() {
+    fun create() {
         UserLoginParams.builder().password("password").username("username").build()
     }
 

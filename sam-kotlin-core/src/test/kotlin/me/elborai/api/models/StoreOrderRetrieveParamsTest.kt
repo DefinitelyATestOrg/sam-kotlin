@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class StoreOrderRetrieveParamsTest {
 
     @Test
-    fun createStoreOrderRetrieveParams() {
+    fun create() {
         StoreOrderRetrieveParams.builder().orderId(0L).build()
     }
 
