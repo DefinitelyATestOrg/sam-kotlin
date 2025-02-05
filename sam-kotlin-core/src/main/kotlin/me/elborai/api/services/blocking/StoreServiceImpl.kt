@@ -7,7 +7,7 @@ import me.elborai.api.services.blocking.store.OrderService
 import me.elborai.api.services.blocking.store.OrderServiceImpl
 
 class StoreServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : StoreService {
 

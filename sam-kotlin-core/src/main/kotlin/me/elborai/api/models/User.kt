@@ -103,7 +103,8 @@ private constructor(
         fun builder() = Builder()
     }
 
-    class Builder {
+    /** A builder for [User]. */
+    class Builder internal constructor() {
 
         private var id: JsonField<Long> = JsonMissing.of()
         private var email: JsonField<String> = JsonMissing.of()

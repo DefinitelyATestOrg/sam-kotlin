@@ -22,7 +22,7 @@ class UserCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             UserCreateParams.builder()
                 .id(10L)
@@ -34,7 +34,7 @@ class UserCreateParamsTest {
                 .username("theUser")
                 .userStatus(1L)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo(10L)
         assertThat(body.email()).isEqualTo("john@email.com")
@@ -47,9 +47,9 @@ class UserCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = UserCreateParams.builder().build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
     }
 }
