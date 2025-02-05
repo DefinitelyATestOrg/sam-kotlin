@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class UserRetrieveParamsTest {
 
     @Test
-    fun createUserRetrieveParams() {
+    fun create() {
         UserRetrieveParams.builder().username("username").build()
     }
 

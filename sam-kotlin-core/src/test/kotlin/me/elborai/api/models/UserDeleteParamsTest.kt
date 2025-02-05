@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class UserDeleteParamsTest {
 
     @Test
-    fun createUserDeleteParams() {
+    fun create() {
         UserDeleteParams.builder().username("username").build()
     }
 

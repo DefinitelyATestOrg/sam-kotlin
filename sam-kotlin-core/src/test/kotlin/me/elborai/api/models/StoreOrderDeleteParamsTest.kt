@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class StoreOrderDeleteParamsTest {
 
     @Test
-    fun createStoreOrderDeleteParams() {
+    fun create() {
         StoreOrderDeleteParams.builder().orderId(0L).build()
     }
 

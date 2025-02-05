@@ -43,15 +43,14 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response
-                .use { createHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        return response
+            .use { createHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-        }
+            }
     }
 
     private val retrieveHandler: Handler<User> =
@@ -68,15 +67,14 @@ internal constructor(
                 .addPathSegments("user", params.getPathParam(0))
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response
-                .use { retrieveHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        return response
+            .use { retrieveHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-        }
+            }
     }
 
     private val updateHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
@@ -90,9 +88,8 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response.use { updateHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        response.use { updateHandler.handle(it) }
     }
 
     private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
@@ -103,12 +100,11 @@ internal constructor(
             HttpRequest.builder()
                 .method(HttpMethod.DELETE)
                 .addPathSegments("user", params.getPathParam(0))
-                .apply { params._body()?.also { body(json(clientOptions.jsonMapper, it)) } }
+                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response.use { deleteHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        response.use { deleteHandler.handle(it) }
     }
 
     private val createWithListHandler: Handler<User> =
@@ -126,15 +122,14 @@ internal constructor(
                 .body(json(clientOptions.jsonMapper, params._body()))
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response
-                .use { createWithListHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        return response
+            .use { createWithListHandler.handle(it) }
+            .also {
+                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                    it.validate()
                 }
-        }
+            }
     }
 
     private val loginHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
@@ -147,9 +142,8 @@ internal constructor(
                 .addPathSegments("user", "login")
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response.use { loginHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        return response.use { loginHandler.handle(it) }
     }
 
     private val logoutHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
@@ -162,8 +156,7 @@ internal constructor(
                 .addPathSegments("user", "logout")
                 .build()
                 .prepareAsync(clientOptions, params)
-        return clientOptions.httpClient.executeAsync(request, requestOptions).let { response ->
-            response.use { logoutHandler.handle(it) }
-        }
+        val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+        response.use { logoutHandler.handle(it) }
     }
 }

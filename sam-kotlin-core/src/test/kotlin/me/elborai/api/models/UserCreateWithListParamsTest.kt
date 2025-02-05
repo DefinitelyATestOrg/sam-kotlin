@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class UserCreateWithListParamsTest {
 
     @Test
-    fun createUserCreateWithListParams() {
+    fun create() {
         UserCreateWithListParams.builder()
             .addBody(
                 User.builder()

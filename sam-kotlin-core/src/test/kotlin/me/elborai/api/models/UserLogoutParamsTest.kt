@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class UserLogoutParamsTest {
 
     @Test
-    fun createUserLogoutParams() {
+    fun create() {
         UserLogoutParams.builder().build()
     }
 }
