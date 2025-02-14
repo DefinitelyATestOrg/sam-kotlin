@@ -80,7 +80,7 @@ class ErrorHandlingTest {
 
         stubFor(post(anyUrl()).willReturn(ok().withBody(toJson(expected))))
 
-        assertThat(client.users().create(params)).isEqualTo(expected)
+        assertThat(client.user().create(params)).isEqualTo(expected)
     }
 
     @Test
@@ -102,7 +102,7 @@ class ErrorHandlingTest {
                 .willReturn(status(400).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertBadRequest(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -127,7 +127,7 @@ class ErrorHandlingTest {
                 .willReturn(status(401).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertUnauthorized(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -152,7 +152,7 @@ class ErrorHandlingTest {
                 .willReturn(status(403).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertPermissionDenied(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -177,7 +177,7 @@ class ErrorHandlingTest {
                 .willReturn(status(404).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertNotFound(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -202,7 +202,7 @@ class ErrorHandlingTest {
                 .willReturn(status(422).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertUnprocessableEntity(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -227,7 +227,7 @@ class ErrorHandlingTest {
                 .willReturn(status(429).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertRateLimit(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -252,7 +252,7 @@ class ErrorHandlingTest {
                 .willReturn(status(500).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertInternalServer(e, Headers.builder().put("Foo", "Bar").build(), SAM_ERROR)
             })
@@ -277,7 +277,7 @@ class ErrorHandlingTest {
                 .willReturn(status(999).withHeader("Foo", "Bar").withBody(toJson(SAM_ERROR)))
         )
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertUnexpectedStatusCodeException(
                     e,
@@ -304,7 +304,7 @@ class ErrorHandlingTest {
 
         stubFor(post(anyUrl()).willReturn(status(200).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertThat(e)
                     .isInstanceOf(SamException::class.java)
@@ -328,7 +328,7 @@ class ErrorHandlingTest {
 
         stubFor(post(anyUrl()).willReturn(status(400).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.users().create(params) })
+        assertThatThrownBy({ client.user().create(params) })
             .satisfies({ e ->
                 assertBadRequest(e, Headers.builder().build(), SamError.builder().build())
             })

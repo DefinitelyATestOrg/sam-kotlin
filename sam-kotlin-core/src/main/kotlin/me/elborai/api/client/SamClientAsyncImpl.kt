@@ -28,13 +28,13 @@ class SamClientAsyncImpl(
         StoreServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val user: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     override fun sync(): SamClient = sync
 
     override fun store(): StoreServiceAsync = store
 
-    override fun users(): UserServiceAsync = users
+    override fun user(): UserServiceAsync = user
 
     override fun close() = clientOptions.httpClient.close()
 }

@@ -4,8 +4,8 @@ package me.elborai.api.services.async
 
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.models.User
+import me.elborai.api.models.UserCreateListParams
 import me.elborai.api.models.UserCreateParams
-import me.elborai.api.models.UserCreateWithListParams
 import me.elborai.api.models.UserDeleteParams
 import me.elborai.api.models.UserLoginParams
 import me.elborai.api.models.UserLogoutParams
@@ -39,8 +39,8 @@ interface UserServiceAsync {
     )
 
     /** Creates list of users with given input array */
-    suspend fun createWithList(
-        params: UserCreateWithListParams,
+    suspend fun createList(
+        params: UserCreateListParams,
         requestOptions: RequestOptions = RequestOptions.none()
     ): User
 

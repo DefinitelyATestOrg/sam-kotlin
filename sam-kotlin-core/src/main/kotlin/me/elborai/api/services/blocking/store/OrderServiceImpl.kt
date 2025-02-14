@@ -14,7 +14,7 @@ import me.elborai.api.core.http.HttpResponse.Handler
 import me.elborai.api.core.json
 import me.elborai.api.core.prepare
 import me.elborai.api.errors.SamError
-import me.elborai.api.models.CoolOrder
+import me.elborai.api.models.Order
 import me.elborai.api.models.StoreOrderDeleteParams
 import me.elborai.api.models.StoreOrderRetrieveParams
 
@@ -25,17 +25,14 @@ internal constructor(
 
     private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-    private val retrieveHandler: Handler<CoolOrder> =
-        jsonHandler<CoolOrder>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    private val retrieveHandler: Handler<Order> =
+        jsonHandler<Order>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
     /**
      * For valid response try integer IDs with value <= 5 or > 10. Other values will generate
      * exceptions.
      */
-    override fun retrieve(
-        params: StoreOrderRetrieveParams,
-        requestOptions: RequestOptions
-    ): CoolOrder {
+    override fun retrieve(params: StoreOrderRetrieveParams, requestOptions: RequestOptions): Order {
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
