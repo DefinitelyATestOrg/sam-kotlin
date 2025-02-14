@@ -31,7 +31,7 @@ interface SamClientAsync {
 
     fun store(): StoreServiceAsync
 
-    fun users(): UserServiceAsync
+    fun user(): UserServiceAsync
 
     /**
      * Closes this client, relinquishing any underlying resources.
