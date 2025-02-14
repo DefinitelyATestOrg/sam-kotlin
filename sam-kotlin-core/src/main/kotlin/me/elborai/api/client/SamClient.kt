@@ -31,7 +31,7 @@ interface SamClient {
 
     fun store(): StoreService
 
-    fun users(): UserService
+    fun user(): UserService
 
     /**
      * Closes this client, relinquishing any underlying resources.

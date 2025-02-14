@@ -5,11 +5,11 @@ package me.elborai.api.models
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class UserCreateWithListParamsTest {
+class UserCreateListParamsTest {
 
     @Test
     fun create() {
-        UserCreateWithListParams.builder()
+        UserCreateListParams.builder()
             .addBody(
                 User.builder()
                     .id(10L)
@@ -28,7 +28,7 @@ class UserCreateWithListParamsTest {
     @Test
     fun body() {
         val params =
-            UserCreateWithListParams.builder()
+            UserCreateListParams.builder()
                 .addBody(
                     User.builder()
                         .id(10L)
@@ -63,7 +63,7 @@ class UserCreateWithListParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = UserCreateWithListParams.builder().addBody(User.builder().build()).build()
+        val params = UserCreateListParams.builder().addBody(User.builder().build()).build()
         val body = params._body()
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(listOf(User.builder().build()))

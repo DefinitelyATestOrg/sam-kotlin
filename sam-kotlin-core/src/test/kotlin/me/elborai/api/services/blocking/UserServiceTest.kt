@@ -5,8 +5,8 @@ package me.elborai.api.services.blocking
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClient
 import me.elborai.api.models.User
+import me.elborai.api.models.UserCreateListParams
 import me.elborai.api.models.UserCreateParams
-import me.elborai.api.models.UserCreateWithListParams
 import me.elborai.api.models.UserDeleteParams
 import me.elborai.api.models.UserLoginParams
 import me.elborai.api.models.UserLogoutParams
@@ -26,7 +26,7 @@ class UserServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         val user =
             userService.create(
                 UserCreateParams.builder()
@@ -51,7 +51,7 @@ class UserServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         val user = userService.retrieve(UserRetrieveParams.builder().username("username").build())
         println(user)
         user.validate()
@@ -64,7 +64,7 @@ class UserServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         userService.update(
             UserUpdateParams.builder()
                 .pathUsername("username")
@@ -87,21 +87,21 @@ class UserServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         userService.delete(UserDeleteParams.builder().username("username").build())
     }
 
     @Test
-    fun callCreateWithList() {
+    fun callCreateList() {
         val client =
             SamOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         val user =
-            userService.createWithList(
-                UserCreateWithListParams.builder()
+            userService.createList(
+                UserCreateListParams.builder()
                     .addBody(
                         User.builder()
                             .id(10L)
@@ -127,7 +127,7 @@ class UserServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         val userLoginResponse =
             userService.login(
                 UserLoginParams.builder().password("password").username("username").build()
@@ -143,7 +143,7 @@ class UserServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.users()
+        val userService = client.user()
         userService.logout(UserLogoutParams.builder().build())
     }
 }
