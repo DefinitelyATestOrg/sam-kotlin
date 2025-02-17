@@ -84,7 +84,9 @@ To create a new user, first use the `UserCreateParams` builder to specify attrib
 import me.elborai.api.models.User
 import me.elborai.api.models.UserCreateParams
 
-val params: UserCreateParams = UserCreateParams.builder().build()
+val params: UserCreateParams = UserCreateParams.builder()
+    .user(User.builder().build())
+    .build()
 val user: User = client.user().create(params)
 ```
 
