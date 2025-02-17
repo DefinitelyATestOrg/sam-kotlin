@@ -249,7 +249,17 @@ private constructor(
                 else -> throw SamInvalidDataException("Unknown Status: $value")
             }
 
-        fun asString(): String = _value().asStringOrThrow()
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws SamInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw SamInvalidDataException("Value is not a String")
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
