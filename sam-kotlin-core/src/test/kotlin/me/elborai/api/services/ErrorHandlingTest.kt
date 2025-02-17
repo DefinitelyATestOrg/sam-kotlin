@@ -56,14 +56,18 @@ class ErrorHandlingTest {
     fun usersCreate200() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         val expected =
@@ -87,14 +91,18 @@ class ErrorHandlingTest {
     fun usersCreate400() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -112,14 +120,18 @@ class ErrorHandlingTest {
     fun usersCreate401() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -137,14 +149,18 @@ class ErrorHandlingTest {
     fun usersCreate403() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -162,14 +178,18 @@ class ErrorHandlingTest {
     fun usersCreate404() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -187,14 +207,18 @@ class ErrorHandlingTest {
     fun usersCreate422() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -212,14 +236,18 @@ class ErrorHandlingTest {
     fun usersCreate429() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -237,14 +265,18 @@ class ErrorHandlingTest {
     fun usersCreate500() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -262,14 +294,18 @@ class ErrorHandlingTest {
     fun unexpectedStatusCode() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(
@@ -292,14 +328,18 @@ class ErrorHandlingTest {
     fun invalidBody() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(post(anyUrl()).willReturn(status(200).withBody("Not JSON")))
@@ -316,14 +356,18 @@ class ErrorHandlingTest {
     fun invalidErrorBody() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
 
         stubFor(post(anyUrl()).willReturn(status(400).withBody("Not JSON")))

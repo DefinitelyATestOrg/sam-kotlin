@@ -42,7 +42,9 @@ class UserCreateListParamsTest {
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
@@ -64,7 +66,9 @@ class UserCreateListParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = UserCreateListParams.builder().addBody(User.builder().build()).build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body).isEqualTo(listOf(User.builder().build()))
     }
