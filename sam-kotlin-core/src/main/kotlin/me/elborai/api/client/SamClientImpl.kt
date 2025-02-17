@@ -9,9 +9,7 @@ import me.elborai.api.services.blocking.StoreServiceImpl
 import me.elborai.api.services.blocking.UserService
 import me.elborai.api.services.blocking.UserServiceImpl
 
-class SamClientImpl(
-    private val clientOptions: ClientOptions,
-) : SamClient {
+class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
 
     private val clientOptionsWithUserAgent =
         if (clientOptions.headers.names().contains("User-Agent")) clientOptions

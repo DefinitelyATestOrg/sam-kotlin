@@ -24,10 +24,8 @@ import me.elborai.api.models.UserLogoutParams
 import me.elborai.api.models.UserRetrieveParams
 import me.elborai.api.models.UserUpdateParams
 
-class UserServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : UserServiceAsync {
+class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    UserServiceAsync {
 
     private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
@@ -59,7 +57,7 @@ internal constructor(
     /** Get user by user name */
     override suspend fun retrieve(
         params: UserRetrieveParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): User {
         val request =
             HttpRequest.builder()
@@ -113,7 +111,7 @@ internal constructor(
     /** Creates list of users with given input array */
     override suspend fun createList(
         params: UserCreateListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): User {
         val request =
             HttpRequest.builder()

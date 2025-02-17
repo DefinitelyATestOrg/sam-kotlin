@@ -8,7 +8,7 @@ abstract class SamServiceException(
     private val body: String,
     private val error: SamError,
     message: String = "$statusCode: $error",
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ) : SamException(message, cause) {
 
     fun statusCode(): Int = statusCode

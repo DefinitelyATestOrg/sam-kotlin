@@ -17,13 +17,13 @@ interface UserService {
     /** This can only be done by the logged in user. */
     fun create(
         params: UserCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
     /** Get user by user name */
     fun retrieve(
         params: UserRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
     /** This can only be done by the logged in user. */
@@ -35,13 +35,13 @@ interface UserService {
     /** Creates list of users with given input array */
     fun createList(
         params: UserCreateListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
     /** Logs user into the system */
     fun login(
         params: UserLoginParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
     /** Logs out current logged in user session */

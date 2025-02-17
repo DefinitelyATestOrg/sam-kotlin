@@ -24,10 +24,7 @@ import me.elborai.api.models.UserLogoutParams
 import me.elborai.api.models.UserRetrieveParams
 import me.elborai.api.models.UserUpdateParams
 
-class UserServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : UserService {
+class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
 
     private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 

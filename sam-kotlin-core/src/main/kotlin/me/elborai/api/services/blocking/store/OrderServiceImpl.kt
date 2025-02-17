@@ -18,10 +18,8 @@ import me.elborai.api.models.Order
 import me.elborai.api.models.StoreOrderDeleteParams
 import me.elborai.api.models.StoreOrderRetrieveParams
 
-class OrderServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : OrderService {
+class OrderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    OrderService {
 
     private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
