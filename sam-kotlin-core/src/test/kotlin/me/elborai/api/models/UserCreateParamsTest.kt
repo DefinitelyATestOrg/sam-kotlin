@@ -10,14 +10,18 @@ class UserCreateParamsTest {
     @Test
     fun create() {
         UserCreateParams.builder()
-            .id(10L)
-            .email("john@email.com")
-            .firstName("John")
-            .lastName("James")
-            .password("12345")
-            .phone("12345")
-            .username("theUser")
-            .userStatus(1L)
+            .user(
+                User.builder()
+                    .id(10L)
+                    .email("john@email.com")
+                    .firstName("John")
+                    .lastName("James")
+                    .password("12345")
+                    .phone("12345")
+                    .username("theUser")
+                    .userStatus(1L)
+                    .build()
+            )
             .build()
     }
 
@@ -25,31 +29,45 @@ class UserCreateParamsTest {
     fun body() {
         val params =
             UserCreateParams.builder()
-                .id(10L)
-                .email("john@email.com")
-                .firstName("John")
-                .lastName("James")
-                .password("12345")
-                .phone("12345")
-                .username("theUser")
-                .userStatus(1L)
+                .user(
+                    User.builder()
+                        .id(10L)
+                        .email("john@email.com")
+                        .firstName("John")
+                        .lastName("James")
+                        .password("12345")
+                        .phone("12345")
+                        .username("theUser")
+                        .userStatus(1L)
+                        .build()
+                )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo(10L)
-        assertThat(body.email()).isEqualTo("john@email.com")
-        assertThat(body.firstName()).isEqualTo("John")
-        assertThat(body.lastName()).isEqualTo("James")
-        assertThat(body.password()).isEqualTo("12345")
-        assertThat(body.phone()).isEqualTo("12345")
-        assertThat(body.username()).isEqualTo("theUser")
-        assertThat(body.userStatus()).isEqualTo(1L)
+        assertThat(body)
+            .isEqualTo(
+                User.builder()
+                    .id(10L)
+                    .email("john@email.com")
+                    .firstName("John")
+                    .lastName("James")
+                    .password("12345")
+                    .phone("12345")
+                    .username("theUser")
+                    .userStatus(1L)
+                    .build()
+            )
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = UserCreateParams.builder().build()
+        val params = UserCreateParams.builder().user(User.builder().build()).build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
+        assertThat(body).isEqualTo(User.builder().build())
     }
 }
