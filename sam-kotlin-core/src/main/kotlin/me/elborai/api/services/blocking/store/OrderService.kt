@@ -15,7 +15,7 @@ interface OrderService {
      */
     fun retrieve(
         params: StoreOrderRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Order
 
     /**
@@ -24,6 +24,6 @@ interface OrderService {
      */
     fun delete(
         params: StoreOrderDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 }

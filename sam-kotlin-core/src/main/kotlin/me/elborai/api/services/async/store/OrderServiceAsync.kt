@@ -15,7 +15,7 @@ interface OrderServiceAsync {
      */
     suspend fun retrieve(
         params: StoreOrderRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): Order
 
     /**
@@ -24,6 +24,6 @@ interface OrderServiceAsync {
      */
     suspend fun delete(
         params: StoreOrderDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     )
 }

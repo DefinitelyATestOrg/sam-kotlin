@@ -6,10 +6,8 @@ import me.elborai.api.core.ClientOptions
 import me.elborai.api.services.blocking.store.OrderService
 import me.elborai.api.services.blocking.store.OrderServiceImpl
 
-class StoreServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : StoreService {
+class StoreServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    StoreService {
 
     private val orders: OrderService by lazy { OrderServiceImpl(clientOptions) }
 
