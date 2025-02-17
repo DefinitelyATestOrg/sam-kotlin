@@ -9,9 +9,7 @@ import me.elborai.api.services.async.StoreServiceAsyncImpl
 import me.elborai.api.services.async.UserServiceAsync
 import me.elborai.api.services.async.UserServiceAsyncImpl
 
-class SamClientAsyncImpl(
-    private val clientOptions: ClientOptions,
-) : SamClientAsync {
+class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAsync {
 
     private val clientOptionsWithUserAgent =
         if (clientOptions.headers.names().contains("User-Agent")) clientOptions

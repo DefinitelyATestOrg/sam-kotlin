@@ -6,10 +6,8 @@ import me.elborai.api.core.ClientOptions
 import me.elborai.api.services.async.store.OrderServiceAsync
 import me.elborai.api.services.async.store.OrderServiceAsyncImpl
 
-class StoreServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : StoreServiceAsync {
+class StoreServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    StoreServiceAsync {
 
     private val orders: OrderServiceAsync by lazy { OrderServiceAsyncImpl(clientOptions) }
 
