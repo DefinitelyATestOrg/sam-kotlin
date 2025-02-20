@@ -5,7 +5,6 @@ package me.elborai.api.models
 import java.util.Objects
 import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.Params
-import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.toImmutable
@@ -13,18 +12,18 @@ import me.elborai.api.core.toImmutable
 /** Creates list of users with given input array */
 class UserCreateListParams
 private constructor(
-    private val body: List<User>,
+    private val body: List<User>?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun body(): List<User> = body
+    fun body(): List<User>? = body
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): List<User> = body
+    internal fun _body(): List<User>? = body
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -46,12 +45,12 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(userCreateListParams: UserCreateListParams) = apply {
-            body = userCreateListParams.body.toMutableList()
+            body = userCreateListParams.body?.toMutableList()
             additionalHeaders = userCreateListParams.additionalHeaders.toBuilder()
             additionalQueryParams = userCreateListParams.additionalQueryParams.toBuilder()
         }
 
-        fun body(body: List<User>) = apply { this.body = body.toMutableList() }
+        fun body(body: List<User>?) = apply { this.body = body?.toMutableList() }
 
         fun addBody(body: User) = apply {
             this.body = (this.body ?: mutableListOf()).apply { add(body) }
@@ -157,7 +156,7 @@ private constructor(
 
         fun build(): UserCreateListParams =
             UserCreateListParams(
-                checkRequired("body", body).toImmutable(),
+                body?.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

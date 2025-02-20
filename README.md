@@ -49,9 +49,7 @@ import me.elborai.api.models.UserCreateParams
 // Configures using the `API_KEY` environment variable
 val client: SamClient = SamOkHttpClient.fromEnv()
 
-val params: UserCreateParams = UserCreateParams.builder()
-    .user(User.builder().build())
-    .build()
+val params: UserCreateParams = UserCreateParams.builder().build()
 val user: User = client.user().create(params)
 ```
 
@@ -120,9 +118,7 @@ import me.elborai.api.models.UserCreateParams
 // Configures using the `API_KEY` environment variable
 val client: SamClient = SamOkHttpClient.fromEnv()
 
-val params: UserCreateParams = UserCreateParams.builder()
-    .user(User.builder().build())
-    .build()
+val params: UserCreateParams = UserCreateParams.builder().build()
 val user: User = client.async().user().create(params)
 ```
 
@@ -137,9 +133,7 @@ import me.elborai.api.models.UserCreateParams
 // Configures using the `API_KEY` environment variable
 val client: SamClientAsync = SamOkHttpClientAsync.fromEnv()
 
-val params: UserCreateParams = UserCreateParams.builder()
-    .user(User.builder().build())
-    .build()
+val params: UserCreateParams = UserCreateParams.builder().build()
 val user: User = client.user().create(params)
 ```
 
@@ -284,12 +278,9 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a `JsonValue` object to its setter:
 
 ```kotlin
-import me.elborai.api.models.User
 import me.elborai.api.models.UserCreateParams
 
-val params: UserCreateParams = UserCreateParams.builder()
-    .user(User.builder().build())
-    .build()
+val params: UserCreateParams = UserCreateParams.builder().build()
 ```
 
 ### Response properties

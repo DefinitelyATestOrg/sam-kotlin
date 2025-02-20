@@ -47,7 +47,6 @@ class UserUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
                 User.builder()
@@ -65,19 +64,14 @@ class UserUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params =
-            UserUpdateParams.builder().username("username").user(User.builder().build()).build()
+        val params = UserUpdateParams.builder().username("username").build()
 
         val body = params._body()
-
-        assertThat(body).isNotNull
-        assertThat(body).isEqualTo(User.builder().build())
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            UserUpdateParams.builder().username("username").user(User.builder().build()).build()
+        val params = UserUpdateParams.builder().username("username").build()
         assertThat(params).isNotNull
         // path param "username"
         assertThat(params.getPathParam(0)).isEqualTo("username")
