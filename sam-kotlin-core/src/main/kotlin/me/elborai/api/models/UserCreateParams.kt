@@ -6,27 +6,28 @@ import java.util.Objects
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.Params
-import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
+import me.elborai.api.core.immutableEmptyMap
 
 /** This can only be done by the logged in user. */
 class UserCreateParams
 private constructor(
-    private val user: User,
+    private val user: User?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun user(): User = user
+    fun user(): User? = user
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = user._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        user?._additionalProperties() ?: immutableEmptyMap()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): User = user
+    internal fun _body(): User? = user
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -53,7 +54,7 @@ private constructor(
             additionalQueryParams = userCreateParams.additionalQueryParams.toBuilder()
         }
 
-        fun user(user: User) = apply { this.user = user }
+        fun user(user: User?) = apply { this.user = user }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -154,11 +155,7 @@ private constructor(
         }
 
         fun build(): UserCreateParams =
-            UserCreateParams(
-                checkRequired("user", user),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            UserCreateParams(user, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {
