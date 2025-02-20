@@ -9,27 +9,29 @@ import me.elborai.api.core.Params
 import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
+import me.elborai.api.core.immutableEmptyMap
 
 /** This can only be done by the logged in user. */
 class UserUpdateParams
 private constructor(
     private val username: String,
-    private val user: User,
+    private val user: User?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun username(): String = username
 
-    fun user(): User = user
+    fun user(): User? = user
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = user._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        user?._additionalProperties() ?: immutableEmptyMap()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): User = user
+    internal fun _body(): User? = user
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -67,7 +69,7 @@ private constructor(
 
         fun username(username: String) = apply { this.username = username }
 
-        fun user(user: User) = apply { this.user = user }
+        fun user(user: User?) = apply { this.user = user }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -170,7 +172,7 @@ private constructor(
         fun build(): UserUpdateParams =
             UserUpdateParams(
                 checkRequired("username", username),
-                checkRequired("user", user),
+                user,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )

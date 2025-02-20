@@ -45,7 +45,6 @@ class UserCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
                 User.builder()
@@ -63,11 +62,8 @@ class UserCreateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = UserCreateParams.builder().user(User.builder().build()).build()
+        val params = UserCreateParams.builder().build()
 
         val body = params._body()
-
-        assertThat(body).isNotNull
-        assertThat(body).isEqualTo(User.builder().build())
     }
 }

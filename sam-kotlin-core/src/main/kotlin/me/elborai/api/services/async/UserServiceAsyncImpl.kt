@@ -38,7 +38,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("user")
-                .body(json(clientOptions.jsonMapper, params._body()))
+                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
         val response = clientOptions.httpClient.executeAsync(request, requestOptions)
@@ -83,7 +83,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             HttpRequest.builder()
                 .method(HttpMethod.PUT)
                 .addPathSegments("user", params.getPathParam(0))
-                .body(json(clientOptions.jsonMapper, params._body()))
+                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
         val response = clientOptions.httpClient.executeAsync(request, requestOptions)
@@ -117,7 +117,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("user", "createWithList")
-                .body(json(clientOptions.jsonMapper, params._body()))
+                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepareAsync(clientOptions, params)
         val response = clientOptions.httpClient.executeAsync(request, requestOptions)
