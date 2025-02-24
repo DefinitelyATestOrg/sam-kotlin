@@ -151,7 +151,7 @@ The asynchronous client supports the same options as the synchronous one, except
 
 The SDK throws custom unchecked exception types:
 
-- `SamServiceException`: Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`SamServiceException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
   | Status | Exception                       |
   | ------ | ------------------------------- |
@@ -164,11 +164,11 @@ The SDK throws custom unchecked exception types:
   | 5xx    | `InternalServerException`       |
   | others | `UnexpectedStatusCodeException` |
 
-- `SamIoException`: I/O networking errors.
+- [`SamIoException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamIoException.kt): I/O networking errors.
 
-- `SamInvalidDataException`: Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`SamInvalidDataException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- `SamException`: Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`SamException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Logging
 
@@ -283,7 +283,7 @@ val params: UserCreateParams = UserCreateParams.builder()
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods. You can also set undocumented parameters on nested headers, query params, or body classes using the `putAdditionalProperty` method. These properties can be accessed on the built object later using the `_additionalProperties()` method.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a `JsonValue` object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](sam-kotlin-core/src/main/kotlin/me/elborai/api/core/JsonValue.kt) object to its setter:
 
 ```kotlin
 import me.elborai.api.models.UserCreateParams
@@ -338,7 +338,7 @@ if (field.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw `SamInvalidDataException` only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`SamInvalidDataException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamInvalidDataException.kt) only if you directly access the property.
 
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
