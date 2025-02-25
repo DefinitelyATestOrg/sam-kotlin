@@ -41,6 +41,8 @@ private constructor(
 
     companion object {
 
+        fun none(): UserLoginParams = builder().build()
+
         fun builder() = Builder()
     }
 
