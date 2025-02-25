@@ -16,9 +16,13 @@ interface UserServiceAsync {
 
     /** This can only be done by the logged in user. */
     suspend fun create(
-        params: UserCreateParams,
+        params: UserCreateParams = UserCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
+
+    /** This can only be done by the logged in user. */
+    suspend fun create(requestOptions: RequestOptions): User =
+        create(UserCreateParams.none(), requestOptions)
 
     /** Get user by user name */
     suspend fun retrieve(
@@ -40,19 +44,31 @@ interface UserServiceAsync {
 
     /** Creates list of users with given input array */
     suspend fun createList(
-        params: UserCreateListParams,
+        params: UserCreateListParams = UserCreateListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
+    /** Creates list of users with given input array */
+    suspend fun createList(requestOptions: RequestOptions): User =
+        createList(UserCreateListParams.none(), requestOptions)
+
     /** Logs user into the system */
     suspend fun login(
-        params: UserLoginParams,
+        params: UserLoginParams = UserLoginParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
+    /** Logs user into the system */
+    suspend fun login(requestOptions: RequestOptions): String =
+        login(UserLoginParams.none(), requestOptions)
+
     /** Logs out current logged in user session */
     suspend fun logout(
-        params: UserLogoutParams,
+        params: UserLogoutParams = UserLogoutParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     )
+
+    /** Logs out current logged in user session */
+    suspend fun logout(requestOptions: RequestOptions) =
+        logout(UserLogoutParams.none(), requestOptions)
 }

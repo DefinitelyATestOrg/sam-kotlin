@@ -16,9 +16,13 @@ interface UserService {
 
     /** This can only be done by the logged in user. */
     fun create(
-        params: UserCreateParams,
+        params: UserCreateParams = UserCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
+
+    /** This can only be done by the logged in user. */
+    fun create(requestOptions: RequestOptions): User =
+        create(UserCreateParams.none(), requestOptions)
 
     /** Get user by user name */
     fun retrieve(
@@ -34,16 +38,30 @@ interface UserService {
 
     /** Creates list of users with given input array */
     fun createList(
-        params: UserCreateListParams,
+        params: UserCreateListParams = UserCreateListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
+    /** Creates list of users with given input array */
+    fun createList(requestOptions: RequestOptions): User =
+        createList(UserCreateListParams.none(), requestOptions)
+
     /** Logs user into the system */
     fun login(
-        params: UserLoginParams,
+        params: UserLoginParams = UserLoginParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
+    /** Logs user into the system */
+    fun login(requestOptions: RequestOptions): String =
+        login(UserLoginParams.none(), requestOptions)
+
     /** Logs out current logged in user session */
-    fun logout(params: UserLogoutParams, requestOptions: RequestOptions = RequestOptions.none())
+    fun logout(
+        params: UserLogoutParams = UserLogoutParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
+    /** Logs out current logged in user session */
+    fun logout(requestOptions: RequestOptions) = logout(UserLogoutParams.none(), requestOptions)
 }

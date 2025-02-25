@@ -37,6 +37,8 @@ private constructor(
 
     companion object {
 
+        fun none(): UserCreateParams = builder().build()
+
         fun builder() = Builder()
     }
 

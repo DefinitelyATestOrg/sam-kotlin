@@ -9,7 +9,6 @@ import me.elborai.api.models.UserCreateListParams
 import me.elborai.api.models.UserCreateParams
 import me.elborai.api.models.UserDeleteParams
 import me.elborai.api.models.UserLoginParams
-import me.elborai.api.models.UserLogoutParams
 import me.elborai.api.models.UserRetrieveParams
 import me.elborai.api.models.UserUpdateParams
 import org.assertj.core.api.Assertions.assertThat
@@ -152,6 +151,6 @@ class UserServiceTest {
                 .apiKey("My API Key")
                 .build()
         val userService = client.user()
-        userService.logout(UserLogoutParams.builder().build())
+        userService.logout()
     }
 }
