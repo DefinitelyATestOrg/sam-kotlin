@@ -49,8 +49,7 @@ import me.elborai.api.models.UserCreateParams
 // Configures using the `API_KEY` environment variable
 val client: SamClient = SamOkHttpClient.fromEnv()
 
-val params: UserCreateParams = UserCreateParams.builder().build()
-val user: User = client.user().create(params)
+val user: User = client.user().create()
 ```
 
 ## Client configuration
@@ -126,8 +125,7 @@ import me.elborai.api.models.UserCreateParams
 // Configures using the `API_KEY` environment variable
 val client: SamClient = SamOkHttpClient.fromEnv()
 
-val params: UserCreateParams = UserCreateParams.builder().build()
-val user: User = client.async().user().create(params)
+val user: User = client.async().user().create()
 ```
 
 Or create an asynchronous client from the beginning:
@@ -141,8 +139,7 @@ import me.elborai.api.models.UserCreateParams
 // Configures using the `API_KEY` environment variable
 val client: SamClientAsync = SamOkHttpClientAsync.fromEnv()
 
-val params: UserCreateParams = UserCreateParams.builder().build()
-val user: User = client.user().create(params)
+val user: User = client.user().create()
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
@@ -224,9 +221,7 @@ To set a custom timeout, configure the method call using the `timeout` method:
 import me.elborai.api.models.User
 import me.elborai.api.models.UserCreateParams
 
-val user: User = client.user().create(
-  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
-)
+val user: User = client.user().create(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
 
 Or configure the default for all method calls at the client level:
@@ -354,9 +349,7 @@ Or configure the method call to validate the response using the `responseValidat
 import me.elborai.api.models.User
 import me.elborai.api.models.UserCreateParams
 
-val user: User = client.user().create(
-  params, RequestOptions.builder().responseValidation(true).build()
-)
+val user: User = client.user().create(RequestOptions.builder().responseValidation(true).build())
 ```
 
 Or configure the default for all method calls at the client level:
