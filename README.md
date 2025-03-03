@@ -8,7 +8,7 @@
 
 The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin.
 
-It is generated with [Stainless](https://www.stainlessapi.com/).
+It is generated with [Stainless](https://www.stainless.com/).
 
 The REST API documentation can be found on [docs.sam.com](https://docs.sam.com).
 
