@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package me.elborai.api.services.blocking
+package me.elborai.api.services.async
 
 import me.elborai.api.TestServerExtension
-import me.elborai.api.client.okhttp.SamOkHttpClient
+import me.elborai.api.client.okhttp.SamOkHttpClientAsync
 import me.elborai.api.models.User
 import me.elborai.api.models.UserCreateListParams
 import me.elborai.api.models.UserCreateParams
@@ -15,19 +15,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class UserServiceTest {
+class UserServiceAsyncTest {
 
     @Test
-    fun create() {
+    suspend fun create() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
         val user =
-            userService.create(
+            userServiceAsync.create(
                 UserCreateParams.builder()
                     .user(
                         User.builder()
@@ -48,29 +48,30 @@ class UserServiceTest {
     }
 
     @Test
-    fun retrieve() {
+    suspend fun retrieve() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
-        val user = userService.retrieve(UserRetrieveParams.builder().username("username").build())
+        val user =
+            userServiceAsync.retrieve(UserRetrieveParams.builder().username("username").build())
 
         user.validate()
     }
 
     @Test
-    fun update() {
+    suspend fun update() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
-        userService.update(
+        userServiceAsync.update(
             UserUpdateParams.builder()
                 .username("username")
                 .user(
@@ -90,28 +91,28 @@ class UserServiceTest {
     }
 
     @Test
-    fun delete() {
+    suspend fun delete() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
-        userService.delete(UserDeleteParams.builder().username("username").build())
+        userServiceAsync.delete(UserDeleteParams.builder().username("username").build())
     }
 
     @Test
-    fun createList() {
+    suspend fun createList() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
         val user =
-            userService.createList(
+            userServiceAsync.createList(
                 UserCreateListParams.builder()
                     .addBody(
                         User.builder()
@@ -132,28 +133,28 @@ class UserServiceTest {
     }
 
     @Test
-    fun login() {
+    suspend fun login() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
-        userService.login(
+        userServiceAsync.login(
             UserLoginParams.builder().password("password").username("username").build()
         )
     }
 
     @Test
-    fun logout() {
+    suspend fun logout() {
         val client =
-            SamOkHttpClient.builder()
+            SamOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val userService = client.user()
+        val userServiceAsync = client.user()
 
-        userService.logout()
+        userServiceAsync.logout()
     }
 }
