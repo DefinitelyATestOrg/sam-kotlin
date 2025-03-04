@@ -17,6 +17,7 @@ class SamOkHttpClientAsync private constructor() {
 
     companion object {
 
+        /** Returns a mutable builder for constructing an instance of [SamOkHttpClientAsync]. */
         fun builder() = Builder()
 
         fun fromEnv(): SamClientAsync = builder().fromEnv().build()
