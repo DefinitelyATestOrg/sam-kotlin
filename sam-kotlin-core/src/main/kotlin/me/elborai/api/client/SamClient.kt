@@ -29,6 +29,11 @@ interface SamClient {
      */
     fun async(): SamClientAsync
 
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
     fun store(): StoreService
 
     fun user(): UserService
@@ -45,4 +50,12 @@ interface SamClient {
      * method.
      */
     fun close()
+
+    /** A view of [SamClient] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun store(): StoreService.WithRawResponse
+
+        fun user(): UserService.WithRawResponse
+    }
 }

@@ -22,6 +22,10 @@ class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAs
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val sync: SamClient by lazy { SamClientImpl(clientOptions) }
 
+    private val withRawResponse: SamClientAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
+
     private val store: StoreServiceAsync by lazy {
         StoreServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -30,9 +34,27 @@ class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAs
 
     override fun sync(): SamClient = sync
 
+    override fun withRawResponse(): SamClientAsync.WithRawResponse = withRawResponse
+
     override fun store(): StoreServiceAsync = store
 
     override fun user(): UserServiceAsync = user
 
     override fun close() = clientOptions.httpClient.close()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        SamClientAsync.WithRawResponse {
+
+        private val store: StoreServiceAsync.WithRawResponse by lazy {
+            StoreServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val user: UserServiceAsync.WithRawResponse by lazy {
+            UserServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun store(): StoreServiceAsync.WithRawResponse = store
+
+        override fun user(): UserServiceAsync.WithRawResponse = user
+    }
 }
