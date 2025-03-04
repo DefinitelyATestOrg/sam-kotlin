@@ -40,11 +40,12 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response
             .use { createHandler.handle(it) }
             .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                if (requestOptions.responseValidation!!) {
                     it.validate()
                 }
             }
@@ -61,11 +62,12 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .addPathSegments("user", params.getPathParam(0))
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response
             .use { retrieveHandler.handle(it) }
             .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                if (requestOptions.responseValidation!!) {
                     it.validate()
                 }
             }
@@ -82,6 +84,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         response.use { updateHandler.handle(it) }
     }
@@ -97,6 +100,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         response.use { deleteHandler.handle(it) }
     }
@@ -113,11 +117,12 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response
             .use { createListHandler.handle(it) }
             .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                if (requestOptions.responseValidation!!) {
                     it.validate()
                 }
             }
@@ -133,6 +138,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .addPathSegments("user", "login")
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         return response.use { loginHandler.handle(it) }
     }
@@ -147,6 +153,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                 .addPathSegments("user", "logout")
                 .build()
                 .prepare(clientOptions, params)
+        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
         val response = clientOptions.httpClient.execute(request, requestOptions)
         response.use { logoutHandler.handle(it) }
     }
