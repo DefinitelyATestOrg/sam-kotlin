@@ -29,6 +29,7 @@ private constructor(
 
         fun none(): UserLogoutParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [UserLogoutParams]. */
         fun builder() = Builder()
     }
 

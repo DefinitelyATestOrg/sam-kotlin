@@ -17,6 +17,7 @@ class SamOkHttpClient private constructor() {
 
     companion object {
 
+        /** Returns a mutable builder for constructing an instance of [SamOkHttpClient]. */
         fun builder() = Builder()
 
         fun fromEnv(): SamClient = builder().fromEnv().build()
