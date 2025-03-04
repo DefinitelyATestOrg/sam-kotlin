@@ -144,6 +144,32 @@ val user: User = client.user().create()
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
 
+## Raw responses
+
+The SDK defines methods that deserialize responses into instances of Kotlin classes. However, these methods don't provide access to the response headers, status code, or the raw response body.
+
+To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
+
+```kotlin
+import me.elborai.api.core.http.Headers
+import me.elborai.api.core.http.HttpResponseFor
+import me.elborai.api.models.User
+import me.elborai.api.models.UserCreateParams
+
+val user: HttpResponseFor<User> = client.user().withRawResponse().create()
+
+val statusCode: Int = user.statusCode()
+val headers: Headers = user.headers()
+```
+
+You can still deserialize the response into an instance of a Kotlin class if needed:
+
+```kotlin
+import me.elborai.api.models.User
+
+val parsedUser: User = user.parse()
+```
+
 ## Error handling
 
 The SDK throws custom unchecked exception types:
