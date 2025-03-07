@@ -28,7 +28,7 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
-    /** This can only be done by the logged in user. */
+    /** @see [create] */
     fun create(requestOptions: RequestOptions): User =
         create(UserCreateParams.none(), requestOptions)
 
@@ -50,7 +50,7 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
-    /** Creates list of users with given input array */
+    /** @see [createList] */
     fun createList(requestOptions: RequestOptions): User =
         createList(UserCreateListParams.none(), requestOptions)
 
@@ -60,7 +60,7 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
-    /** Logs user into the system */
+    /** @see [login] */
     fun login(requestOptions: RequestOptions): String =
         login(UserLoginParams.none(), requestOptions)
 
@@ -70,7 +70,7 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** Logs out current logged in user session */
+    /** @see [logout] */
     fun logout(requestOptions: RequestOptions) = logout(UserLogoutParams.none(), requestOptions)
 
     /** A view of [UserService] that provides access to raw HTTP responses for each method. */
@@ -86,10 +86,7 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<User>
 
-        /**
-         * Returns a raw HTTP response for `post /user`, but is otherwise the same as
-         * [UserService.create].
-         */
+        /** @see [create] */
         @MustBeClosed
         fun create(requestOptions: RequestOptions): HttpResponseFor<User> =
             create(UserCreateParams.none(), requestOptions)
@@ -134,10 +131,7 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<User>
 
-        /**
-         * Returns a raw HTTP response for `post /user/createWithList`, but is otherwise the same as
-         * [UserService.createList].
-         */
+        /** @see [createList] */
         @MustBeClosed
         fun createList(requestOptions: RequestOptions): HttpResponseFor<User> =
             createList(UserCreateListParams.none(), requestOptions)
@@ -152,10 +146,7 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<String>
 
-        /**
-         * Returns a raw HTTP response for `get /user/login`, but is otherwise the same as
-         * [UserService.login].
-         */
+        /** @see [login] */
         @MustBeClosed
         fun login(requestOptions: RequestOptions): HttpResponseFor<String> =
             login(UserLoginParams.none(), requestOptions)
@@ -170,10 +161,7 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /**
-         * Returns a raw HTTP response for `get /user/logout`, but is otherwise the same as
-         * [UserService.logout].
-         */
+        /** @see [logout] */
         @MustBeClosed
         fun logout(requestOptions: RequestOptions): HttpResponse =
             logout(UserLogoutParams.none(), requestOptions)
