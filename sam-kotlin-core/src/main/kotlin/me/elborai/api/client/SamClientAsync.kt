@@ -2,6 +2,11 @@
 
 package me.elborai.api.client
 
+import me.elborai.api.services.async.CompleteServiceAsync
+import me.elborai.api.services.async.MessageServiceAsync
+import me.elborai.api.services.async.MessagesBetaTrueServiceAsync
+import me.elborai.api.services.async.ModelServiceAsync
+import me.elborai.api.services.async.ModelsBetaTrueServiceAsync
 import me.elborai.api.services.async.StoreServiceAsync
 import me.elborai.api.services.async.UserServiceAsync
 
@@ -38,6 +43,16 @@ interface SamClientAsync {
 
     fun user(): UserServiceAsync
 
+    fun messages(): MessageServiceAsync
+
+    fun complete(): CompleteServiceAsync
+
+    fun models(): ModelServiceAsync
+
+    fun messagesBetaTrue(): MessagesBetaTrueServiceAsync
+
+    fun modelsBetaTrue(): ModelsBetaTrueServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -57,5 +72,15 @@ interface SamClientAsync {
         fun store(): StoreServiceAsync.WithRawResponse
 
         fun user(): UserServiceAsync.WithRawResponse
+
+        fun messages(): MessageServiceAsync.WithRawResponse
+
+        fun complete(): CompleteServiceAsync.WithRawResponse
+
+        fun models(): ModelServiceAsync.WithRawResponse
+
+        fun messagesBetaTrue(): MessagesBetaTrueServiceAsync.WithRawResponse
+
+        fun modelsBetaTrue(): ModelsBetaTrueServiceAsync.WithRawResponse
     }
 }
