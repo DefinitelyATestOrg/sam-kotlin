@@ -4,7 +4,7 @@ package me.elborai.api.services.async
 
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClientAsync
-import me.elborai.api.models.CompleteCreateParams
+import me.elborai.api.models.complete.CompleteCreateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

@@ -15,10 +15,10 @@ import me.elborai.api.core.http.json
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepare
 import me.elborai.api.errors.SamError
-import me.elborai.api.models.MessageBatchesBetaTrueCreateParams
-import me.elborai.api.models.MessageBatchesBetaTrueCreateResponse
-import me.elborai.api.models.MessageBatchesBetaTrueListParams
-import me.elborai.api.models.MessageBatchesBetaTrueListResponse
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueCreateParams
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueCreateResponse
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListParams
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListResponse
 
 class BatchesBetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     BatchesBetaTrueService {
@@ -30,16 +30,16 @@ class BatchesBetaTrueServiceImpl internal constructor(private val clientOptions:
     override fun withRawResponse(): BatchesBetaTrueService.WithRawResponse = withRawResponse
 
     override fun create(
-        params: MessageBatchesBetaTrueCreateParams,
+        params: BatchesBetaTrueCreateParams,
         requestOptions: RequestOptions,
-    ): MessageBatchesBetaTrueCreateResponse =
+    ): BatchesBetaTrueCreateResponse =
         // post /v1/messages/batches?beta=true
         withRawResponse().create(params, requestOptions).parse()
 
     override fun list(
-        params: MessageBatchesBetaTrueListParams,
+        params: BatchesBetaTrueListParams,
         requestOptions: RequestOptions,
-    ): MessageBatchesBetaTrueListResponse =
+    ): BatchesBetaTrueListResponse =
         // get /v1/messages/batches?beta=true
         withRawResponse().list(params, requestOptions).parse()
 
@@ -48,14 +48,14 @@ class BatchesBetaTrueServiceImpl internal constructor(private val clientOptions:
 
         private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<MessageBatchesBetaTrueCreateResponse> =
-            jsonHandler<MessageBatchesBetaTrueCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<BatchesBetaTrueCreateResponse> =
+            jsonHandler<BatchesBetaTrueCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun create(
-            params: MessageBatchesBetaTrueCreateParams,
+            params: BatchesBetaTrueCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MessageBatchesBetaTrueCreateResponse> {
+        ): HttpResponseFor<BatchesBetaTrueCreateResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -77,14 +77,14 @@ class BatchesBetaTrueServiceImpl internal constructor(private val clientOptions:
             }
         }
 
-        private val listHandler: Handler<MessageBatchesBetaTrueListResponse> =
-            jsonHandler<MessageBatchesBetaTrueListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<BatchesBetaTrueListResponse> =
+            jsonHandler<BatchesBetaTrueListResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
-            params: MessageBatchesBetaTrueListParams,
+            params: BatchesBetaTrueListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MessageBatchesBetaTrueListResponse> {
+        ): HttpResponseFor<BatchesBetaTrueListResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

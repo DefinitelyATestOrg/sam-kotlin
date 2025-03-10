@@ -44,8 +44,8 @@ This library requires Java 8 or later.
 ```kotlin
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 
 // Configures using the `API_KEY` environment variable
 val client: SamClient = SamOkHttpClient.fromEnv()
@@ -128,8 +128,8 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```kotlin
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 
 // Configures using the `API_KEY` environment variable
 val client: SamClient = SamOkHttpClient.fromEnv()
@@ -150,8 +150,8 @@ Or create an asynchronous client from the beginning:
 ```kotlin
 import me.elborai.api.client.SamClientAsync
 import me.elborai.api.client.okhttp.SamOkHttpClientAsync
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 
 // Configures using the `API_KEY` environment variable
 val client: SamClientAsync = SamOkHttpClientAsync.fromEnv()
@@ -178,8 +178,8 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```kotlin
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 
 val params: MessageCreateParams = MessageCreateParams.builder()
     .maxTokens(1024L)
@@ -198,7 +198,7 @@ val headers: Headers = message.headers()
 You can still deserialize the response into an instance of a Kotlin class if needed:
 
 ```kotlin
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateResponse
 
 val parsedMessage: MessageCreateResponse = message.parse()
 ```
@@ -277,8 +277,8 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 
 val message: MessageCreateResponse = client.messages().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -328,7 +328,7 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```kotlin
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateParams
 
 val params: MessageCreateParams = MessageCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -343,7 +343,7 @@ To set undocumented parameters on _nested_ headers, query params, or body classe
 
 ```kotlin
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateParams
 
 val params: MessageCreateParams = MessageCreateParams.builder()
     .metadata(MessageCreateParams.Metadata.builder()
@@ -357,7 +357,7 @@ These properties can be accessed on the nested built object later using the `_ad
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](sam-kotlin-core/src/main/kotlin/me/elborai/api/core/Values.kt) object to its setter:
 
 ```kotlin
-import me.elborai.api.models.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateParams
 
 val params: MessageCreateParams = MessageCreateParams.builder()
     .maxTokens(1024L)
@@ -456,7 +456,7 @@ By default, the SDK will not throw an exception in this case. It will throw [`Sa
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateResponse
 
 val message: MessageCreateResponse = client.messages().create(params).validate()
 ```
@@ -464,8 +464,8 @@ val message: MessageCreateResponse = client.messages().create(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 
 val message: MessageCreateResponse = client.messages().create(
   params, RequestOptions.builder().responseValidation(true).build()

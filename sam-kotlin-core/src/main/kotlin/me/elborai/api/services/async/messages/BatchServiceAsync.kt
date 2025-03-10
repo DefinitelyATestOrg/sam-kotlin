@@ -5,22 +5,22 @@ package me.elborai.api.services.async.messages
 import com.google.errorprone.annotations.MustBeClosed
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.MessageBatchCancelBetaParams
-import me.elborai.api.models.MessageBatchCancelBetaResponse
-import me.elborai.api.models.MessageBatchCancelParams
-import me.elborai.api.models.MessageBatchCancelResponse
-import me.elborai.api.models.MessageBatchCreateParams
-import me.elborai.api.models.MessageBatchCreateResponse
-import me.elborai.api.models.MessageBatchDeleteParams
-import me.elborai.api.models.MessageBatchDeleteResponse
-import me.elborai.api.models.MessageBatchListParams
-import me.elborai.api.models.MessageBatchListResponse
-import me.elborai.api.models.MessageBatchResultsBetaParams
-import me.elborai.api.models.MessageBatchResultsBetaResponse
-import me.elborai.api.models.MessageBatchResultsParams
-import me.elborai.api.models.MessageBatchResultsResponse
-import me.elborai.api.models.MessageBatchRetrieveParams
-import me.elborai.api.models.MessageBatchRetrieveResponse
+import me.elborai.api.models.messages.batches.BatchCancelBetaParams
+import me.elborai.api.models.messages.batches.BatchCancelBetaResponse
+import me.elborai.api.models.messages.batches.BatchCancelParams
+import me.elborai.api.models.messages.batches.BatchCancelResponse
+import me.elborai.api.models.messages.batches.BatchCreateParams
+import me.elborai.api.models.messages.batches.BatchCreateResponse
+import me.elborai.api.models.messages.batches.BatchDeleteParams
+import me.elborai.api.models.messages.batches.BatchDeleteResponse
+import me.elborai.api.models.messages.batches.BatchListParams
+import me.elborai.api.models.messages.batches.BatchListResponse
+import me.elborai.api.models.messages.batches.BatchResultsBetaParams
+import me.elborai.api.models.messages.batches.BatchResultsBetaResponse
+import me.elborai.api.models.messages.batches.BatchResultsParams
+import me.elborai.api.models.messages.batches.BatchResultsResponse
+import me.elborai.api.models.messages.batches.BatchRetrieveParams
+import me.elborai.api.models.messages.batches.BatchRetrieveResponse
 import me.elborai.api.services.async.messages.batches.BetaTrueServiceAsync
 
 interface BatchServiceAsync {
@@ -43,9 +43,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun create(
-        params: MessageBatchCreateParams,
+        params: BatchCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchCreateResponse
+    ): BatchCreateResponse
 
     /**
      * This endpoint is idempotent and can be used to poll for Message Batch completion. To access
@@ -55,9 +55,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun retrieve(
-        params: MessageBatchRetrieveParams,
+        params: BatchRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchRetrieveResponse
+    ): BatchRetrieveResponse
 
     /**
      * List all Message Batches within a Workspace. Most recently created batches are returned
@@ -67,13 +67,13 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun list(
-        params: MessageBatchListParams = MessageBatchListParams.none(),
+        params: BatchListParams = BatchListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchListResponse
+    ): BatchListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): MessageBatchListResponse =
-        list(MessageBatchListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): BatchListResponse =
+        list(BatchListParams.none(), requestOptions)
 
     /**
      * Delete a Message Batch.
@@ -85,9 +85,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun delete(
-        params: MessageBatchDeleteParams,
+        params: BatchDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchDeleteResponse
+    ): BatchDeleteResponse
 
     /**
      * Batches may be canceled any time before processing ends. Once cancellation is initiated, the
@@ -102,9 +102,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun cancel(
-        params: MessageBatchCancelParams,
+        params: BatchCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchCancelResponse
+    ): BatchCancelResponse
 
     /**
      * Batches may be canceled any time before processing ends. Once cancellation is initiated, the
@@ -119,9 +119,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun cancelBeta(
-        params: MessageBatchCancelBetaParams,
+        params: BatchCancelBetaParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchCancelBetaResponse
+    ): BatchCancelBetaResponse
 
     /**
      * Streams the results of a Message Batch as a `.jsonl` file.
@@ -134,9 +134,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun results(
-        params: MessageBatchResultsParams,
+        params: BatchResultsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchResultsResponse
+    ): BatchResultsResponse
 
     /**
      * Streams the results of a Message Batch as a `.jsonl` file.
@@ -149,9 +149,9 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun resultsBeta(
-        params: MessageBatchResultsBetaParams,
+        params: BatchResultsBetaParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchResultsBetaResponse
+    ): BatchResultsBetaResponse
 
     /** A view of [BatchServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -164,9 +164,9 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun create(
-            params: MessageBatchCreateParams,
+            params: BatchCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchCreateResponse>
+        ): HttpResponseFor<BatchCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}`, but is
@@ -174,9 +174,9 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
-            params: MessageBatchRetrieveParams,
+            params: BatchRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchRetrieveResponse>
+        ): HttpResponseFor<BatchRetrieveResponse>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batches`, but is otherwise the same as
@@ -184,16 +184,14 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun list(
-            params: MessageBatchListParams = MessageBatchListParams.none(),
+            params: BatchListParams = BatchListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchListResponse>
+        ): HttpResponseFor<BatchListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(
-            requestOptions: RequestOptions
-        ): HttpResponseFor<MessageBatchListResponse> =
-            list(MessageBatchListParams.none(), requestOptions)
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<BatchListResponse> =
+            list(BatchListParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/batches/{message_batch_id}`, but is
@@ -201,9 +199,9 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun delete(
-            params: MessageBatchDeleteParams,
+            params: BatchDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchDeleteResponse>
+        ): HttpResponseFor<BatchDeleteResponse>
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batches/{message_batch_id}/cancel`,
@@ -211,9 +209,9 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun cancel(
-            params: MessageBatchCancelParams,
+            params: BatchCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchCancelResponse>
+        ): HttpResponseFor<BatchCancelResponse>
 
         /**
          * Returns a raw HTTP response for `post
@@ -222,9 +220,9 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun cancelBeta(
-            params: MessageBatchCancelBetaParams,
+            params: BatchCancelBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchCancelBetaResponse>
+        ): HttpResponseFor<BatchCancelBetaResponse>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}/results`,
@@ -232,9 +230,9 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun results(
-            params: MessageBatchResultsParams,
+            params: BatchResultsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchResultsResponse>
+        ): HttpResponseFor<BatchResultsResponse>
 
         /**
          * Returns a raw HTTP response for `get
@@ -243,8 +241,8 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun resultsBeta(
-            params: MessageBatchResultsBetaParams,
+            params: BatchResultsBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchResultsBetaResponse>
+        ): HttpResponseFor<BatchResultsBetaResponse>
     }
 }

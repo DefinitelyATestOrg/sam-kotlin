@@ -5,7 +5,7 @@ package me.elborai.api.services.async
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClientAsync
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessagesBetaTrueCreateParams
+import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

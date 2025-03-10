@@ -4,7 +4,7 @@ package me.elborai.api.services.blocking
 
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClient
-import me.elborai.api.models.ModelsBetaTrueListParams
+import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

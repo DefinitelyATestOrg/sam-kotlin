@@ -5,10 +5,10 @@ package me.elborai.api.services.async.messages
 import com.google.errorprone.annotations.MustBeClosed
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.MessageBatchesBetaTrueCreateParams
-import me.elborai.api.models.MessageBatchesBetaTrueCreateResponse
-import me.elborai.api.models.MessageBatchesBetaTrueListParams
-import me.elborai.api.models.MessageBatchesBetaTrueListResponse
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueCreateParams
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueCreateResponse
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListParams
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListResponse
 
 interface BatchesBetaTrueServiceAsync {
 
@@ -28,9 +28,9 @@ interface BatchesBetaTrueServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun create(
-        params: MessageBatchesBetaTrueCreateParams,
+        params: BatchesBetaTrueCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchesBetaTrueCreateResponse
+    ): BatchesBetaTrueCreateResponse
 
     /**
      * List all Message Batches within a Workspace. Most recently created batches are returned
@@ -40,13 +40,13 @@ interface BatchesBetaTrueServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun list(
-        params: MessageBatchesBetaTrueListParams = MessageBatchesBetaTrueListParams.none(),
+        params: BatchesBetaTrueListParams = BatchesBetaTrueListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchesBetaTrueListResponse
+    ): BatchesBetaTrueListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): MessageBatchesBetaTrueListResponse =
-        list(MessageBatchesBetaTrueListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): BatchesBetaTrueListResponse =
+        list(BatchesBetaTrueListParams.none(), requestOptions)
 
     /**
      * A view of [BatchesBetaTrueServiceAsync] that provides access to raw HTTP responses for each
@@ -60,9 +60,9 @@ interface BatchesBetaTrueServiceAsync {
          */
         @MustBeClosed
         suspend fun create(
-            params: MessageBatchesBetaTrueCreateParams,
+            params: BatchesBetaTrueCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchesBetaTrueCreateResponse>
+        ): HttpResponseFor<BatchesBetaTrueCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batches?beta=true`, but is otherwise
@@ -70,15 +70,15 @@ interface BatchesBetaTrueServiceAsync {
          */
         @MustBeClosed
         suspend fun list(
-            params: MessageBatchesBetaTrueListParams = MessageBatchesBetaTrueListParams.none(),
+            params: BatchesBetaTrueListParams = BatchesBetaTrueListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchesBetaTrueListResponse>
+        ): HttpResponseFor<BatchesBetaTrueListResponse>
 
         /** @see [list] */
         @MustBeClosed
         suspend fun list(
             requestOptions: RequestOptions
-        ): HttpResponseFor<MessageBatchesBetaTrueListResponse> =
-            list(MessageBatchesBetaTrueListParams.none(), requestOptions)
+        ): HttpResponseFor<BatchesBetaTrueListResponse> =
+            list(BatchesBetaTrueListParams.none(), requestOptions)
     }
 }
