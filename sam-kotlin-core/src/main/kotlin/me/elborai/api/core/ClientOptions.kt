@@ -185,11 +185,6 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
-            apiKey.let {
-                if (!it.isEmpty()) {
-                    headers.put("api_key", it)
-                }
-            }
             headers.replaceAll(this.headers.build())
             queryParams.replaceAll(this.queryParams.build())
 
