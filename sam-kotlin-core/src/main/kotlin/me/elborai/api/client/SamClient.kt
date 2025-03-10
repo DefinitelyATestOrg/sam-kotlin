@@ -2,6 +2,11 @@
 
 package me.elborai.api.client
 
+import me.elborai.api.services.blocking.CompleteService
+import me.elborai.api.services.blocking.MessageService
+import me.elborai.api.services.blocking.MessagesBetaTrueService
+import me.elborai.api.services.blocking.ModelService
+import me.elborai.api.services.blocking.ModelsBetaTrueService
 import me.elborai.api.services.blocking.StoreService
 import me.elborai.api.services.blocking.UserService
 
@@ -38,6 +43,16 @@ interface SamClient {
 
     fun user(): UserService
 
+    fun messages(): MessageService
+
+    fun complete(): CompleteService
+
+    fun models(): ModelService
+
+    fun messagesBetaTrue(): MessagesBetaTrueService
+
+    fun modelsBetaTrue(): ModelsBetaTrueService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -57,5 +72,15 @@ interface SamClient {
         fun store(): StoreService.WithRawResponse
 
         fun user(): UserService.WithRawResponse
+
+        fun messages(): MessageService.WithRawResponse
+
+        fun complete(): CompleteService.WithRawResponse
+
+        fun models(): ModelService.WithRawResponse
+
+        fun messagesBetaTrue(): MessagesBetaTrueService.WithRawResponse
+
+        fun modelsBetaTrue(): ModelsBetaTrueService.WithRawResponse
     }
 }
