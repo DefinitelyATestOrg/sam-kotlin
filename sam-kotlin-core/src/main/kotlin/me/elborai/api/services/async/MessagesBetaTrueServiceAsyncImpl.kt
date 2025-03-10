@@ -15,8 +15,8 @@ import me.elborai.api.core.http.json
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepareAsync
 import me.elborai.api.errors.SamError
-import me.elborai.api.models.MessagesBetaTrueCreateParams
-import me.elborai.api.models.MessagesBetaTrueCreateResponse
+import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateParams
+import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateResponse
 
 class MessagesBetaTrueServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : MessagesBetaTrueServiceAsync {

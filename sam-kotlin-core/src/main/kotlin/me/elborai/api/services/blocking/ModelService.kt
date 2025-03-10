@@ -5,12 +5,12 @@ package me.elborai.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.ModelListParams
-import me.elborai.api.models.ModelListResponse
-import me.elborai.api.models.ModelRetrieveBetaParams
-import me.elborai.api.models.ModelRetrieveBetaResponse
-import me.elborai.api.models.ModelRetrieveParams
-import me.elborai.api.models.ModelRetrieveResponse
+import me.elborai.api.models.models.ModelListParams
+import me.elborai.api.models.models.ModelListResponse
+import me.elborai.api.models.models.ModelRetrieveBetaParams
+import me.elborai.api.models.models.ModelRetrieveBetaResponse
+import me.elborai.api.models.models.ModelRetrieveParams
+import me.elborai.api.models.models.ModelRetrieveResponse
 
 interface ModelService {
 

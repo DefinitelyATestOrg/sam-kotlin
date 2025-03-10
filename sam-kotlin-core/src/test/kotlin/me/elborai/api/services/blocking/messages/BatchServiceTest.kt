@@ -5,14 +5,14 @@ package me.elborai.api.services.blocking.messages
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClient
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessageBatchCancelBetaParams
-import me.elborai.api.models.MessageBatchCancelParams
-import me.elborai.api.models.MessageBatchCreateParams
-import me.elborai.api.models.MessageBatchDeleteParams
-import me.elborai.api.models.MessageBatchListParams
-import me.elborai.api.models.MessageBatchResultsBetaParams
-import me.elborai.api.models.MessageBatchResultsParams
-import me.elborai.api.models.MessageBatchRetrieveParams
+import me.elborai.api.models.messages.batches.BatchCancelBetaParams
+import me.elborai.api.models.messages.batches.BatchCancelParams
+import me.elborai.api.models.messages.batches.BatchCreateParams
+import me.elborai.api.models.messages.batches.BatchDeleteParams
+import me.elborai.api.models.messages.batches.BatchListParams
+import me.elborai.api.models.messages.batches.BatchResultsBetaParams
+import me.elborai.api.models.messages.batches.BatchResultsParams
+import me.elborai.api.models.messages.batches.BatchRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -31,28 +31,27 @@ class BatchServiceTest {
 
         val batch =
             batchService.create(
-                MessageBatchCreateParams.builder()
+                BatchCreateParams.builder()
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
                     .xApiKey("x-api-key")
                     .addRequest(
-                        MessageBatchCreateParams.Request.builder()
+                        BatchCreateParams.Request.builder()
                             .customId("my-custom-id-1")
                             .params(
-                                MessageBatchCreateParams.Request.Params.builder()
+                                BatchCreateParams.Request.Params.builder()
                                     .maxTokens(1024L)
                                     .addMessage(
-                                        MessageBatchCreateParams.Request.Params.Message.builder()
+                                        BatchCreateParams.Request.Params.Message.builder()
                                             .content("Hello, world")
                                             .role(
-                                                MessageBatchCreateParams.Request.Params.Message.Role
-                                                    .USER
+                                                BatchCreateParams.Request.Params.Message.Role.USER
                                             )
                                             .build()
                                     )
                                     .model("claude-3-7-sonnet-20250219")
                                     .metadata(
-                                        MessageBatchCreateParams.Request.Params.Metadata.builder()
+                                        BatchCreateParams.Request.Params.Metadata.builder()
                                             .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
                                             .build()
                                     )
@@ -60,24 +59,22 @@ class BatchServiceTest {
                                     .stream(true)
                                     .systemOfRequestTextBlocks(
                                         listOf(
-                                            MessageBatchCreateParams.Request.Params.System
-                                                .RequestTextBlock
+                                            BatchCreateParams.Request.Params.System.RequestTextBlock
                                                 .builder()
                                                 .text("Today's date is 2024-06-01.")
                                                 .type(
-                                                    MessageBatchCreateParams.Request.Params.System
+                                                    BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .Type
                                                         .TEXT
                                                 )
                                                 .cacheControl(
-                                                    MessageBatchCreateParams.Request.Params.System
+                                                    BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .CacheControl
                                                         .builder()
                                                         .type(
-                                                            MessageBatchCreateParams.Request.Params
-                                                                .System
+                                                            BatchCreateParams.Request.Params.System
                                                                 .RequestTextBlock
                                                                 .CacheControl
                                                                 .Type
@@ -86,7 +83,7 @@ class BatchServiceTest {
                                                         .build()
                                                 )
                                                 .addCitation(
-                                                    MessageBatchCreateParams.Request.Params.System
+                                                    BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .Citation
                                                         .RequestCharLocationCitation
@@ -97,8 +94,7 @@ class BatchServiceTest {
                                                         .endCharIndex(0L)
                                                         .startCharIndex(0L)
                                                         .type(
-                                                            MessageBatchCreateParams.Request.Params
-                                                                .System
+                                                            BatchCreateParams.Request.Params.System
                                                                 .RequestTextBlock
                                                                 .Citation
                                                                 .RequestCharLocationCitation
@@ -113,11 +109,10 @@ class BatchServiceTest {
                                     .temperature(1.0)
                                     .configEnabledThinking(1024L)
                                     .toolChoice(
-                                        MessageBatchCreateParams.Request.Params.ToolChoice
-                                            .ToolChoiceAuto
+                                        BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto
                                             .builder()
                                             .type(
-                                                MessageBatchCreateParams.Request.Params.ToolChoice
+                                                BatchCreateParams.Request.Params.ToolChoice
                                                     .ToolChoiceAuto
                                                     .Type
                                                     .AUTO
@@ -126,15 +121,13 @@ class BatchServiceTest {
                                             .build()
                                     )
                                     .addTool(
-                                        MessageBatchCreateParams.Request.Params.Tool.InnerTool
-                                            .builder()
+                                        BatchCreateParams.Request.Params.Tool.InnerTool.builder()
                                             .inputSchema(
-                                                MessageBatchCreateParams.Request.Params.Tool
-                                                    .InnerTool
+                                                BatchCreateParams.Request.Params.Tool.InnerTool
                                                     .InputSchema
                                                     .builder()
                                                     .type(
-                                                        MessageBatchCreateParams.Request.Params.Tool
+                                                        BatchCreateParams.Request.Params.Tool
                                                             .InnerTool
                                                             .InputSchema
                                                             .Type
@@ -162,12 +155,11 @@ class BatchServiceTest {
                                             )
                                             .name("name")
                                             .cacheControl(
-                                                MessageBatchCreateParams.Request.Params.Tool
-                                                    .InnerTool
+                                                BatchCreateParams.Request.Params.Tool.InnerTool
                                                     .CacheControl
                                                     .builder()
                                                     .type(
-                                                        MessageBatchCreateParams.Request.Params.Tool
+                                                        BatchCreateParams.Request.Params.Tool
                                                             .InnerTool
                                                             .CacheControl
                                                             .Type
@@ -203,7 +195,7 @@ class BatchServiceTest {
 
         val batch =
             batchService.retrieve(
-                MessageBatchRetrieveParams.builder()
+                BatchRetrieveParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
@@ -225,7 +217,7 @@ class BatchServiceTest {
 
         val batch =
             batchService.list(
-                MessageBatchListParams.builder()
+                BatchListParams.builder()
                     .afterId("after_id")
                     .beforeId("before_id")
                     .limit(1L)
@@ -249,7 +241,7 @@ class BatchServiceTest {
 
         val batch =
             batchService.delete(
-                MessageBatchDeleteParams.builder()
+                BatchDeleteParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
@@ -271,7 +263,7 @@ class BatchServiceTest {
 
         val response =
             batchService.cancel(
-                MessageBatchCancelParams.builder()
+                BatchCancelParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
@@ -293,7 +285,7 @@ class BatchServiceTest {
 
         val response =
             batchService.cancelBeta(
-                MessageBatchCancelBetaParams.builder()
+                BatchCancelBetaParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
@@ -316,7 +308,7 @@ class BatchServiceTest {
 
         val responseStreamResponse =
             batchService.resultsStreaming(
-                MessageBatchResultsParams.builder()
+                BatchResultsParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
@@ -341,7 +333,7 @@ class BatchServiceTest {
 
         val responseStreamResponse =
             batchService.resultsBetaStreaming(
-                MessageBatchResultsBetaParams.builder()
+                BatchResultsBetaParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")

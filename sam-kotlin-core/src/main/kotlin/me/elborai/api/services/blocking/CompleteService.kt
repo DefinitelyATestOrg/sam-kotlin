@@ -5,8 +5,8 @@ package me.elborai.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.CompleteCreateParams
-import me.elborai.api.models.CompleteCreateResponse
+import me.elborai.api.models.complete.CompleteCreateParams
+import me.elborai.api.models.complete.CompleteCreateResponse
 
 interface CompleteService {
 

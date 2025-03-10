@@ -5,8 +5,8 @@ package me.elborai.api.services.blocking.messages
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClient
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessageBatchesBetaTrueCreateParams
-import me.elborai.api.models.MessageBatchesBetaTrueListParams
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueCreateParams
+import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -24,23 +24,21 @@ class BatchesBetaTrueServiceTest {
 
         val batchesBetaTrue =
             batchesBetaTrueService.create(
-                MessageBatchesBetaTrueCreateParams.builder()
+                BatchesBetaTrueCreateParams.builder()
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
                     .xApiKey("x-api-key")
                     .addRequest(
-                        MessageBatchesBetaTrueCreateParams.Request.builder()
+                        BatchesBetaTrueCreateParams.Request.builder()
                             .customId("my-custom-id-1")
                             .params(
-                                MessageBatchesBetaTrueCreateParams.Request.Params.builder()
+                                BatchesBetaTrueCreateParams.Request.Params.builder()
                                     .maxTokens(1024L)
                                     .addMessage(
-                                        MessageBatchesBetaTrueCreateParams.Request.Params.Message
-                                            .builder()
+                                        BatchesBetaTrueCreateParams.Request.Params.Message.builder()
                                             .content("Hello, world")
                                             .role(
-                                                MessageBatchesBetaTrueCreateParams.Request.Params
-                                                    .Message
+                                                BatchesBetaTrueCreateParams.Request.Params.Message
                                                     .Role
                                                     .USER
                                             )
@@ -48,7 +46,7 @@ class BatchesBetaTrueServiceTest {
                                     )
                                     .model("claude-3-7-sonnet-20250219")
                                     .metadata(
-                                        MessageBatchesBetaTrueCreateParams.Request.Params.Metadata
+                                        BatchesBetaTrueCreateParams.Request.Params.Metadata
                                             .builder()
                                             .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
                                             .build()
@@ -57,28 +55,25 @@ class BatchesBetaTrueServiceTest {
                                     .stream(true)
                                     .systemOfBetaRequestTextBlocks(
                                         listOf(
-                                            MessageBatchesBetaTrueCreateParams.Request.Params.System
+                                            BatchesBetaTrueCreateParams.Request.Params.System
                                                 .BetaRequestTextBlock
                                                 .builder()
                                                 .text("Today's date is 2024-06-01.")
                                                 .type(
-                                                    MessageBatchesBetaTrueCreateParams.Request
-                                                        .Params
+                                                    BatchesBetaTrueCreateParams.Request.Params
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .Type
                                                         .TEXT
                                                 )
                                                 .cacheControl(
-                                                    MessageBatchesBetaTrueCreateParams.Request
-                                                        .Params
+                                                    BatchesBetaTrueCreateParams.Request.Params
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .CacheControl
                                                         .builder()
                                                         .type(
-                                                            MessageBatchesBetaTrueCreateParams
-                                                                .Request
+                                                            BatchesBetaTrueCreateParams.Request
                                                                 .Params
                                                                 .System
                                                                 .BetaRequestTextBlock
@@ -89,8 +84,7 @@ class BatchesBetaTrueServiceTest {
                                                         .build()
                                                 )
                                                 .addCitation(
-                                                    MessageBatchesBetaTrueCreateParams.Request
-                                                        .Params
+                                                    BatchesBetaTrueCreateParams.Request.Params
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .Citation
@@ -102,8 +96,7 @@ class BatchesBetaTrueServiceTest {
                                                         .endCharIndex(0L)
                                                         .startCharIndex(0L)
                                                         .type(
-                                                            MessageBatchesBetaTrueCreateParams
-                                                                .Request
+                                                            BatchesBetaTrueCreateParams.Request
                                                                 .Params
                                                                 .System
                                                                 .BetaRequestTextBlock
@@ -120,11 +113,11 @@ class BatchesBetaTrueServiceTest {
                                     .temperature(1.0)
                                     .betaThinkingConfigEnabledThinking(1024L)
                                     .toolChoice(
-                                        MessageBatchesBetaTrueCreateParams.Request.Params.ToolChoice
+                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice
                                             .BetaToolChoiceAuto
                                             .builder()
                                             .type(
-                                                MessageBatchesBetaTrueCreateParams.Request.Params
+                                                BatchesBetaTrueCreateParams.Request.Params
                                                     .ToolChoice
                                                     .BetaToolChoiceAuto
                                                     .Type
@@ -134,18 +127,15 @@ class BatchesBetaTrueServiceTest {
                                             .build()
                                     )
                                     .addTool(
-                                        MessageBatchesBetaTrueCreateParams.Request.Params.Tool
-                                            .BetaTool
+                                        BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                             .builder()
                                             .inputSchema(
-                                                MessageBatchesBetaTrueCreateParams.Request.Params
-                                                    .Tool
+                                                BatchesBetaTrueCreateParams.Request.Params.Tool
                                                     .BetaTool
                                                     .InputSchema
                                                     .builder()
                                                     .type(
-                                                        MessageBatchesBetaTrueCreateParams.Request
-                                                            .Params
+                                                        BatchesBetaTrueCreateParams.Request.Params
                                                             .Tool
                                                             .BetaTool
                                                             .InputSchema
@@ -174,14 +164,12 @@ class BatchesBetaTrueServiceTest {
                                             )
                                             .name("name")
                                             .cacheControl(
-                                                MessageBatchesBetaTrueCreateParams.Request.Params
-                                                    .Tool
+                                                BatchesBetaTrueCreateParams.Request.Params.Tool
                                                     .BetaTool
                                                     .CacheControl
                                                     .builder()
                                                     .type(
-                                                        MessageBatchesBetaTrueCreateParams.Request
-                                                            .Params
+                                                        BatchesBetaTrueCreateParams.Request.Params
                                                             .Tool
                                                             .BetaTool
                                                             .CacheControl
@@ -194,8 +182,7 @@ class BatchesBetaTrueServiceTest {
                                                 "Get the current weather in a given location"
                                             )
                                             .type(
-                                                MessageBatchesBetaTrueCreateParams.Request.Params
-                                                    .Tool
+                                                BatchesBetaTrueCreateParams.Request.Params.Tool
                                                     .BetaTool
                                                     .Type
                                                     .CUSTOM
@@ -225,7 +212,7 @@ class BatchesBetaTrueServiceTest {
 
         val batchesBetaTrue =
             batchesBetaTrueService.list(
-                MessageBatchesBetaTrueListParams.builder()
+                BatchesBetaTrueListParams.builder()
                     .afterId("after_id")
                     .beforeId("before_id")
                     .limit(1L)

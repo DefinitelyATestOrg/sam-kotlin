@@ -5,10 +5,10 @@ package me.elborai.api.services.blocking.messages.batches
 import com.google.errorprone.annotations.MustBeClosed
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.MessageBatchBetaTrueDeleteParams
-import me.elborai.api.models.MessageBatchBetaTrueDeleteResponse
-import me.elborai.api.models.MessageBatchBetaTrueRetrieveParams
-import me.elborai.api.models.MessageBatchBetaTrueRetrieveResponse
+import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteParams
+import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteResponse
+import me.elborai.api.models.messages.batches.betatrue.BetaTrueRetrieveParams
+import me.elborai.api.models.messages.batches.betatrue.BetaTrueRetrieveResponse
 
 interface BetaTrueService {
 
@@ -25,9 +25,9 @@ interface BetaTrueService {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     fun retrieve(
-        params: MessageBatchBetaTrueRetrieveParams,
+        params: BetaTrueRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchBetaTrueRetrieveResponse
+    ): BetaTrueRetrieveResponse
 
     /**
      * Delete a Message Batch.
@@ -39,9 +39,9 @@ interface BetaTrueService {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     fun delete(
-        params: MessageBatchBetaTrueDeleteParams,
+        params: BetaTrueDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageBatchBetaTrueDeleteResponse
+    ): BetaTrueDeleteResponse
 
     /** A view of [BetaTrueService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -52,9 +52,9 @@ interface BetaTrueService {
          */
         @MustBeClosed
         fun retrieve(
-            params: MessageBatchBetaTrueRetrieveParams,
+            params: BetaTrueRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchBetaTrueRetrieveResponse>
+        ): HttpResponseFor<BetaTrueRetrieveResponse>
 
         /**
          * Returns a raw HTTP response for `delete
@@ -63,8 +63,8 @@ interface BetaTrueService {
          */
         @MustBeClosed
         fun delete(
-            params: MessageBatchBetaTrueDeleteParams,
+            params: BetaTrueDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageBatchBetaTrueDeleteResponse>
+        ): HttpResponseFor<BetaTrueDeleteResponse>
     }
 }

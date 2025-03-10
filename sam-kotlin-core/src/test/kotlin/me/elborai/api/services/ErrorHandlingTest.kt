@@ -23,7 +23,7 @@ import me.elborai.api.errors.SamException
 import me.elborai.api.errors.UnauthorizedException
 import me.elborai.api.errors.UnexpectedStatusCodeException
 import me.elborai.api.errors.UnprocessableEntityException
-import me.elborai.api.models.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateParams
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach

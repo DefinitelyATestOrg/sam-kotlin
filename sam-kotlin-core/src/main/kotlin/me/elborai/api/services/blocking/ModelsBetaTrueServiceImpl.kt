@@ -14,8 +14,8 @@ import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepare
 import me.elborai.api.errors.SamError
-import me.elborai.api.models.ModelsBetaTrueListParams
-import me.elborai.api.models.ModelsBetaTrueListResponse
+import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListParams
+import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListResponse
 
 class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ModelsBetaTrueService {

@@ -15,8 +15,8 @@ import me.elborai.api.core.http.json
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepare
 import me.elborai.api.errors.SamError
-import me.elborai.api.models.CompleteCreateParams
-import me.elborai.api.models.CompleteCreateResponse
+import me.elborai.api.models.complete.CompleteCreateParams
+import me.elborai.api.models.complete.CompleteCreateResponse
 
 class CompleteServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CompleteService {

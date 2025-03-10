@@ -15,7 +15,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import me.elborai.api.client.SamClient
 import me.elborai.api.client.okhttp.SamOkHttpClient
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateParams
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
