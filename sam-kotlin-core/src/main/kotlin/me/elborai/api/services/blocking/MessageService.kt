@@ -5,12 +5,12 @@ package me.elborai.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
-import me.elborai.api.models.MessageCountTokensBetaParams
-import me.elborai.api.models.MessageCountTokensBetaResponse
-import me.elborai.api.models.MessageCountTokensParams
-import me.elborai.api.models.MessageCountTokensResponse
-import me.elborai.api.models.MessageCreateParams
-import me.elborai.api.models.MessageCreateResponse
+import me.elborai.api.models.messages.MessageCountTokensBetaParams
+import me.elborai.api.models.messages.MessageCountTokensBetaResponse
+import me.elborai.api.models.messages.MessageCountTokensParams
+import me.elborai.api.models.messages.MessageCountTokensResponse
+import me.elborai.api.models.messages.MessageCreateParams
+import me.elborai.api.models.messages.MessageCreateResponse
 import me.elborai.api.services.blocking.messages.BatchService
 import me.elborai.api.services.blocking.messages.BatchesBetaTrueService
 

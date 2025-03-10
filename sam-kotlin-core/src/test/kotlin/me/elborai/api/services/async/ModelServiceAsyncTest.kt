@@ -4,9 +4,9 @@ package me.elborai.api.services.async
 
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClientAsync
-import me.elborai.api.models.ModelListParams
-import me.elborai.api.models.ModelRetrieveBetaParams
-import me.elborai.api.models.ModelRetrieveParams
+import me.elborai.api.models.models.ModelListParams
+import me.elborai.api.models.models.ModelRetrieveBetaParams
+import me.elborai.api.models.models.ModelRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

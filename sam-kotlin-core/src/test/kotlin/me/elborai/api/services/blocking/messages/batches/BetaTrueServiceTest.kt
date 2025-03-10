@@ -4,8 +4,8 @@ package me.elborai.api.services.blocking.messages.batches
 
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClient
-import me.elborai.api.models.MessageBatchBetaTrueDeleteParams
-import me.elborai.api.models.MessageBatchBetaTrueRetrieveParams
+import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteParams
+import me.elborai.api.models.messages.batches.betatrue.BetaTrueRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -23,7 +23,7 @@ class BetaTrueServiceTest {
 
         val betaTrue =
             betaTrueService.retrieve(
-                MessageBatchBetaTrueRetrieveParams.builder()
+                BetaTrueRetrieveParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")
@@ -45,7 +45,7 @@ class BetaTrueServiceTest {
 
         val betaTrue =
             betaTrueService.delete(
-                MessageBatchBetaTrueDeleteParams.builder()
+                BetaTrueDeleteParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")

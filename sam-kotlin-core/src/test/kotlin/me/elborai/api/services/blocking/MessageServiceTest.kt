@@ -5,9 +5,9 @@ package me.elborai.api.services.blocking
 import me.elborai.api.TestServerExtension
 import me.elborai.api.client.okhttp.SamOkHttpClient
 import me.elborai.api.core.JsonValue
-import me.elborai.api.models.MessageCountTokensBetaParams
-import me.elborai.api.models.MessageCountTokensParams
-import me.elborai.api.models.MessageCreateParams
+import me.elborai.api.models.messages.MessageCountTokensBetaParams
+import me.elborai.api.models.messages.MessageCountTokensParams
+import me.elborai.api.models.messages.MessageCreateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
