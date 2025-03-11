@@ -3,6 +3,8 @@
 package me.elborai.api.core.handlers
 
 import com.fasterxml.jackson.databind.json.JsonMapper
+import java.io.ByteArrayInputStream
+import java.io.InputStream
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.HttpResponse
 import me.elborai.api.core.http.HttpResponse.Handler
@@ -12,12 +14,9 @@ import me.elborai.api.errors.NotFoundException
 import me.elborai.api.errors.PermissionDeniedException
 import me.elborai.api.errors.RateLimitException
 import me.elborai.api.errors.SamError
-import me.elborai.api.errors.SamException
 import me.elborai.api.errors.UnauthorizedException
 import me.elborai.api.errors.UnexpectedStatusCodeException
 import me.elborai.api.errors.UnprocessableEntityException
-import java.io.ByteArrayInputStream
-import java.io.InputStream
 
 internal fun errorHandler(jsonMapper: JsonMapper): Handler<SamError> {
     val handler = jsonHandler<SamError>(jsonMapper)

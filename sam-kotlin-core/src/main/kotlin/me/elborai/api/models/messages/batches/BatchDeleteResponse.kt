@@ -19,11 +19,12 @@ import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
 @NoAutoDetect
-class BatchDeleteResponse @JsonCreator private constructor(
+class BatchDeleteResponse
+@JsonCreator
+private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
     @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** ID of the Message Batch. */
@@ -37,18 +38,14 @@ class BatchDeleteResponse @JsonCreator private constructor(
     fun type(): Type = type.getRequired("type")
 
     /** ID of the Message Batch. */
-    @JsonProperty("id")
-    @ExcludeMissing
-    fun _id(): JsonField<String> = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
      * Deleted object type.
      *
      * For Message Batches, this is always `"message_batch_deleted"`.
      */
-    @JsonProperty("type")
-    @ExcludeMissing
-    fun _type(): JsonField<Type> = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -56,16 +53,15 @@ class BatchDeleteResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): BatchDeleteResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            id()
-            type()
-            validated = true
+    fun validate(): BatchDeleteResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        id()
+        type()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -75,7 +71,6 @@ class BatchDeleteResponse @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [BatchDeleteResponse].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .id()
          * .type()
@@ -91,21 +86,17 @@ class BatchDeleteResponse @JsonCreator private constructor(
         private var type: JsonField<Type>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(batchDeleteResponse: BatchDeleteResponse) =
-            apply {
-                id = batchDeleteResponse.id
-                type = batchDeleteResponse.type
-                additionalProperties = batchDeleteResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(batchDeleteResponse: BatchDeleteResponse) = apply {
+            id = batchDeleteResponse.id
+            type = batchDeleteResponse.type
+            additionalProperties = batchDeleteResponse.additionalProperties.toMutableMap()
+        }
 
         /** ID of the Message Batch. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** ID of the Message Batch. */
-        fun id(id: JsonField<String>) =
-            apply {
-                this.id = id
-            }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /**
          * Deleted object type.
@@ -119,46 +110,32 @@ class BatchDeleteResponse @JsonCreator private constructor(
          *
          * For Message Batches, this is always `"message_batch_deleted"`.
          */
-        fun type(type: JsonField<Type>) =
-            apply {
-                this.type = type
-            }
+        fun type(type: JsonField<Type>) = apply { this.type = type }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): BatchDeleteResponse =
             BatchDeleteResponse(
-              checkRequired(
-                "id", id
-              ),
-              checkRequired(
-                "type", type
-              ),
-              additionalProperties.toImmutable(),
+                checkRequired("id", id),
+                checkRequired("type", type),
+                additionalProperties.toImmutable(),
             )
     }
 
@@ -167,21 +144,17 @@ class BatchDeleteResponse @JsonCreator private constructor(
      *
      * For Message Batches, this is always `"message_batch_deleted"`.
      */
-    class Type @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that
-         * doesn't match any known member, and you want to know that value. For example, if
-         * the SDK is on an older version than the API, then the API may respond with new
-         * members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -192,18 +165,16 @@ class BatchDeleteResponse @JsonCreator private constructor(
 
         /** An enum containing [Type]'s known values. */
         enum class Known {
-            MESSAGE_BATCH_DELETED,
+            MESSAGE_BATCH_DELETED
         }
 
         /**
          * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Type] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For
-         *   example, if the SDK is on an older version than the API, then the API may
-         *   respond with new members that the SDK is unaware of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -213,11 +184,11 @@ class BatchDeleteResponse @JsonCreator private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or
-         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if
-         * you want to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -228,11 +199,10 @@ class BatchDeleteResponse @JsonCreator private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and
-         * don't want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws SamInvalidDataException if this class instance's value is a not a known
-         * member.
+         * @throws SamInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -243,20 +213,21 @@ class BatchDeleteResponse @JsonCreator private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for
-         * debugging and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws SamInvalidDataException if this class instance's value does not have the
-         * expected primitive type.
+         * @throws SamInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
          */
-        fun asString(): String = _value().asString() ?: throw SamInvalidDataException("Value is not a String")
+        fun asString(): String =
+            _value().asString() ?: throw SamInvalidDataException("Value is not a String")
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -265,11 +236,11 @@ class BatchDeleteResponse @JsonCreator private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is BatchDeleteResponse && id == other.id && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is BatchDeleteResponse && id == other.id && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -278,5 +249,6 @@ class BatchDeleteResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "BatchDeleteResponse{id=$id, type=$type, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "BatchDeleteResponse{id=$id, type=$type, additionalProperties=$additionalProperties}"
 }

@@ -19,35 +19,48 @@ import me.elborai.api.services.async.StoreServiceAsyncImpl
 import me.elborai.api.services.async.UserServiceAsync
 import me.elborai.api.services.async.UserServiceAsyncImpl
 
-class SamClientAsyncImpl(
-    private val clientOptions: ClientOptions,
-
-) : SamClientAsync {
+class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAsync {
 
     private val clientOptionsWithUserAgent =
-
-      if (clientOptions.headers.names().contains("User-Agent")) clientOptions
-
-      else clientOptions.toBuilder().putHeader("User-Agent", "${javaClass.simpleName}/Kotlin ${getPackageVersion()}").build()
+        if (clientOptions.headers.names().contains("User-Agent")) clientOptions
+        else
+            clientOptions
+                .toBuilder()
+                .putHeader("User-Agent", "${javaClass.simpleName}/Kotlin ${getPackageVersion()}")
+                .build()
 
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val sync: SamClient by lazy { SamClientImpl(clientOptions) }
 
-    private val withRawResponse: SamClientAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: SamClientAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val store: StoreServiceAsync by lazy { StoreServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val store: StoreServiceAsync by lazy {
+        StoreServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
     private val user: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val messages: MessageServiceAsync by lazy { MessageServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val messages: MessageServiceAsync by lazy {
+        MessageServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
-    private val complete: CompleteServiceAsync by lazy { CompleteServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val complete: CompleteServiceAsync by lazy {
+        CompleteServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
-    private val models: ModelServiceAsync by lazy { ModelServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val models: ModelServiceAsync by lazy {
+        ModelServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
-    private val messagesBetaTrue: MessagesBetaTrueServiceAsync by lazy { MessagesBetaTrueServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val messagesBetaTrue: MessagesBetaTrueServiceAsync by lazy {
+        MessagesBetaTrueServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
-    private val modelsBetaTrue: ModelsBetaTrueServiceAsync by lazy { ModelsBetaTrueServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val modelsBetaTrue: ModelsBetaTrueServiceAsync by lazy {
+        ModelsBetaTrueServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
     override fun sync(): SamClient = sync
 
@@ -69,24 +82,36 @@ class SamClientAsyncImpl(
 
     override fun close() = clientOptions.httpClient.close()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        SamClientAsync.WithRawResponse {
 
-    ) : SamClientAsync.WithRawResponse {
+        private val store: StoreServiceAsync.WithRawResponse by lazy {
+            StoreServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val store: StoreServiceAsync.WithRawResponse by lazy { StoreServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val user: UserServiceAsync.WithRawResponse by lazy {
+            UserServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val user: UserServiceAsync.WithRawResponse by lazy { UserServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val messages: MessageServiceAsync.WithRawResponse by lazy {
+            MessageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val messages: MessageServiceAsync.WithRawResponse by lazy { MessageServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val complete: CompleteServiceAsync.WithRawResponse by lazy {
+            CompleteServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val complete: CompleteServiceAsync.WithRawResponse by lazy { CompleteServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val models: ModelServiceAsync.WithRawResponse by lazy {
+            ModelServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val models: ModelServiceAsync.WithRawResponse by lazy { ModelServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val messagesBetaTrue: MessagesBetaTrueServiceAsync.WithRawResponse by lazy {
+            MessagesBetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val messagesBetaTrue: MessagesBetaTrueServiceAsync.WithRawResponse by lazy { MessagesBetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
-
-        private val modelsBetaTrue: ModelsBetaTrueServiceAsync.WithRawResponse by lazy { ModelsBetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val modelsBetaTrue: ModelsBetaTrueServiceAsync.WithRawResponse by lazy {
+            ModelsBetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
         override fun store(): StoreServiceAsync.WithRawResponse = store
 
@@ -98,7 +123,8 @@ class SamClientAsyncImpl(
 
         override fun models(): ModelServiceAsync.WithRawResponse = models
 
-        override fun messagesBetaTrue(): MessagesBetaTrueServiceAsync.WithRawResponse = messagesBetaTrue
+        override fun messagesBetaTrue(): MessagesBetaTrueServiceAsync.WithRawResponse =
+            messagesBetaTrue
 
         override fun modelsBetaTrue(): ModelsBetaTrueServiceAsync.WithRawResponse = modelsBetaTrue
     }

@@ -13,57 +13,72 @@ import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListRespons
 interface BatchesBetaTrueServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /**
      * Send a batch of Message creation requests.
      *
-     * The Message Batches API can be used to process multiple Messages API requests at
-     * once. Once a Message Batch is created, it begins processing immediately. Batches
-     * can take up to 24 hours to complete.
+     * The Message Batches API can be used to process multiple Messages API requests at once. Once a
+     * Message Batch is created, it begins processing immediately. Batches can take up to 24 hours
+     * to complete.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun create(params: BatchesBetaTrueCreateParams, requestOptions: RequestOptions = RequestOptions.none()): BatchesBetaTrueCreateResponse
+    suspend fun create(
+        params: BatchesBetaTrueCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchesBetaTrueCreateResponse
 
     /**
-     * List all Message Batches within a Workspace. Most recently created batches are
-     * returned first.
+     * List all Message Batches within a Workspace. Most recently created batches are returned
+     * first.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun list(params: BatchesBetaTrueListParams = BatchesBetaTrueListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): BatchesBetaTrueListResponse
+    suspend fun list(
+        params: BatchesBetaTrueListParams = BatchesBetaTrueListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchesBetaTrueListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): BatchesBetaTrueListResponse = list(BatchesBetaTrueListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): BatchesBetaTrueListResponse =
+        list(BatchesBetaTrueListParams.none(), requestOptions)
 
     /**
-     * A view of [BatchesBetaTrueServiceAsync] that provides access to raw HTTP
-     * responses for each method.
+     * A view of [BatchesBetaTrueServiceAsync] that provides access to raw HTTP responses for each
+     * method.
      */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/messages/batches?beta=true`, but is
-         * otherwise the same as [BatchesBetaTrueServiceAsync.create].
+         * Returns a raw HTTP response for `post /v1/messages/batches?beta=true`, but is otherwise
+         * the same as [BatchesBetaTrueServiceAsync.create].
          */
         @MustBeClosed
-        suspend fun create(params: BatchesBetaTrueCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchesBetaTrueCreateResponse>
+        suspend fun create(
+            params: BatchesBetaTrueCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchesBetaTrueCreateResponse>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/batches?beta=true`, but is
-         * otherwise the same as [BatchesBetaTrueServiceAsync.list].
+         * Returns a raw HTTP response for `get /v1/messages/batches?beta=true`, but is otherwise
+         * the same as [BatchesBetaTrueServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(params: BatchesBetaTrueListParams = BatchesBetaTrueListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchesBetaTrueListResponse>
+        suspend fun list(
+            params: BatchesBetaTrueListParams = BatchesBetaTrueListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchesBetaTrueListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<BatchesBetaTrueListResponse> = list(BatchesBetaTrueListParams.none(), requestOptions)
+        suspend fun list(
+            requestOptions: RequestOptions
+        ): HttpResponseFor<BatchesBetaTrueListResponse> =
+            list(BatchesBetaTrueListParams.none(), requestOptions)
     }
 }
