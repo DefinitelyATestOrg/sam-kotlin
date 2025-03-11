@@ -18,54 +18,51 @@ import me.elborai.api.errors.SamError
 import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateParams
 import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateResponse
 
-class MessagesBetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    MessagesBetaTrueService {
+class MessagesBetaTrueServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: MessagesBetaTrueService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : MessagesBetaTrueService {
+
+    private val withRawResponse: MessagesBetaTrueService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): MessagesBetaTrueService.WithRawResponse = withRawResponse
 
-    override fun create(
-        params: MessagesBetaTrueCreateParams,
-        requestOptions: RequestOptions,
-    ): MessagesBetaTrueCreateResponse =
+    override fun create(params: MessagesBetaTrueCreateParams, requestOptions: RequestOptions): MessagesBetaTrueCreateResponse =
         // post /v1/messages?beta=true
         withRawResponse().create(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        MessagesBetaTrueService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : MessagesBetaTrueService.WithRawResponse {
 
         private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<MessagesBetaTrueCreateResponse> =
-            jsonHandler<MessagesBetaTrueCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val createHandler: Handler<MessagesBetaTrueCreateResponse> = jsonHandler<MessagesBetaTrueCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun create(
-            params: MessagesBetaTrueCreateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<MessagesBetaTrueCreateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .addPathSegments("v1", "messages")
-                    .putQueryParam("beta", "true")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { createHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun create(params: MessagesBetaTrueCreateParams, requestOptions: RequestOptions): HttpResponseFor<MessagesBetaTrueCreateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .addPathSegments("v1", "messages")
+            .putQueryParam("beta", "true")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  createHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

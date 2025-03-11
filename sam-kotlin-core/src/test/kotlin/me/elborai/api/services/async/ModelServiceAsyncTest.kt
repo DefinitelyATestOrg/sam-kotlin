@@ -15,66 +15,54 @@ class ModelServiceAsyncTest {
 
     @Test
     suspend fun retrieve() {
-        val client =
-            SamOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val modelServiceAsync = client.models()
+      val client = SamOkHttpClientAsync.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .apiKey("My API Key")
+          .build()
+      val modelServiceAsync = client.models()
 
-        val model =
-            modelServiceAsync.retrieve(
-                ModelRetrieveParams.builder()
-                    .modelId("model_id")
-                    .anthropicVersion("anthropic-version")
-                    .xApiKey("x-api-key")
-                    .build()
-            )
+      val model = modelServiceAsync.retrieve(ModelRetrieveParams.builder()
+          .modelId("model_id")
+          .anthropicVersion("anthropic-version")
+          .xApiKey("x-api-key")
+          .build())
 
-        model.validate()
+      model.validate()
     }
 
     @Test
     suspend fun list() {
-        val client =
-            SamOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val modelServiceAsync = client.models()
+      val client = SamOkHttpClientAsync.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .apiKey("My API Key")
+          .build()
+      val modelServiceAsync = client.models()
 
-        val model =
-            modelServiceAsync.list(
-                ModelListParams.builder()
-                    .afterId("after_id")
-                    .beforeId("before_id")
-                    .limit(1L)
-                    .anthropicVersion("anthropic-version")
-                    .xApiKey("x-api-key")
-                    .build()
-            )
+      val model = modelServiceAsync.list(ModelListParams.builder()
+          .afterId("after_id")
+          .beforeId("before_id")
+          .limit(1L)
+          .anthropicVersion("anthropic-version")
+          .xApiKey("x-api-key")
+          .build())
 
-        model.validate()
+      model.validate()
     }
 
     @Test
     suspend fun retrieveBeta() {
-        val client =
-            SamOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val modelServiceAsync = client.models()
+      val client = SamOkHttpClientAsync.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .apiKey("My API Key")
+          .build()
+      val modelServiceAsync = client.models()
 
-        val response =
-            modelServiceAsync.retrieveBeta(
-                ModelRetrieveBetaParams.builder()
-                    .modelId("model_id")
-                    .anthropicVersion("anthropic-version")
-                    .xApiKey("x-api-key")
-                    .build()
-            )
+      val response = modelServiceAsync.retrieveBeta(ModelRetrieveBetaParams.builder()
+          .modelId("model_id")
+          .anthropicVersion("anthropic-version")
+          .xApiKey("x-api-key")
+          .build())
 
-        response.validate()
+      response.validate()
     }
 }

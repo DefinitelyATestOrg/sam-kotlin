@@ -6,12 +6,12 @@ import me.elborai.api.core.ClientOptions
 import me.elborai.api.services.async.store.OrderServiceAsync
 import me.elborai.api.services.async.store.OrderServiceAsyncImpl
 
-class StoreServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    StoreServiceAsync {
+class StoreServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: StoreServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : StoreServiceAsync {
+
+    private val withRawResponse: StoreServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     private val orders: OrderServiceAsync by lazy { OrderServiceAsyncImpl(clientOptions) }
 
@@ -19,12 +19,12 @@ class StoreServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun orders(): OrderServiceAsync = orders
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        StoreServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val orders: OrderServiceAsync.WithRawResponse by lazy {
-            OrderServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+    ) : StoreServiceAsync.WithRawResponse {
+
+        private val orders: OrderServiceAsync.WithRawResponse by lazy { OrderServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
         override fun orders(): OrderServiceAsync.WithRawResponse = orders
     }
