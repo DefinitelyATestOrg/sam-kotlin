@@ -4,14 +4,17 @@ package me.elborai.api.services.blocking
 
 import me.elborai.api.core.ClientOptions
 
-class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
+class UserServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: UserService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : UserService {
+
+    private val withRawResponse: UserService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): UserService.WithRawResponse = withRawResponse
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        UserService.WithRawResponse
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : UserService.WithRawResponse
 }

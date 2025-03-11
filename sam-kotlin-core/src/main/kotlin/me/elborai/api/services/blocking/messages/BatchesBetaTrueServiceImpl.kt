@@ -20,89 +20,81 @@ import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueCreateRespo
 import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListParams
 import me.elborai.api.models.messages.batchesbetatrue.BatchesBetaTrueListResponse
 
-class BatchesBetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    BatchesBetaTrueService {
+class BatchesBetaTrueServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: BatchesBetaTrueService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : BatchesBetaTrueService {
+
+    private val withRawResponse: BatchesBetaTrueService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): BatchesBetaTrueService.WithRawResponse = withRawResponse
 
-    override fun create(
-        params: BatchesBetaTrueCreateParams,
-        requestOptions: RequestOptions,
-    ): BatchesBetaTrueCreateResponse =
+    override fun create(params: BatchesBetaTrueCreateParams, requestOptions: RequestOptions): BatchesBetaTrueCreateResponse =
         // post /v1/messages/batches?beta=true
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun list(
-        params: BatchesBetaTrueListParams,
-        requestOptions: RequestOptions,
-    ): BatchesBetaTrueListResponse =
+    override fun list(params: BatchesBetaTrueListParams, requestOptions: RequestOptions): BatchesBetaTrueListResponse =
         // get /v1/messages/batches?beta=true
         withRawResponse().list(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        BatchesBetaTrueService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : BatchesBetaTrueService.WithRawResponse {
 
         private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<BatchesBetaTrueCreateResponse> =
-            jsonHandler<BatchesBetaTrueCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val createHandler: Handler<BatchesBetaTrueCreateResponse> = jsonHandler<BatchesBetaTrueCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun create(
-            params: BatchesBetaTrueCreateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BatchesBetaTrueCreateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .addPathSegments("v1", "messages", "batches")
-                    .putQueryParam("beta", "true")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { createHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun create(params: BatchesBetaTrueCreateParams, requestOptions: RequestOptions): HttpResponseFor<BatchesBetaTrueCreateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .addPathSegments("v1", "messages", "batches")
+            .putQueryParam("beta", "true")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  createHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val listHandler: Handler<BatchesBetaTrueListResponse> =
-            jsonHandler<BatchesBetaTrueListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listHandler: Handler<BatchesBetaTrueListResponse> = jsonHandler<BatchesBetaTrueListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(
-            params: BatchesBetaTrueListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BatchesBetaTrueListResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", "batches")
-                    .putQueryParam("beta", "true")
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun list(params: BatchesBetaTrueListParams, requestOptions: RequestOptions): HttpResponseFor<BatchesBetaTrueListResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "messages", "batches")
+            .putQueryParam("beta", "true")
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

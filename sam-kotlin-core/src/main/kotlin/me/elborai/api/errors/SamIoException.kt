@@ -1,4 +1,3 @@
 package me.elborai.api.errors
 
-class SamIoException(message: String? = null, cause: Throwable? = null) :
-    SamException(message, cause)
+class SamIoException(message: String? = null, cause: Throwable? = null) : SamException(message, cause)

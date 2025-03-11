@@ -9,14 +9,12 @@ class BetaTrueDeleteResponseTest {
 
     @Test
     fun createBetaTrueDeleteResponse() {
-        val betaTrueDeleteResponse =
-            BetaTrueDeleteResponse.builder()
-                .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-                .type(BetaTrueDeleteResponse.Type.MESSAGE_BATCH_DELETED)
-                .build()
-        assertThat(betaTrueDeleteResponse).isNotNull
-        assertThat(betaTrueDeleteResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-        assertThat(betaTrueDeleteResponse.type())
-            .isEqualTo(BetaTrueDeleteResponse.Type.MESSAGE_BATCH_DELETED)
+      val betaTrueDeleteResponse = BetaTrueDeleteResponse.builder()
+          .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
+          .type(BetaTrueDeleteResponse.Type.MESSAGE_BATCH_DELETED)
+          .build()
+      assertThat(betaTrueDeleteResponse).isNotNull
+      assertThat(betaTrueDeleteResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
+      assertThat(betaTrueDeleteResponse.type()).isEqualTo(BetaTrueDeleteResponse.Type.MESSAGE_BATCH_DELETED)
     }
 }

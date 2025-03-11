@@ -30,13 +30,13 @@ import me.elborai.api.core.toImmutable
  * [migration guide](https://docs.anthropic.com/en/api/migrating-from-text-completions-to-messages)
  * for guidance in migrating from Text Completions to Messages.
  */
-class CompleteCreateParams
-private constructor(
+class CompleteCreateParams private constructor(
     private val anthropicVersion: String?,
     private val xApiKey: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     /**
@@ -50,39 +50,43 @@ private constructor(
     /**
      * Your unique API key for authentication.
      *
-     * This key is required in the header of all API requests, to authenticate your account and
-     * access Anthropic's services. Get your API key through the
-     * [Console](https://console.anthropic.com/settings/keys). Each key is scoped to a Workspace.
+     * This key is required in the header of all API requests, to authenticate your
+     * account and access Anthropic's services. Get your API key through the
+     * [Console](https://console.anthropic.com/settings/keys). Each key is scoped to a
+     * Workspace.
      */
     fun xApiKey(): String? = xApiKey
 
     /**
      * The maximum number of tokens to generate before stopping.
      *
-     * Note that our models may stop _before_ reaching this maximum. This parameter only specifies
-     * the absolute maximum number of tokens to generate.
+     * Note that our models may stop _before_ reaching this maximum. This parameter
+     * only specifies the absolute maximum number of tokens to generate.
      */
     fun maxTokensToSample(): Long = body.maxTokensToSample()
 
     /**
      * The model that will complete your prompt.
      *
-     * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details and
-     * options.
+     * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+     * details and options.
      */
     fun model(): String = body.model()
 
     /**
      * The prompt that you want Claude to complete.
      *
-     * For proper response generation you will need to format your prompt using alternating
-     * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+     * For proper response generation you will need to format your prompt using
+     * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+     *
      * ```
      * "\n\nHuman: {userQuestion}\n\nAssistant:"
      * ```
      *
-     * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our guide to
-     * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more details.
+     * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+     * our guide to
+     * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+     * details.
      */
     fun prompt(): String = body.prompt()
 
@@ -92,9 +96,9 @@ private constructor(
     /**
      * Sequences that will cause the model to stop generating.
      *
-     * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in the
-     * future. By providing the stop_sequences parameter, you may include additional strings that
-     * will cause the model to stop generating.
+     * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+     * sequences in the future. By providing the stop_sequences parameter, you may
+     * include additional strings that will cause the model to stop generating.
      */
     fun stopSequences(): List<String>? = body.stopSequences()
 
@@ -108,10 +112,12 @@ private constructor(
     /**
      * Amount of randomness injected into the response.
      *
-     * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-     * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+     * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+     * for analytical / multiple choice, and closer to `1.0` for creative and
+     * generative tasks.
      *
-     * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+     * Note that even with `temperature` of `0.0`, the results will not be fully
+     * deterministic.
      */
     fun temperature(): Double? = body.temperature()
 
@@ -121,49 +127,54 @@ private constructor(
      * Used to remove "long tail" low probability responses.
      * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
      *
-     * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     * Recommended for advanced use cases only. You usually only need to use
+     * `temperature`.
      */
     fun topK(): Long? = body.topK()
 
     /**
      * Use nucleus sampling.
      *
-     * In nucleus sampling, we compute the cumulative distribution over all the options for each
-     * subsequent token in decreasing probability order and cut it off once it reaches a particular
-     * probability specified by `top_p`. You should either alter `temperature` or `top_p`, but not
-     * both.
+     * In nucleus sampling, we compute the cumulative distribution over all the options
+     * for each subsequent token in decreasing probability order and cut it off once it
+     * reaches a particular probability specified by `top_p`. You should either alter
+     * `temperature` or `top_p`, but not both.
      *
-     * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     * Recommended for advanced use cases only. You usually only need to use
+     * `temperature`.
      */
     fun topP(): Double? = body.topP()
 
     /**
      * The maximum number of tokens to generate before stopping.
      *
-     * Note that our models may stop _before_ reaching this maximum. This parameter only specifies
-     * the absolute maximum number of tokens to generate.
+     * Note that our models may stop _before_ reaching this maximum. This parameter
+     * only specifies the absolute maximum number of tokens to generate.
      */
     fun _maxTokensToSample(): JsonField<Long> = body._maxTokensToSample()
 
     /**
      * The model that will complete your prompt.
      *
-     * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details and
-     * options.
+     * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+     * details and options.
      */
     fun _model(): JsonField<String> = body._model()
 
     /**
      * The prompt that you want Claude to complete.
      *
-     * For proper response generation you will need to format your prompt using alternating
-     * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+     * For proper response generation you will need to format your prompt using
+     * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+     *
      * ```
      * "\n\nHuman: {userQuestion}\n\nAssistant:"
      * ```
      *
-     * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our guide to
-     * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more details.
+     * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+     * our guide to
+     * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+     * details.
      */
     fun _prompt(): JsonField<String> = body._prompt()
 
@@ -173,9 +184,9 @@ private constructor(
     /**
      * Sequences that will cause the model to stop generating.
      *
-     * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in the
-     * future. By providing the stop_sequences parameter, you may include additional strings that
-     * will cause the model to stop generating.
+     * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+     * sequences in the future. By providing the stop_sequences parameter, you may
+     * include additional strings that will cause the model to stop generating.
      */
     fun _stopSequences(): JsonField<List<String>> = body._stopSequences()
 
@@ -189,10 +200,12 @@ private constructor(
     /**
      * Amount of randomness injected into the response.
      *
-     * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-     * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+     * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+     * for analytical / multiple choice, and closer to `1.0` for creative and
+     * generative tasks.
      *
-     * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+     * Note that even with `temperature` of `0.0`, the results will not be fully
+     * deterministic.
      */
     fun _temperature(): JsonField<Double> = body._temperature()
 
@@ -202,19 +215,21 @@ private constructor(
      * Used to remove "long tail" low probability responses.
      * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
      *
-     * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     * Recommended for advanced use cases only. You usually only need to use
+     * `temperature`.
      */
     fun _topK(): JsonField<Long> = body._topK()
 
     /**
      * Use nucleus sampling.
      *
-     * In nucleus sampling, we compute the cumulative distribution over all the options for each
-     * subsequent token in decreasing probability order and cut it off once it reaches a particular
-     * probability specified by `top_p`. You should either alter `temperature` or `top_p`, but not
-     * both.
+     * In nucleus sampling, we compute the cumulative distribution over all the options
+     * for each subsequent token in decreasing probability order and cut it off once it
+     * reaches a particular probability specified by `top_p`. You should either alter
+     * `temperature` or `top_p`, but not both.
      *
-     * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     * Recommended for advanced use cases only. You usually only need to use
+     * `temperature`.
      */
     fun _topP(): JsonField<Double> = body._topP()
 
@@ -227,75 +242,67 @@ private constructor(
     internal fun _body(): Body = body
 
     override fun _headers(): Headers {
-        val headers = Headers.builder()
-        this.anthropicVersion?.let { headers.put("anthropic-version", listOf(it.toString())) }
-        this.xApiKey?.let { headers.put("x-api-key", listOf(it.toString())) }
-        headers.putAll(additionalHeaders)
-        return headers.build()
+      val headers = Headers.builder()
+      this.anthropicVersion?.let {
+          headers.put(
+            "anthropic-version", listOf(it.toString())
+          )
+      }
+      this.xApiKey?.let {
+          headers.put(
+            "x-api-key", listOf(it.toString())
+          )
+      }
+      headers.putAll(additionalHeaders)
+      return headers.build()
     }
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("max_tokens_to_sample")
-        @ExcludeMissing
-        private val maxTokensToSample: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("model")
-        @ExcludeMissing
-        private val model: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("prompt")
-        @ExcludeMissing
-        private val prompt: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("metadata")
-        @ExcludeMissing
-        private val metadata: JsonField<Metadata> = JsonMissing.of(),
-        @JsonProperty("stop_sequences")
-        @ExcludeMissing
-        private val stopSequences: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("stream")
-        @ExcludeMissing
-        private val stream: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("temperature")
-        @ExcludeMissing
-        private val temperature: JsonField<Double> = JsonMissing.of(),
+    class Body @JsonCreator private constructor(
+        @JsonProperty("max_tokens_to_sample") @ExcludeMissing private val maxTokensToSample: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("model") @ExcludeMissing private val model: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("prompt") @ExcludeMissing private val prompt: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing private val metadata: JsonField<Metadata> = JsonMissing.of(),
+        @JsonProperty("stop_sequences") @ExcludeMissing private val stopSequences: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("stream") @ExcludeMissing private val stream: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("temperature") @ExcludeMissing private val temperature: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("top_k") @ExcludeMissing private val topK: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("top_p")
-        @ExcludeMissing
-        private val topP: JsonField<Double> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonProperty("top_p") @ExcludeMissing private val topP: JsonField<Double> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         /**
          * The maximum number of tokens to generate before stopping.
          *
-         * Note that our models may stop _before_ reaching this maximum. This parameter only
-         * specifies the absolute maximum number of tokens to generate.
+         * Note that our models may stop _before_ reaching this maximum. This parameter
+         * only specifies the absolute maximum number of tokens to generate.
          */
         fun maxTokensToSample(): Long = maxTokensToSample.getRequired("max_tokens_to_sample")
 
         /**
          * The model that will complete your prompt.
          *
-         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
-         * and options.
+         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+         * details and options.
          */
         fun model(): String = model.getRequired("model")
 
         /**
          * The prompt that you want Claude to complete.
          *
-         * For proper response generation you will need to format your prompt using alternating
-         * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         * For proper response generation you will need to format your prompt using
+         * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         *
          * ```
          * "\n\nHuman: {userQuestion}\n\nAssistant:"
          * ```
          *
-         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-         * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+         * our guide to
+         * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
          * details.
          */
         fun prompt(): String = prompt.getRequired("prompt")
@@ -306,9 +313,9 @@ private constructor(
         /**
          * Sequences that will cause the model to stop generating.
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+         * sequences in the future. By providing the stop_sequences parameter, you may
+         * include additional strings that will cause the model to stop generating.
          */
         fun stopSequences(): List<String>? = stopSequences.getNullable("stop_sequences")
 
@@ -322,10 +329,12 @@ private constructor(
         /**
          * Amount of randomness injected into the response.
          *
-         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-         * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+         * for analytical / multiple choice, and closer to `1.0` for creative and
+         * generative tasks.
          *
-         * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         * Note that even with `temperature` of `0.0`, the results will not be fully
+         * deterministic.
          */
         fun temperature(): Double? = temperature.getNullable("temperature")
 
@@ -335,27 +344,29 @@ private constructor(
          * Used to remove "long tail" low probability responses.
          * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
         fun topK(): Long? = topK.getNullable("top_k")
 
         /**
          * Use nucleus sampling.
          *
-         * In nucleus sampling, we compute the cumulative distribution over all the options for each
-         * subsequent token in decreasing probability order and cut it off once it reaches a
-         * particular probability specified by `top_p`. You should either alter `temperature` or
-         * `top_p`, but not both.
+         * In nucleus sampling, we compute the cumulative distribution over all the options
+         * for each subsequent token in decreasing probability order and cut it off once it
+         * reaches a particular probability specified by `top_p`. You should either alter
+         * `temperature` or `top_p`, but not both.
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
         fun topP(): Double? = topP.getNullable("top_p")
 
         /**
          * The maximum number of tokens to generate before stopping.
          *
-         * Note that our models may stop _before_ reaching this maximum. This parameter only
-         * specifies the absolute maximum number of tokens to generate.
+         * Note that our models may stop _before_ reaching this maximum. This parameter
+         * only specifies the absolute maximum number of tokens to generate.
          */
         @JsonProperty("max_tokens_to_sample")
         @ExcludeMissing
@@ -364,35 +375,43 @@ private constructor(
         /**
          * The model that will complete your prompt.
          *
-         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
-         * and options.
+         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+         * details and options.
          */
-        @JsonProperty("model") @ExcludeMissing fun _model(): JsonField<String> = model
+        @JsonProperty("model")
+        @ExcludeMissing
+        fun _model(): JsonField<String> = model
 
         /**
          * The prompt that you want Claude to complete.
          *
-         * For proper response generation you will need to format your prompt using alternating
-         * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         * For proper response generation you will need to format your prompt using
+         * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         *
          * ```
          * "\n\nHuman: {userQuestion}\n\nAssistant:"
          * ```
          *
-         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-         * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+         * our guide to
+         * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
          * details.
          */
-        @JsonProperty("prompt") @ExcludeMissing fun _prompt(): JsonField<String> = prompt
+        @JsonProperty("prompt")
+        @ExcludeMissing
+        fun _prompt(): JsonField<String> = prompt
 
         /** An object describing metadata about the request. */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+        @JsonProperty("metadata")
+        @ExcludeMissing
+        fun _metadata(): JsonField<Metadata> = metadata
 
         /**
          * Sequences that will cause the model to stop generating.
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+         * sequences in the future. By providing the stop_sequences parameter, you may
+         * include additional strings that will cause the model to stop generating.
          */
         @JsonProperty("stop_sequences")
         @ExcludeMissing
@@ -403,15 +422,19 @@ private constructor(
          *
          * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
          */
-        @JsonProperty("stream") @ExcludeMissing fun _stream(): JsonField<Boolean> = stream
+        @JsonProperty("stream")
+        @ExcludeMissing
+        fun _stream(): JsonField<Boolean> = stream
 
         /**
          * Amount of randomness injected into the response.
          *
-         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-         * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+         * for analytical / multiple choice, and closer to `1.0` for creative and
+         * generative tasks.
          *
-         * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         * Note that even with `temperature` of `0.0`, the results will not be fully
+         * deterministic.
          */
         @JsonProperty("temperature")
         @ExcludeMissing
@@ -423,21 +446,27 @@ private constructor(
          * Used to remove "long tail" low probability responses.
          * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
-        @JsonProperty("top_k") @ExcludeMissing fun _topK(): JsonField<Long> = topK
+        @JsonProperty("top_k")
+        @ExcludeMissing
+        fun _topK(): JsonField<Long> = topK
 
         /**
          * Use nucleus sampling.
          *
-         * In nucleus sampling, we compute the cumulative distribution over all the options for each
-         * subsequent token in decreasing probability order and cut it off once it reaches a
-         * particular probability specified by `top_p`. You should either alter `temperature` or
-         * `top_p`, but not both.
+         * In nucleus sampling, we compute the cumulative distribution over all the options
+         * for each subsequent token in decreasing probability order and cut it off once it
+         * reaches a particular probability specified by `top_p`. You should either alter
+         * `temperature` or `top_p`, but not both.
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
-        @JsonProperty("top_p") @ExcludeMissing fun _topP(): JsonField<Double> = topP
+        @JsonProperty("top_p")
+        @ExcludeMissing
+        fun _topP(): JsonField<Double> = topP
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -445,22 +474,23 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Body =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            maxTokensToSample()
-            model()
-            prompt()
-            metadata()?.validate()
-            stopSequences()
-            stream()
-            temperature()
-            topK()
-            topP()
-            validated = true
-        }
+                maxTokensToSample()
+                model()
+                prompt()
+                metadata()?.validate()
+                stopSequences()
+                stream()
+                temperature()
+                topK()
+                topP()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
@@ -470,6 +500,7 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
+             *
              * ```kotlin
              * .maxTokensToSample()
              * .model()
@@ -493,37 +524,38 @@ private constructor(
             private var topP: JsonField<Double> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(body: Body) = apply {
-                maxTokensToSample = body.maxTokensToSample
-                model = body.model
-                prompt = body.prompt
-                metadata = body.metadata
-                stopSequences = body.stopSequences.map { it.toMutableList() }
-                stream = body.stream
-                temperature = body.temperature
-                topK = body.topK
-                topP = body.topP
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
+            internal fun from(body: Body) =
+                apply {
+                    maxTokensToSample = body.maxTokensToSample
+                    model = body.model
+                    prompt = body.prompt
+                    metadata = body.metadata
+                    stopSequences = body.stopSequences.map { it.toMutableList() }
+                    stream = body.stream
+                    temperature = body.temperature
+                    topK = body.topK
+                    topP = body.topP
+                    additionalProperties = body.additionalProperties.toMutableMap()
+                }
 
             /**
              * The maximum number of tokens to generate before stopping.
              *
-             * Note that our models may stop _before_ reaching this maximum. This parameter only
-             * specifies the absolute maximum number of tokens to generate.
+             * Note that our models may stop _before_ reaching this maximum. This parameter
+             * only specifies the absolute maximum number of tokens to generate.
              */
-            fun maxTokensToSample(maxTokensToSample: Long) =
-                maxTokensToSample(JsonField.of(maxTokensToSample))
+            fun maxTokensToSample(maxTokensToSample: Long) = maxTokensToSample(JsonField.of(maxTokensToSample))
 
             /**
              * The maximum number of tokens to generate before stopping.
              *
-             * Note that our models may stop _before_ reaching this maximum. This parameter only
-             * specifies the absolute maximum number of tokens to generate.
+             * Note that our models may stop _before_ reaching this maximum. This parameter
+             * only specifies the absolute maximum number of tokens to generate.
              */
-            fun maxTokensToSample(maxTokensToSample: JsonField<Long>) = apply {
-                this.maxTokensToSample = maxTokensToSample
-            }
+            fun maxTokensToSample(maxTokensToSample: JsonField<Long>) =
+                apply {
+                    this.maxTokensToSample = maxTokensToSample
+                }
 
             /**
              * The model that will complete your prompt.
@@ -539,78 +571,91 @@ private constructor(
              * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
              * details and options.
              */
-            fun model(model: JsonField<String>) = apply { this.model = model }
+            fun model(model: JsonField<String>) =
+                apply {
+                    this.model = model
+                }
 
             /**
              * The prompt that you want Claude to complete.
              *
-             * For proper response generation you will need to format your prompt using alternating
-             * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+             * For proper response generation you will need to format your prompt using
+             * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+             *
              * ```
              * "\n\nHuman: {userQuestion}\n\nAssistant:"
              * ```
              *
-             * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-             * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for
-             * more details.
+             * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+             * our guide to
+             * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+             * details.
              */
             fun prompt(prompt: String) = prompt(JsonField.of(prompt))
 
             /**
              * The prompt that you want Claude to complete.
              *
-             * For proper response generation you will need to format your prompt using alternating
-             * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+             * For proper response generation you will need to format your prompt using
+             * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+             *
              * ```
              * "\n\nHuman: {userQuestion}\n\nAssistant:"
              * ```
              *
-             * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-             * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for
-             * more details.
+             * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+             * our guide to
+             * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+             * details.
              */
-            fun prompt(prompt: JsonField<String>) = apply { this.prompt = prompt }
+            fun prompt(prompt: JsonField<String>) =
+                apply {
+                    this.prompt = prompt
+                }
 
             /** An object describing metadata about the request. */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /** An object describing metadata about the request. */
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+            fun metadata(metadata: JsonField<Metadata>) =
+                apply {
+                    this.metadata = metadata
+                }
 
             /**
              * Sequences that will cause the model to stop generating.
              *
-             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences
-             * in the future. By providing the stop_sequences parameter, you may include additional
-             * strings that will cause the model to stop generating.
+             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+             * sequences in the future. By providing the stop_sequences parameter, you may
+             * include additional strings that will cause the model to stop generating.
              */
-            fun stopSequences(stopSequences: List<String>) =
-                stopSequences(JsonField.of(stopSequences))
+            fun stopSequences(stopSequences: List<String>) = stopSequences(JsonField.of(stopSequences))
 
             /**
              * Sequences that will cause the model to stop generating.
              *
-             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences
-             * in the future. By providing the stop_sequences parameter, you may include additional
-             * strings that will cause the model to stop generating.
+             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+             * sequences in the future. By providing the stop_sequences parameter, you may
+             * include additional strings that will cause the model to stop generating.
              */
-            fun stopSequences(stopSequences: JsonField<List<String>>) = apply {
-                this.stopSequences = stopSequences.map { it.toMutableList() }
-            }
+            fun stopSequences(stopSequences: JsonField<List<String>>) =
+                apply {
+                    this.stopSequences = stopSequences.map { it.toMutableList() }
+                }
 
             /**
              * Sequences that will cause the model to stop generating.
              *
-             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences
-             * in the future. By providing the stop_sequences parameter, you may include additional
-             * strings that will cause the model to stop generating.
+             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+             * sequences in the future. By providing the stop_sequences parameter, you may
+             * include additional strings that will cause the model to stop generating.
              */
-            fun addStopSequence(stopSequence: String) = apply {
-                stopSequences =
-                    (stopSequences ?: JsonField.of(mutableListOf())).also {
+            fun addStopSequence(stopSequence: String) =
+                apply {
+                    stopSequences = (stopSequences ?: JsonField.of(mutableListOf())).also {
                         checkKnown("stopSequences", it).add(stopSequence)
                     }
-            }
+                }
 
             /**
              * Whether to incrementally stream the response using server-sent events.
@@ -624,13 +669,17 @@ private constructor(
              *
              * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
              */
-            fun stream(stream: JsonField<Boolean>) = apply { this.stream = stream }
+            fun stream(stream: JsonField<Boolean>) =
+                apply {
+                    this.stream = stream
+                }
 
             /**
              * Amount of randomness injected into the response.
              *
-             * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-             * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+             * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+             * for analytical / multiple choice, and closer to `1.0` for creative and
+             * generative tasks.
              *
              * Note that even with `temperature` of `0.0`, the results will not be fully
              * deterministic.
@@ -640,15 +689,17 @@ private constructor(
             /**
              * Amount of randomness injected into the response.
              *
-             * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-             * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+             * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+             * for analytical / multiple choice, and closer to `1.0` for creative and
+             * generative tasks.
              *
              * Note that even with `temperature` of `0.0`, the results will not be fully
              * deterministic.
              */
-            fun temperature(temperature: JsonField<Double>) = apply {
-                this.temperature = temperature
-            }
+            fun temperature(temperature: JsonField<Double>) =
+                apply {
+                    this.temperature = temperature
+                }
 
             /**
              * Only sample from the top K options for each subsequent token.
@@ -656,7 +707,8 @@ private constructor(
              * Used to remove "long tail" low probability responses.
              * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
              *
-             * Recommended for advanced use cases only. You usually only need to use `temperature`.
+             * Recommended for advanced use cases only. You usually only need to use
+             * `temperature`.
              */
             fun topK(topK: Long) = topK(JsonField.of(topK))
 
@@ -666,74 +718,96 @@ private constructor(
              * Used to remove "long tail" low probability responses.
              * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
              *
-             * Recommended for advanced use cases only. You usually only need to use `temperature`.
+             * Recommended for advanced use cases only. You usually only need to use
+             * `temperature`.
              */
-            fun topK(topK: JsonField<Long>) = apply { this.topK = topK }
+            fun topK(topK: JsonField<Long>) =
+                apply {
+                    this.topK = topK
+                }
 
             /**
              * Use nucleus sampling.
              *
-             * In nucleus sampling, we compute the cumulative distribution over all the options for
-             * each subsequent token in decreasing probability order and cut it off once it reaches
-             * a particular probability specified by `top_p`. You should either alter `temperature`
-             * or `top_p`, but not both.
+             * In nucleus sampling, we compute the cumulative distribution over all the options
+             * for each subsequent token in decreasing probability order and cut it off once it
+             * reaches a particular probability specified by `top_p`. You should either alter
+             * `temperature` or `top_p`, but not both.
              *
-             * Recommended for advanced use cases only. You usually only need to use `temperature`.
+             * Recommended for advanced use cases only. You usually only need to use
+             * `temperature`.
              */
             fun topP(topP: Double) = topP(JsonField.of(topP))
 
             /**
              * Use nucleus sampling.
              *
-             * In nucleus sampling, we compute the cumulative distribution over all the options for
-             * each subsequent token in decreasing probability order and cut it off once it reaches
-             * a particular probability specified by `top_p`. You should either alter `temperature`
-             * or `top_p`, but not both.
+             * In nucleus sampling, we compute the cumulative distribution over all the options
+             * for each subsequent token in decreasing probability order and cut it off once it
+             * reaches a particular probability specified by `top_p`. You should either alter
+             * `temperature` or `top_p`, but not both.
              *
-             * Recommended for advanced use cases only. You usually only need to use `temperature`.
+             * Recommended for advanced use cases only. You usually only need to use
+             * `temperature`.
              */
-            fun topP(topP: JsonField<Double>) = apply { this.topP = topP }
+            fun topP(topP: JsonField<Double>) =
+                apply {
+                    this.topP = topP
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             fun build(): Body =
                 Body(
-                    checkRequired("maxTokensToSample", maxTokensToSample),
-                    checkRequired("model", model),
-                    checkRequired("prompt", prompt),
-                    metadata,
-                    (stopSequences ?: JsonMissing.of()).map { it.toImmutable() },
-                    stream,
-                    temperature,
-                    topK,
-                    topP,
-                    additionalProperties.toImmutable(),
+                  checkRequired(
+                    "maxTokensToSample", maxTokensToSample
+                  ),
+                  checkRequired(
+                    "model", model
+                  ),
+                  checkRequired(
+                    "prompt", prompt
+                  ),
+                  metadata,
+                  (stopSequences ?: JsonMissing.of()).map { it.toImmutable() },
+                  stream,
+                  temperature,
+                  topK,
+                  topP,
+                  additionalProperties.toImmutable(),
                 )
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Body && maxTokensToSample == other.maxTokensToSample && model == other.model && prompt == other.prompt && metadata == other.metadata && stopSequences == other.stopSequences && stream == other.stream && temperature == other.temperature && topK == other.topK && topP == other.topP && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Body && maxTokensToSample == other.maxTokensToSample && model == other.model && prompt == other.prompt && metadata == other.metadata && stopSequences == other.stopSequences && stream == other.stream && temperature == other.temperature && topK == other.topK && topP == other.topP && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -742,8 +816,7 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Body{maxTokensToSample=$maxTokensToSample, model=$model, prompt=$prompt, metadata=$metadata, stopSequences=$stopSequences, stream=$stream, temperature=$temperature, topK=$topK, topP=$topP, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{maxTokensToSample=$maxTokensToSample, model=$model, prompt=$prompt, metadata=$metadata, stopSequences=$stopSequences, stream=$stream, temperature=$temperature, topK=$topK, topP=$topP, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -751,9 +824,11 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [CompleteCreateParams].
+         * Returns a mutable builder for constructing an instance of
+         * [CompleteCreateParams].
          *
          * The following fields are required:
+         *
          * ```kotlin
          * .maxTokensToSample()
          * .model()
@@ -773,13 +848,14 @@ private constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(completeCreateParams: CompleteCreateParams) = apply {
-            anthropicVersion = completeCreateParams.anthropicVersion
-            xApiKey = completeCreateParams.xApiKey
-            body = completeCreateParams.body.toBuilder()
-            additionalHeaders = completeCreateParams.additionalHeaders.toBuilder()
-            additionalQueryParams = completeCreateParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(completeCreateParams: CompleteCreateParams) =
+            apply {
+                anthropicVersion = completeCreateParams.anthropicVersion
+                xApiKey = completeCreateParams.xApiKey
+                body = completeCreateParams.body.toBuilder()
+                additionalHeaders = completeCreateParams.additionalHeaders.toBuilder()
+                additionalQueryParams = completeCreateParams.additionalQueryParams.toBuilder()
+            }
 
         /**
          * The version of the Anthropic API you want to use.
@@ -787,154 +863,205 @@ private constructor(
          * Read more about versioning and our version history
          * [here](https://docs.anthropic.com/en/api/versioning).
          */
-        fun anthropicVersion(anthropicVersion: String?) = apply {
-            this.anthropicVersion = anthropicVersion
-        }
+        fun anthropicVersion(anthropicVersion: String?) =
+            apply {
+                this.anthropicVersion = anthropicVersion
+            }
 
         /**
          * Your unique API key for authentication.
          *
-         * This key is required in the header of all API requests, to authenticate your account and
-         * access Anthropic's services. Get your API key through the
+         * This key is required in the header of all API requests, to authenticate your
+         * account and access Anthropic's services. Get your API key through the
          * [Console](https://console.anthropic.com/settings/keys). Each key is scoped to a
          * Workspace.
          */
-        fun xApiKey(xApiKey: String?) = apply { this.xApiKey = xApiKey }
+        fun xApiKey(xApiKey: String?) =
+            apply {
+                this.xApiKey = xApiKey
+            }
 
         /**
          * The maximum number of tokens to generate before stopping.
          *
-         * Note that our models may stop _before_ reaching this maximum. This parameter only
-         * specifies the absolute maximum number of tokens to generate.
+         * Note that our models may stop _before_ reaching this maximum. This parameter
+         * only specifies the absolute maximum number of tokens to generate.
          */
-        fun maxTokensToSample(maxTokensToSample: Long) = apply {
-            body.maxTokensToSample(maxTokensToSample)
-        }
+        fun maxTokensToSample(maxTokensToSample: Long) =
+            apply {
+                body.maxTokensToSample(maxTokensToSample)
+            }
 
         /**
          * The maximum number of tokens to generate before stopping.
          *
-         * Note that our models may stop _before_ reaching this maximum. This parameter only
-         * specifies the absolute maximum number of tokens to generate.
+         * Note that our models may stop _before_ reaching this maximum. This parameter
+         * only specifies the absolute maximum number of tokens to generate.
          */
-        fun maxTokensToSample(maxTokensToSample: JsonField<Long>) = apply {
-            body.maxTokensToSample(maxTokensToSample)
-        }
+        fun maxTokensToSample(maxTokensToSample: JsonField<Long>) =
+            apply {
+                body.maxTokensToSample(maxTokensToSample)
+            }
 
         /**
          * The model that will complete your prompt.
          *
-         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
-         * and options.
+         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+         * details and options.
          */
-        fun model(model: String) = apply { body.model(model) }
+        fun model(model: String) =
+            apply {
+                body.model(model)
+            }
 
         /**
          * The model that will complete your prompt.
          *
-         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
-         * and options.
+         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
+         * details and options.
          */
-        fun model(model: JsonField<String>) = apply { body.model(model) }
+        fun model(model: JsonField<String>) =
+            apply {
+                body.model(model)
+            }
 
         /**
          * The prompt that you want Claude to complete.
          *
-         * For proper response generation you will need to format your prompt using alternating
-         * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         * For proper response generation you will need to format your prompt using
+         * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         *
          * ```
          * "\n\nHuman: {userQuestion}\n\nAssistant:"
          * ```
          *
-         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-         * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+         * our guide to
+         * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
          * details.
          */
-        fun prompt(prompt: String) = apply { body.prompt(prompt) }
+        fun prompt(prompt: String) =
+            apply {
+                body.prompt(prompt)
+            }
 
         /**
          * The prompt that you want Claude to complete.
          *
-         * For proper response generation you will need to format your prompt using alternating
-         * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         * For proper response generation you will need to format your prompt using
+         * alternating `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
+         *
          * ```
          * "\n\nHuman: {userQuestion}\n\nAssistant:"
          * ```
          *
-         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-         * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
+         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and
+         * our guide to
+         * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
          * details.
          */
-        fun prompt(prompt: JsonField<String>) = apply { body.prompt(prompt) }
+        fun prompt(prompt: JsonField<String>) =
+            apply {
+                body.prompt(prompt)
+            }
 
         /** An object describing metadata about the request. */
-        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata) =
+            apply {
+                body.metadata(metadata)
+            }
 
         /** An object describing metadata about the request. */
-        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
+        fun metadata(metadata: JsonField<Metadata>) =
+            apply {
+                body.metadata(metadata)
+            }
 
         /**
          * Sequences that will cause the model to stop generating.
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+         * sequences in the future. By providing the stop_sequences parameter, you may
+         * include additional strings that will cause the model to stop generating.
          */
-        fun stopSequences(stopSequences: List<String>) = apply { body.stopSequences(stopSequences) }
+        fun stopSequences(stopSequences: List<String>) =
+            apply {
+                body.stopSequences(stopSequences)
+            }
 
         /**
          * Sequences that will cause the model to stop generating.
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+         * sequences in the future. By providing the stop_sequences parameter, you may
+         * include additional strings that will cause the model to stop generating.
          */
-        fun stopSequences(stopSequences: JsonField<List<String>>) = apply {
-            body.stopSequences(stopSequences)
-        }
+        fun stopSequences(stopSequences: JsonField<List<String>>) =
+            apply {
+                body.stopSequences(stopSequences)
+            }
 
         /**
          * Sequences that will cause the model to stop generating.
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop
+         * sequences in the future. By providing the stop_sequences parameter, you may
+         * include additional strings that will cause the model to stop generating.
          */
-        fun addStopSequence(stopSequence: String) = apply { body.addStopSequence(stopSequence) }
+        fun addStopSequence(stopSequence: String) =
+            apply {
+                body.addStopSequence(stopSequence)
+            }
 
         /**
          * Whether to incrementally stream the response using server-sent events.
          *
          * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
          */
-        fun stream(stream: Boolean) = apply { body.stream(stream) }
+        fun stream(stream: Boolean) =
+            apply {
+                body.stream(stream)
+            }
 
         /**
          * Whether to incrementally stream the response using server-sent events.
          *
          * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
          */
-        fun stream(stream: JsonField<Boolean>) = apply { body.stream(stream) }
+        fun stream(stream: JsonField<Boolean>) =
+            apply {
+                body.stream(stream)
+            }
 
         /**
          * Amount of randomness injected into the response.
          *
-         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-         * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+         * for analytical / multiple choice, and closer to `1.0` for creative and
+         * generative tasks.
          *
-         * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         * Note that even with `temperature` of `0.0`, the results will not be fully
+         * deterministic.
          */
-        fun temperature(temperature: Double) = apply { body.temperature(temperature) }
+        fun temperature(temperature: Double) =
+            apply {
+                body.temperature(temperature)
+            }
 
         /**
          * Amount of randomness injected into the response.
          *
-         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-         * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
+         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0`
+         * for analytical / multiple choice, and closer to `1.0` for creative and
+         * generative tasks.
          *
-         * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         * Note that even with `temperature` of `0.0`, the results will not be fully
+         * deterministic.
          */
-        fun temperature(temperature: JsonField<Double>) = apply { body.temperature(temperature) }
+        fun temperature(temperature: JsonField<Double>) =
+            apply {
+                body.temperature(temperature)
+            }
 
         /**
          * Only sample from the top K options for each subsequent token.
@@ -942,9 +1069,13 @@ private constructor(
          * Used to remove "long tail" low probability responses.
          * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
-        fun topK(topK: Long) = apply { body.topK(topK) }
+        fun topK(topK: Long) =
+            apply {
+                body.topK(topK)
+            }
 
         /**
          * Only sample from the top K options for each subsequent token.
@@ -952,190 +1083,234 @@ private constructor(
          * Used to remove "long tail" low probability responses.
          * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
-        fun topK(topK: JsonField<Long>) = apply { body.topK(topK) }
+        fun topK(topK: JsonField<Long>) =
+            apply {
+                body.topK(topK)
+            }
 
         /**
          * Use nucleus sampling.
          *
-         * In nucleus sampling, we compute the cumulative distribution over all the options for each
-         * subsequent token in decreasing probability order and cut it off once it reaches a
-         * particular probability specified by `top_p`. You should either alter `temperature` or
-         * `top_p`, but not both.
+         * In nucleus sampling, we compute the cumulative distribution over all the options
+         * for each subsequent token in decreasing probability order and cut it off once it
+         * reaches a particular probability specified by `top_p`. You should either alter
+         * `temperature` or `top_p`, but not both.
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
-        fun topP(topP: Double) = apply { body.topP(topP) }
+        fun topP(topP: Double) =
+            apply {
+                body.topP(topP)
+            }
 
         /**
          * Use nucleus sampling.
          *
-         * In nucleus sampling, we compute the cumulative distribution over all the options for each
-         * subsequent token in decreasing probability order and cut it off once it reaches a
-         * particular probability specified by `top_p`. You should either alter `temperature` or
-         * `top_p`, but not both.
+         * In nucleus sampling, we compute the cumulative distribution over all the options
+         * for each subsequent token in decreasing probability order and cut it off once it
+         * reaches a particular probability specified by `top_p`. You should either alter
+         * `temperature` or `top_p`, but not both.
          *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Recommended for advanced use cases only. You usually only need to use
+         * `temperature`.
          */
-        fun topP(topP: JsonField<Double>) = apply { body.topP(topP) }
+        fun topP(topP: JsonField<Double>) =
+            apply {
+                body.topP(topP)
+            }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.additionalProperties(additionalBodyProperties)
+            }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
+            apply {
+                body.putAdditionalProperty(
+                  key, value
+                )
+            }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+        fun removeAdditionalBodyProperty(key: String) =
+            apply {
+                body.removeAdditionalProperty(key)
+            }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
+            apply {
+                body.removeAllAdditionalProperties(keys)
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         fun build(): CompleteCreateParams =
             CompleteCreateParams(
-                anthropicVersion,
-                xApiKey,
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              anthropicVersion,
+              xApiKey,
+              body.build(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
     /** An object describing metadata about the request. */
     @NoAutoDetect
-    class Metadata
-    @JsonCreator
-    private constructor(
-        @JsonProperty("user_id")
-        @ExcludeMissing
-        private val userId: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    class Metadata @JsonCreator private constructor(
+        @JsonProperty("user_id") @ExcludeMissing private val userId: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         /**
          * An external identifier for the user who is associated with the request.
          *
-         * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this id
-         * to help detect abuse. Do not include any identifying information such as name, email
-         * address, or phone number.
+         * This should be a uuid, hash value, or other opaque identifier. Anthropic may use
+         * this id to help detect abuse. Do not include any identifying information such as
+         * name, email address, or phone number.
          */
         fun userId(): String? = userId.getNullable("user_id")
 
         /**
          * An external identifier for the user who is associated with the request.
          *
-         * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this id
-         * to help detect abuse. Do not include any identifying information such as name, email
-         * address, or phone number.
+         * This should be a uuid, hash value, or other opaque identifier. Anthropic may use
+         * this id to help detect abuse. Do not include any identifying information such as
+         * name, email address, or phone number.
          */
-        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
+        @JsonProperty("user_id")
+        @ExcludeMissing
+        fun _userId(): JsonField<String> = userId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -1143,14 +1318,15 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Metadata = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Metadata =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            userId()
-            validated = true
-        }
+                userId()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
@@ -1166,57 +1342,71 @@ private constructor(
             private var userId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(metadata: Metadata) = apply {
-                userId = metadata.userId
-                additionalProperties = metadata.additionalProperties.toMutableMap()
-            }
+            internal fun from(metadata: Metadata) =
+                apply {
+                    userId = metadata.userId
+                    additionalProperties = metadata.additionalProperties.toMutableMap()
+                }
 
             /**
              * An external identifier for the user who is associated with the request.
              *
-             * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this
-             * id to help detect abuse. Do not include any identifying information such as name,
-             * email address, or phone number.
+             * This should be a uuid, hash value, or other opaque identifier. Anthropic may use
+             * this id to help detect abuse. Do not include any identifying information such as
+             * name, email address, or phone number.
              */
             fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
             /**
              * An external identifier for the user who is associated with the request.
              *
-             * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this
-             * id to help detect abuse. Do not include any identifying information such as name,
-             * email address, or phone number.
+             * This should be a uuid, hash value, or other opaque identifier. Anthropic may use
+             * this id to help detect abuse. Do not include any identifying information such as
+             * name, email address, or phone number.
              */
-            fun userId(userId: JsonField<String>) = apply { this.userId = userId }
+            fun userId(userId: JsonField<String>) =
+                apply {
+                    this.userId = userId
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
-            fun build(): Metadata = Metadata(userId, additionalProperties.toImmutable())
+            fun build(): Metadata =
+                Metadata(
+                  userId, additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Metadata && userId == other.userId && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Metadata && userId == other.userId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -1225,20 +1415,18 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Metadata{userId=$userId, additionalProperties=$additionalProperties}"
+        override fun toString() = "Metadata{userId=$userId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is CompleteCreateParams && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+      return /* spotless:off */ other is CompleteCreateParams && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(anthropicVersion, xApiKey, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
-    override fun toString() =
-        "CompleteCreateParams{anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "CompleteCreateParams{anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

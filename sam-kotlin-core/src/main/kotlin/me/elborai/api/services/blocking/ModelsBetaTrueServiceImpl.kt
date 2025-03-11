@@ -17,53 +17,50 @@ import me.elborai.api.errors.SamError
 import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListParams
 import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListResponse
 
-class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    ModelsBetaTrueService {
+class ModelsBetaTrueServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: ModelsBetaTrueService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : ModelsBetaTrueService {
+
+    private val withRawResponse: ModelsBetaTrueService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): ModelsBetaTrueService.WithRawResponse = withRawResponse
 
-    override fun list(
-        params: ModelsBetaTrueListParams,
-        requestOptions: RequestOptions,
-    ): ModelsBetaTrueListResponse =
+    override fun list(params: ModelsBetaTrueListParams, requestOptions: RequestOptions): ModelsBetaTrueListResponse =
         // get /v1/models?beta=true
         withRawResponse().list(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ModelsBetaTrueService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : ModelsBetaTrueService.WithRawResponse {
 
         private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<ModelsBetaTrueListResponse> =
-            jsonHandler<ModelsBetaTrueListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listHandler: Handler<ModelsBetaTrueListResponse> = jsonHandler<ModelsBetaTrueListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(
-            params: ModelsBetaTrueListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ModelsBetaTrueListResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "models")
-                    .putQueryParam("beta", "true")
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun list(params: ModelsBetaTrueListParams, requestOptions: RequestOptions): HttpResponseFor<ModelsBetaTrueListResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "models")
+            .putQueryParam("beta", "true")
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

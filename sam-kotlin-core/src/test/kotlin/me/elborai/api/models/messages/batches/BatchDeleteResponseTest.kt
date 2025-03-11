@@ -9,14 +9,12 @@ class BatchDeleteResponseTest {
 
     @Test
     fun createBatchDeleteResponse() {
-        val batchDeleteResponse =
-            BatchDeleteResponse.builder()
-                .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-                .type(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
-                .build()
-        assertThat(batchDeleteResponse).isNotNull
-        assertThat(batchDeleteResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-        assertThat(batchDeleteResponse.type())
-            .isEqualTo(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
+      val batchDeleteResponse = BatchDeleteResponse.builder()
+          .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
+          .type(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
+          .build()
+      assertThat(batchDeleteResponse).isNotNull
+      assertThat(batchDeleteResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
+      assertThat(batchDeleteResponse.type()).isEqualTo(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
     }
 }
