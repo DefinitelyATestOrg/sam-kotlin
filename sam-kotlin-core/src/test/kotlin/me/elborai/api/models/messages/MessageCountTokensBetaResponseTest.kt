@@ -9,10 +9,9 @@ class MessageCountTokensBetaResponseTest {
 
     @Test
     fun createMessageCountTokensBetaResponse() {
-      val messageCountTokensBetaResponse = MessageCountTokensBetaResponse.builder()
-          .inputTokens(2095L)
-          .build()
-      assertThat(messageCountTokensBetaResponse).isNotNull
-      assertThat(messageCountTokensBetaResponse.inputTokens()).isEqualTo(2095L)
+        val messageCountTokensBetaResponse =
+            MessageCountTokensBetaResponse.builder().inputTokens(2095L).build()
+        assertThat(messageCountTokensBetaResponse).isNotNull
+        assertThat(messageCountTokensBetaResponse.inputTokens()).isEqualTo(2095L)
     }
 }

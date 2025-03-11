@@ -26,8 +26,7 @@ import me.elborai.api.services.async.messages.batches.BetaTrueServiceAsync
 interface BatchServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
@@ -36,175 +35,214 @@ interface BatchServiceAsync {
     /**
      * Send a batch of Message creation requests.
      *
-     * The Message Batches API can be used to process multiple Messages API requests at
-     * once. Once a Message Batch is created, it begins processing immediately. Batches
-     * can take up to 24 hours to complete.
+     * The Message Batches API can be used to process multiple Messages API requests at once. Once a
+     * Message Batch is created, it begins processing immediately. Batches can take up to 24 hours
+     * to complete.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun create(params: BatchCreateParams, requestOptions: RequestOptions = RequestOptions.none()): BatchCreateResponse
+    suspend fun create(
+        params: BatchCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchCreateResponse
 
     /**
-     * This endpoint is idempotent and can be used to poll for Message Batch
-     * completion. To access the results of a Message Batch, make a request to the
-     * `results_url` field in the response.
+     * This endpoint is idempotent and can be used to poll for Message Batch completion. To access
+     * the results of a Message Batch, make a request to the `results_url` field in the response.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun retrieve(params: BatchRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): BatchRetrieveResponse
+    suspend fun retrieve(
+        params: BatchRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchRetrieveResponse
 
     /**
-     * List all Message Batches within a Workspace. Most recently created batches are
-     * returned first.
+     * List all Message Batches within a Workspace. Most recently created batches are returned
+     * first.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun list(params: BatchListParams = BatchListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): BatchListResponse
+    suspend fun list(
+        params: BatchListParams = BatchListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): BatchListResponse = list(BatchListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): BatchListResponse =
+        list(BatchListParams.none(), requestOptions)
 
     /**
      * Delete a Message Batch.
      *
-     * Message Batches can only be deleted once they've finished processing. If you'd
-     * like to delete an in-progress batch, you must first cancel it.
+     * Message Batches can only be deleted once they've finished processing. If you'd like to delete
+     * an in-progress batch, you must first cancel it.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun delete(params: BatchDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): BatchDeleteResponse
+    suspend fun delete(
+        params: BatchDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchDeleteResponse
 
     /**
-     * Batches may be canceled any time before processing ends. Once cancellation is
-     * initiated, the batch enters a `canceling` state, at which time the system may
-     * complete any in-progress, non-interruptible requests before finalizing
-     * cancellation.
+     * Batches may be canceled any time before processing ends. Once cancellation is initiated, the
+     * batch enters a `canceling` state, at which time the system may complete any in-progress,
+     * non-interruptible requests before finalizing cancellation.
      *
-     * The number of canceled requests is specified in `request_counts`. To determine
-     * which requests were canceled, check the individual results within the batch.
-     * Note that cancellation may not result in any canceled requests if they were
-     * non-interruptible.
+     * The number of canceled requests is specified in `request_counts`. To determine which requests
+     * were canceled, check the individual results within the batch. Note that cancellation may not
+     * result in any canceled requests if they were non-interruptible.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun cancel(params: BatchCancelParams, requestOptions: RequestOptions = RequestOptions.none()): BatchCancelResponse
+    suspend fun cancel(
+        params: BatchCancelParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchCancelResponse
 
     /**
-     * Batches may be canceled any time before processing ends. Once cancellation is
-     * initiated, the batch enters a `canceling` state, at which time the system may
-     * complete any in-progress, non-interruptible requests before finalizing
-     * cancellation.
+     * Batches may be canceled any time before processing ends. Once cancellation is initiated, the
+     * batch enters a `canceling` state, at which time the system may complete any in-progress,
+     * non-interruptible requests before finalizing cancellation.
      *
-     * The number of canceled requests is specified in `request_counts`. To determine
-     * which requests were canceled, check the individual results within the batch.
-     * Note that cancellation may not result in any canceled requests if they were
-     * non-interruptible.
+     * The number of canceled requests is specified in `request_counts`. To determine which requests
+     * were canceled, check the individual results within the batch. Note that cancellation may not
+     * result in any canceled requests if they were non-interruptible.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun cancelBeta(params: BatchCancelBetaParams, requestOptions: RequestOptions = RequestOptions.none()): BatchCancelBetaResponse
-
-    /**
-     * Streams the results of a Message Batch as a `.jsonl` file.
-     *
-     * Each line in the file is a JSON object containing the result of a single request
-     * in the Message Batch. Results are not guaranteed to be in the same order as
-     * requests. Use the `custom_id` field to match results to requests.
-     *
-     * Learn more about the Message Batches API in our
-     * [user guide](/en/docs/build-with-claude/batch-processing)
-     */
-    suspend fun results(params: BatchResultsParams, requestOptions: RequestOptions = RequestOptions.none()): BatchResultsResponse
+    suspend fun cancelBeta(
+        params: BatchCancelBetaParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchCancelBetaResponse
 
     /**
      * Streams the results of a Message Batch as a `.jsonl` file.
      *
-     * Each line in the file is a JSON object containing the result of a single request
-     * in the Message Batch. Results are not guaranteed to be in the same order as
-     * requests. Use the `custom_id` field to match results to requests.
+     * Each line in the file is a JSON object containing the result of a single request in the
+     * Message Batch. Results are not guaranteed to be in the same order as requests. Use the
+     * `custom_id` field to match results to requests.
      *
      * Learn more about the Message Batches API in our
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
-    suspend fun resultsBeta(params: BatchResultsBetaParams, requestOptions: RequestOptions = RequestOptions.none()): BatchResultsBetaResponse
+    suspend fun results(
+        params: BatchResultsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchResultsResponse
 
     /**
-     * A view of [BatchServiceAsync] that provides access to raw HTTP responses for
-     * each method.
+     * Streams the results of a Message Batch as a `.jsonl` file.
+     *
+     * Each line in the file is a JSON object containing the result of a single request in the
+     * Message Batch. Results are not guaranteed to be in the same order as requests. Use the
+     * `custom_id` field to match results to requests.
+     *
+     * Learn more about the Message Batches API in our
+     * [user guide](/en/docs/build-with-claude/batch-processing)
      */
+    suspend fun resultsBeta(
+        params: BatchResultsBetaParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchResultsBetaResponse
+
+    /** A view of [BatchServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         fun betaTrue(): BetaTrueServiceAsync.WithRawResponse
 
         /**
-         * Returns a raw HTTP response for `post /v1/messages/batches`, but is otherwise
-         * the same as [BatchServiceAsync.create].
+         * Returns a raw HTTP response for `post /v1/messages/batches`, but is otherwise the same as
+         * [BatchServiceAsync.create].
          */
         @MustBeClosed
-        suspend fun create(params: BatchCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchCreateResponse>
+        suspend fun create(
+            params: BatchCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchCreateResponse>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}`,
-         * but is otherwise the same as [BatchServiceAsync.retrieve].
+         * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}`, but is
+         * otherwise the same as [BatchServiceAsync.retrieve].
          */
         @MustBeClosed
-        suspend fun retrieve(params: BatchRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchRetrieveResponse>
+        suspend fun retrieve(
+            params: BatchRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchRetrieveResponse>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/batches`, but is otherwise the
-         * same as [BatchServiceAsync.list].
+         * Returns a raw HTTP response for `get /v1/messages/batches`, but is otherwise the same as
+         * [BatchServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(params: BatchListParams = BatchListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchListResponse>
+        suspend fun list(
+            params: BatchListParams = BatchListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<BatchListResponse> = list(BatchListParams.none(), requestOptions)
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<BatchListResponse> =
+            list(BatchListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for
-         * `delete /v1/messages/batches/{message_batch_id}`, but is otherwise the same as
-         * [BatchServiceAsync.delete].
+         * Returns a raw HTTP response for `delete /v1/messages/batches/{message_batch_id}`, but is
+         * otherwise the same as [BatchServiceAsync.delete].
          */
         @MustBeClosed
-        suspend fun delete(params: BatchDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchDeleteResponse>
+        suspend fun delete(
+            params: BatchDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchDeleteResponse>
 
         /**
-         * Returns a raw HTTP response for
-         * `post /v1/messages/batches/{message_batch_id}/cancel`, but is otherwise the same
-         * as [BatchServiceAsync.cancel].
+         * Returns a raw HTTP response for `post /v1/messages/batches/{message_batch_id}/cancel`,
+         * but is otherwise the same as [BatchServiceAsync.cancel].
          */
         @MustBeClosed
-        suspend fun cancel(params: BatchCancelParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchCancelResponse>
+        suspend fun cancel(
+            params: BatchCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchCancelResponse>
 
         /**
-         * Returns a raw HTTP response for
-         * `post /v1/messages/batches/{message_batch_id}/cancel?beta=true`, but is
-         * otherwise the same as [BatchServiceAsync.cancelBeta].
+         * Returns a raw HTTP response for `post
+         * /v1/messages/batches/{message_batch_id}/cancel?beta=true`, but is otherwise the same as
+         * [BatchServiceAsync.cancelBeta].
          */
         @MustBeClosed
-        suspend fun cancelBeta(params: BatchCancelBetaParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchCancelBetaResponse>
+        suspend fun cancelBeta(
+            params: BatchCancelBetaParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchCancelBetaResponse>
 
         /**
-         * Returns a raw HTTP response for
-         * `get /v1/messages/batches/{message_batch_id}/results`, but is otherwise the same
-         * as [BatchServiceAsync.results].
+         * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}/results`,
+         * but is otherwise the same as [BatchServiceAsync.results].
          */
         @MustBeClosed
-        suspend fun results(params: BatchResultsParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchResultsResponse>
+        suspend fun results(
+            params: BatchResultsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchResultsResponse>
 
         /**
-         * Returns a raw HTTP response for
-         * `get /v1/messages/batches/{message_batch_id}/results?beta=true`, but is
-         * otherwise the same as [BatchServiceAsync.resultsBeta].
+         * Returns a raw HTTP response for `get
+         * /v1/messages/batches/{message_batch_id}/results?beta=true`, but is otherwise the same as
+         * [BatchServiceAsync.resultsBeta].
          */
         @MustBeClosed
-        suspend fun resultsBeta(params: BatchResultsBetaParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BatchResultsBetaResponse>
+        suspend fun resultsBeta(
+            params: BatchResultsBetaParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchResultsBetaResponse>
     }
 }

@@ -12,16 +12,16 @@ import me.elborai.api.core.http.QueryParams
 /**
  * Get a specific model.
  *
- * The Models API response can be used to determine information about a specific
- * model or resolve a model alias to a model ID.
+ * The Models API response can be used to determine information about a specific model or resolve a
+ * model alias to a model ID.
  */
-class ModelRetrieveParams private constructor(
+class ModelRetrieveParams
+private constructor(
     private val modelId: String,
     private val anthropicVersion: String?,
     private val xApiKey: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     /** Model identifier or alias. */
@@ -38,10 +38,9 @@ class ModelRetrieveParams private constructor(
     /**
      * Your unique API key for authentication.
      *
-     * This key is required in the header of all API requests, to authenticate your
-     * account and access Anthropic's services. Get your API key through the
-     * [Console](https://console.anthropic.com/settings/keys). Each key is scoped to a
-     * Workspace.
+     * This key is required in the header of all API requests, to authenticate your account and
+     * access Anthropic's services. Get your API key through the
+     * [Console](https://console.anthropic.com/settings/keys). Each key is scoped to a Workspace.
      */
     fun xApiKey(): String? = xApiKey
 
@@ -50,28 +49,20 @@ class ModelRetrieveParams private constructor(
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     override fun _headers(): Headers {
-      val headers = Headers.builder()
-      this.anthropicVersion?.let {
-          headers.put(
-            "anthropic-version", listOf(it.toString())
-          )
-      }
-      this.xApiKey?.let {
-          headers.put(
-            "x-api-key", listOf(it.toString())
-          )
-      }
-      headers.putAll(additionalHeaders)
-      return headers.build()
+        val headers = Headers.builder()
+        this.anthropicVersion?.let { headers.put("anthropic-version", listOf(it.toString())) }
+        this.xApiKey?.let { headers.put("x-api-key", listOf(it.toString())) }
+        headers.putAll(additionalHeaders)
+        return headers.build()
     }
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
-      return when (index) {
-          0 -> modelId
-          else -> ""
-      }
+        return when (index) {
+            0 -> modelId
+            else -> ""
+        }
     }
 
     fun toBuilder() = Builder().from(this)
@@ -82,7 +73,6 @@ class ModelRetrieveParams private constructor(
          * Returns a mutable builder for constructing an instance of [ModelRetrieveParams].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .modelId()
          * ```
@@ -100,20 +90,16 @@ class ModelRetrieveParams private constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(modelRetrieveParams: ModelRetrieveParams) =
-            apply {
-                modelId = modelRetrieveParams.modelId
-                anthropicVersion = modelRetrieveParams.anthropicVersion
-                xApiKey = modelRetrieveParams.xApiKey
-                additionalHeaders = modelRetrieveParams.additionalHeaders.toBuilder()
-                additionalQueryParams = modelRetrieveParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(modelRetrieveParams: ModelRetrieveParams) = apply {
+            modelId = modelRetrieveParams.modelId
+            anthropicVersion = modelRetrieveParams.anthropicVersion
+            xApiKey = modelRetrieveParams.xApiKey
+            additionalHeaders = modelRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = modelRetrieveParams.additionalQueryParams.toBuilder()
+        }
 
         /** Model identifier or alias. */
-        fun modelId(modelId: String) =
-            apply {
-                this.modelId = modelId
-            }
+        fun modelId(modelId: String) = apply { this.modelId = modelId }
 
         /**
          * The version of the Anthropic API you want to use.
@@ -121,169 +107,138 @@ class ModelRetrieveParams private constructor(
          * Read more about versioning and our version history
          * [here](https://docs.anthropic.com/en/api/versioning).
          */
-        fun anthropicVersion(anthropicVersion: String?) =
-            apply {
-                this.anthropicVersion = anthropicVersion
-            }
+        fun anthropicVersion(anthropicVersion: String?) = apply {
+            this.anthropicVersion = anthropicVersion
+        }
 
         /**
          * Your unique API key for authentication.
          *
-         * This key is required in the header of all API requests, to authenticate your
-         * account and access Anthropic's services. Get your API key through the
+         * This key is required in the header of all API requests, to authenticate your account and
+         * access Anthropic's services. Get your API key through the
          * [Console](https://console.anthropic.com/settings/keys). Each key is scoped to a
          * Workspace.
          */
-        fun xApiKey(xApiKey: String?) =
-            apply {
-                this.xApiKey = xApiKey
-            }
+        fun xApiKey(xApiKey: String?) = apply { this.xApiKey = xApiKey }
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         fun build(): ModelRetrieveParams =
             ModelRetrieveParams(
-              checkRequired(
-                "modelId", modelId
-              ),
-              anthropicVersion,
-              xApiKey,
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                checkRequired("modelId", modelId),
+                anthropicVersion,
+                xApiKey,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is ModelRetrieveParams && modelId == other.modelId && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ModelRetrieveParams && modelId == other.modelId && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(modelId, anthropicVersion, xApiKey, additionalHeaders, additionalQueryParams) /* spotless:on */
 
-    override fun toString() = "ModelRetrieveParams{modelId=$modelId, anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "ModelRetrieveParams{modelId=$modelId, anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

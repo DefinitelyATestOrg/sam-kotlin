@@ -4,17 +4,15 @@ package me.elborai.api.services.blocking.store
 
 import me.elborai.api.core.ClientOptions
 
-class OrderServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class OrderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    OrderService {
 
-) : OrderService {
-
-    private val withRawResponse: OrderService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: OrderService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): OrderService.WithRawResponse = withRawResponse
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : OrderService.WithRawResponse
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        OrderService.WithRawResponse
 }
