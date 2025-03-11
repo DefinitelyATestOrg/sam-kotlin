@@ -18,50 +18,53 @@ import me.elborai.api.errors.SamError
 import me.elborai.api.models.complete.CompleteCreateParams
 import me.elborai.api.models.complete.CompleteCreateResponse
 
-class CompleteServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class CompleteServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    CompleteServiceAsync {
 
-) : CompleteServiceAsync {
-
-    private val withRawResponse: CompleteServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: CompleteServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): CompleteServiceAsync.WithRawResponse = withRawResponse
 
-    override suspend fun create(params: CompleteCreateParams, requestOptions: RequestOptions): CompleteCreateResponse =
+    override suspend fun create(
+        params: CompleteCreateParams,
+        requestOptions: RequestOptions,
+    ): CompleteCreateResponse =
         // post /v1/complete
         withRawResponse().create(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : CompleteServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        CompleteServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<CompleteCreateResponse> = jsonHandler<CompleteCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<CompleteCreateResponse> =
+            jsonHandler<CompleteCreateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override suspend fun create(params: CompleteCreateParams, requestOptions: RequestOptions): HttpResponseFor<CompleteCreateResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("v1", "complete")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.executeAsync(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override suspend fun create(
+            params: CompleteCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CompleteCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("v1", "complete")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

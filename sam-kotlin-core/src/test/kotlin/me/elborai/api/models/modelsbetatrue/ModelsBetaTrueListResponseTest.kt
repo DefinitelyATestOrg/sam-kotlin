@@ -10,26 +10,32 @@ class ModelsBetaTrueListResponseTest {
 
     @Test
     fun createModelsBetaTrueListResponse() {
-      val modelsBetaTrueListResponse = ModelsBetaTrueListResponse.builder()
-          .addData(ModelsBetaTrueListResponse.Data.builder()
-              .id("claude-3-7-sonnet-20250219")
-              .createdAt(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
-              .displayName("Claude 3.7 Sonnet")
-              .type(ModelsBetaTrueListResponse.Data.Type.MODEL)
-              .build())
-          .firstId("first_id")
-          .hasMore(true)
-          .lastId("last_id")
-          .build()
-      assertThat(modelsBetaTrueListResponse).isNotNull
-      assertThat(modelsBetaTrueListResponse.data()).containsExactly(ModelsBetaTrueListResponse.Data.builder()
-          .id("claude-3-7-sonnet-20250219")
-          .createdAt(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
-          .displayName("Claude 3.7 Sonnet")
-          .type(ModelsBetaTrueListResponse.Data.Type.MODEL)
-          .build())
-      assertThat(modelsBetaTrueListResponse.firstId()).isEqualTo("first_id")
-      assertThat(modelsBetaTrueListResponse.hasMore()).isEqualTo(true)
-      assertThat(modelsBetaTrueListResponse.lastId()).isEqualTo("last_id")
+        val modelsBetaTrueListResponse =
+            ModelsBetaTrueListResponse.builder()
+                .addData(
+                    ModelsBetaTrueListResponse.Data.builder()
+                        .id("claude-3-7-sonnet-20250219")
+                        .createdAt(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
+                        .displayName("Claude 3.7 Sonnet")
+                        .type(ModelsBetaTrueListResponse.Data.Type.MODEL)
+                        .build()
+                )
+                .firstId("first_id")
+                .hasMore(true)
+                .lastId("last_id")
+                .build()
+        assertThat(modelsBetaTrueListResponse).isNotNull
+        assertThat(modelsBetaTrueListResponse.data())
+            .containsExactly(
+                ModelsBetaTrueListResponse.Data.builder()
+                    .id("claude-3-7-sonnet-20250219")
+                    .createdAt(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
+                    .displayName("Claude 3.7 Sonnet")
+                    .type(ModelsBetaTrueListResponse.Data.Type.MODEL)
+                    .build()
+            )
+        assertThat(modelsBetaTrueListResponse.firstId()).isEqualTo("first_id")
+        assertThat(modelsBetaTrueListResponse.hasMore()).isEqualTo(true)
+        assertThat(modelsBetaTrueListResponse.lastId()).isEqualTo("last_id")
     }
 }

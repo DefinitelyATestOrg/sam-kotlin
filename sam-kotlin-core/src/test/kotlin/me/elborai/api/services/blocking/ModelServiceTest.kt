@@ -15,54 +15,66 @@ class ModelServiceTest {
 
     @Test
     fun retrieve() {
-      val client = SamOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val modelService = client.models()
+        val client =
+            SamOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val modelService = client.models()
 
-      val model = modelService.retrieve(ModelRetrieveParams.builder()
-          .modelId("model_id")
-          .anthropicVersion("anthropic-version")
-          .xApiKey("x-api-key")
-          .build())
+        val model =
+            modelService.retrieve(
+                ModelRetrieveParams.builder()
+                    .modelId("model_id")
+                    .anthropicVersion("anthropic-version")
+                    .xApiKey("x-api-key")
+                    .build()
+            )
 
-      model.validate()
+        model.validate()
     }
 
     @Test
     fun list() {
-      val client = SamOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val modelService = client.models()
+        val client =
+            SamOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val modelService = client.models()
 
-      val model = modelService.list(ModelListParams.builder()
-          .afterId("after_id")
-          .beforeId("before_id")
-          .limit(1L)
-          .anthropicVersion("anthropic-version")
-          .xApiKey("x-api-key")
-          .build())
+        val model =
+            modelService.list(
+                ModelListParams.builder()
+                    .afterId("after_id")
+                    .beforeId("before_id")
+                    .limit(1L)
+                    .anthropicVersion("anthropic-version")
+                    .xApiKey("x-api-key")
+                    .build()
+            )
 
-      model.validate()
+        model.validate()
     }
 
     @Test
     fun retrieveBeta() {
-      val client = SamOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val modelService = client.models()
+        val client =
+            SamOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val modelService = client.models()
 
-      val response = modelService.retrieveBeta(ModelRetrieveBetaParams.builder()
-          .modelId("model_id")
-          .anthropicVersion("anthropic-version")
-          .xApiKey("x-api-key")
-          .build())
+        val response =
+            modelService.retrieveBeta(
+                ModelRetrieveBetaParams.builder()
+                    .modelId("model_id")
+                    .anthropicVersion("anthropic-version")
+                    .xApiKey("x-api-key")
+                    .build()
+            )
 
-      response.validate()
+        response.validate()
     }
 }

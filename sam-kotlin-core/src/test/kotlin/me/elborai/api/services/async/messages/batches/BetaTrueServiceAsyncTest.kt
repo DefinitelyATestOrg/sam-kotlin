@@ -14,37 +14,45 @@ class BetaTrueServiceAsyncTest {
 
     @Test
     suspend fun retrieve() {
-      val client = SamOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val betaTrueServiceAsync = client.messages().batches().betaTrue()
+        val client =
+            SamOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val betaTrueServiceAsync = client.messages().batches().betaTrue()
 
-      val betaTrue = betaTrueServiceAsync.retrieve(BetaTrueRetrieveParams.builder()
-          .messageBatchId("message_batch_id")
-          .addAnthropicBeta("string")
-          .anthropicVersion("anthropic-version")
-          .xApiKey("x-api-key")
-          .build())
+        val betaTrue =
+            betaTrueServiceAsync.retrieve(
+                BetaTrueRetrieveParams.builder()
+                    .messageBatchId("message_batch_id")
+                    .addAnthropicBeta("string")
+                    .anthropicVersion("anthropic-version")
+                    .xApiKey("x-api-key")
+                    .build()
+            )
 
-      betaTrue.validate()
+        betaTrue.validate()
     }
 
     @Test
     suspend fun delete() {
-      val client = SamOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .apiKey("My API Key")
-          .build()
-      val betaTrueServiceAsync = client.messages().batches().betaTrue()
+        val client =
+            SamOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val betaTrueServiceAsync = client.messages().batches().betaTrue()
 
-      val betaTrue = betaTrueServiceAsync.delete(BetaTrueDeleteParams.builder()
-          .messageBatchId("message_batch_id")
-          .addAnthropicBeta("string")
-          .anthropicVersion("anthropic-version")
-          .xApiKey("x-api-key")
-          .build())
+        val betaTrue =
+            betaTrueServiceAsync.delete(
+                BetaTrueDeleteParams.builder()
+                    .messageBatchId("message_batch_id")
+                    .addAnthropicBeta("string")
+                    .anthropicVersion("anthropic-version")
+                    .xApiKey("x-api-key")
+                    .build()
+            )
 
-      betaTrue.validate()
+        betaTrue.validate()
     }
 }

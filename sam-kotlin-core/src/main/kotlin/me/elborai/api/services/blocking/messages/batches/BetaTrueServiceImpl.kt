@@ -20,81 +20,89 @@ import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteResponse
 import me.elborai.api.models.messages.batches.betatrue.BetaTrueRetrieveParams
 import me.elborai.api.models.messages.batches.betatrue.BetaTrueRetrieveResponse
 
-class BetaTrueServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class BetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    BetaTrueService {
 
-) : BetaTrueService {
-
-    private val withRawResponse: BetaTrueService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: BetaTrueService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): BetaTrueService.WithRawResponse = withRawResponse
 
-    override fun retrieve(params: BetaTrueRetrieveParams, requestOptions: RequestOptions): BetaTrueRetrieveResponse =
+    override fun retrieve(
+        params: BetaTrueRetrieveParams,
+        requestOptions: RequestOptions,
+    ): BetaTrueRetrieveResponse =
         // get /v1/messages/batches/{message_batch_id}?beta=true
         withRawResponse().retrieve(params, requestOptions).parse()
 
-    override fun delete(params: BetaTrueDeleteParams, requestOptions: RequestOptions): BetaTrueDeleteResponse =
+    override fun delete(
+        params: BetaTrueDeleteParams,
+        requestOptions: RequestOptions,
+    ): BetaTrueDeleteResponse =
         // delete /v1/messages/batches/{message_batch_id}?beta=true
         withRawResponse().delete(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : BetaTrueService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        BetaTrueService.WithRawResponse {
 
         private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
 
-        private val retrieveHandler: Handler<BetaTrueRetrieveResponse> = jsonHandler<BetaTrueRetrieveResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val retrieveHandler: Handler<BetaTrueRetrieveResponse> =
+            jsonHandler<BetaTrueRetrieveResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun retrieve(params: BetaTrueRetrieveParams, requestOptions: RequestOptions): HttpResponseFor<BetaTrueRetrieveResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages", "batches", params.getPathParam(0))
-            .putQueryParam("beta", "true")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  retrieveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun retrieve(
+            params: BetaTrueRetrieveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BetaTrueRetrieveResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages", "batches", params.getPathParam(0))
+                    .putQueryParam("beta", "true")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val deleteHandler: Handler<BetaTrueDeleteResponse> = jsonHandler<BetaTrueDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<BetaTrueDeleteResponse> =
+            jsonHandler<BetaTrueDeleteResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun delete(params: BetaTrueDeleteParams, requestOptions: RequestOptions): HttpResponseFor<BetaTrueDeleteResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("v1", "messages", "batches", params.getPathParam(0))
-            .putQueryParam("beta", "true")
-            .apply { params._body()?.let{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  deleteHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun delete(
+            params: BetaTrueDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BetaTrueDeleteResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("v1", "messages", "batches", params.getPathParam(0))
+                    .putQueryParam("beta", "true")
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }
