@@ -2,8 +2,8 @@
 
 package me.elborai.api.core
 
-import java.lang.reflect.InvocationTargetException
 import me.elborai.api.errors.SamException
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Closes [closeable] when [observed] becomes only phantom reachable.

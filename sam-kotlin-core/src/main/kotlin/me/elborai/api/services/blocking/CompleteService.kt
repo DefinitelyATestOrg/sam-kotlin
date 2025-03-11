@@ -11,7 +11,8 @@ import me.elborai.api.models.complete.CompleteCreateResponse
 interface CompleteService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
@@ -25,22 +26,19 @@ interface CompleteService {
      * [migration guide](https://docs.anthropic.com/en/api/migrating-from-text-completions-to-messages)
      * for guidance in migrating from Text Completions to Messages.
      */
-    fun create(
-        params: CompleteCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompleteCreateResponse
+    fun create(params: CompleteCreateParams, requestOptions: RequestOptions = RequestOptions.none()): CompleteCreateResponse
 
-    /** A view of [CompleteService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [CompleteService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/complete`, but is otherwise the same as
-         * [CompleteService.create].
+         * Returns a raw HTTP response for `post /v1/complete`, but is otherwise the same
+         * as [CompleteService.create].
          */
         @MustBeClosed
-        fun create(
-            params: CompleteCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CompleteCreateResponse>
+        fun create(params: CompleteCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<CompleteCreateResponse>
     }
 }

@@ -4,15 +4,17 @@ package me.elborai.api.services.async
 
 import me.elborai.api.core.ClientOptions
 
-class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    UserServiceAsync {
+class UserServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: UserServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : UserServiceAsync {
+
+    private val withRawResponse: UserServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): UserServiceAsync.WithRawResponse = withRawResponse
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        UserServiceAsync.WithRawResponse
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : UserServiceAsync.WithRawResponse
 }

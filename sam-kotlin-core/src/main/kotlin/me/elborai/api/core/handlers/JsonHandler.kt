@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import me.elborai.api.core.enhanceJacksonException
 import me.elborai.api.core.http.HttpResponse
 import me.elborai.api.core.http.HttpResponse.Handler
+import me.elborai.api.errors.SamException
 
 internal inline fun <reified T> jsonHandler(jsonMapper: JsonMapper): Handler<T> =
     object : Handler<T> {
