@@ -38,13 +38,26 @@ private constructor(
      * Unique object identifier.
      *
      * The format and length of IDs may change over time.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
-    /** The resulting completion up to and excluding the stop sequences. */
+    /**
+     * The resulting completion up to and excluding the stop sequences.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun completion(): String = completion.getRequired("completion")
 
-    /** The model that handled the request. */
+    /**
+     * The model that handled the request.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun model(): String = model.getRequired("model")
 
     /**
@@ -54,6 +67,9 @@ private constructor(
      * - `"stop_sequence"`: we reached a stop sequence — either provided by you via the
      *   `stop_sequences` parameter, or a stop sequence built into the model
      * - `"max_tokens"`: we exceeded `max_tokens_to_sample` or the model's maximum
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun stopReason(): String? = stopReason.getNullable("stop_reason")
 
@@ -61,36 +77,44 @@ private constructor(
      * Object type.
      *
      * For Text Completions, this is always `"completion"`.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun type(): Type = type.getRequired("type")
 
     /**
-     * Unique object identifier.
+     * Returns the raw JSON value of [id].
      *
-     * The format and length of IDs may change over time.
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** The resulting completion up to and excluding the stop sequences. */
+    /**
+     * Returns the raw JSON value of [completion].
+     *
+     * Unlike [completion], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("completion") @ExcludeMissing fun _completion(): JsonField<String> = completion
 
-    /** The model that handled the request. */
+    /**
+     * Returns the raw JSON value of [model].
+     *
+     * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("model") @ExcludeMissing fun _model(): JsonField<String> = model
 
     /**
-     * The reason that we stopped.
+     * Returns the raw JSON value of [stopReason].
      *
-     * This may be one the following values:
-     * - `"stop_sequence"`: we reached a stop sequence — either provided by you via the
-     *   `stop_sequences` parameter, or a stop sequence built into the model
-     * - `"max_tokens"`: we exceeded `max_tokens_to_sample` or the model's maximum
+     * Unlike [stopReason], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("stop_reason") @ExcludeMissing fun _stopReason(): JsonField<String> = stopReason
 
     /**
-     * Object type.
+     * Returns the raw JSON value of [type].
      *
-     * For Text Completions, this is always `"completion"`.
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
@@ -159,22 +183,34 @@ private constructor(
         fun id(id: String) = id(JsonField.of(id))
 
         /**
-         * Unique object identifier.
+         * Sets [Builder.id] to an arbitrary JSON value.
          *
-         * The format and length of IDs may change over time.
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** The resulting completion up to and excluding the stop sequences. */
         fun completion(completion: String) = completion(JsonField.of(completion))
 
-        /** The resulting completion up to and excluding the stop sequences. */
+        /**
+         * Sets [Builder.completion] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.completion] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun completion(completion: JsonField<String>) = apply { this.completion = completion }
 
         /** The model that handled the request. */
         fun model(model: String) = model(JsonField.of(model))
 
-        /** The model that handled the request. */
+        /**
+         * Sets [Builder.model] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.model] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun model(model: JsonField<String>) = apply { this.model = model }
 
         /**
@@ -188,12 +224,11 @@ private constructor(
         fun stopReason(stopReason: String?) = stopReason(JsonField.ofNullable(stopReason))
 
         /**
-         * The reason that we stopped.
+         * Sets [Builder.stopReason] to an arbitrary JSON value.
          *
-         * This may be one the following values:
-         * - `"stop_sequence"`: we reached a stop sequence — either provided by you via the
-         *   `stop_sequences` parameter, or a stop sequence built into the model
-         * - `"max_tokens"`: we exceeded `max_tokens_to_sample` or the model's maximum
+         * You should usually call [Builder.stopReason] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun stopReason(stopReason: JsonField<String>) = apply { this.stopReason = stopReason }
 
@@ -205,9 +240,10 @@ private constructor(
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
-         * Object type.
+         * Sets [Builder.type] to an arbitrary JSON value.
          *
-         * For Text Completions, this is always `"completion"`.
+         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun type(type: JsonField<Type>) = apply { this.type = type }
 

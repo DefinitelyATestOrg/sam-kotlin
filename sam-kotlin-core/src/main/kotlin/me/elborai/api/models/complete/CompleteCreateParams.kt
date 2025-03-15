@@ -19,6 +19,7 @@ import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
+import me.elborai.api.errors.SamInvalidDataException
 
 /**
  * [Legacy] Create a Text Completion.
@@ -61,6 +62,9 @@ private constructor(
      *
      * Note that our models may stop _before_ reaching this maximum. This parameter only specifies
      * the absolute maximum number of tokens to generate.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun maxTokensToSample(): Long = body.maxTokensToSample()
 
@@ -69,6 +73,9 @@ private constructor(
      *
      * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details and
      * options.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun model(): String = body.model()
 
@@ -83,10 +90,18 @@ private constructor(
      *
      * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our guide to
      * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more details.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun prompt(): String = body.prompt()
 
-    /** An object describing metadata about the request. */
+    /**
+     * An object describing metadata about the request.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
+     */
     fun metadata(): Metadata? = body.metadata()
 
     /**
@@ -95,6 +110,9 @@ private constructor(
      * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in the
      * future. By providing the stop_sequences parameter, you may include additional strings that
      * will cause the model to stop generating.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun stopSequences(): List<String>? = body.stopSequences()
 
@@ -102,6 +120,9 @@ private constructor(
      * Whether to incrementally stream the response using server-sent events.
      *
      * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun stream(): Boolean? = body.stream()
 
@@ -112,6 +133,9 @@ private constructor(
      * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
      *
      * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun temperature(): Double? = body.temperature()
 
@@ -122,6 +146,9 @@ private constructor(
      * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
      *
      * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun topK(): Long? = body.topK()
 
@@ -134,87 +161,73 @@ private constructor(
      * both.
      *
      * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the server
+     *   responded with an unexpected value).
      */
     fun topP(): Double? = body.topP()
 
     /**
-     * The maximum number of tokens to generate before stopping.
+     * Returns the raw JSON value of [maxTokensToSample].
      *
-     * Note that our models may stop _before_ reaching this maximum. This parameter only specifies
-     * the absolute maximum number of tokens to generate.
+     * Unlike [maxTokensToSample], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _maxTokensToSample(): JsonField<Long> = body._maxTokensToSample()
 
     /**
-     * The model that will complete your prompt.
+     * Returns the raw JSON value of [model].
      *
-     * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details and
-     * options.
+     * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _model(): JsonField<String> = body._model()
 
     /**
-     * The prompt that you want Claude to complete.
+     * Returns the raw JSON value of [prompt].
      *
-     * For proper response generation you will need to format your prompt using alternating
-     * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
-     * ```
-     * "\n\nHuman: {userQuestion}\n\nAssistant:"
-     * ```
-     *
-     * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our guide to
-     * [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more details.
+     * Unlike [prompt], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _prompt(): JsonField<String> = body._prompt()
 
-    /** An object describing metadata about the request. */
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _metadata(): JsonField<Metadata> = body._metadata()
 
     /**
-     * Sequences that will cause the model to stop generating.
+     * Returns the raw JSON value of [stopSequences].
      *
-     * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in the
-     * future. By providing the stop_sequences parameter, you may include additional strings that
-     * will cause the model to stop generating.
+     * Unlike [stopSequences], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _stopSequences(): JsonField<List<String>> = body._stopSequences()
 
     /**
-     * Whether to incrementally stream the response using server-sent events.
+     * Returns the raw JSON value of [stream].
      *
-     * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
+     * Unlike [stream], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _stream(): JsonField<Boolean> = body._stream()
 
     /**
-     * Amount of randomness injected into the response.
+     * Returns the raw JSON value of [temperature].
      *
-     * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-     * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
-     *
-     * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+     * Unlike [temperature], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _temperature(): JsonField<Double> = body._temperature()
 
     /**
-     * Only sample from the top K options for each subsequent token.
+     * Returns the raw JSON value of [topK].
      *
-     * Used to remove "long tail" low probability responses.
-     * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
-     *
-     * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     * Unlike [topK], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _topK(): JsonField<Long> = body._topK()
 
     /**
-     * Use nucleus sampling.
+     * Returns the raw JSON value of [topP].
      *
-     * In nucleus sampling, we compute the cumulative distribution over all the options for each
-     * subsequent token in decreasing probability order and cut it off once it reaches a particular
-     * probability specified by `top_p`. You should either alter `temperature` or `top_p`, but not
-     * both.
-     *
-     * Recommended for advanced use cases only. You usually only need to use `temperature`.
+     * Unlike [topP], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _topP(): JsonField<Double> = body._topP()
 
@@ -274,6 +287,9 @@ private constructor(
          *
          * Note that our models may stop _before_ reaching this maximum. This parameter only
          * specifies the absolute maximum number of tokens to generate.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun maxTokensToSample(): Long = maxTokensToSample.getRequired("max_tokens_to_sample")
 
@@ -282,6 +298,9 @@ private constructor(
          *
          * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
          * and options.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun model(): String = model.getRequired("model")
 
@@ -297,10 +316,18 @@ private constructor(
          * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
          * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
          * details.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun prompt(): String = prompt.getRequired("prompt")
 
-        /** An object describing metadata about the request. */
+        /**
+         * An object describing metadata about the request.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun metadata(): Metadata? = metadata.getNullable("metadata")
 
         /**
@@ -309,6 +336,9 @@ private constructor(
          * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
          * the future. By providing the stop_sequences parameter, you may include additional strings
          * that will cause the model to stop generating.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun stopSequences(): List<String>? = stopSequences.getNullable("stop_sequences")
 
@@ -316,6 +346,9 @@ private constructor(
          * Whether to incrementally stream the response using server-sent events.
          *
          * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun stream(): Boolean? = stream.getNullable("stream")
 
@@ -326,6 +359,9 @@ private constructor(
          * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
          *
          * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun temperature(): Double? = temperature.getNullable("temperature")
 
@@ -336,6 +372,9 @@ private constructor(
          * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
          *
          * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun topK(): Long? = topK.getNullable("top_k")
 
@@ -348,94 +387,80 @@ private constructor(
          * `top_p`, but not both.
          *
          * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun topP(): Double? = topP.getNullable("top_p")
 
         /**
-         * The maximum number of tokens to generate before stopping.
+         * Returns the raw JSON value of [maxTokensToSample].
          *
-         * Note that our models may stop _before_ reaching this maximum. This parameter only
-         * specifies the absolute maximum number of tokens to generate.
+         * Unlike [maxTokensToSample], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("max_tokens_to_sample")
         @ExcludeMissing
         fun _maxTokensToSample(): JsonField<Long> = maxTokensToSample
 
         /**
-         * The model that will complete your prompt.
+         * Returns the raw JSON value of [model].
          *
-         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
-         * and options.
+         * Unlike [model], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("model") @ExcludeMissing fun _model(): JsonField<String> = model
 
         /**
-         * The prompt that you want Claude to complete.
+         * Returns the raw JSON value of [prompt].
          *
-         * For proper response generation you will need to format your prompt using alternating
-         * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
-         * ```
-         * "\n\nHuman: {userQuestion}\n\nAssistant:"
-         * ```
-         *
-         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-         * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
-         * details.
+         * Unlike [prompt], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("prompt") @ExcludeMissing fun _prompt(): JsonField<String> = prompt
 
-        /** An object describing metadata about the request. */
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         /**
-         * Sequences that will cause the model to stop generating.
+         * Returns the raw JSON value of [stopSequences].
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * Unlike [stopSequences], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("stop_sequences")
         @ExcludeMissing
         fun _stopSequences(): JsonField<List<String>> = stopSequences
 
         /**
-         * Whether to incrementally stream the response using server-sent events.
+         * Returns the raw JSON value of [stream].
          *
-         * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
+         * Unlike [stream], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("stream") @ExcludeMissing fun _stream(): JsonField<Boolean> = stream
 
         /**
-         * Amount of randomness injected into the response.
+         * Returns the raw JSON value of [temperature].
          *
-         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-         * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
-         *
-         * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         * Unlike [temperature], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("temperature")
         @ExcludeMissing
         fun _temperature(): JsonField<Double> = temperature
 
         /**
-         * Only sample from the top K options for each subsequent token.
+         * Returns the raw JSON value of [topK].
          *
-         * Used to remove "long tail" low probability responses.
-         * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
-         *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Unlike [topK], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("top_k") @ExcludeMissing fun _topK(): JsonField<Long> = topK
 
         /**
-         * Use nucleus sampling.
+         * Returns the raw JSON value of [topP].
          *
-         * In nucleus sampling, we compute the cumulative distribution over all the options for each
-         * subsequent token in decreasing probability order and cut it off once it reaches a
-         * particular probability specified by `top_p`. You should either alter `temperature` or
-         * `top_p`, but not both.
-         *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * Unlike [topP], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("top_p") @ExcludeMissing fun _topP(): JsonField<Double> = topP
 
@@ -516,10 +541,11 @@ private constructor(
                 maxTokensToSample(JsonField.of(maxTokensToSample))
 
             /**
-             * The maximum number of tokens to generate before stopping.
+             * Sets [Builder.maxTokensToSample] to an arbitrary JSON value.
              *
-             * Note that our models may stop _before_ reaching this maximum. This parameter only
-             * specifies the absolute maximum number of tokens to generate.
+             * You should usually call [Builder.maxTokensToSample] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun maxTokensToSample(maxTokensToSample: JsonField<Long>) = apply {
                 this.maxTokensToSample = maxTokensToSample
@@ -534,10 +560,11 @@ private constructor(
             fun model(model: String) = model(JsonField.of(model))
 
             /**
-             * The model that will complete your prompt.
+             * Sets [Builder.model] to an arbitrary JSON value.
              *
-             * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional
-             * details and options.
+             * You should usually call [Builder.model] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun model(model: JsonField<String>) = apply { this.model = model }
 
@@ -557,24 +584,24 @@ private constructor(
             fun prompt(prompt: String) = prompt(JsonField.of(prompt))
 
             /**
-             * The prompt that you want Claude to complete.
+             * Sets [Builder.prompt] to an arbitrary JSON value.
              *
-             * For proper response generation you will need to format your prompt using alternating
-             * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
-             * ```
-             * "\n\nHuman: {userQuestion}\n\nAssistant:"
-             * ```
-             *
-             * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-             * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for
-             * more details.
+             * You should usually call [Builder.prompt] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun prompt(prompt: JsonField<String>) = apply { this.prompt = prompt }
 
             /** An object describing metadata about the request. */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
-            /** An object describing metadata about the request. */
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             /**
@@ -588,22 +615,20 @@ private constructor(
                 stopSequences(JsonField.of(stopSequences))
 
             /**
-             * Sequences that will cause the model to stop generating.
+             * Sets [Builder.stopSequences] to an arbitrary JSON value.
              *
-             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences
-             * in the future. By providing the stop_sequences parameter, you may include additional
-             * strings that will cause the model to stop generating.
+             * You should usually call [Builder.stopSequences] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun stopSequences(stopSequences: JsonField<List<String>>) = apply {
                 this.stopSequences = stopSequences.map { it.toMutableList() }
             }
 
             /**
-             * Sequences that will cause the model to stop generating.
+             * Adds a single [String] to [stopSequences].
              *
-             * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences
-             * in the future. By providing the stop_sequences parameter, you may include additional
-             * strings that will cause the model to stop generating.
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addStopSequence(stopSequence: String) = apply {
                 stopSequences =
@@ -620,9 +645,11 @@ private constructor(
             fun stream(stream: Boolean) = stream(JsonField.of(stream))
 
             /**
-             * Whether to incrementally stream the response using server-sent events.
+             * Sets [Builder.stream] to an arbitrary JSON value.
              *
-             * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
+             * You should usually call [Builder.stream] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun stream(stream: JsonField<Boolean>) = apply { this.stream = stream }
 
@@ -638,13 +665,11 @@ private constructor(
             fun temperature(temperature: Double) = temperature(JsonField.of(temperature))
 
             /**
-             * Amount of randomness injected into the response.
+             * Sets [Builder.temperature] to an arbitrary JSON value.
              *
-             * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-             * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
-             *
-             * Note that even with `temperature` of `0.0`, the results will not be fully
-             * deterministic.
+             * You should usually call [Builder.temperature] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun temperature(temperature: JsonField<Double>) = apply {
                 this.temperature = temperature
@@ -661,12 +686,11 @@ private constructor(
             fun topK(topK: Long) = topK(JsonField.of(topK))
 
             /**
-             * Only sample from the top K options for each subsequent token.
+             * Sets [Builder.topK] to an arbitrary JSON value.
              *
-             * Used to remove "long tail" low probability responses.
-             * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
-             *
-             * Recommended for advanced use cases only. You usually only need to use `temperature`.
+             * You should usually call [Builder.topK] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun topK(topK: JsonField<Long>) = apply { this.topK = topK }
 
@@ -683,14 +707,11 @@ private constructor(
             fun topP(topP: Double) = topP(JsonField.of(topP))
 
             /**
-             * Use nucleus sampling.
+             * Sets [Builder.topP] to an arbitrary JSON value.
              *
-             * In nucleus sampling, we compute the cumulative distribution over all the options for
-             * each subsequent token in decreasing probability order and cut it off once it reaches
-             * a particular probability specified by `top_p`. You should either alter `temperature`
-             * or `top_p`, but not both.
-             *
-             * Recommended for advanced use cases only. You usually only need to use `temperature`.
+             * You should usually call [Builder.topP] with a well-typed [Double] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun topP(topP: JsonField<Double>) = apply { this.topP = topP }
 
@@ -812,10 +833,11 @@ private constructor(
         }
 
         /**
-         * The maximum number of tokens to generate before stopping.
+         * Sets [Builder.maxTokensToSample] to an arbitrary JSON value.
          *
-         * Note that our models may stop _before_ reaching this maximum. This parameter only
-         * specifies the absolute maximum number of tokens to generate.
+         * You should usually call [Builder.maxTokensToSample] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun maxTokensToSample(maxTokensToSample: JsonField<Long>) = apply {
             body.maxTokensToSample(maxTokensToSample)
@@ -830,10 +852,10 @@ private constructor(
         fun model(model: String) = apply { body.model(model) }
 
         /**
-         * The model that will complete your prompt.
+         * Sets [Builder.model] to an arbitrary JSON value.
          *
-         * See [models](https://docs.anthropic.com/en/docs/models-overview) for additional details
-         * and options.
+         * You should usually call [Builder.model] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun model(model: JsonField<String>) = apply { body.model(model) }
 
@@ -853,24 +875,23 @@ private constructor(
         fun prompt(prompt: String) = apply { body.prompt(prompt) }
 
         /**
-         * The prompt that you want Claude to complete.
+         * Sets [Builder.prompt] to an arbitrary JSON value.
          *
-         * For proper response generation you will need to format your prompt using alternating
-         * `\n\nHuman:` and `\n\nAssistant:` conversational turns. For example:
-         * ```
-         * "\n\nHuman: {userQuestion}\n\nAssistant:"
-         * ```
-         *
-         * See [prompt validation](https://docs.anthropic.com/en/api/prompt-validation) and our
-         * guide to [prompt design](https://docs.anthropic.com/en/docs/intro-to-prompting) for more
-         * details.
+         * You should usually call [Builder.prompt] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun prompt(prompt: JsonField<String>) = apply { body.prompt(prompt) }
 
         /** An object describing metadata about the request. */
         fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
-        /** An object describing metadata about the request. */
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         /**
@@ -883,22 +904,20 @@ private constructor(
         fun stopSequences(stopSequences: List<String>) = apply { body.stopSequences(stopSequences) }
 
         /**
-         * Sequences that will cause the model to stop generating.
+         * Sets [Builder.stopSequences] to an arbitrary JSON value.
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * You should usually call [Builder.stopSequences] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun stopSequences(stopSequences: JsonField<List<String>>) = apply {
             body.stopSequences(stopSequences)
         }
 
         /**
-         * Sequences that will cause the model to stop generating.
+         * Adds a single [String] to [stopSequences].
          *
-         * Our models stop on `"\n\nHuman:"`, and may include additional built-in stop sequences in
-         * the future. By providing the stop_sequences parameter, you may include additional strings
-         * that will cause the model to stop generating.
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addStopSequence(stopSequence: String) = apply { body.addStopSequence(stopSequence) }
 
@@ -910,9 +929,10 @@ private constructor(
         fun stream(stream: Boolean) = apply { body.stream(stream) }
 
         /**
-         * Whether to incrementally stream the response using server-sent events.
+         * Sets [Builder.stream] to an arbitrary JSON value.
          *
-         * See [streaming](https://docs.anthropic.com/en/api/streaming) for details.
+         * You should usually call [Builder.stream] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun stream(stream: JsonField<Boolean>) = apply { body.stream(stream) }
 
@@ -927,12 +947,11 @@ private constructor(
         fun temperature(temperature: Double) = apply { body.temperature(temperature) }
 
         /**
-         * Amount of randomness injected into the response.
+         * Sets [Builder.temperature] to an arbitrary JSON value.
          *
-         * Defaults to `1.0`. Ranges from `0.0` to `1.0`. Use `temperature` closer to `0.0` for
-         * analytical / multiple choice, and closer to `1.0` for creative and generative tasks.
-         *
-         * Note that even with `temperature` of `0.0`, the results will not be fully deterministic.
+         * You should usually call [Builder.temperature] with a well-typed [Double] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun temperature(temperature: JsonField<Double>) = apply { body.temperature(temperature) }
 
@@ -947,12 +966,10 @@ private constructor(
         fun topK(topK: Long) = apply { body.topK(topK) }
 
         /**
-         * Only sample from the top K options for each subsequent token.
+         * Sets [Builder.topK] to an arbitrary JSON value.
          *
-         * Used to remove "long tail" low probability responses.
-         * [Learn more technical details here](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277).
-         *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * You should usually call [Builder.topK] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun topK(topK: JsonField<Long>) = apply { body.topK(topK) }
 
@@ -969,14 +986,10 @@ private constructor(
         fun topP(topP: Double) = apply { body.topP(topP) }
 
         /**
-         * Use nucleus sampling.
+         * Sets [Builder.topP] to an arbitrary JSON value.
          *
-         * In nucleus sampling, we compute the cumulative distribution over all the options for each
-         * subsequent token in decreasing probability order and cut it off once it reaches a
-         * particular probability specified by `top_p`. You should either alter `temperature` or
-         * `top_p`, but not both.
-         *
-         * Recommended for advanced use cases only. You usually only need to use `temperature`.
+         * You should usually call [Builder.topP] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun topP(topP: JsonField<Double>) = apply { body.topP(topP) }
 
@@ -1125,15 +1138,16 @@ private constructor(
          * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this id
          * to help detect abuse. Do not include any identifying information such as name, email
          * address, or phone number.
+         *
+         * @throws SamInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun userId(): String? = userId.getNullable("user_id")
 
         /**
-         * An external identifier for the user who is associated with the request.
+         * Returns the raw JSON value of [userId].
          *
-         * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this id
-         * to help detect abuse. Do not include any identifying information such as name, email
-         * address, or phone number.
+         * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
 
@@ -1181,11 +1195,11 @@ private constructor(
             fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
             /**
-             * An external identifier for the user who is associated with the request.
+             * Sets [Builder.userId] to an arbitrary JSON value.
              *
-             * This should be a uuid, hash value, or other opaque identifier. Anthropic may use this
-             * id to help detect abuse. Do not include any identifying information such as name,
-             * email address, or phone number.
+             * You should usually call [Builder.userId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 

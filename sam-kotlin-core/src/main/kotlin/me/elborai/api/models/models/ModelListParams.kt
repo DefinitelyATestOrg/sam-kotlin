@@ -134,9 +134,9 @@ private constructor(
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
-         * Number of items to return per page.
+         * Alias for [Builder.limit].
          *
-         * Defaults to `20`. Ranges from `1` to `1000`.
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun limit(limit: Long) = limit(limit as Long?)
 
