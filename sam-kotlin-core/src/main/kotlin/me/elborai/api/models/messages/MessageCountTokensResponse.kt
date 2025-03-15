@@ -15,6 +15,7 @@ import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.checkRequired
 import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
+import me.elborai.api.errors.SamInvalidDataException
 
 @NoAutoDetect
 class MessageCountTokensResponse
@@ -28,11 +29,16 @@ private constructor(
 
     /**
      * The total number of tokens across the provided list of messages, system prompt, and tools.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun inputTokens(): Long = inputTokens.getRequired("input_tokens")
 
     /**
-     * The total number of tokens across the provided list of messages, system prompt, and tools.
+     * Returns the raw JSON value of [inputTokens].
+     *
+     * Unlike [inputTokens], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("input_tokens") @ExcludeMissing fun _inputTokens(): JsonField<Long> = inputTokens
 
@@ -84,8 +90,11 @@ private constructor(
         fun inputTokens(inputTokens: Long) = inputTokens(JsonField.of(inputTokens))
 
         /**
-         * The total number of tokens across the provided list of messages, system prompt, and
-         * tools.
+         * Sets [Builder.inputTokens] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inputTokens] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun inputTokens(inputTokens: JsonField<Long>) = apply { this.inputTokens = inputTokens }
 

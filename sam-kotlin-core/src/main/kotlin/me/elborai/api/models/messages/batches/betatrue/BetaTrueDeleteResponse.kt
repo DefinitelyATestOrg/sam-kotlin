@@ -27,23 +27,35 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** ID of the Message Batch. */
+    /**
+     * ID of the Message Batch.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
     /**
      * Deleted object type.
      *
      * For Message Batches, this is always `"message_batch_deleted"`.
+     *
+     * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun type(): Type = type.getRequired("type")
 
-    /** ID of the Message Batch. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
-     * Deleted object type.
+     * Returns the raw JSON value of [type].
      *
-     * For Message Batches, this is always `"message_batch_deleted"`.
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
@@ -95,7 +107,12 @@ private constructor(
         /** ID of the Message Batch. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** ID of the Message Batch. */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /**
@@ -106,9 +123,10 @@ private constructor(
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
-         * Deleted object type.
+         * Sets [Builder.type] to an arbitrary JSON value.
          *
-         * For Message Batches, this is always `"message_batch_deleted"`.
+         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun type(type: JsonField<Type>) = apply { this.type = type }
 

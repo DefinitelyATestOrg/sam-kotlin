@@ -129,10 +129,9 @@ private constructor(
         }
 
         /**
-         * Optional header to specify the beta version(s) you want to use.
+         * Adds a single [String] to [Builder.anthropicBeta].
          *
-         * To use multiple betas, use a comma separated list like `beta1,beta2` or specify the
-         * header multiple times for each beta.
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addAnthropicBeta(anthropicBeta: String) = apply {
             this.anthropicBeta =
