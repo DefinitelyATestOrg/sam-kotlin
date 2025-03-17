@@ -62,14 +62,15 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers {
-        val headers = Headers.builder()
-        this.anthropicBeta?.let { headers.put("anthropic-beta", it.map(Any::toString)) }
-        this.anthropicVersion?.let { headers.put("anthropic-version", listOf(it.toString())) }
-        this.xApiKey?.let { headers.put("x-api-key", listOf(it.toString())) }
-        headers.putAll(additionalHeaders)
-        return headers.build()
-    }
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                anthropicBeta?.forEach { put("anthropic-beta", it) }
+                anthropicVersion?.let { put("anthropic-version", it) }
+                xApiKey?.let { put("x-api-key", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 

@@ -75,23 +75,25 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers {
-        val headers = Headers.builder()
-        this.anthropicBeta?.let { headers.put("anthropic-beta", it.map(Any::toString)) }
-        this.anthropicVersion?.let { headers.put("anthropic-version", listOf(it.toString())) }
-        this.xApiKey?.let { headers.put("x-api-key", listOf(it.toString())) }
-        headers.putAll(additionalHeaders)
-        return headers.build()
-    }
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                anthropicBeta?.forEach { put("anthropic-beta", it) }
+                anthropicVersion?.let { put("anthropic-version", it) }
+                xApiKey?.let { put("x-api-key", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.afterId?.let { queryParams.put("after_id", listOf(it.toString())) }
-        this.beforeId?.let { queryParams.put("before_id", listOf(it.toString())) }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                afterId?.let { put("after_id", it) }
+                beforeId?.let { put("before_id", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun toBuilder() = Builder().from(this)
 
