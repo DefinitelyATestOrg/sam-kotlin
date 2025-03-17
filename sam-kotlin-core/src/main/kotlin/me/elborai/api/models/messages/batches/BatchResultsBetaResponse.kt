@@ -229,6 +229,19 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [BatchResultsBetaResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customId()
+         * .result()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): BatchResultsBetaResponse =
             BatchResultsBetaResponse(
                 checkRequired("customId", customId),
@@ -566,6 +579,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [BetaSucceededResult].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .message()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): BetaSucceededResult =
                     BetaSucceededResult(
                         checkRequired("message", message),
@@ -1145,6 +1171,25 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Message].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .id()
+                     * .content()
+                     * .model()
+                     * .role()
+                     * .stopReason()
+                     * .stopSequence()
+                     * .type()
+                     * .usage()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Message =
                         Message(
                             checkRequired("id", id),
@@ -1670,6 +1715,21 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaResponseTextBlock].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .citations()
+                             * .text()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaResponseTextBlock =
                                 BetaResponseTextBlock(
                                     checkRequired("citations", citations).map { it.toImmutable() },
@@ -2257,6 +2317,25 @@ private constructor(
                                         keys.forEach(::removeAdditionalProperty)
                                     }
 
+                                    /**
+                                     * Returns an immutable instance of
+                                     * [BetaResponseCharLocationCitation].
+                                     *
+                                     * Further updates to this [Builder] will not mutate the
+                                     * returned instance.
+                                     *
+                                     * The following fields are required:
+                                     * ```kotlin
+                                     * .citedText()
+                                     * .documentIndex()
+                                     * .documentTitle()
+                                     * .endCharIndex()
+                                     * .startCharIndex()
+                                     * .type()
+                                     * ```
+                                     *
+                                     * @throws IllegalStateException if any required field is unset.
+                                     */
                                     fun build(): BetaResponseCharLocationCitation =
                                         BetaResponseCharLocationCitation(
                                             checkRequired("citedText", citedText),
@@ -2716,6 +2795,25 @@ private constructor(
                                         keys.forEach(::removeAdditionalProperty)
                                     }
 
+                                    /**
+                                     * Returns an immutable instance of
+                                     * [BetaResponsePageLocationCitation].
+                                     *
+                                     * Further updates to this [Builder] will not mutate the
+                                     * returned instance.
+                                     *
+                                     * The following fields are required:
+                                     * ```kotlin
+                                     * .citedText()
+                                     * .documentIndex()
+                                     * .documentTitle()
+                                     * .endPageNumber()
+                                     * .startPageNumber()
+                                     * .type()
+                                     * ```
+                                     *
+                                     * @throws IllegalStateException if any required field is unset.
+                                     */
                                     fun build(): BetaResponsePageLocationCitation =
                                         BetaResponsePageLocationCitation(
                                             checkRequired("citedText", citedText),
@@ -3177,6 +3275,25 @@ private constructor(
                                         keys.forEach(::removeAdditionalProperty)
                                     }
 
+                                    /**
+                                     * Returns an immutable instance of
+                                     * [BetaResponseContentBlockLocationCitation].
+                                     *
+                                     * Further updates to this [Builder] will not mutate the
+                                     * returned instance.
+                                     *
+                                     * The following fields are required:
+                                     * ```kotlin
+                                     * .citedText()
+                                     * .documentIndex()
+                                     * .documentTitle()
+                                     * .endBlockIndex()
+                                     * .startBlockIndex()
+                                     * .type()
+                                     * ```
+                                     *
+                                     * @throws IllegalStateException if any required field is unset.
+                                     */
                                     fun build(): BetaResponseContentBlockLocationCitation =
                                         BetaResponseContentBlockLocationCitation(
                                             checkRequired("citedText", citedText),
@@ -3620,6 +3737,22 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaResponseToolUseBlock].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .id()
+                             * .input()
+                             * .name()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaResponseToolUseBlock =
                                 BetaResponseToolUseBlock(
                                     checkRequired("id", id),
@@ -3930,6 +4063,21 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaResponseThinkingBlock].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .signature()
+                             * .thinking()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaResponseThinkingBlock =
                                 BetaResponseThinkingBlock(
                                     checkRequired("signature", signature),
@@ -4199,6 +4347,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaResponseRedactedThinkingBlock].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .data()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaResponseRedactedThinkingBlock =
                                 BetaResponseRedactedThinkingBlock(
                                     checkRequired("data", data),
@@ -4930,6 +5092,21 @@ private constructor(
                             keys.forEach(::removeAdditionalProperty)
                         }
 
+                        /**
+                         * Returns an immutable instance of [Usage].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```kotlin
+                         * .cacheCreationInputTokens()
+                         * .cacheReadInputTokens()
+                         * .inputTokens()
+                         * .outputTokens()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
                         fun build(): Usage =
                             Usage(
                                 checkRequired("cacheCreationInputTokens", cacheCreationInputTokens),
@@ -5220,6 +5397,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [BetaErroredResult].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .error()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): BetaErroredResult =
                     BetaErroredResult(
                         checkRequired("error", error),
@@ -5619,6 +5809,19 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Error].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```kotlin
+                     * .error()
+                     * .type()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Error =
                         Error(
                             checkRequired("error", error),
@@ -6146,6 +6349,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaInvalidRequestError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaInvalidRequestError =
                                 BetaInvalidRequestError(
                                     checkRequired("message", message),
@@ -6416,6 +6633,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaAuthenticationError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaAuthenticationError =
                                 BetaAuthenticationError(
                                     checkRequired("message", message),
@@ -6685,6 +6916,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaBillingError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaBillingError =
                                 BetaBillingError(
                                     checkRequired("message", message),
@@ -6954,6 +7199,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaPermissionError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaPermissionError =
                                 BetaPermissionError(
                                     checkRequired("message", message),
@@ -7223,6 +7482,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaNotFoundError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaNotFoundError =
                                 BetaNotFoundError(
                                     checkRequired("message", message),
@@ -7492,6 +7765,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaRateLimitError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaRateLimitError =
                                 BetaRateLimitError(
                                     checkRequired("message", message),
@@ -7762,6 +8049,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaGatewayTimeoutError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaGatewayTimeoutError =
                                 BetaGatewayTimeoutError(
                                     checkRequired("message", message),
@@ -8031,6 +8332,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaApiError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaApiError =
                                 BetaApiError(
                                     checkRequired("message", message),
@@ -8300,6 +8615,20 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [BetaOverloadedError].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```kotlin
+                             * .message()
+                             * .type()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): BetaOverloadedError =
                                 BetaOverloadedError(
                                     checkRequired("message", message),
@@ -8757,6 +9086,18 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [BetaCanceledResult].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): BetaCanceledResult =
                     BetaCanceledResult(
                         checkRequired("type", type),
@@ -8976,6 +9317,18 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [BetaExpiredResult].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): BetaExpiredResult =
                     BetaExpiredResult(
                         checkRequired("type", type),
