@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package me.elborai.api.core.http
 
 import me.elborai.api.core.toImmutable
