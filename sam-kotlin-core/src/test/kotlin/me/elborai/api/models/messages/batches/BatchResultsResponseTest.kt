@@ -5,7 +5,7 @@ package me.elborai.api.models.messages.batches
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class BatchResultsResponseTest {
+internal class BatchResultsResponseTest {
 
     @Test
     fun createBatchResultsResponse() {

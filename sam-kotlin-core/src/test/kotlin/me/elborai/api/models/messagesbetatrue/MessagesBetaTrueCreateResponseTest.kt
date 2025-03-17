@@ -5,7 +5,7 @@ package me.elborai.api.models.messagesbetatrue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessagesBetaTrueCreateResponseTest {
+internal class MessagesBetaTrueCreateResponseTest {
 
     @Test
     fun createMessagesBetaTrueCreateResponse() {

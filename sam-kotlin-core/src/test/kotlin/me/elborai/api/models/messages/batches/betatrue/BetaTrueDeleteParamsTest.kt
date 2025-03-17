@@ -5,7 +5,7 @@ package me.elborai.api.models.messages.batches.betatrue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class BetaTrueDeleteParamsTest {
+internal class BetaTrueDeleteParamsTest {
 
     @Test
     fun create() {
