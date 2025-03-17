@@ -146,6 +146,11 @@ class SamOkHttpClientAsync private constructor() {
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
+        /**
+         * Returns an immutable instance of [SamClientAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): SamClientAsync =
             SamClientAsyncImpl(
                 clientOptions
