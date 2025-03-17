@@ -5,7 +5,7 @@ package me.elborai.api.models.models
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ModelRetrieveBetaParamsTest {
+internal class ModelRetrieveBetaParamsTest {
 
     @Test
     fun create() {
