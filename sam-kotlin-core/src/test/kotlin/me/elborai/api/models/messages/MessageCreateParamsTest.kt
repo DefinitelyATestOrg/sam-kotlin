@@ -7,7 +7,7 @@ import me.elborai.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageCreateParamsTest {
+internal class MessageCreateParamsTest {
 
     @Test
     fun create() {

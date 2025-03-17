@@ -6,7 +6,7 @@ import me.elborai.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ModelListParamsTest {
+internal class ModelListParamsTest {
 
     @Test
     fun create() {

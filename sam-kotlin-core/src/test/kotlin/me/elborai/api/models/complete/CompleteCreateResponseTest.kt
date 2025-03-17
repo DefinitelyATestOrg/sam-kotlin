@@ -5,7 +5,7 @@ package me.elborai.api.models.complete
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CompleteCreateResponseTest {
+internal class CompleteCreateResponseTest {
 
     @Test
     fun createCompleteCreateResponse() {
