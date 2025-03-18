@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class BatchListResponseTest {
 
     @Test
-    fun createBatchListResponse() {
+    fun create() {
         val batchListResponse =
             BatchListResponse.builder()
                 .addData(
@@ -40,7 +40,7 @@ internal class BatchListResponseTest {
                 .hasMore(true)
                 .lastId("last_id")
                 .build()
-        assertThat(batchListResponse).isNotNull
+
         assertThat(batchListResponse.data())
             .containsExactly(
                 BatchListResponse.Data.builder()

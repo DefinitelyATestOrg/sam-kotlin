@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class ModelListResponseTest {
 
     @Test
-    fun createModelListResponse() {
+    fun create() {
         val modelListResponse =
             ModelListResponse.builder()
                 .addData(
@@ -24,7 +24,7 @@ internal class ModelListResponseTest {
                 .hasMore(true)
                 .lastId("last_id")
                 .build()
-        assertThat(modelListResponse).isNotNull
+
         assertThat(modelListResponse.data())
             .containsExactly(
                 ModelListResponse.Data.builder()

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class BatchCancelBetaResponseTest {
 
     @Test
-    fun createBatchCancelBetaResponse() {
+    fun create() {
         val batchCancelBetaResponse =
             BatchCancelBetaResponse.builder()
                 .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
@@ -33,7 +33,7 @@ internal class BatchCancelBetaResponseTest {
                 )
                 .type(BatchCancelBetaResponse.Type.MESSAGE_BATCH)
                 .build()
-        assertThat(batchCancelBetaResponse).isNotNull
+
         assertThat(batchCancelBetaResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(batchCancelBetaResponse.archivedAt())
             .isEqualTo(OffsetDateTime.parse("2024-08-20T18:37:24.100435Z"))

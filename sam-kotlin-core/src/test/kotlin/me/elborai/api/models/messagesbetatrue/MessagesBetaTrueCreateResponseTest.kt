@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class MessagesBetaTrueCreateResponseTest {
 
     @Test
-    fun createMessagesBetaTrueCreateResponse() {
+    fun create() {
         val messagesBetaTrueCreateResponse =
             MessagesBetaTrueCreateResponse.builder()
                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
@@ -52,7 +52,7 @@ internal class MessagesBetaTrueCreateResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(messagesBetaTrueCreateResponse).isNotNull
+
         assertThat(messagesBetaTrueCreateResponse.id()).isEqualTo("msg_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(messagesBetaTrueCreateResponse.content())
             .containsExactly(

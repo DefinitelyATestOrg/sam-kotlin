@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test
 internal class BetaTrueDeleteResponseTest {
 
     @Test
-    fun createBetaTrueDeleteResponse() {
+    fun create() {
         val betaTrueDeleteResponse =
             BetaTrueDeleteResponse.builder()
                 .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
                 .type(BetaTrueDeleteResponse.Type.MESSAGE_BATCH_DELETED)
                 .build()
-        assertThat(betaTrueDeleteResponse).isNotNull
+
         assertThat(betaTrueDeleteResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(betaTrueDeleteResponse.type())
             .isEqualTo(BetaTrueDeleteResponse.Type.MESSAGE_BATCH_DELETED)

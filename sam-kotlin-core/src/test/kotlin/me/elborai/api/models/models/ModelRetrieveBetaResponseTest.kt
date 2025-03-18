@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class ModelRetrieveBetaResponseTest {
 
     @Test
-    fun createModelRetrieveBetaResponse() {
+    fun create() {
         val modelRetrieveBetaResponse =
             ModelRetrieveBetaResponse.builder()
                 .id("claude-3-7-sonnet-20250219")
@@ -17,7 +17,7 @@ internal class ModelRetrieveBetaResponseTest {
                 .displayName("Claude 3.7 Sonnet")
                 .type(ModelRetrieveBetaResponse.Type.MODEL)
                 .build()
-        assertThat(modelRetrieveBetaResponse).isNotNull
+
         assertThat(modelRetrieveBetaResponse.id()).isEqualTo("claude-3-7-sonnet-20250219")
         assertThat(modelRetrieveBetaResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
