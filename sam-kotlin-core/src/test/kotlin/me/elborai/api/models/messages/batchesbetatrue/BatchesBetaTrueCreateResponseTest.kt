@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class BatchesBetaTrueCreateResponseTest {
 
     @Test
-    fun createBatchesBetaTrueCreateResponse() {
+    fun create() {
         val batchesBetaTrueCreateResponse =
             BatchesBetaTrueCreateResponse.builder()
                 .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
@@ -33,7 +33,7 @@ internal class BatchesBetaTrueCreateResponseTest {
                 )
                 .type(BatchesBetaTrueCreateResponse.Type.MESSAGE_BATCH)
                 .build()
-        assertThat(batchesBetaTrueCreateResponse).isNotNull
+
         assertThat(batchesBetaTrueCreateResponse.id())
             .isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(batchesBetaTrueCreateResponse.archivedAt())
