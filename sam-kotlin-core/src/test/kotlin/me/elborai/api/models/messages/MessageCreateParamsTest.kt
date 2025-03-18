@@ -219,13 +219,11 @@ internal class MessageCreateParamsTest {
         assertNotNull(body)
         assertThat(body.maxTokens()).isEqualTo(1024L)
         assertThat(body.messages())
-            .isEqualTo(
-                listOf(
-                    MessageCreateParams.Message.builder()
-                        .content("Hello, world")
-                        .role(MessageCreateParams.Message.Role.USER)
-                        .build()
-                )
+            .containsExactly(
+                MessageCreateParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessageCreateParams.Message.Role.USER)
+                    .build()
             )
         assertThat(body.model()).isEqualTo("claude-3-7-sonnet-20250219")
         assertThat(body.metadata())
@@ -234,7 +232,7 @@ internal class MessageCreateParamsTest {
                     .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
                     .build()
             )
-        assertThat(body.stopSequences()).isEqualTo(listOf("string"))
+        assertThat(body.stopSequences()).containsExactly("string")
         assertThat(body.stream()).isEqualTo(true)
         assertThat(body.system())
             .isEqualTo(
@@ -293,47 +291,42 @@ internal class MessageCreateParamsTest {
                 )
             )
         assertThat(body.tools())
-            .isEqualTo(
-                listOf(
-                    MessageCreateParams.Tool.ofTool(
-                        MessageCreateParams.Tool.InnerTool.builder()
-                            .inputSchema(
-                                MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                    .type(
-                                        MessageCreateParams.Tool.InnerTool.InputSchema.Type.OBJECT
-                                    )
-                                    .properties(
-                                        JsonValue.from(
-                                            mapOf(
-                                                "location" to
-                                                    mapOf(
-                                                        "description" to
-                                                            "The city and state, e.g. San Francisco, CA",
-                                                        "type" to "string",
-                                                    ),
-                                                "unit" to
-                                                    mapOf(
-                                                        "description" to
-                                                            "Unit for the output - one of (celsius, fahrenheit)",
-                                                        "type" to "string",
-                                                    ),
-                                            )
+            .containsExactly(
+                MessageCreateParams.Tool.ofTool(
+                    MessageCreateParams.Tool.InnerTool.builder()
+                        .inputSchema(
+                            MessageCreateParams.Tool.InnerTool.InputSchema.builder()
+                                .type(MessageCreateParams.Tool.InnerTool.InputSchema.Type.OBJECT)
+                                .properties(
+                                    JsonValue.from(
+                                        mapOf(
+                                            "location" to
+                                                mapOf(
+                                                    "description" to
+                                                        "The city and state, e.g. San Francisco, CA",
+                                                    "type" to "string",
+                                                ),
+                                            "unit" to
+                                                mapOf(
+                                                    "description" to
+                                                        "Unit for the output - one of (celsius, fahrenheit)",
+                                                    "type" to "string",
+                                                ),
                                         )
                                     )
-                                    .build()
-                            )
-                            .name("name")
-                            .cacheControl(
-                                MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                    .type(
-                                        MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                            .EPHEMERAL
-                                    )
-                                    .build()
-                            )
-                            .description("Get the current weather in a given location")
-                            .build()
-                    )
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .cacheControl(
+                            MessageCreateParams.Tool.InnerTool.CacheControl.builder()
+                                .type(
+                                    MessageCreateParams.Tool.InnerTool.CacheControl.Type.EPHEMERAL
+                                )
+                                .build()
+                        )
+                        .description("Get the current weather in a given location")
+                        .build()
                 )
             )
         assertThat(body.topK()).isEqualTo(5L)
@@ -359,13 +352,11 @@ internal class MessageCreateParamsTest {
         assertNotNull(body)
         assertThat(body.maxTokens()).isEqualTo(1024L)
         assertThat(body.messages())
-            .isEqualTo(
-                listOf(
-                    MessageCreateParams.Message.builder()
-                        .content("Hello, world")
-                        .role(MessageCreateParams.Message.Role.USER)
-                        .build()
-                )
+            .containsExactly(
+                MessageCreateParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessageCreateParams.Message.Role.USER)
+                    .build()
             )
         assertThat(body.model()).isEqualTo("claude-3-7-sonnet-20250219")
     }
