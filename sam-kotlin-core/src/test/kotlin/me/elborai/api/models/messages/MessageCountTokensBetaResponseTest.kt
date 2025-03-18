@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test
 internal class MessageCountTokensBetaResponseTest {
 
     @Test
-    fun createMessageCountTokensBetaResponse() {
+    fun create() {
         val messageCountTokensBetaResponse =
             MessageCountTokensBetaResponse.builder().inputTokens(2095L).build()
-        assertThat(messageCountTokensBetaResponse).isNotNull
+
         assertThat(messageCountTokensBetaResponse.inputTokens()).isEqualTo(2095L)
     }
 }

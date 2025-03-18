@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class BatchResultsResponseTest {
 
     @Test
-    fun createBatchResultsResponse() {
+    fun create() {
         val batchResultsResponse =
             BatchResultsResponse.builder()
                 .customId("my-custom-id-1")
@@ -68,7 +68,7 @@ internal class BatchResultsResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(batchResultsResponse).isNotNull
+
         assertThat(batchResultsResponse.customId()).isEqualTo("my-custom-id-1")
         assertThat(batchResultsResponse.result())
             .isEqualTo(

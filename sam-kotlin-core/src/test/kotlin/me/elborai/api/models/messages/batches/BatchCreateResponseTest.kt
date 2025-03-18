@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class BatchCreateResponseTest {
 
     @Test
-    fun createBatchCreateResponse() {
+    fun create() {
         val batchCreateResponse =
             BatchCreateResponse.builder()
                 .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
@@ -33,7 +33,7 @@ internal class BatchCreateResponseTest {
                 )
                 .type(BatchCreateResponse.Type.MESSAGE_BATCH)
                 .build()
-        assertThat(batchCreateResponse).isNotNull
+
         assertThat(batchCreateResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(batchCreateResponse.archivedAt())
             .isEqualTo(OffsetDateTime.parse("2024-08-20T18:37:24.100435Z"))
