@@ -2,6 +2,7 @@
 
 package me.elborai.api.models.models
 
+import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -17,6 +18,37 @@ internal class ModelListParamsTest {
             .anthropicVersion("anthropic-version")
             .xApiKey("x-api-key")
             .build()
+    }
+
+    @Test
+    fun headers() {
+        val params =
+            ModelListParams.builder()
+                .afterId("after_id")
+                .beforeId("before_id")
+                .limit(1L)
+                .anthropicVersion("anthropic-version")
+                .xApiKey("x-api-key")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("anthropic-version", "anthropic-version")
+                    .put("x-api-key", "x-api-key")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params = ModelListParams.builder().build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
     }
 
     @Test
