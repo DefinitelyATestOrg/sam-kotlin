@@ -62,7 +62,7 @@ internal class CompleteCreateParamsTest {
                     .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
                     .build()
             )
-        assertThat(body.stopSequences()).isEqualTo(listOf("string"))
+        assertThat(body.stopSequences()).containsExactly("string")
         assertThat(body.stream()).isEqualTo(true)
         assertThat(body.temperature()).isEqualTo(1.0)
         assertThat(body.topK()).isEqualTo(5L)

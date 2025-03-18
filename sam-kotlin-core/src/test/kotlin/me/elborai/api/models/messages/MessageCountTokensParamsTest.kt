@@ -204,13 +204,11 @@ internal class MessageCountTokensParamsTest {
 
         assertNotNull(body)
         assertThat(body.messages())
-            .isEqualTo(
-                listOf(
-                    MessageCountTokensParams.Message.builder()
-                        .content("Hello, world")
-                        .role(MessageCountTokensParams.Message.Role.USER)
-                        .build()
-                )
+            .containsExactly(
+                MessageCountTokensParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessageCountTokensParams.Message.Role.USER)
+                    .build()
             )
         assertThat(body.model()).isEqualTo("claude-3-7-sonnet-20250219")
         assertThat(body.system())
@@ -271,48 +269,45 @@ internal class MessageCountTokensParamsTest {
                 )
             )
         assertThat(body.tools())
-            .isEqualTo(
-                listOf(
-                    MessageCountTokensParams.Tool.ofTool(
-                        MessageCountTokensParams.Tool.InnerTool.builder()
-                            .inputSchema(
-                                MessageCountTokensParams.Tool.InnerTool.InputSchema.builder()
-                                    .type(
-                                        MessageCountTokensParams.Tool.InnerTool.InputSchema.Type
-                                            .OBJECT
-                                    )
-                                    .properties(
-                                        JsonValue.from(
-                                            mapOf(
-                                                "location" to
-                                                    mapOf(
-                                                        "description" to
-                                                            "The city and state, e.g. San Francisco, CA",
-                                                        "type" to "string",
-                                                    ),
-                                                "unit" to
-                                                    mapOf(
-                                                        "description" to
-                                                            "Unit for the output - one of (celsius, fahrenheit)",
-                                                        "type" to "string",
-                                                    ),
-                                            )
+            .containsExactly(
+                MessageCountTokensParams.Tool.ofTool(
+                    MessageCountTokensParams.Tool.InnerTool.builder()
+                        .inputSchema(
+                            MessageCountTokensParams.Tool.InnerTool.InputSchema.builder()
+                                .type(
+                                    MessageCountTokensParams.Tool.InnerTool.InputSchema.Type.OBJECT
+                                )
+                                .properties(
+                                    JsonValue.from(
+                                        mapOf(
+                                            "location" to
+                                                mapOf(
+                                                    "description" to
+                                                        "The city and state, e.g. San Francisco, CA",
+                                                    "type" to "string",
+                                                ),
+                                            "unit" to
+                                                mapOf(
+                                                    "description" to
+                                                        "Unit for the output - one of (celsius, fahrenheit)",
+                                                    "type" to "string",
+                                                ),
                                         )
                                     )
-                                    .build()
-                            )
-                            .name("name")
-                            .cacheControl(
-                                MessageCountTokensParams.Tool.InnerTool.CacheControl.builder()
-                                    .type(
-                                        MessageCountTokensParams.Tool.InnerTool.CacheControl.Type
-                                            .EPHEMERAL
-                                    )
-                                    .build()
-                            )
-                            .description("Get the current weather in a given location")
-                            .build()
-                    )
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .cacheControl(
+                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder()
+                                .type(
+                                    MessageCountTokensParams.Tool.InnerTool.CacheControl.Type
+                                        .EPHEMERAL
+                                )
+                                .build()
+                        )
+                        .description("Get the current weather in a given location")
+                        .build()
                 )
             )
     }
@@ -334,13 +329,11 @@ internal class MessageCountTokensParamsTest {
 
         assertNotNull(body)
         assertThat(body.messages())
-            .isEqualTo(
-                listOf(
-                    MessageCountTokensParams.Message.builder()
-                        .content("Hello, world")
-                        .role(MessageCountTokensParams.Message.Role.USER)
-                        .build()
-                )
+            .containsExactly(
+                MessageCountTokensParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessageCountTokensParams.Message.Role.USER)
+                    .build()
             )
         assertThat(body.model()).isEqualTo("claude-3-7-sonnet-20250219")
     }
