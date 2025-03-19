@@ -11,7 +11,11 @@ The Sam Kotlin SDK provides convenient access to the Sam REST API from applicati
 
 It is generated with [Stainless](https://www.stainless.com/).
 
+<!-- x-release-please-start-version -->
+
 The REST API documentation can be found on [docs.sam.com](https://docs.sam.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/me.elborai.api/sam-kotlin/0.1.0-alpha.1).
+
+<!-- x-release-please-end -->
 
 ## Installation
 
