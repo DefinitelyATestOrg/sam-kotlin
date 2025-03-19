@@ -3,6 +3,7 @@
 package me.elborai.api.services.async.messages
 
 import me.elborai.api.core.ClientOptions
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.json
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepareAsync
-import me.elborai.api.errors.SamError
 import me.elborai.api.models.messages.batches.BatchCancelBetaParams
 import me.elborai.api.models.messages.batches.BatchCancelBetaResponse
 import me.elborai.api.models.messages.batches.BatchCancelParams
@@ -106,7 +106,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         BatchServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val betaTrue: BetaTrueServiceAsync.WithRawResponse by lazy {
             BetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions)
