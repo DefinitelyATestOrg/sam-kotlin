@@ -3,6 +3,7 @@
 package me.elborai.api.services.async
 
 import me.elborai.api.core.ClientOptions
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
@@ -13,7 +14,6 @@ import me.elborai.api.core.http.HttpResponse.Handler
 import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepareAsync
-import me.elborai.api.errors.SamError
 import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListParams
 import me.elborai.api.models.modelsbetatrue.ModelsBetaTrueListResponse
 
@@ -36,7 +36,7 @@ internal constructor(private val clientOptions: ClientOptions) : ModelsBetaTrueS
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ModelsBetaTrueServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val listHandler: Handler<ModelsBetaTrueListResponse> =
             jsonHandler<ModelsBetaTrueListResponse>(clientOptions.jsonMapper)
