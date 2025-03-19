@@ -3,6 +3,7 @@
 package me.elborai.api.services.blocking
 
 import me.elborai.api.core.ClientOptions
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.json
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepare
-import me.elborai.api.errors.SamError
 import me.elborai.api.models.complete.CompleteCreateParams
 import me.elborai.api.models.complete.CompleteCreateResponse
 
@@ -37,7 +37,7 @@ class CompleteServiceImpl internal constructor(private val clientOptions: Client
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CompleteService.WithRawResponse {
 
-        private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val createHandler: Handler<CompleteCreateResponse> =
             jsonHandler<CompleteCreateResponse>(clientOptions.jsonMapper)

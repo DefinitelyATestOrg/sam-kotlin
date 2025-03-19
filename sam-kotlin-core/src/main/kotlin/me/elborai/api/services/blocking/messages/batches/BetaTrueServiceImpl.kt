@@ -3,6 +3,7 @@
 package me.elborai.api.services.blocking.messages.batches
 
 import me.elborai.api.core.ClientOptions
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.json
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepare
-import me.elborai.api.errors.SamError
 import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteParams
 import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteResponse
 import me.elborai.api.models.messages.batches.betatrue.BetaTrueRetrieveParams
@@ -46,7 +46,7 @@ class BetaTrueServiceImpl internal constructor(private val clientOptions: Client
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         BetaTrueService.WithRawResponse {
 
-        private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val retrieveHandler: Handler<BetaTrueRetrieveResponse> =
             jsonHandler<BetaTrueRetrieveResponse>(clientOptions.jsonMapper)

@@ -1,21 +1,16 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package me.elborai.api.errors
 
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.http.Headers
 
-abstract class SamServiceException(
-    private val statusCode: Int,
-    private val headers: Headers,
-    private val body: String,
-    private val error: SamError,
-    message: String = "$statusCode: $error",
-    cause: Throwable? = null,
-) : SamException(message, cause) {
+abstract class SamServiceException
+protected constructor(message: String, cause: Throwable? = null) : SamException(message, cause) {
 
-    fun statusCode(): Int = statusCode
+    abstract fun statusCode(): Int
 
-    fun headers(): Headers = headers
+    abstract fun headers(): Headers
 
-    fun body(): String = body
-
-    fun error(): SamError = error
+    abstract fun body(): JsonValue
 }

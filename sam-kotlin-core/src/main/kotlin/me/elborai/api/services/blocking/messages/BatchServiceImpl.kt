@@ -3,6 +3,7 @@
 package me.elborai.api.services.blocking.messages
 
 import me.elborai.api.core.ClientOptions
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
@@ -17,7 +18,6 @@ import me.elborai.api.core.http.json
 import me.elborai.api.core.http.map
 import me.elborai.api.core.http.parseable
 import me.elborai.api.core.prepare
-import me.elborai.api.errors.SamError
 import me.elborai.api.models.messages.batches.BatchCancelBetaParams
 import me.elborai.api.models.messages.batches.BatchCancelBetaResponse
 import me.elborai.api.models.messages.batches.BatchCancelParams
@@ -106,7 +106,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         BatchService.WithRawResponse {
 
-        private val errorHandler: Handler<SamError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val betaTrue: BetaTrueService.WithRawResponse by lazy {
             BetaTrueServiceImpl.WithRawResponseImpl(clientOptions)

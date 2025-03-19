@@ -1,11 +1,10 @@
-@file:JvmName("ErrorHandler")
+// File generated from our OpenAPI spec by Stainless.
 
 package me.elborai.api.core.handlers
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import me.elborai.api.core.http.Headers
+import me.elborai.api.core.JsonMissing
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.http.HttpResponse
 import me.elborai.api.core.http.HttpResponse.Handler
 import me.elborai.api.errors.BadRequestException
@@ -13,111 +12,69 @@ import me.elborai.api.errors.InternalServerException
 import me.elborai.api.errors.NotFoundException
 import me.elborai.api.errors.PermissionDeniedException
 import me.elborai.api.errors.RateLimitException
-import me.elborai.api.errors.SamError
 import me.elborai.api.errors.UnauthorizedException
 import me.elborai.api.errors.UnexpectedStatusCodeException
 import me.elborai.api.errors.UnprocessableEntityException
 
-internal fun errorHandler(jsonMapper: JsonMapper): Handler<SamError> {
-    val handler = jsonHandler<SamError>(jsonMapper)
+internal fun errorHandler(jsonMapper: JsonMapper): Handler<JsonValue> {
+    val handler = jsonHandler<JsonValue>(jsonMapper)
 
-    return object : Handler<SamError> {
-        override fun handle(response: HttpResponse): SamError =
+    return object : Handler<JsonValue> {
+        override fun handle(response: HttpResponse): JsonValue =
             try {
                 handler.handle(response)
             } catch (e: Exception) {
-                SamError.builder().build()
+                JsonMissing.of()
             }
     }
 }
 
-internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<SamError>): Handler<T> =
+internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<JsonValue>): Handler<T> =
     object : Handler<T> {
-        override fun handle(response: HttpResponse): T {
+        override fun handle(response: HttpResponse): T =
             when (val statusCode = response.statusCode()) {
-                in 200..299 -> {
-                    return this@withErrorHandler.handle(response)
-                }
-                400 -> {
-                    val buffered = response.buffered()
-                    throw BadRequestException(
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                401 -> {
-                    val buffered = response.buffered()
-                    throw UnauthorizedException(
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                403 -> {
-                    val buffered = response.buffered()
-                    throw PermissionDeniedException(
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                404 -> {
-                    val buffered = response.buffered()
-                    throw NotFoundException(
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                422 -> {
-                    val buffered = response.buffered()
-                    throw UnprocessableEntityException(
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                429 -> {
-                    val buffered = response.buffered()
-                    throw RateLimitException(
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                in 500..599 -> {
-                    val buffered = response.buffered()
-                    throw InternalServerException(
-                        statusCode,
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
-                else -> {
-                    val buffered = response.buffered()
-                    throw UnexpectedStatusCodeException(
-                        statusCode,
-                        buffered.headers(),
-                        stringHandler().handle(buffered),
-                        errorHandler.handle(buffered),
-                    )
-                }
+                in 200..299 -> this@withErrorHandler.handle(response)
+                400 ->
+                    throw BadRequestException.builder()
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                401 ->
+                    throw UnauthorizedException.builder()
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                403 ->
+                    throw PermissionDeniedException.builder()
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                404 ->
+                    throw NotFoundException.builder()
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                422 ->
+                    throw UnprocessableEntityException.builder()
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                429 ->
+                    throw RateLimitException.builder()
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                in 500..599 ->
+                    throw InternalServerException.builder()
+                        .statusCode(statusCode)
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
+                else ->
+                    throw UnexpectedStatusCodeException.builder()
+                        .statusCode(statusCode)
+                        .headers(response.headers())
+                        .body(errorHandler.handle(response))
+                        .build()
             }
-        }
     }
-
-private fun HttpResponse.buffered(): HttpResponse {
-    val body = body().readBytes()
-
-    return object : HttpResponse {
-        override fun statusCode(): Int = this@buffered.statusCode()
-
-        override fun headers(): Headers = this@buffered.headers()
-
-        override fun body(): InputStream = ByteArrayInputStream(body)
-
-        override fun close() = this@buffered.close()
-    }
-}
