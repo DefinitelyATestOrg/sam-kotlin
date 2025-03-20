@@ -2,7 +2,6 @@
 
 package me.elborai.api.models.messages.batchesbetatrue
 
-import kotlin.test.assertNotNull
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
@@ -536,7 +535,6 @@ internal class BatchesBetaTrueCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.requests())
             .containsExactly(
                 BatchesBetaTrueCreateParams.Request.builder()
@@ -718,7 +716,6 @@ internal class BatchesBetaTrueCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.requests())
             .containsExactly(
                 BatchesBetaTrueCreateParams.Request.builder()

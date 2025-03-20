@@ -2,7 +2,6 @@
 
 package me.elborai.api.models.messages
 
-import kotlin.test.assertNotNull
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
@@ -350,7 +349,6 @@ internal class MessageCountTokensBetaParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.messages())
             .containsExactly(
                 MessageCountTokensBetaParams.Message.builder()
@@ -484,7 +482,6 @@ internal class MessageCountTokensBetaParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.messages())
             .containsExactly(
                 MessageCountTokensBetaParams.Message.builder()
