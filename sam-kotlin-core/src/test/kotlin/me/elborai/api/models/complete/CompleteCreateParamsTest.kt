@@ -2,7 +2,6 @@
 
 package me.elborai.api.models.complete
 
-import kotlin.test.assertNotNull
 import me.elborai.api.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -99,7 +98,6 @@ internal class CompleteCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.maxTokensToSample()).isEqualTo(256L)
         assertThat(body.model()).isEqualTo("claude-2.1")
         assertThat(body.prompt()).isEqualTo("\n\nHuman: Hello, world!\n\nAssistant:")
@@ -127,7 +125,6 @@ internal class CompleteCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.maxTokensToSample()).isEqualTo(256L)
         assertThat(body.model()).isEqualTo("claude-2.1")
         assertThat(body.prompt()).isEqualTo("\n\nHuman: Hello, world!\n\nAssistant:")
