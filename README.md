@@ -213,16 +213,16 @@ The SDK throws custom unchecked exception types:
 
 - [`SamServiceException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                       |
-  | ------ | ------------------------------- |
-  | 400    | `BadRequestException`           |
-  | 401    | `AuthenticationException`       |
-  | 403    | `PermissionDeniedException`     |
-  | 404    | `NotFoundException`             |
-  | 422    | `UnprocessableEntityException`  |
-  | 429    | `RateLimitException`            |
-  | 5xx    | `InternalServerException`       |
-  | others | `UnexpectedStatusCodeException` |
+  | Status | Exception                                                                                                                 |
+  | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+  | 400    | [`BadRequestException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/UnexpectedStatusCodeException.kt) |
 
 - [`SamIoException`](sam-kotlin-core/src/main/kotlin/me/elborai/api/errors/SamIoException.kt): I/O networking errors.
 
