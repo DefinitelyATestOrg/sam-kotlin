@@ -9,7 +9,7 @@ import me.elborai.api.core.http.StreamResponse
 import me.elborai.api.errors.SamException
 
 internal inline fun <reified T> jsonlHandler(jsonMapper: JsonMapper): Handler<StreamResponse<T>> =
-    streamHandler { lines ->
+    streamHandler { _, lines ->
         for (line in lines) {
             val value =
                 try {

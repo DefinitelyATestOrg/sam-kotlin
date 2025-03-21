@@ -8,7 +8,7 @@ import me.elborai.api.core.http.PhantomReachableClosingStreamResponse
 import me.elborai.api.core.http.StreamResponse
 
 internal fun <T> streamHandler(
-    block: suspend SequenceScope<T>.(lines: Sequence<String>) -> Unit
+    block: suspend SequenceScope<T>.(response: HttpResponse, lines: Sequence<String>) -> Unit
 ): Handler<StreamResponse<T>> =
     object : Handler<StreamResponse<T>> {
         override fun handle(response: HttpResponse): StreamResponse<T> {
@@ -16,7 +16,9 @@ internal fun <T> streamHandler(
             val sequence =
                 // Wrap in a `CloseableSequence` to avoid performing a read on the `reader`
                 // after it has been closed, which would throw an `IOException`.
-                CloseableSequence(sequence { reader.useLines { block(it) } }.constrainOnce())
+                CloseableSequence(
+                    sequence { reader.useLines { block(response, it) } }.constrainOnce()
+                )
 
             return PhantomReachableClosingStreamResponse(
                 object : StreamResponse<T> {
