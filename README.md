@@ -7,7 +7,7 @@
 
 <!-- x-release-please-end -->
 
-The Sam Kotlin SDK provides convenient access to the Sam REST API from applications written in Kotlin.
+The Sam Kotlin SDK provides convenient access to the [Sam REST API](https://docs.sam.com) from applications written in Kotlin.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -31,9 +31,9 @@ implementation("me.elborai.api:sam-kotlin:0.1.0-alpha.1")
 
 ```xml
 <dependency>
-    <groupId>me.elborai.api</groupId>
-    <artifactId>sam-kotlin</artifactId>
-    <version>0.1.0-alpha.1</version>
+  <groupId>me.elborai.api</groupId>
+  <artifactId>sam-kotlin</artifactId>
+  <version>0.1.0-alpha.1</version>
 </dependency>
 ```
 
