@@ -7,37 +7,34 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import me.elborai.api.core.Enum
 import me.elborai.api.core.ExcludeMissing
 import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
-import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.checkKnown
 import me.elborai.api.core.checkRequired
-import me.elborai.api.core.immutableEmptyMap
 import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
-@NoAutoDetect
 class BatchListResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("data")
-    @ExcludeMissing
-    private val data: JsonField<List<Data>> = JsonMissing.of(),
-    @JsonProperty("first_id")
-    @ExcludeMissing
-    private val firstId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("has_more")
-    @ExcludeMissing
-    private val hasMore: JsonField<Boolean> = JsonMissing.of(),
-    @JsonProperty("last_id")
-    @ExcludeMissing
-    private val lastId: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val data: JsonField<List<Data>>,
+    private val firstId: JsonField<String>,
+    private val hasMore: JsonField<Boolean>,
+    private val lastId: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data") @ExcludeMissing data: JsonField<List<Data>> = JsonMissing.of(),
+        @JsonProperty("first_id") @ExcludeMissing firstId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("has_more") @ExcludeMissing hasMore: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("last_id") @ExcludeMissing lastId: JsonField<String> = JsonMissing.of(),
+    ) : this(data, firstId, hasMore, lastId, mutableMapOf())
 
     /**
      * @throws SamInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -97,23 +94,15 @@ private constructor(
      */
     @JsonProperty("last_id") @ExcludeMissing fun _lastId(): JsonField<String> = lastId
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): BatchListResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        data().forEach { it.validate() }
-        firstId()
-        hasMore()
-        lastId()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -247,43 +236,80 @@ private constructor(
                 checkRequired("firstId", firstId),
                 checkRequired("hasMore", hasMore),
                 checkRequired("lastId", lastId),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): BatchListResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data().forEach { it.validate() }
+        firstId()
+        hasMore()
+        lastId()
+        validated = true
+    }
+
     class Data
-    @JsonCreator
     private constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("archived_at")
-        @ExcludeMissing
-        private val archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("cancel_initiated_at")
-        @ExcludeMissing
-        private val cancelInitiatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("created_at")
-        @ExcludeMissing
-        private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("ended_at")
-        @ExcludeMissing
-        private val endedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("expires_at")
-        @ExcludeMissing
-        private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("processing_status")
-        @ExcludeMissing
-        private val processingStatus: JsonField<ProcessingStatus> = JsonMissing.of(),
-        @JsonProperty("request_counts")
-        @ExcludeMissing
-        private val requestCounts: JsonField<RequestCounts> = JsonMissing.of(),
-        @JsonProperty("results_url")
-        @ExcludeMissing
-        private val resultsUrl: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val id: JsonField<String>,
+        private val archivedAt: JsonField<OffsetDateTime>,
+        private val cancelInitiatedAt: JsonField<OffsetDateTime>,
+        private val createdAt: JsonField<OffsetDateTime>,
+        private val endedAt: JsonField<OffsetDateTime>,
+        private val expiresAt: JsonField<OffsetDateTime>,
+        private val processingStatus: JsonField<ProcessingStatus>,
+        private val requestCounts: JsonField<RequestCounts>,
+        private val resultsUrl: JsonField<String>,
+        private val type: JsonField<Type>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("archived_at")
+            @ExcludeMissing
+            archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("cancel_initiated_at")
+            @ExcludeMissing
+            cancelInitiatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("ended_at")
+            @ExcludeMissing
+            endedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("expires_at")
+            @ExcludeMissing
+            expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("processing_status")
+            @ExcludeMissing
+            processingStatus: JsonField<ProcessingStatus> = JsonMissing.of(),
+            @JsonProperty("request_counts")
+            @ExcludeMissing
+            requestCounts: JsonField<RequestCounts> = JsonMissing.of(),
+            @JsonProperty("results_url")
+            @ExcludeMissing
+            resultsUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+        ) : this(
+            id,
+            archivedAt,
+            cancelInitiatedAt,
+            createdAt,
+            endedAt,
+            expiresAt,
+            processingStatus,
+            requestCounts,
+            resultsUrl,
+            type,
+            mutableMapOf(),
+        )
 
         /**
          * Unique object identifier.
@@ -474,29 +500,15 @@ private constructor(
          */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            archivedAt()
-            cancelInitiatedAt()
-            createdAt()
-            endedAt()
-            expiresAt()
-            processingStatus()
-            requestCounts().validate()
-            resultsUrl()
-            type()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -777,8 +789,28 @@ private constructor(
                     checkRequired("requestCounts", requestCounts),
                     checkRequired("resultsUrl", resultsUrl),
                     checkRequired("type", type),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            archivedAt()
+            cancelInitiatedAt()
+            createdAt()
+            endedAt()
+            expiresAt()
+            processingStatus()
+            requestCounts().validate()
+            resultsUrl()
+            type()
+            validated = true
         }
 
         /** Processing status of the Message Batch. */
@@ -899,28 +931,34 @@ private constructor(
          * of the entire batch ends. The sum of all values always matches the total number of
          * requests in the batch.
          */
-        @NoAutoDetect
         class RequestCounts
-        @JsonCreator
         private constructor(
-            @JsonProperty("canceled")
-            @ExcludeMissing
-            private val canceled: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("errored")
-            @ExcludeMissing
-            private val errored: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("expired")
-            @ExcludeMissing
-            private val expired: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("processing")
-            @ExcludeMissing
-            private val processing: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("succeeded")
-            @ExcludeMissing
-            private val succeeded: JsonField<Long> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val canceled: JsonField<Long>,
+            private val errored: JsonField<Long>,
+            private val expired: JsonField<Long>,
+            private val processing: JsonField<Long>,
+            private val succeeded: JsonField<Long>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("canceled")
+                @ExcludeMissing
+                canceled: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("errored")
+                @ExcludeMissing
+                errored: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("expired")
+                @ExcludeMissing
+                expired: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("processing")
+                @ExcludeMissing
+                processing: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("succeeded")
+                @ExcludeMissing
+                succeeded: JsonField<Long> = JsonMissing.of(),
+            ) : this(canceled, errored, expired, processing, succeeded, mutableMapOf())
 
             /**
              * Number of requests in the Message Batch that have been canceled.
@@ -1015,24 +1053,15 @@ private constructor(
              */
             @JsonProperty("succeeded") @ExcludeMissing fun _succeeded(): JsonField<Long> = succeeded
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): RequestCounts = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                canceled()
-                errored()
-                expired()
-                processing()
-                succeeded()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -1193,8 +1222,23 @@ private constructor(
                         checkRequired("expired", expired),
                         checkRequired("processing", processing),
                         checkRequired("succeeded", succeeded),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): RequestCounts = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                canceled()
+                errored()
+                expired()
+                processing()
+                succeeded()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {

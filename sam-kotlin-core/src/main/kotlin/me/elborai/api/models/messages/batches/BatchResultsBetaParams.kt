@@ -3,7 +3,6 @@
 package me.elborai.api.models.messages.batches
 
 import java.util.Objects
-import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.Params
 import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
@@ -62,24 +61,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> messageBatchId
-            else -> ""
-        }
-
-    override fun _headers(): Headers =
-        Headers.builder()
-            .apply {
-                anthropicBeta?.forEach { put("anthropic-beta", it) }
-                anthropicVersion?.let { put("anthropic-version", it) }
-                xApiKey?.let { put("x-api-key", it) }
-                putAll(additionalHeaders)
-            }
-            .build()
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -96,7 +77,6 @@ private constructor(
     }
 
     /** A builder for [BatchResultsBetaParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var messageBatchId: String? = null
@@ -278,6 +258,24 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> messageBatchId
+            else -> ""
+        }
+
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                anthropicBeta?.forEach { put("anthropic-beta", it) }
+                anthropicVersion?.let { put("anthropic-version", it) }
+                xApiKey?.let { put("x-api-key", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
