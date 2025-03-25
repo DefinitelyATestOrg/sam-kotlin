@@ -6,26 +6,27 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import me.elborai.api.core.ExcludeMissing
 import me.elborai.api.core.JsonField
 import me.elborai.api.core.JsonMissing
 import me.elborai.api.core.JsonValue
-import me.elborai.api.core.NoAutoDetect
 import me.elborai.api.core.checkRequired
-import me.elborai.api.core.immutableEmptyMap
-import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
-@NoAutoDetect
 class MessageCountTokensResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("input_tokens")
-    @ExcludeMissing
-    private val inputTokens: JsonField<Long> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val inputTokens: JsonField<Long>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("input_tokens")
+        @ExcludeMissing
+        inputTokens: JsonField<Long> = JsonMissing.of()
+    ) : this(inputTokens, mutableMapOf())
 
     /**
      * The total number of tokens across the provided list of messages, system prompt, and tools.
@@ -42,20 +43,15 @@ private constructor(
      */
     @JsonProperty("input_tokens") @ExcludeMissing fun _inputTokens(): JsonField<Long> = inputTokens
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): MessageCountTokensResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        inputTokens()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -132,8 +128,19 @@ private constructor(
         fun build(): MessageCountTokensResponse =
             MessageCountTokensResponse(
                 checkRequired("inputTokens", inputTokens),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): MessageCountTokensResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        inputTokens()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {
