@@ -2,11 +2,7 @@
 
 package me.elborai.api.models.messages.batches
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import java.util.Collections
 import java.util.Objects
-import me.elborai.api.core.ExcludeMissing
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.Params
 import me.elborai.api.core.checkRequired
@@ -34,7 +30,7 @@ private constructor(
     private val xApiKey: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: MutableMap<String, JsonValue>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     /** ID of the Message Batch. */
@@ -65,19 +61,11 @@ private constructor(
      */
     fun xApiKey(): String? = xApiKey
 
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    @JsonAnySetter
-    private fun putAdditionalBodyProperty(key: String, value: JsonValue) {
-        additionalBodyProperties.put(key, value)
-    }
-
-    @JsonAnyGetter
-    @ExcludeMissing
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalBodyProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -298,7 +286,7 @@ private constructor(
                 xApiKey,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toMutableMap(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
