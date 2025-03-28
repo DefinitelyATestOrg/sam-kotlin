@@ -2435,96 +2435,74 @@ private constructor(
 
                                 when (type) {
                                     "text" -> {
-                                        tryDeserialize(node, jacksonTypeRef<RequestTextBlock>()) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestTextBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestTextBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestTextBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "image" -> {
-                                        tryDeserialize(node, jacksonTypeRef<RequestImageBlock>()) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestImageBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestImageBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestImageBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "tool_use" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestToolUseBlock>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestToolUseBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestToolUseBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestToolUseBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "tool_result" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestToolResultBlock>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestToolResultBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestToolResultBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestToolResultBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "document" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestDocumentBlock>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestDocumentBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestDocumentBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestDocumentBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "thinking" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestThinkingBlock>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestThinkingBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestThinkingBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestThinkingBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "redacted_thinking" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestRedactedThinkingBlock>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return UnnamedSchemaWithArrayParent9(
-                                                    requestRedactedThinkingBlock = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return UnnamedSchemaWithArrayParent9(
+                                            requestRedactedThinkingBlock =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestRedactedThinkingBlock>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                 }
 
@@ -3411,52 +3389,40 @@ private constructor(
 
                                         when (type) {
                                             "char_location" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<
-                                                            RequestCharLocationCitation
-                                                        >(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Citation(
-                                                            requestCharLocation = it,
-                                                            _json = json,
-                                                        )
-                                                    }
+                                                return Citation(
+                                                    requestCharLocation =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<
+                                                                RequestCharLocationCitation
+                                                            >(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                             "page_location" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<
-                                                            RequestPageLocationCitation
-                                                        >(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Citation(
-                                                            requestPageLocation = it,
-                                                            _json = json,
-                                                        )
-                                                    }
+                                                return Citation(
+                                                    requestPageLocation =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<
+                                                                RequestPageLocationCitation
+                                                            >(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                             "content_block_location" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<
-                                                            RequestContentBlockLocationCitation
-                                                        >(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Citation(
-                                                            requestContentBlockLocation = it,
-                                                            _json = json,
-                                                        )
-                                                    }
+                                                return Citation(
+                                                    requestContentBlockLocation =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<
+                                                                RequestContentBlockLocationCitation
+                                                            >(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                         }
 
@@ -5413,29 +5379,24 @@ private constructor(
 
                                         when (type) {
                                             "base64" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<Base64ImageSource>(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Source(
-                                                            base64Image = it,
-                                                            _json = json,
-                                                        )
-                                                    }
+                                                return Source(
+                                                    base64Image =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<Base64ImageSource>(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                             "url" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<UrlImageSource>(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Source(urlImage = it, _json = json)
-                                                    }
+                                                return Source(
+                                                    urlImage =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<UrlImageSource>(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                         }
 
@@ -8347,32 +8308,24 @@ private constructor(
 
                                             when (type) {
                                                 "text" -> {
-                                                    tryDeserialize(
-                                                            node,
-                                                            jacksonTypeRef<RequestTextBlock>(),
-                                                        ) {
-                                                            it.validate()
-                                                        }
-                                                        ?.let {
-                                                            return UnnamedSchemaWithArrayParent10(
-                                                                requestTextBlock = it,
-                                                                _json = json,
-                                                            )
-                                                        }
+                                                    return UnnamedSchemaWithArrayParent10(
+                                                        requestTextBlock =
+                                                            deserialize(
+                                                                node,
+                                                                jacksonTypeRef<RequestTextBlock>(),
+                                                            ),
+                                                        _json = json,
+                                                    )
                                                 }
                                                 "image" -> {
-                                                    tryDeserialize(
-                                                            node,
-                                                            jacksonTypeRef<RequestImageBlock>(),
-                                                        ) {
-                                                            it.validate()
-                                                        }
-                                                        ?.let {
-                                                            return UnnamedSchemaWithArrayParent10(
-                                                                requestImageBlock = it,
-                                                                _json = json,
-                                                            )
-                                                        }
+                                                    return UnnamedSchemaWithArrayParent10(
+                                                        requestImageBlock =
+                                                            deserialize(
+                                                                node,
+                                                                jacksonTypeRef<RequestImageBlock>(),
+                                                            ),
+                                                        _json = json,
+                                                    )
                                                 }
                                             }
 
@@ -9377,53 +9330,40 @@ private constructor(
 
                                                     when (type) {
                                                         "char_location" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<
-                                                                        RequestCharLocationCitation
-                                                                    >(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return Citation(
-                                                                        requestCharLocation = it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return Citation(
+                                                                requestCharLocation =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            RequestCharLocationCitation
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                         "page_location" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<
-                                                                        RequestPageLocationCitation
-                                                                    >(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return Citation(
-                                                                        requestPageLocation = it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return Citation(
+                                                                requestPageLocation =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            RequestPageLocationCitation
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                         "content_block_location" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<
-                                                                        RequestContentBlockLocationCitation
-                                                                    >(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return Citation(
-                                                                        requestContentBlockLocation =
-                                                                            it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return Citation(
+                                                                requestContentBlockLocation =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            RequestContentBlockLocationCitation
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                     }
 
@@ -11660,34 +11600,28 @@ private constructor(
 
                                                     when (type) {
                                                         "base64" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<
-                                                                        Base64ImageSource
-                                                                    >(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return Source(
-                                                                        base64Image = it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return Source(
+                                                                base64Image =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            Base64ImageSource
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                         "url" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<UrlImageSource>(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return Source(
-                                                                        urlImage = it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return Source(
+                                                                urlImage =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            UrlImageSource
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                     }
 
@@ -13653,51 +13587,44 @@ private constructor(
 
                                         when (type) {
                                             "base64" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<Base64PdfSource>(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Source(base64Pdf = it, _json = json)
-                                                    }
+                                                return Source(
+                                                    base64Pdf =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<Base64PdfSource>(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                             "text" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<PlainTextSource>(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Source(plainText = it, _json = json)
-                                                    }
+                                                return Source(
+                                                    plainText =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<PlainTextSource>(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                             "content" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<ContentBlockSource>(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Source(
-                                                            contentBlock = it,
-                                                            _json = json,
-                                                        )
-                                                    }
+                                                return Source(
+                                                    contentBlock =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<ContentBlockSource>(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                             "url" -> {
-                                                tryDeserialize(
-                                                        node,
-                                                        jacksonTypeRef<UrlpdfSource>(),
-                                                    ) {
-                                                        it.validate()
-                                                    }
-                                                    ?.let {
-                                                        return Source(urlpdf = it, _json = json)
-                                                    }
+                                                return Source(
+                                                    urlpdf =
+                                                        deserialize(
+                                                            node,
+                                                            jacksonTypeRef<UrlpdfSource>(),
+                                                        ),
+                                                    _json = json,
+                                                )
                                             }
                                         }
 
@@ -15258,36 +15185,28 @@ private constructor(
 
                                                     when (type) {
                                                         "text" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<
-                                                                        RequestTextBlock
-                                                                    >(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return UnnamedSchemaWithArrayParent11(
-                                                                        requestTextBlock = it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return UnnamedSchemaWithArrayParent11(
+                                                                requestTextBlock =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            RequestTextBlock
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                         "image" -> {
-                                                            tryDeserialize(
-                                                                    node,
-                                                                    jacksonTypeRef<
-                                                                        RequestImageBlock
-                                                                    >(),
-                                                                ) {
-                                                                    it.validate()
-                                                                }
-                                                                ?.let {
-                                                                    return UnnamedSchemaWithArrayParent11(
-                                                                        requestImageBlock = it,
-                                                                        _json = json,
-                                                                    )
-                                                                }
+                                                            return UnnamedSchemaWithArrayParent11(
+                                                                requestImageBlock =
+                                                                    deserialize(
+                                                                        node,
+                                                                        jacksonTypeRef<
+                                                                            RequestImageBlock
+                                                                        >(),
+                                                                    ),
+                                                                _json = json,
+                                                            )
                                                         }
                                                     }
 
@@ -16372,55 +16291,40 @@ private constructor(
 
                                                             when (type) {
                                                                 "char_location" -> {
-                                                                    tryDeserialize(
-                                                                            node,
-                                                                            jacksonTypeRef<
-                                                                                RequestCharLocationCitation
-                                                                            >(),
-                                                                        ) {
-                                                                            it.validate()
-                                                                        }
-                                                                        ?.let {
-                                                                            return Citation(
-                                                                                requestCharLocation =
-                                                                                    it,
-                                                                                _json = json,
-                                                                            )
-                                                                        }
+                                                                    return Citation(
+                                                                        requestCharLocation =
+                                                                            deserialize(
+                                                                                node,
+                                                                                jacksonTypeRef<
+                                                                                    RequestCharLocationCitation
+                                                                                >(),
+                                                                            ),
+                                                                        _json = json,
+                                                                    )
                                                                 }
                                                                 "page_location" -> {
-                                                                    tryDeserialize(
-                                                                            node,
-                                                                            jacksonTypeRef<
-                                                                                RequestPageLocationCitation
-                                                                            >(),
-                                                                        ) {
-                                                                            it.validate()
-                                                                        }
-                                                                        ?.let {
-                                                                            return Citation(
-                                                                                requestPageLocation =
-                                                                                    it,
-                                                                                _json = json,
-                                                                            )
-                                                                        }
+                                                                    return Citation(
+                                                                        requestPageLocation =
+                                                                            deserialize(
+                                                                                node,
+                                                                                jacksonTypeRef<
+                                                                                    RequestPageLocationCitation
+                                                                                >(),
+                                                                            ),
+                                                                        _json = json,
+                                                                    )
                                                                 }
                                                                 "content_block_location" -> {
-                                                                    tryDeserialize(
-                                                                            node,
-                                                                            jacksonTypeRef<
-                                                                                RequestContentBlockLocationCitation
-                                                                            >(),
-                                                                        ) {
-                                                                            it.validate()
-                                                                        }
-                                                                        ?.let {
-                                                                            return Citation(
-                                                                                requestContentBlockLocation =
-                                                                                    it,
-                                                                                _json = json,
-                                                                            )
-                                                                        }
+                                                                    return Citation(
+                                                                        requestContentBlockLocation =
+                                                                            deserialize(
+                                                                                node,
+                                                                                jacksonTypeRef<
+                                                                                    RequestContentBlockLocationCitation
+                                                                                >(),
+                                                                            ),
+                                                                        _json = json,
+                                                                    )
                                                                 }
                                                             }
 
@@ -19004,36 +18908,28 @@ private constructor(
 
                                                             when (type) {
                                                                 "base64" -> {
-                                                                    tryDeserialize(
-                                                                            node,
-                                                                            jacksonTypeRef<
-                                                                                Base64ImageSource
-                                                                            >(),
-                                                                        ) {
-                                                                            it.validate()
-                                                                        }
-                                                                        ?.let {
-                                                                            return InnerSource(
-                                                                                base64Image = it,
-                                                                                _json = json,
-                                                                            )
-                                                                        }
+                                                                    return InnerSource(
+                                                                        base64Image =
+                                                                            deserialize(
+                                                                                node,
+                                                                                jacksonTypeRef<
+                                                                                    Base64ImageSource
+                                                                                >(),
+                                                                            ),
+                                                                        _json = json,
+                                                                    )
                                                                 }
                                                                 "url" -> {
-                                                                    tryDeserialize(
-                                                                            node,
-                                                                            jacksonTypeRef<
-                                                                                UrlImageSource
-                                                                            >(),
-                                                                        ) {
-                                                                            it.validate()
-                                                                        }
-                                                                        ?.let {
-                                                                            return InnerSource(
-                                                                                urlImage = it,
-                                                                                _json = json,
-                                                                            )
-                                                                        }
+                                                                    return InnerSource(
+                                                                        urlImage =
+                                                                            deserialize(
+                                                                                node,
+                                                                                jacksonTypeRef<
+                                                                                    UrlImageSource
+                                                                                >(),
+                                                                            ),
+                                                                        _json = json,
+                                                                    )
                                                                 }
                                                             }
 
@@ -23366,48 +23262,36 @@ private constructor(
 
                                 when (type) {
                                     "char_location" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestCharLocationCitation>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return Citation(
-                                                    requestCharLocation = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return Citation(
+                                            requestCharLocation =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestCharLocationCitation>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "page_location" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<RequestPageLocationCitation>(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return Citation(
-                                                    requestPageLocation = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return Citation(
+                                            requestPageLocation =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<RequestPageLocationCitation>(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                     "content_block_location" -> {
-                                        tryDeserialize(
-                                                node,
-                                                jacksonTypeRef<
-                                                    RequestContentBlockLocationCitation
-                                                >(),
-                                            ) {
-                                                it.validate()
-                                            }
-                                            ?.let {
-                                                return Citation(
-                                                    requestContentBlockLocation = it,
-                                                    _json = json,
-                                                )
-                                            }
+                                        return Citation(
+                                            requestContentBlockLocation =
+                                                deserialize(
+                                                    node,
+                                                    jacksonTypeRef<
+                                                        RequestContentBlockLocationCitation
+                                                    >(),
+                                                ),
+                                            _json = json,
+                                        )
                                     }
                                 }
 
@@ -25016,20 +24900,18 @@ private constructor(
 
                         when (type) {
                             "enabled" -> {
-                                tryDeserialize(node, jacksonTypeRef<ThinkingConfigEnabled>()) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Thinking(configEnabled = it, _json = json)
-                                    }
+                                return Thinking(
+                                    configEnabled =
+                                        deserialize(node, jacksonTypeRef<ThinkingConfigEnabled>()),
+                                    _json = json,
+                                )
                             }
                             "disabled" -> {
-                                tryDeserialize(node, jacksonTypeRef<ThinkingConfigDisabled>()) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Thinking(configDisabled = it, _json = json)
-                                    }
+                                return Thinking(
+                                    configDisabled =
+                                        deserialize(node, jacksonTypeRef<ThinkingConfigDisabled>()),
+                                    _json = json,
+                                )
                             }
                         }
 
@@ -25778,36 +25660,28 @@ private constructor(
 
                         when (type) {
                             "auto" -> {
-                                tryDeserialize(node, jacksonTypeRef<ToolChoiceAuto>()) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return ToolChoice(auto = it, _json = json)
-                                    }
+                                return ToolChoice(
+                                    auto = deserialize(node, jacksonTypeRef<ToolChoiceAuto>()),
+                                    _json = json,
+                                )
                             }
                             "any" -> {
-                                tryDeserialize(node, jacksonTypeRef<ToolChoiceAny>()) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return ToolChoice(any = it, _json = json)
-                                    }
+                                return ToolChoice(
+                                    any = deserialize(node, jacksonTypeRef<ToolChoiceAny>()),
+                                    _json = json,
+                                )
                             }
                             "tool" -> {
-                                tryDeserialize(node, jacksonTypeRef<ToolChoiceTool>()) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return ToolChoice(tool = it, _json = json)
-                                    }
+                                return ToolChoice(
+                                    tool = deserialize(node, jacksonTypeRef<ToolChoiceTool>()),
+                                    _json = json,
+                                )
                             }
                             "none" -> {
-                                tryDeserialize(node, jacksonTypeRef<ToolChoiceNone>()) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return ToolChoice(none = it, _json = json)
-                                    }
+                                return ToolChoice(
+                                    none = deserialize(node, jacksonTypeRef<ToolChoiceNone>()),
+                                    _json = json,
+                                )
                             }
                         }
 

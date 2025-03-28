@@ -398,28 +398,28 @@ private constructor(
 
                 when (type) {
                     "succeeded" -> {
-                        tryDeserialize(node, jacksonTypeRef<SucceededResult>()) { it.validate() }
-                            ?.let {
-                                return Result(succeeded = it, _json = json)
-                            }
+                        return Result(
+                            succeeded = deserialize(node, jacksonTypeRef<SucceededResult>()),
+                            _json = json,
+                        )
                     }
                     "errored" -> {
-                        tryDeserialize(node, jacksonTypeRef<ErroredResult>()) { it.validate() }
-                            ?.let {
-                                return Result(errored = it, _json = json)
-                            }
+                        return Result(
+                            errored = deserialize(node, jacksonTypeRef<ErroredResult>()),
+                            _json = json,
+                        )
                     }
                     "canceled" -> {
-                        tryDeserialize(node, jacksonTypeRef<CanceledResult>()) { it.validate() }
-                            ?.let {
-                                return Result(canceled = it, _json = json)
-                            }
+                        return Result(
+                            canceled = deserialize(node, jacksonTypeRef<CanceledResult>()),
+                            _json = json,
+                        )
                     }
                     "expired" -> {
-                        tryDeserialize(node, jacksonTypeRef<ExpiredResult>()) { it.validate() }
-                            ?.let {
-                                return Result(expired = it, _json = json)
-                            }
+                        return Result(
+                            expired = deserialize(node, jacksonTypeRef<ExpiredResult>()),
+                            _json = json,
+                        )
                     }
                 }
 
@@ -1402,42 +1402,41 @@ private constructor(
 
                             when (type) {
                                 "text" -> {
-                                    tryDeserialize(node, jacksonTypeRef<ResponseTextBlock>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return Content(responseTextBlock = it, _json = json)
-                                        }
+                                    return Content(
+                                        responseTextBlock =
+                                            deserialize(node, jacksonTypeRef<ResponseTextBlock>()),
+                                        _json = json,
+                                    )
                                 }
                                 "tool_use" -> {
-                                    tryDeserialize(node, jacksonTypeRef<ResponseToolUseBlock>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return Content(responseToolUseBlock = it, _json = json)
-                                        }
+                                    return Content(
+                                        responseToolUseBlock =
+                                            deserialize(
+                                                node,
+                                                jacksonTypeRef<ResponseToolUseBlock>(),
+                                            ),
+                                        _json = json,
+                                    )
                                 }
                                 "thinking" -> {
-                                    tryDeserialize(node, jacksonTypeRef<ResponseThinkingBlock>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return Content(responseThinkingBlock = it, _json = json)
-                                        }
+                                    return Content(
+                                        responseThinkingBlock =
+                                            deserialize(
+                                                node,
+                                                jacksonTypeRef<ResponseThinkingBlock>(),
+                                            ),
+                                        _json = json,
+                                    )
                                 }
                                 "redacted_thinking" -> {
-                                    tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<ResponseRedactedThinkingBlock>(),
-                                        ) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return Content(
-                                                responseRedactedThinkingBlock = it,
-                                                _json = json,
-                                            )
-                                        }
+                                    return Content(
+                                        responseRedactedThinkingBlock =
+                                            deserialize(
+                                                node,
+                                                jacksonTypeRef<ResponseRedactedThinkingBlock>(),
+                                            ),
+                                        _json = json,
+                                    )
                                 }
                             }
 
@@ -1904,48 +1903,40 @@ private constructor(
 
                                     when (type) {
                                         "char_location" -> {
-                                            tryDeserialize(
-                                                    node,
-                                                    jacksonTypeRef<ResponseCharLocationCitation>(),
-                                                ) {
-                                                    it.validate()
-                                                }
-                                                ?.let {
-                                                    return Citation(
-                                                        responseCharLocation = it,
-                                                        _json = json,
-                                                    )
-                                                }
+                                            return Citation(
+                                                responseCharLocation =
+                                                    deserialize(
+                                                        node,
+                                                        jacksonTypeRef<
+                                                            ResponseCharLocationCitation
+                                                        >(),
+                                                    ),
+                                                _json = json,
+                                            )
                                         }
                                         "page_location" -> {
-                                            tryDeserialize(
-                                                    node,
-                                                    jacksonTypeRef<ResponsePageLocationCitation>(),
-                                                ) {
-                                                    it.validate()
-                                                }
-                                                ?.let {
-                                                    return Citation(
-                                                        responsePageLocation = it,
-                                                        _json = json,
-                                                    )
-                                                }
+                                            return Citation(
+                                                responsePageLocation =
+                                                    deserialize(
+                                                        node,
+                                                        jacksonTypeRef<
+                                                            ResponsePageLocationCitation
+                                                        >(),
+                                                    ),
+                                                _json = json,
+                                            )
                                         }
                                         "content_block_location" -> {
-                                            tryDeserialize(
-                                                    node,
-                                                    jacksonTypeRef<
-                                                        ResponseContentBlockLocationCitation
-                                                    >(),
-                                                ) {
-                                                    it.validate()
-                                                }
-                                                ?.let {
-                                                    return Citation(
-                                                        responseContentBlockLocation = it,
-                                                        _json = json,
-                                                    )
-                                                }
+                                            return Citation(
+                                                responseContentBlockLocation =
+                                                    deserialize(
+                                                        node,
+                                                        jacksonTypeRef<
+                                                            ResponseContentBlockLocationCitation
+                                                        >(),
+                                                    ),
+                                                _json = json,
+                                            )
                                         }
                                     }
 
@@ -6132,76 +6123,74 @@ private constructor(
 
                             when (type) {
                                 "invalid_request_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<InvalidRequestError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(invalidRequest = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        invalidRequest =
+                                            deserialize(
+                                                node,
+                                                jacksonTypeRef<InvalidRequestError>(),
+                                            ),
+                                        _json = json,
+                                    )
                                 }
                                 "authentication_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<AuthenticationError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(authentication = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        authentication =
+                                            deserialize(
+                                                node,
+                                                jacksonTypeRef<AuthenticationError>(),
+                                            ),
+                                        _json = json,
+                                    )
                                 }
                                 "billing_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<BillingError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(billing = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        billing = deserialize(node, jacksonTypeRef<BillingError>()),
+                                        _json = json,
+                                    )
                                 }
                                 "permission_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<PermissionError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(permission = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        permission =
+                                            deserialize(node, jacksonTypeRef<PermissionError>()),
+                                        _json = json,
+                                    )
                                 }
                                 "not_found_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<NotFoundError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(notFound = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        notFound =
+                                            deserialize(node, jacksonTypeRef<NotFoundError>()),
+                                        _json = json,
+                                    )
                                 }
                                 "rate_limit_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<RateLimitError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(rateLimit = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        rateLimit =
+                                            deserialize(node, jacksonTypeRef<RateLimitError>()),
+                                        _json = json,
+                                    )
                                 }
                                 "timeout_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<GatewayTimeoutError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(gatewayTimeout = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        gatewayTimeout =
+                                            deserialize(
+                                                node,
+                                                jacksonTypeRef<GatewayTimeoutError>(),
+                                            ),
+                                        _json = json,
+                                    )
                                 }
                                 "api_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<ApiError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(api = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        api = deserialize(node, jacksonTypeRef<ApiError>()),
+                                        _json = json,
+                                    )
                                 }
                                 "overloaded_error" -> {
-                                    tryDeserialize(node, jacksonTypeRef<OverloadedError>()) {
-                                            it.validate()
-                                        }
-                                        ?.let {
-                                            return InnerError(overloaded = it, _json = json)
-                                        }
+                                    return InnerError(
+                                        overloaded =
+                                            deserialize(node, jacksonTypeRef<OverloadedError>()),
+                                        _json = json,
+                                    )
                                 }
                             }
 
