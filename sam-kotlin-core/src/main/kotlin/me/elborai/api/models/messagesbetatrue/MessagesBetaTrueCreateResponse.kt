@@ -776,36 +776,35 @@ private constructor(
 
                 when (type) {
                     "text" -> {
-                        tryDeserialize(node, jacksonTypeRef<BetaResponseTextBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(betaResponseTextBlock = it, _json = json)
-                            }
+                        return Content(
+                            betaResponseTextBlock =
+                                deserialize(node, jacksonTypeRef<BetaResponseTextBlock>()),
+                            _json = json,
+                        )
                     }
                     "tool_use" -> {
-                        tryDeserialize(node, jacksonTypeRef<BetaResponseToolUseBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(betaResponseToolUseBlock = it, _json = json)
-                            }
+                        return Content(
+                            betaResponseToolUseBlock =
+                                deserialize(node, jacksonTypeRef<BetaResponseToolUseBlock>()),
+                            _json = json,
+                        )
                     }
                     "thinking" -> {
-                        tryDeserialize(node, jacksonTypeRef<BetaResponseThinkingBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(betaResponseThinkingBlock = it, _json = json)
-                            }
+                        return Content(
+                            betaResponseThinkingBlock =
+                                deserialize(node, jacksonTypeRef<BetaResponseThinkingBlock>()),
+                            _json = json,
+                        )
                     }
                     "redacted_thinking" -> {
-                        tryDeserialize(node, jacksonTypeRef<BetaResponseRedactedThinkingBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(betaResponseRedactedThinkingBlock = it, _json = json)
-                            }
+                        return Content(
+                            betaResponseRedactedThinkingBlock =
+                                deserialize(
+                                    node,
+                                    jacksonTypeRef<BetaResponseRedactedThinkingBlock>(),
+                                ),
+                            _json = json,
+                        )
                     }
                 }
 
@@ -1254,40 +1253,36 @@ private constructor(
 
                         when (type) {
                             "char_location" -> {
-                                tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<BetaResponseCharLocationCitation>(),
-                                    ) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Citation(betaResponseCharLocation = it, _json = json)
-                                    }
+                                return Citation(
+                                    betaResponseCharLocation =
+                                        deserialize(
+                                            node,
+                                            jacksonTypeRef<BetaResponseCharLocationCitation>(),
+                                        ),
+                                    _json = json,
+                                )
                             }
                             "page_location" -> {
-                                tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<BetaResponsePageLocationCitation>(),
-                                    ) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Citation(betaResponsePageLocation = it, _json = json)
-                                    }
+                                return Citation(
+                                    betaResponsePageLocation =
+                                        deserialize(
+                                            node,
+                                            jacksonTypeRef<BetaResponsePageLocationCitation>(),
+                                        ),
+                                    _json = json,
+                                )
                             }
                             "content_block_location" -> {
-                                tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<BetaResponseContentBlockLocationCitation>(),
-                                    ) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Citation(
-                                            betaResponseContentBlockLocation = it,
-                                            _json = json,
-                                        )
-                                    }
+                                return Citation(
+                                    betaResponseContentBlockLocation =
+                                        deserialize(
+                                            node,
+                                            jacksonTypeRef<
+                                                BetaResponseContentBlockLocationCitation
+                                            >(),
+                                        ),
+                                    _json = json,
+                                )
                             }
                         }
 
