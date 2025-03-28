@@ -757,34 +757,32 @@ private constructor(
 
                 when (type) {
                     "text" -> {
-                        tryDeserialize(node, jacksonTypeRef<ResponseTextBlock>()) { it.validate() }
-                            ?.let {
-                                return Content(responseTextBlock = it, _json = json)
-                            }
+                        return Content(
+                            responseTextBlock =
+                                deserialize(node, jacksonTypeRef<ResponseTextBlock>()),
+                            _json = json,
+                        )
                     }
                     "tool_use" -> {
-                        tryDeserialize(node, jacksonTypeRef<ResponseToolUseBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(responseToolUseBlock = it, _json = json)
-                            }
+                        return Content(
+                            responseToolUseBlock =
+                                deserialize(node, jacksonTypeRef<ResponseToolUseBlock>()),
+                            _json = json,
+                        )
                     }
                     "thinking" -> {
-                        tryDeserialize(node, jacksonTypeRef<ResponseThinkingBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(responseThinkingBlock = it, _json = json)
-                            }
+                        return Content(
+                            responseThinkingBlock =
+                                deserialize(node, jacksonTypeRef<ResponseThinkingBlock>()),
+                            _json = json,
+                        )
                     }
                     "redacted_thinking" -> {
-                        tryDeserialize(node, jacksonTypeRef<ResponseRedactedThinkingBlock>()) {
-                                it.validate()
-                            }
-                            ?.let {
-                                return Content(responseRedactedThinkingBlock = it, _json = json)
-                            }
+                        return Content(
+                            responseRedactedThinkingBlock =
+                                deserialize(node, jacksonTypeRef<ResponseRedactedThinkingBlock>()),
+                            _json = json,
+                        )
                     }
                 }
 
@@ -1215,40 +1213,34 @@ private constructor(
 
                         when (type) {
                             "char_location" -> {
-                                tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<ResponseCharLocationCitation>(),
-                                    ) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Citation(responseCharLocation = it, _json = json)
-                                    }
+                                return Citation(
+                                    responseCharLocation =
+                                        deserialize(
+                                            node,
+                                            jacksonTypeRef<ResponseCharLocationCitation>(),
+                                        ),
+                                    _json = json,
+                                )
                             }
                             "page_location" -> {
-                                tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<ResponsePageLocationCitation>(),
-                                    ) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Citation(responsePageLocation = it, _json = json)
-                                    }
+                                return Citation(
+                                    responsePageLocation =
+                                        deserialize(
+                                            node,
+                                            jacksonTypeRef<ResponsePageLocationCitation>(),
+                                        ),
+                                    _json = json,
+                                )
                             }
                             "content_block_location" -> {
-                                tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<ResponseContentBlockLocationCitation>(),
-                                    ) {
-                                        it.validate()
-                                    }
-                                    ?.let {
-                                        return Citation(
-                                            responseContentBlockLocation = it,
-                                            _json = json,
-                                        )
-                                    }
+                                return Citation(
+                                    responseContentBlockLocation =
+                                        deserialize(
+                                            node,
+                                            jacksonTypeRef<ResponseContentBlockLocationCitation>(),
+                                        ),
+                                    _json = json,
+                                )
                             }
                         }
 
