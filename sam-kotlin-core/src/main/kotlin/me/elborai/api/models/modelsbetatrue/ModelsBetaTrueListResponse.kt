@@ -254,6 +254,25 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: SamInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (data.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (firstId.asKnown() == null) 0 else 1) +
+            (if (hasMore.asKnown() == null) 0 else 1) +
+            (if (lastId.asKnown() == null) 0 else 1)
+
     class Data
     private constructor(
         private val id: JsonField<String>,
@@ -500,9 +519,29 @@ private constructor(
             id()
             createdAt()
             displayName()
-            type()
+            type().validate()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: SamInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (createdAt.asKnown() == null) 0 else 1) +
+                (if (displayName.asKnown() == null) 0 else 1) +
+                (type.asKnown()?.validity() ?: 0)
 
         /**
          * Object type.
@@ -587,6 +626,33 @@ private constructor(
              */
             fun asString(): String =
                 _value().asString() ?: throw SamInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: SamInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
