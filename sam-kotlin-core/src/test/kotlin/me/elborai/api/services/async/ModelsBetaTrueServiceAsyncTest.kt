@@ -20,7 +20,7 @@ internal class ModelsBetaTrueServiceAsyncTest {
                 .build()
         val modelsBetaTrueServiceAsync = client.modelsBetaTrue()
 
-        val modelsBetaTrue =
+        val modelsBetaTrues =
             modelsBetaTrueServiceAsync.list(
                 ModelsBetaTrueListParams.builder()
                     .afterId("after_id")
@@ -31,6 +31,6 @@ internal class ModelsBetaTrueServiceAsyncTest {
                     .build()
             )
 
-        modelsBetaTrue.validate()
+        modelsBetaTrues.validate()
     }
 }

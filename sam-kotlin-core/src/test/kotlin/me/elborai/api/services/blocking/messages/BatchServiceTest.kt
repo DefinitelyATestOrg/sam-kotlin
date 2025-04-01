@@ -215,7 +215,7 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batches()
 
-        val batch =
+        val batches =
             batchService.list(
                 BatchListParams.builder()
                     .afterId("after_id")
@@ -227,7 +227,7 @@ internal class BatchServiceTest {
                     .build()
             )
 
-        batch.validate()
+        batches.validate()
     }
 
     @Test

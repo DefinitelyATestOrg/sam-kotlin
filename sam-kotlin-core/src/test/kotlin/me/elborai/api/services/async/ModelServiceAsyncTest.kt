@@ -43,7 +43,7 @@ internal class ModelServiceAsyncTest {
                 .build()
         val modelServiceAsync = client.models()
 
-        val model =
+        val models =
             modelServiceAsync.list(
                 ModelListParams.builder()
                     .afterId("after_id")
@@ -54,7 +54,7 @@ internal class ModelServiceAsyncTest {
                     .build()
             )
 
-        model.validate()
+        models.validate()
     }
 
     @Test
