@@ -1148,6 +1148,31 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: SamInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (maxTokensToSample.asKnown() == null) 0 else 1) +
+                (if (model.asKnown() == null) 0 else 1) +
+                (if (prompt.asKnown() == null) 0 else 1) +
+                (metadata.asKnown()?.validity() ?: 0) +
+                (stopSequences.asKnown()?.size ?: 0) +
+                (if (stream.asKnown() == null) 0 else 1) +
+                (if (temperature.asKnown() == null) 0 else 1) +
+                (if (topK.asKnown() == null) 0 else 1) +
+                (if (topP.asKnown() == null) 0 else 1)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -1281,6 +1306,22 @@ private constructor(
             userId()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: SamInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = (if (userId.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

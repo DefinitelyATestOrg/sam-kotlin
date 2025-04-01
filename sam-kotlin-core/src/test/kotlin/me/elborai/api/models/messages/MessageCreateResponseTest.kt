@@ -2,6 +2,8 @@
 
 package me.elborai.api.models.messages
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import me.elborai.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -92,5 +94,58 @@ internal class MessageCreateResponseTest {
                     .outputTokens(503L)
                     .build()
             )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val messageCreateResponse =
+            MessageCreateResponse.builder()
+                .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
+                .addContent(
+                    MessageCreateResponse.Content.ResponseTextBlock.builder()
+                        .addCitation(
+                            MessageCreateResponse.Content.ResponseTextBlock.Citation
+                                .ResponseCharLocationCitation
+                                .builder()
+                                .citedText("cited_text")
+                                .documentIndex(0L)
+                                .documentTitle("document_title")
+                                .endCharIndex(0L)
+                                .startCharIndex(0L)
+                                .type(
+                                    MessageCreateResponse.Content.ResponseTextBlock.Citation
+                                        .ResponseCharLocationCitation
+                                        .Type
+                                        .CHAR_LOCATION
+                                )
+                                .build()
+                        )
+                        .text("Hi! My name is Claude.")
+                        .type(MessageCreateResponse.Content.ResponseTextBlock.Type.TEXT)
+                        .build()
+                )
+                .model("claude-3-7-sonnet-20250219")
+                .role(MessageCreateResponse.Role.ASSISTANT)
+                .stopReason(MessageCreateResponse.StopReason.END_TURN)
+                .stopSequence(null)
+                .type(MessageCreateResponse.Type.MESSAGE)
+                .usage(
+                    MessageCreateResponse.Usage.builder()
+                        .cacheCreationInputTokens(2051L)
+                        .cacheReadInputTokens(2051L)
+                        .inputTokens(2095L)
+                        .outputTokens(503L)
+                        .build()
+                )
+                .build()
+
+        val roundtrippedMessageCreateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(messageCreateResponse),
+                jacksonTypeRef<MessageCreateResponse>(),
+            )
+
+        assertThat(roundtrippedMessageCreateResponse).isEqualTo(messageCreateResponse)
     }
 }
