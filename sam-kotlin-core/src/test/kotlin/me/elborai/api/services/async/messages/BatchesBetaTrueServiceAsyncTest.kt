@@ -210,7 +210,7 @@ internal class BatchesBetaTrueServiceAsyncTest {
                 .build()
         val batchesBetaTrueServiceAsync = client.messages().batchesBetaTrue()
 
-        val batchesBetaTrue =
+        val batchesBetaTrues =
             batchesBetaTrueServiceAsync.list(
                 BatchesBetaTrueListParams.builder()
                     .afterId("after_id")
@@ -222,6 +222,6 @@ internal class BatchesBetaTrueServiceAsyncTest {
                     .build()
             )
 
-        batchesBetaTrue.validate()
+        batchesBetaTrues.validate()
     }
 }
