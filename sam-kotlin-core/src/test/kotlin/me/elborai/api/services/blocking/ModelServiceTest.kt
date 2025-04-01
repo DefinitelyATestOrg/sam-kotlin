@@ -43,7 +43,7 @@ internal class ModelServiceTest {
                 .build()
         val modelService = client.models()
 
-        val model =
+        val models =
             modelService.list(
                 ModelListParams.builder()
                     .afterId("after_id")
@@ -54,7 +54,7 @@ internal class ModelServiceTest {
                     .build()
             )
 
-        model.validate()
+        models.validate()
     }
 
     @Test
