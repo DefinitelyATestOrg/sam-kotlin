@@ -254,6 +254,25 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: SamInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (data.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (firstId.asKnown() == null) 0 else 1) +
+            (if (hasMore.asKnown() == null) 0 else 1) +
+            (if (lastId.asKnown() == null) 0 else 1)
+
     class Data
     private constructor(
         private val id: JsonField<String>,
@@ -806,12 +825,38 @@ private constructor(
             createdAt()
             endedAt()
             expiresAt()
-            processingStatus()
+            processingStatus().validate()
             requestCounts().validate()
             resultsUrl()
-            type()
+            type().validate()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: SamInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (archivedAt.asKnown() == null) 0 else 1) +
+                (if (cancelInitiatedAt.asKnown() == null) 0 else 1) +
+                (if (createdAt.asKnown() == null) 0 else 1) +
+                (if (endedAt.asKnown() == null) 0 else 1) +
+                (if (expiresAt.asKnown() == null) 0 else 1) +
+                (processingStatus.asKnown()?.validity() ?: 0) +
+                (requestCounts.asKnown()?.validity() ?: 0) +
+                (if (resultsUrl.asKnown() == null) 0 else 1) +
+                (type.asKnown()?.validity() ?: 0)
 
         /** Processing status of the Message Batch. */
         class ProcessingStatus
@@ -910,6 +955,33 @@ private constructor(
              */
             fun asString(): String =
                 _value().asString() ?: throw SamInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): ProcessingStatus = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: SamInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1241,6 +1313,27 @@ private constructor(
                 validated = true
             }
 
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: SamInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (if (canceled.asKnown() == null) 0 else 1) +
+                    (if (errored.asKnown() == null) 0 else 1) +
+                    (if (expired.asKnown() == null) 0 else 1) +
+                    (if (processing.asKnown() == null) 0 else 1) +
+                    (if (succeeded.asKnown() == null) 0 else 1)
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -1342,6 +1435,33 @@ private constructor(
              */
             fun asString(): String =
                 _value().asString() ?: throw SamInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: SamInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

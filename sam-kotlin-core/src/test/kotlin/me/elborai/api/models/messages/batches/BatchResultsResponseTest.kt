@@ -2,6 +2,8 @@
 
 package me.elborai.api.models.messages.batches
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import me.elborai.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -143,5 +145,77 @@ internal class BatchResultsResponseTest {
                         .build()
                 )
             )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val batchResultsResponse =
+            BatchResultsResponse.builder()
+                .customId("my-custom-id-1")
+                .succeededResult(
+                    BatchResultsResponse.Result.SucceededResult.Message.builder()
+                        .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
+                        .addContent(
+                            BatchResultsResponse.Result.SucceededResult.Message.Content
+                                .ResponseTextBlock
+                                .builder()
+                                .addCitation(
+                                    BatchResultsResponse.Result.SucceededResult.Message.Content
+                                        .ResponseTextBlock
+                                        .Citation
+                                        .ResponseCharLocationCitation
+                                        .builder()
+                                        .citedText("cited_text")
+                                        .documentIndex(0L)
+                                        .documentTitle("document_title")
+                                        .endCharIndex(0L)
+                                        .startCharIndex(0L)
+                                        .type(
+                                            BatchResultsResponse.Result.SucceededResult.Message
+                                                .Content
+                                                .ResponseTextBlock
+                                                .Citation
+                                                .ResponseCharLocationCitation
+                                                .Type
+                                                .CHAR_LOCATION
+                                        )
+                                        .build()
+                                )
+                                .text("Hi! My name is Claude.")
+                                .type(
+                                    BatchResultsResponse.Result.SucceededResult.Message.Content
+                                        .ResponseTextBlock
+                                        .Type
+                                        .TEXT
+                                )
+                                .build()
+                        )
+                        .model("claude-3-7-sonnet-20250219")
+                        .role(BatchResultsResponse.Result.SucceededResult.Message.Role.ASSISTANT)
+                        .stopReason(
+                            BatchResultsResponse.Result.SucceededResult.Message.StopReason.END_TURN
+                        )
+                        .stopSequence(null)
+                        .type(BatchResultsResponse.Result.SucceededResult.Message.Type.MESSAGE)
+                        .usage(
+                            BatchResultsResponse.Result.SucceededResult.Message.Usage.builder()
+                                .cacheCreationInputTokens(2051L)
+                                .cacheReadInputTokens(2051L)
+                                .inputTokens(2095L)
+                                .outputTokens(503L)
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+
+        val roundtrippedBatchResultsResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(batchResultsResponse),
+                jacksonTypeRef<BatchResultsResponse>(),
+            )
+
+        assertThat(roundtrippedBatchResultsResponse).isEqualTo(batchResultsResponse)
     }
 }
