@@ -538,6 +538,20 @@ private constructor(
         fun xApiKey(xApiKey: String?) = apply { this.xApiKey = xApiKey }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [maxTokens]
+         * - [messages]
+         * - [model]
+         * - [metadata]
+         * - [stopSequences]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The maximum number of tokens to generate before stopping.
          *
          * Note that our models may stop _before_ reaching this maximum. This parameter only
@@ -1191,7 +1205,7 @@ private constructor(
             )
     }
 
-    internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers =
         Headers.builder()
