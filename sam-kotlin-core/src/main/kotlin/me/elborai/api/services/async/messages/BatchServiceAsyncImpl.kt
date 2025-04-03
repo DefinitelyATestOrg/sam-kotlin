@@ -25,10 +25,6 @@ import me.elborai.api.models.messages.batches.BatchDeleteParams
 import me.elborai.api.models.messages.batches.BatchDeleteResponse
 import me.elborai.api.models.messages.batches.BatchListParams
 import me.elborai.api.models.messages.batches.BatchListResponse
-import me.elborai.api.models.messages.batches.BatchResultsBetaParams
-import me.elborai.api.models.messages.batches.BatchResultsBetaResponse
-import me.elborai.api.models.messages.batches.BatchResultsParams
-import me.elborai.api.models.messages.batches.BatchResultsResponse
 import me.elborai.api.models.messages.batches.BatchRetrieveParams
 import me.elborai.api.models.messages.batches.BatchRetrieveResponse
 import me.elborai.api.services.async.messages.batches.BetaTrueServiceAsync
@@ -88,20 +84,6 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
     ): BatchCancelBetaResponse =
         // post /v1/messages/batches/{message_batch_id}/cancel?beta=true
         withRawResponse().cancelBeta(params, requestOptions).parse()
-
-    override suspend fun results(
-        params: BatchResultsParams,
-        requestOptions: RequestOptions,
-    ): BatchResultsResponse =
-        // get /v1/messages/batches/{message_batch_id}/results
-        withRawResponse().results(params, requestOptions).parse()
-
-    override suspend fun resultsBeta(
-        params: BatchResultsBetaParams,
-        requestOptions: RequestOptions,
-    ): BatchResultsBetaResponse =
-        // get /v1/messages/batches/{message_batch_id}/results?beta=true
-        withRawResponse().resultsBeta(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         BatchServiceAsync.WithRawResponse {
@@ -272,61 +254,6 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return response.parseable {
                 response
                     .use { cancelBetaHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
-
-        private val resultsHandler: Handler<BatchResultsResponse> =
-            jsonHandler<BatchResultsResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override suspend fun results(
-            params: BatchResultsParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BatchResultsResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", "batches", params._pathParam(0), "results")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { resultsHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
-
-        private val resultsBetaHandler: Handler<BatchResultsBetaResponse> =
-            jsonHandler<BatchResultsBetaResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override suspend fun resultsBeta(
-            params: BatchResultsBetaParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BatchResultsBetaResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", "batches", params._pathParam(0), "results")
-                    .putQueryParam("beta", "true")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { resultsBetaHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
