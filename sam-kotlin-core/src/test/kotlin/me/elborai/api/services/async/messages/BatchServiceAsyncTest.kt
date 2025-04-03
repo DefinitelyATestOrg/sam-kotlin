@@ -10,10 +10,7 @@ import me.elborai.api.models.messages.batches.BatchCancelParams
 import me.elborai.api.models.messages.batches.BatchCreateParams
 import me.elborai.api.models.messages.batches.BatchDeleteParams
 import me.elborai.api.models.messages.batches.BatchListParams
-import me.elborai.api.models.messages.batches.BatchResultsBetaParams
-import me.elborai.api.models.messages.batches.BatchResultsParams
 import me.elborai.api.models.messages.batches.BatchRetrieveParams
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -286,52 +283,6 @@ internal class BatchServiceAsyncTest {
         val response =
             batchServiceAsync.cancelBeta(
                 BatchCancelBetaParams.builder()
-                    .messageBatchId("message_batch_id")
-                    .addAnthropicBeta("string")
-                    .anthropicVersion("anthropic-version")
-                    .xApiKey("x-api-key")
-                    .build()
-            )
-
-        response.validate()
-    }
-
-    @Disabled("Prism doesn't support JSONL responses yet")
-    @Test
-    suspend fun results() {
-        val client =
-            SamOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val batchServiceAsync = client.messages().batches()
-
-        val response =
-            batchServiceAsync.results(
-                BatchResultsParams.builder()
-                    .messageBatchId("message_batch_id")
-                    .addAnthropicBeta("string")
-                    .anthropicVersion("anthropic-version")
-                    .xApiKey("x-api-key")
-                    .build()
-            )
-
-        response.validate()
-    }
-
-    @Disabled("Prism doesn't support JSONL responses yet")
-    @Test
-    suspend fun resultsBeta() {
-        val client =
-            SamOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val batchServiceAsync = client.messages().batches()
-
-        val response =
-            batchServiceAsync.resultsBeta(
-                BatchResultsBetaParams.builder()
                     .messageBatchId("message_batch_id")
                     .addAnthropicBeta("string")
                     .anthropicVersion("anthropic-version")

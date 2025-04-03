@@ -15,10 +15,6 @@ import me.elborai.api.models.messages.batches.BatchDeleteParams
 import me.elborai.api.models.messages.batches.BatchDeleteResponse
 import me.elborai.api.models.messages.batches.BatchListParams
 import me.elborai.api.models.messages.batches.BatchListResponse
-import me.elborai.api.models.messages.batches.BatchResultsBetaParams
-import me.elborai.api.models.messages.batches.BatchResultsBetaResponse
-import me.elborai.api.models.messages.batches.BatchResultsParams
-import me.elborai.api.models.messages.batches.BatchResultsResponse
 import me.elborai.api.models.messages.batches.BatchRetrieveParams
 import me.elborai.api.models.messages.batches.BatchRetrieveResponse
 import me.elborai.api.services.async.messages.batches.BetaTrueServiceAsync
@@ -123,36 +119,6 @@ interface BatchServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BatchCancelBetaResponse
 
-    /**
-     * Streams the results of a Message Batch as a `.jsonl` file.
-     *
-     * Each line in the file is a JSON object containing the result of a single request in the
-     * Message Batch. Results are not guaranteed to be in the same order as requests. Use the
-     * `custom_id` field to match results to requests.
-     *
-     * Learn more about the Message Batches API in our
-     * [user guide](/en/docs/build-with-claude/batch-processing)
-     */
-    suspend fun results(
-        params: BatchResultsParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): BatchResultsResponse
-
-    /**
-     * Streams the results of a Message Batch as a `.jsonl` file.
-     *
-     * Each line in the file is a JSON object containing the result of a single request in the
-     * Message Batch. Results are not guaranteed to be in the same order as requests. Use the
-     * `custom_id` field to match results to requests.
-     *
-     * Learn more about the Message Batches API in our
-     * [user guide](/en/docs/build-with-claude/batch-processing)
-     */
-    suspend fun resultsBeta(
-        params: BatchResultsBetaParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): BatchResultsBetaResponse
-
     /** A view of [BatchServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -223,26 +189,5 @@ interface BatchServiceAsync {
             params: BatchCancelBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BatchCancelBetaResponse>
-
-        /**
-         * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}/results`,
-         * but is otherwise the same as [BatchServiceAsync.results].
-         */
-        @MustBeClosed
-        suspend fun results(
-            params: BatchResultsParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BatchResultsResponse>
-
-        /**
-         * Returns a raw HTTP response for `get
-         * /v1/messages/batches/{message_batch_id}/results?beta=true`, but is otherwise the same as
-         * [BatchServiceAsync.resultsBeta].
-         */
-        @MustBeClosed
-        suspend fun resultsBeta(
-            params: BatchResultsBetaParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BatchResultsBetaResponse>
     }
 }
