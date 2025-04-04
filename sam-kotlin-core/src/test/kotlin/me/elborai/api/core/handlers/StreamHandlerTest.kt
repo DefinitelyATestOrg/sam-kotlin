@@ -12,6 +12,34 @@ import org.junit.jupiter.api.assertThrows
 internal class StreamHandlerTest {
 
     @Test
+    fun streamHandler_splitsStreamOnNewlines() {
+        val handler = streamHandler { _, lines -> yieldAll(lines) }
+        val streamResponse = handler.handle(httpResponse("a\nbb\nccc\ndddd".byteInputStream()))
+
+        val lines = streamResponse.asSequence().toList()
+
+        assertThat(lines).containsExactly("a", "bb", "ccc", "dddd")
+    }
+
+    @Test
+    fun streamHandler_whenClosedEarly_stopsYielding() {
+        val handler = streamHandler { _, lines -> yieldAll(lines) }
+        val streamResponse = handler.handle(httpResponse("a\nbb\nccc\ndddd".byteInputStream()))
+
+        val lines =
+            streamResponse
+                .asSequence()
+                .onEach {
+                    if (it == "bb") {
+                        streamResponse.close()
+                    }
+                }
+                .toList()
+
+        assertThat(lines).containsExactly("a", "bb")
+    }
+
+    @Test
     fun streamHandler_whenReaderThrowsIOException_wrapsException() {
         val handler = streamHandler<String> { _, lines -> lines.forEach {} }
         val streamResponse = handler.handle(httpResponse("a\nb\nc\n".byteInputStream().throwing()))
