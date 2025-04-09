@@ -7,6 +7,7 @@ import me.elborai.api.services.async.MessageServiceAsync
 import me.elborai.api.services.async.MessagesBetaTrueServiceAsync
 import me.elborai.api.services.async.ModelServiceAsync
 import me.elborai.api.services.async.ModelsBetaTrueServiceAsync
+import me.elborai.api.services.async.SamPlopPlopServiceAsync
 import me.elborai.api.services.async.StoreServiceAsync
 import me.elborai.api.services.async.UserServiceAsync
 
@@ -53,6 +54,8 @@ interface SamClientAsync {
 
     fun modelsBetaTrue(): ModelsBetaTrueServiceAsync
 
+    fun samPlopPlop(): SamPlopPlopServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -82,5 +85,7 @@ interface SamClientAsync {
         fun messagesBetaTrue(): MessagesBetaTrueServiceAsync.WithRawResponse
 
         fun modelsBetaTrue(): ModelsBetaTrueServiceAsync.WithRawResponse
+
+        fun samPlopPlop(): SamPlopPlopServiceAsync.WithRawResponse
     }
 }

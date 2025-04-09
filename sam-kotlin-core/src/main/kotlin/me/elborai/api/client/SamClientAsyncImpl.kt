@@ -14,6 +14,8 @@ import me.elborai.api.services.async.ModelServiceAsync
 import me.elborai.api.services.async.ModelServiceAsyncImpl
 import me.elborai.api.services.async.ModelsBetaTrueServiceAsync
 import me.elborai.api.services.async.ModelsBetaTrueServiceAsyncImpl
+import me.elborai.api.services.async.SamPlopPlopServiceAsync
+import me.elborai.api.services.async.SamPlopPlopServiceAsyncImpl
 import me.elborai.api.services.async.StoreServiceAsync
 import me.elborai.api.services.async.StoreServiceAsyncImpl
 import me.elborai.api.services.async.UserServiceAsync
@@ -62,6 +64,10 @@ class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAs
         ModelsBetaTrueServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val samPlopPlop: SamPlopPlopServiceAsync by lazy {
+        SamPlopPlopServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): SamClient = sync
 
     override fun withRawResponse(): SamClientAsync.WithRawResponse = withRawResponse
@@ -79,6 +85,8 @@ class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAs
     override fun messagesBetaTrue(): MessagesBetaTrueServiceAsync = messagesBetaTrue
 
     override fun modelsBetaTrue(): ModelsBetaTrueServiceAsync = modelsBetaTrue
+
+    override fun samPlopPlop(): SamPlopPlopServiceAsync = samPlopPlop
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -113,6 +121,10 @@ class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAs
             ModelsBetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val samPlopPlop: SamPlopPlopServiceAsync.WithRawResponse by lazy {
+            SamPlopPlopServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun store(): StoreServiceAsync.WithRawResponse = store
 
         override fun user(): UserServiceAsync.WithRawResponse = user
@@ -127,5 +139,7 @@ class SamClientAsyncImpl(private val clientOptions: ClientOptions) : SamClientAs
             messagesBetaTrue
 
         override fun modelsBetaTrue(): ModelsBetaTrueServiceAsync.WithRawResponse = modelsBetaTrue
+
+        override fun samPlopPlop(): SamPlopPlopServiceAsync.WithRawResponse = samPlopPlop
     }
 }
