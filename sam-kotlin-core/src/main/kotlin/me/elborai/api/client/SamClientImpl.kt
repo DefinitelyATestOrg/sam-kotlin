@@ -14,6 +14,8 @@ import me.elborai.api.services.blocking.ModelService
 import me.elborai.api.services.blocking.ModelServiceImpl
 import me.elborai.api.services.blocking.ModelsBetaTrueService
 import me.elborai.api.services.blocking.ModelsBetaTrueServiceImpl
+import me.elborai.api.services.blocking.SamPlopPlopService
+import me.elborai.api.services.blocking.SamPlopPlopServiceImpl
 import me.elborai.api.services.blocking.StoreService
 import me.elborai.api.services.blocking.StoreServiceImpl
 import me.elborai.api.services.blocking.UserService
@@ -56,6 +58,10 @@ class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
         ModelsBetaTrueServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val samPlopPlop: SamPlopPlopService by lazy {
+        SamPlopPlopServiceImpl(clientOptionsWithUserAgent)
+    }
+
     override fun async(): SamClientAsync = async
 
     override fun withRawResponse(): SamClient.WithRawResponse = withRawResponse
@@ -73,6 +79,8 @@ class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
     override fun messagesBetaTrue(): MessagesBetaTrueService = messagesBetaTrue
 
     override fun modelsBetaTrue(): ModelsBetaTrueService = modelsBetaTrue
+
+    override fun samPlopPlop(): SamPlopPlopService = samPlopPlop
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -107,6 +115,10 @@ class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
             ModelsBetaTrueServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val samPlopPlop: SamPlopPlopService.WithRawResponse by lazy {
+            SamPlopPlopServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun store(): StoreService.WithRawResponse = store
 
         override fun user(): UserService.WithRawResponse = user
@@ -120,5 +132,7 @@ class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
         override fun messagesBetaTrue(): MessagesBetaTrueService.WithRawResponse = messagesBetaTrue
 
         override fun modelsBetaTrue(): ModelsBetaTrueService.WithRawResponse = modelsBetaTrue
+
+        override fun samPlopPlop(): SamPlopPlopService.WithRawResponse = samPlopPlop
     }
 }

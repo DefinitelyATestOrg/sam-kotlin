@@ -7,6 +7,7 @@ import me.elborai.api.services.blocking.MessageService
 import me.elborai.api.services.blocking.MessagesBetaTrueService
 import me.elborai.api.services.blocking.ModelService
 import me.elborai.api.services.blocking.ModelsBetaTrueService
+import me.elborai.api.services.blocking.SamPlopPlopService
 import me.elborai.api.services.blocking.StoreService
 import me.elborai.api.services.blocking.UserService
 
@@ -53,6 +54,8 @@ interface SamClient {
 
     fun modelsBetaTrue(): ModelsBetaTrueService
 
+    fun samPlopPlop(): SamPlopPlopService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -82,5 +85,7 @@ interface SamClient {
         fun messagesBetaTrue(): MessagesBetaTrueService.WithRawResponse
 
         fun modelsBetaTrue(): ModelsBetaTrueService.WithRawResponse
+
+        fun samPlopPlop(): SamPlopPlopService.WithRawResponse
     }
 }
