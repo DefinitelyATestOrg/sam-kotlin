@@ -9,7 +9,7 @@ configure<PublishingExtension> {
             from(components["java"])
 
             pom {
-                name.set("Anthropic API")
+                name.set("Sam API")
                 description.set("An SDK library for sam")
                 url.set("https://docs.sam.com")
 
