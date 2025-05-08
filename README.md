@@ -293,7 +293,6 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import me.elborai.api.models.messages.MessageCreateParams
 import me.elborai.api.models.messages.MessageCreateResponse
 
 val message: MessageCreateResponse = client.messages().create(
@@ -534,7 +533,6 @@ val message: MessageCreateResponse = client.messages().create(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import me.elborai.api.models.messages.MessageCreateParams
 import me.elborai.api.models.messages.MessageCreateResponse
 
 val message: MessageCreateResponse = client.messages().create(
