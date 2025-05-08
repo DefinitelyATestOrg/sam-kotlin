@@ -26,9 +26,20 @@ interface ModelService {
      * resolve a model alias to a model ID.
      */
     fun retrieve(
+        modelId: String,
+        params: ModelRetrieveParams = ModelRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ModelRetrieveResponse = retrieve(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    fun retrieve(
         params: ModelRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveResponse
+
+    /** @see [retrieve] */
+    fun retrieve(modelId: String, requestOptions: RequestOptions): ModelRetrieveResponse =
+        retrieve(modelId, ModelRetrieveParams.none(), requestOptions)
 
     /**
      * List available models.
@@ -52,9 +63,21 @@ interface ModelService {
      * resolve a model alias to a model ID.
      */
     fun retrieveBeta(
+        modelId: String,
+        params: ModelRetrieveBetaParams = ModelRetrieveBetaParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ModelRetrieveBetaResponse =
+        retrieveBeta(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+    /** @see [retrieveBeta] */
+    fun retrieveBeta(
         params: ModelRetrieveBetaParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveBetaResponse
+
+    /** @see [retrieveBeta] */
+    fun retrieveBeta(modelId: String, requestOptions: RequestOptions): ModelRetrieveBetaResponse =
+        retrieveBeta(modelId, ModelRetrieveBetaParams.none(), requestOptions)
 
     /** A view of [ModelService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -65,9 +88,26 @@ interface ModelService {
          */
         @MustBeClosed
         fun retrieve(
+            modelId: String,
+            params: ModelRetrieveParams = ModelRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ModelRetrieveResponse> =
+            retrieve(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
             params: ModelRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelRetrieveResponse>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
+            modelId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ModelRetrieveResponse> =
+            retrieve(modelId, ModelRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/models`, but is otherwise the same as
@@ -90,8 +130,25 @@ interface ModelService {
          */
         @MustBeClosed
         fun retrieveBeta(
+            modelId: String,
+            params: ModelRetrieveBetaParams = ModelRetrieveBetaParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ModelRetrieveBetaResponse> =
+            retrieveBeta(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+        /** @see [retrieveBeta] */
+        @MustBeClosed
+        fun retrieveBeta(
             params: ModelRetrieveBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelRetrieveBetaResponse>
+
+        /** @see [retrieveBeta] */
+        @MustBeClosed
+        fun retrieveBeta(
+            modelId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ModelRetrieveBetaResponse> =
+            retrieveBeta(modelId, ModelRetrieveBetaParams.none(), requestOptions)
     }
 }

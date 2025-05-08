@@ -51,9 +51,23 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun retrieve(
+        messageBatchId: String,
+        params: BatchRetrieveParams = BatchRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchRetrieveResponse =
+        retrieve(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
         params: BatchRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BatchRetrieveResponse
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
+        messageBatchId: String,
+        requestOptions: RequestOptions,
+    ): BatchRetrieveResponse = retrieve(messageBatchId, BatchRetrieveParams.none(), requestOptions)
 
     /**
      * List all Message Batches within a Workspace. Most recently created batches are returned
@@ -81,9 +95,23 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun delete(
+        messageBatchId: String,
+        params: BatchDeleteParams = BatchDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchDeleteResponse =
+        delete(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+    /** @see [delete] */
+    suspend fun delete(
         params: BatchDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BatchDeleteResponse
+
+    /** @see [delete] */
+    suspend fun delete(
+        messageBatchId: String,
+        requestOptions: RequestOptions,
+    ): BatchDeleteResponse = delete(messageBatchId, BatchDeleteParams.none(), requestOptions)
 
     /**
      * Batches may be canceled any time before processing ends. Once cancellation is initiated, the
@@ -98,9 +126,23 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun cancel(
+        messageBatchId: String,
+        params: BatchCancelParams = BatchCancelParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchCancelResponse =
+        cancel(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+    /** @see [cancel] */
+    suspend fun cancel(
         params: BatchCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BatchCancelResponse
+
+    /** @see [cancel] */
+    suspend fun cancel(
+        messageBatchId: String,
+        requestOptions: RequestOptions,
+    ): BatchCancelResponse = cancel(messageBatchId, BatchCancelParams.none(), requestOptions)
 
     /**
      * Batches may be canceled any time before processing ends. Once cancellation is initiated, the
@@ -115,9 +157,24 @@ interface BatchServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun cancelBeta(
+        messageBatchId: String,
+        params: BatchCancelBetaParams = BatchCancelBetaParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BatchCancelBetaResponse =
+        cancelBeta(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+    /** @see [cancelBeta] */
+    suspend fun cancelBeta(
         params: BatchCancelBetaParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BatchCancelBetaResponse
+
+    /** @see [cancelBeta] */
+    suspend fun cancelBeta(
+        messageBatchId: String,
+        requestOptions: RequestOptions,
+    ): BatchCancelBetaResponse =
+        cancelBeta(messageBatchId, BatchCancelBetaParams.none(), requestOptions)
 
     /** A view of [BatchServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -140,9 +197,26 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
+            messageBatchId: String,
+            params: BatchRetrieveParams = BatchRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchRetrieveResponse> =
+            retrieve(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
             params: BatchRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BatchRetrieveResponse>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
+            messageBatchId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BatchRetrieveResponse> =
+            retrieve(messageBatchId, BatchRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batches`, but is otherwise the same as
@@ -165,9 +239,26 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun delete(
+            messageBatchId: String,
+            params: BatchDeleteParams = BatchDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchDeleteResponse> =
+            delete(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
             params: BatchDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BatchDeleteResponse>
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
+            messageBatchId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BatchDeleteResponse> =
+            delete(messageBatchId, BatchDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batches/{message_batch_id}/cancel`,
@@ -175,9 +266,26 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun cancel(
+            messageBatchId: String,
+            params: BatchCancelParams = BatchCancelParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchCancelResponse> =
+            cancel(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+        /** @see [cancel] */
+        @MustBeClosed
+        suspend fun cancel(
             params: BatchCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BatchCancelResponse>
+
+        /** @see [cancel] */
+        @MustBeClosed
+        suspend fun cancel(
+            messageBatchId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BatchCancelResponse> =
+            cancel(messageBatchId, BatchCancelParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post
@@ -186,8 +294,25 @@ interface BatchServiceAsync {
          */
         @MustBeClosed
         suspend fun cancelBeta(
+            messageBatchId: String,
+            params: BatchCancelBetaParams = BatchCancelBetaParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BatchCancelBetaResponse> =
+            cancelBeta(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+        /** @see [cancelBeta] */
+        @MustBeClosed
+        suspend fun cancelBeta(
             params: BatchCancelBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BatchCancelBetaResponse>
+
+        /** @see [cancelBeta] */
+        @MustBeClosed
+        suspend fun cancelBeta(
+            messageBatchId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BatchCancelBetaResponse> =
+            cancelBeta(messageBatchId, BatchCancelBetaParams.none(), requestOptions)
     }
 }

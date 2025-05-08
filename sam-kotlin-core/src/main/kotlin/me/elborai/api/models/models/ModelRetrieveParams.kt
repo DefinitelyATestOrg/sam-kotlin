@@ -4,7 +4,6 @@ package me.elborai.api.models.models
 
 import java.util.Objects
 import me.elborai.api.core.Params
-import me.elborai.api.core.checkRequired
 import me.elborai.api.core.http.Headers
 import me.elborai.api.core.http.QueryParams
 
@@ -16,7 +15,7 @@ import me.elborai.api.core.http.QueryParams
  */
 class ModelRetrieveParams
 private constructor(
-    private val modelId: String,
+    private val modelId: String?,
     private val anthropicVersion: String?,
     private val xApiKey: String?,
     private val additionalHeaders: Headers,
@@ -24,7 +23,7 @@ private constructor(
 ) : Params {
 
     /** Model identifier or alias. */
-    fun modelId(): String = modelId
+    fun modelId(): String? = modelId
 
     /**
      * The version of the Anthropic API you want to use.
@@ -51,14 +50,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ModelRetrieveParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .modelId()
-         * ```
-         */
+        fun none(): ModelRetrieveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ModelRetrieveParams]. */
         fun builder() = Builder()
     }
 
@@ -80,7 +74,7 @@ private constructor(
         }
 
         /** Model identifier or alias. */
-        fun modelId(modelId: String) = apply { this.modelId = modelId }
+        fun modelId(modelId: String?) = apply { this.modelId = modelId }
 
         /**
          * The version of the Anthropic API you want to use.
@@ -204,17 +198,10 @@ private constructor(
          * Returns an immutable instance of [ModelRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .modelId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ModelRetrieveParams =
             ModelRetrieveParams(
-                checkRequired("modelId", modelId),
+                modelId,
                 anthropicVersion,
                 xApiKey,
                 additionalHeaders.build(),
@@ -224,7 +211,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> modelId
+            0 -> modelId ?: ""
             else -> ""
         }
 

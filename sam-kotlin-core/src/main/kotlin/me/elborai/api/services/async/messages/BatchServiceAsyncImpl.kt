@@ -5,6 +5,7 @@ package me.elborai.api.services.async.messages
 import me.elborai.api.core.ClientOptions
 import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.checkRequired
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
 import me.elborai.api.core.handlers.withErrorHandler
@@ -132,6 +133,9 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: BatchRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BatchRetrieveResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageBatchId", params.messageBatchId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -185,6 +189,9 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: BatchDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BatchDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageBatchId", params.messageBatchId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -213,6 +220,9 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: BatchCancelParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BatchCancelResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageBatchId", params.messageBatchId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -241,6 +251,9 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: BatchCancelBetaParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BatchCancelBetaResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageBatchId", params.messageBatchId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
