@@ -83,7 +83,7 @@ internal class BatchServiceAsyncTest {
                                                     BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .Citation
-                                                        .RequestCharLocationCitation
+                                                        .CharLocation
                                                         .builder()
                                                         .citedText("cited_text")
                                                         .documentIndex(0L)
@@ -94,7 +94,7 @@ internal class BatchServiceAsyncTest {
                                                             BatchCreateParams.Request.Params.System
                                                                 .RequestTextBlock
                                                                 .Citation
-                                                                .RequestCharLocationCitation
+                                                                .CharLocation
                                                                 .Type
                                                                 .CHAR_LOCATION
                                                         )
@@ -104,13 +104,11 @@ internal class BatchServiceAsyncTest {
                                         )
                                     )
                                     .temperature(1.0)
-                                    .configEnabledThinking(1024L)
+                                    .enabledThinking(1024L)
                                     .toolChoice(
-                                        BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto
-                                            .builder()
+                                        BatchCreateParams.Request.Params.ToolChoice.Auto.builder()
                                             .type(
-                                                BatchCreateParams.Request.Params.ToolChoice
-                                                    .ToolChoiceAuto
+                                                BatchCreateParams.Request.Params.ToolChoice.Auto
                                                     .Type
                                                     .AUTO
                                             )

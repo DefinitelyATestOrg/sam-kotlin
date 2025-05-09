@@ -68,7 +68,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             BatchesBetaTrueCreateParams.Request.Params.System
                                                 .BetaRequestTextBlock
                                                 .Citation
-                                                .BetaRequestCharLocationCitation
+                                                .CharLocation
                                                 .builder()
                                                 .citedText("cited_text")
                                                 .documentIndex(0L)
@@ -80,7 +80,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .Citation
-                                                        .BetaRequestCharLocationCitation
+                                                        .CharLocation
                                                         .Type
                                                         .CHAR_LOCATION
                                                 )
@@ -90,14 +90,11 @@ internal class BatchesBetaTrueCreateParamsTest {
                                 )
                             )
                             .temperature(1.0)
-                            .betaThinkingConfigEnabledThinking(1024L)
+                            .enabledThinking(1024L)
                             .toolChoice(
-                                BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                    .BetaToolChoiceAuto
-                                    .builder()
+                                BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto.builder()
                                     .type(
-                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                            .BetaToolChoiceAuto
+                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                             .Type
                                             .AUTO
                                     )
@@ -229,7 +226,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                 BatchesBetaTrueCreateParams.Request.Params.System
                                                     .BetaRequestTextBlock
                                                     .Citation
-                                                    .BetaRequestCharLocationCitation
+                                                    .CharLocation
                                                     .builder()
                                                     .citedText("cited_text")
                                                     .documentIndex(0L)
@@ -241,7 +238,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                             .System
                                                             .BetaRequestTextBlock
                                                             .Citation
-                                                            .BetaRequestCharLocationCitation
+                                                            .CharLocation
                                                             .Type
                                                             .CHAR_LOCATION
                                                     )
@@ -251,14 +248,13 @@ internal class BatchesBetaTrueCreateParamsTest {
                                     )
                                 )
                                 .temperature(1.0)
-                                .betaThinkingConfigEnabledThinking(1024L)
+                                .enabledThinking(1024L)
                                 .toolChoice(
-                                    BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                        .BetaToolChoiceAuto
+                                    BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                         .builder()
                                         .type(
                                             BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                                .BetaToolChoiceAuto
+                                                .Auto
                                                 .Type
                                                 .AUTO
                                         )
@@ -433,7 +429,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                 BatchesBetaTrueCreateParams.Request.Params.System
                                                     .BetaRequestTextBlock
                                                     .Citation
-                                                    .BetaRequestCharLocationCitation
+                                                    .CharLocation
                                                     .builder()
                                                     .citedText("cited_text")
                                                     .documentIndex(0L)
@@ -445,7 +441,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                             .System
                                                             .BetaRequestTextBlock
                                                             .Citation
-                                                            .BetaRequestCharLocationCitation
+                                                            .CharLocation
                                                             .Type
                                                             .CHAR_LOCATION
                                                     )
@@ -455,14 +451,13 @@ internal class BatchesBetaTrueCreateParamsTest {
                                     )
                                 )
                                 .temperature(1.0)
-                                .betaThinkingConfigEnabledThinking(1024L)
+                                .enabledThinking(1024L)
                                 .toolChoice(
-                                    BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                        .BetaToolChoiceAuto
+                                    BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                         .builder()
                                         .type(
                                             BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                                .BetaToolChoiceAuto
+                                                .Auto
                                                 .Type
                                                 .AUTO
                                         )
@@ -589,7 +584,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             BatchesBetaTrueCreateParams.Request.Params.System
                                                 .BetaRequestTextBlock
                                                 .Citation
-                                                .BetaRequestCharLocationCitation
+                                                .CharLocation
                                                 .builder()
                                                 .citedText("cited_text")
                                                 .documentIndex(0L)
@@ -601,7 +596,7 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .Citation
-                                                        .BetaRequestCharLocationCitation
+                                                        .CharLocation
                                                         .Type
                                                         .CHAR_LOCATION
                                                 )
@@ -611,14 +606,11 @@ internal class BatchesBetaTrueCreateParamsTest {
                                 )
                             )
                             .temperature(1.0)
-                            .betaThinkingConfigEnabledThinking(1024L)
+                            .enabledThinking(1024L)
                             .toolChoice(
-                                BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                    .BetaToolChoiceAuto
-                                    .builder()
+                                BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto.builder()
                                     .type(
-                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                            .BetaToolChoiceAuto
+                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                             .Type
                                             .AUTO
                                     )

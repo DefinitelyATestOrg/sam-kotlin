@@ -88,7 +88,7 @@ internal class BatchesBetaTrueServiceAsyncTest {
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .Citation
-                                                        .BetaRequestCharLocationCitation
+                                                        .CharLocation
                                                         .builder()
                                                         .citedText("cited_text")
                                                         .documentIndex(0L)
@@ -101,7 +101,7 @@ internal class BatchesBetaTrueServiceAsyncTest {
                                                                 .System
                                                                 .BetaRequestTextBlock
                                                                 .Citation
-                                                                .BetaRequestCharLocationCitation
+                                                                .CharLocation
                                                                 .Type
                                                                 .CHAR_LOCATION
                                                         )
@@ -111,15 +111,14 @@ internal class BatchesBetaTrueServiceAsyncTest {
                                         )
                                     )
                                     .temperature(1.0)
-                                    .betaThinkingConfigEnabledThinking(1024L)
+                                    .enabledThinking(1024L)
                                     .toolChoice(
-                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                            .BetaToolChoiceAuto
+                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                             .builder()
                                             .type(
                                                 BatchesBetaTrueCreateParams.Request.Params
                                                     .ToolChoice
-                                                    .BetaToolChoiceAuto
+                                                    .Auto
                                                     .Type
                                                     .AUTO
                                             )

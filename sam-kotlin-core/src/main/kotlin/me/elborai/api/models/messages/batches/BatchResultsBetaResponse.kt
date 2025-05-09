@@ -153,55 +153,51 @@ private constructor(
          */
         fun result(result: JsonField<Result>) = apply { this.result = result }
 
-        /** Alias for calling [result] with `Result.ofBetaSucceeded(betaSucceeded)`. */
-        fun result(betaSucceeded: Result.BetaSucceededResult) =
-            result(Result.ofBetaSucceeded(betaSucceeded))
+        /** Alias for calling [result] with `Result.ofSucceeded(succeeded)`. */
+        fun result(succeeded: Result.Succeeded) = result(Result.ofSucceeded(succeeded))
 
         /**
          * Alias for calling [result] with the following:
          * ```kotlin
-         * Result.BetaSucceededResult.builder()
-         *     .type(BatchResultsBetaResponse.Result.BetaSucceededResult.Type.SUCCEEDED)
+         * Result.Succeeded.builder()
+         *     .type(BatchResultsBetaResponse.Result.Succeeded.Type.SUCCEEDED)
          *     .message(message)
          *     .build()
          * ```
          */
-        fun betaSucceededResult(message: Result.BetaSucceededResult.Message) =
+        fun succeededResult(message: Result.Succeeded.Message) =
             result(
-                Result.BetaSucceededResult.builder()
-                    .type(BatchResultsBetaResponse.Result.BetaSucceededResult.Type.SUCCEEDED)
+                Result.Succeeded.builder()
+                    .type(BatchResultsBetaResponse.Result.Succeeded.Type.SUCCEEDED)
                     .message(message)
                     .build()
             )
 
-        /** Alias for calling [result] with `Result.ofBetaErrored(betaErrored)`. */
-        fun result(betaErrored: Result.BetaErroredResult) =
-            result(Result.ofBetaErrored(betaErrored))
+        /** Alias for calling [result] with `Result.ofErrored(errored)`. */
+        fun result(errored: Result.Errored) = result(Result.ofErrored(errored))
 
         /**
          * Alias for calling [result] with the following:
          * ```kotlin
-         * Result.BetaErroredResult.builder()
-         *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Type.ERRORED)
+         * Result.Errored.builder()
+         *     .type(BatchResultsBetaResponse.Result.Errored.Type.ERRORED)
          *     .error(error)
          *     .build()
          * ```
          */
-        fun betaErroredResult(error: Result.BetaErroredResult.Error) =
+        fun erroredResult(error: Result.Errored.Error) =
             result(
-                Result.BetaErroredResult.builder()
-                    .type(BatchResultsBetaResponse.Result.BetaErroredResult.Type.ERRORED)
+                Result.Errored.builder()
+                    .type(BatchResultsBetaResponse.Result.Errored.Type.ERRORED)
                     .error(error)
                     .build()
             )
 
-        /** Alias for calling [result] with `Result.ofBetaCanceled(betaCanceled)`. */
-        fun result(betaCanceled: Result.BetaCanceledResult) =
-            result(Result.ofBetaCanceled(betaCanceled))
+        /** Alias for calling [result] with `Result.ofCanceled(canceled)`. */
+        fun result(canceled: Result.Canceled) = result(Result.ofCanceled(canceled))
 
-        /** Alias for calling [result] with `Result.ofBetaExpired(betaExpired)`. */
-        fun result(betaExpired: Result.BetaExpiredResult) =
-            result(Result.ofBetaExpired(betaExpired))
+        /** Alias for calling [result] with `Result.ofExpired(expired)`. */
+        fun result(expired: Result.Expired) = result(Result.ofExpired(expired))
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -281,45 +277,45 @@ private constructor(
     @JsonSerialize(using = Result.Serializer::class)
     class Result
     private constructor(
-        private val betaSucceeded: BetaSucceededResult? = null,
-        private val betaErrored: BetaErroredResult? = null,
-        private val betaCanceled: BetaCanceledResult? = null,
-        private val betaExpired: BetaExpiredResult? = null,
+        private val succeeded: Succeeded? = null,
+        private val errored: Errored? = null,
+        private val canceled: Canceled? = null,
+        private val expired: Expired? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun betaSucceeded(): BetaSucceededResult? = betaSucceeded
+        fun succeeded(): Succeeded? = succeeded
 
-        fun betaErrored(): BetaErroredResult? = betaErrored
+        fun errored(): Errored? = errored
 
-        fun betaCanceled(): BetaCanceledResult? = betaCanceled
+        fun canceled(): Canceled? = canceled
 
-        fun betaExpired(): BetaExpiredResult? = betaExpired
+        fun expired(): Expired? = expired
 
-        fun isBetaSucceeded(): Boolean = betaSucceeded != null
+        fun isSucceeded(): Boolean = succeeded != null
 
-        fun isBetaErrored(): Boolean = betaErrored != null
+        fun isErrored(): Boolean = errored != null
 
-        fun isBetaCanceled(): Boolean = betaCanceled != null
+        fun isCanceled(): Boolean = canceled != null
 
-        fun isBetaExpired(): Boolean = betaExpired != null
+        fun isExpired(): Boolean = expired != null
 
-        fun asBetaSucceeded(): BetaSucceededResult = betaSucceeded.getOrThrow("betaSucceeded")
+        fun asSucceeded(): Succeeded = succeeded.getOrThrow("succeeded")
 
-        fun asBetaErrored(): BetaErroredResult = betaErrored.getOrThrow("betaErrored")
+        fun asErrored(): Errored = errored.getOrThrow("errored")
 
-        fun asBetaCanceled(): BetaCanceledResult = betaCanceled.getOrThrow("betaCanceled")
+        fun asCanceled(): Canceled = canceled.getOrThrow("canceled")
 
-        fun asBetaExpired(): BetaExpiredResult = betaExpired.getOrThrow("betaExpired")
+        fun asExpired(): Expired = expired.getOrThrow("expired")
 
         fun _json(): JsonValue? = _json
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                betaSucceeded != null -> visitor.visitBetaSucceeded(betaSucceeded)
-                betaErrored != null -> visitor.visitBetaErrored(betaErrored)
-                betaCanceled != null -> visitor.visitBetaCanceled(betaCanceled)
-                betaExpired != null -> visitor.visitBetaExpired(betaExpired)
+                succeeded != null -> visitor.visitSucceeded(succeeded)
+                errored != null -> visitor.visitErrored(errored)
+                canceled != null -> visitor.visitCanceled(canceled)
+                expired != null -> visitor.visitExpired(expired)
                 else -> visitor.unknown(_json)
             }
 
@@ -332,20 +328,20 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitBetaSucceeded(betaSucceeded: BetaSucceededResult) {
-                        betaSucceeded.validate()
+                    override fun visitSucceeded(succeeded: Succeeded) {
+                        succeeded.validate()
                     }
 
-                    override fun visitBetaErrored(betaErrored: BetaErroredResult) {
-                        betaErrored.validate()
+                    override fun visitErrored(errored: Errored) {
+                        errored.validate()
                     }
 
-                    override fun visitBetaCanceled(betaCanceled: BetaCanceledResult) {
-                        betaCanceled.validate()
+                    override fun visitCanceled(canceled: Canceled) {
+                        canceled.validate()
                     }
 
-                    override fun visitBetaExpired(betaExpired: BetaExpiredResult) {
-                        betaExpired.validate()
+                    override fun visitExpired(expired: Expired) {
+                        expired.validate()
                     }
                 }
             )
@@ -369,17 +365,13 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitBetaSucceeded(betaSucceeded: BetaSucceededResult) =
-                        betaSucceeded.validity()
+                    override fun visitSucceeded(succeeded: Succeeded) = succeeded.validity()
 
-                    override fun visitBetaErrored(betaErrored: BetaErroredResult) =
-                        betaErrored.validity()
+                    override fun visitErrored(errored: Errored) = errored.validity()
 
-                    override fun visitBetaCanceled(betaCanceled: BetaCanceledResult) =
-                        betaCanceled.validity()
+                    override fun visitCanceled(canceled: Canceled) = canceled.validity()
 
-                    override fun visitBetaExpired(betaExpired: BetaExpiredResult) =
-                        betaExpired.validity()
+                    override fun visitExpired(expired: Expired) = expired.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -390,44 +382,42 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Result && betaSucceeded == other.betaSucceeded && betaErrored == other.betaErrored && betaCanceled == other.betaCanceled && betaExpired == other.betaExpired /* spotless:on */
+            return /* spotless:off */ other is Result && succeeded == other.succeeded && errored == other.errored && canceled == other.canceled && expired == other.expired /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(betaSucceeded, betaErrored, betaCanceled, betaExpired) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(succeeded, errored, canceled, expired) /* spotless:on */
 
         override fun toString(): String =
             when {
-                betaSucceeded != null -> "Result{betaSucceeded=$betaSucceeded}"
-                betaErrored != null -> "Result{betaErrored=$betaErrored}"
-                betaCanceled != null -> "Result{betaCanceled=$betaCanceled}"
-                betaExpired != null -> "Result{betaExpired=$betaExpired}"
+                succeeded != null -> "Result{succeeded=$succeeded}"
+                errored != null -> "Result{errored=$errored}"
+                canceled != null -> "Result{canceled=$canceled}"
+                expired != null -> "Result{expired=$expired}"
                 _json != null -> "Result{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Result")
             }
 
         companion object {
 
-            fun ofBetaSucceeded(betaSucceeded: BetaSucceededResult) =
-                Result(betaSucceeded = betaSucceeded)
+            fun ofSucceeded(succeeded: Succeeded) = Result(succeeded = succeeded)
 
-            fun ofBetaErrored(betaErrored: BetaErroredResult) = Result(betaErrored = betaErrored)
+            fun ofErrored(errored: Errored) = Result(errored = errored)
 
-            fun ofBetaCanceled(betaCanceled: BetaCanceledResult) =
-                Result(betaCanceled = betaCanceled)
+            fun ofCanceled(canceled: Canceled) = Result(canceled = canceled)
 
-            fun ofBetaExpired(betaExpired: BetaExpiredResult) = Result(betaExpired = betaExpired)
+            fun ofExpired(expired: Expired) = Result(expired = expired)
         }
 
         /** An interface that defines how to map each variant of [Result] to a value of type [T]. */
         interface Visitor<out T> {
 
-            fun visitBetaSucceeded(betaSucceeded: BetaSucceededResult): T
+            fun visitSucceeded(succeeded: Succeeded): T
 
-            fun visitBetaErrored(betaErrored: BetaErroredResult): T
+            fun visitErrored(errored: Errored): T
 
-            fun visitBetaCanceled(betaCanceled: BetaCanceledResult): T
+            fun visitCanceled(canceled: Canceled): T
 
-            fun visitBetaExpired(betaExpired: BetaExpiredResult): T
+            fun visitExpired(expired: Expired): T
 
             /**
              * Maps an unknown variant of [Result] to a value of type [T].
@@ -452,23 +442,23 @@ private constructor(
 
                 when (type) {
                     "succeeded" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaSucceededResult>())?.let {
-                            Result(betaSucceeded = it, _json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Succeeded>())?.let {
+                            Result(succeeded = it, _json = json)
                         } ?: Result(_json = json)
                     }
                     "errored" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaErroredResult>())?.let {
-                            Result(betaErrored = it, _json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Errored>())?.let {
+                            Result(errored = it, _json = json)
                         } ?: Result(_json = json)
                     }
                     "canceled" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaCanceledResult>())?.let {
-                            Result(betaCanceled = it, _json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Canceled>())?.let {
+                            Result(canceled = it, _json = json)
                         } ?: Result(_json = json)
                     }
                     "expired" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaExpiredResult>())?.let {
-                            Result(betaExpired = it, _json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Expired>())?.let {
+                            Result(expired = it, _json = json)
                         } ?: Result(_json = json)
                     }
                 }
@@ -485,17 +475,17 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.betaSucceeded != null -> generator.writeObject(value.betaSucceeded)
-                    value.betaErrored != null -> generator.writeObject(value.betaErrored)
-                    value.betaCanceled != null -> generator.writeObject(value.betaCanceled)
-                    value.betaExpired != null -> generator.writeObject(value.betaExpired)
+                    value.succeeded != null -> generator.writeObject(value.succeeded)
+                    value.errored != null -> generator.writeObject(value.errored)
+                    value.canceled != null -> generator.writeObject(value.canceled)
+                    value.expired != null -> generator.writeObject(value.expired)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Result")
                 }
             }
         }
 
-        class BetaSucceededResult
+        class Succeeded
         private constructor(
             private val message: JsonField<Message>,
             private val type: JsonField<Type>,
@@ -553,7 +543,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [BetaSucceededResult].
+                 * Returns a mutable builder for constructing an instance of [Succeeded].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -564,17 +554,17 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaSucceededResult]. */
+            /** A builder for [Succeeded]. */
             class Builder internal constructor() {
 
                 private var message: JsonField<Message>? = null
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaSucceededResult: BetaSucceededResult) = apply {
-                    message = betaSucceededResult.message
-                    type = betaSucceededResult.type
-                    additionalProperties = betaSucceededResult.additionalProperties.toMutableMap()
+                internal fun from(succeeded: Succeeded) = apply {
+                    message = succeeded.message
+                    type = succeeded.type
+                    additionalProperties = succeeded.additionalProperties.toMutableMap()
                 }
 
                 fun message(message: Message) = message(JsonField.of(message))
@@ -622,7 +612,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaSucceededResult].
+                 * Returns an immutable instance of [Succeeded].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -634,8 +624,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaSucceededResult =
-                    BetaSucceededResult(
+                fun build(): Succeeded =
+                    Succeeded(
                         checkRequired("message", message),
                         checkRequired("type", type),
                         additionalProperties.toMutableMap(),
@@ -644,7 +634,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): BetaSucceededResult = apply {
+            fun validate(): Succeeded = apply {
                 if (validated) {
                     return@apply
                 }
@@ -1044,56 +1034,39 @@ private constructor(
                             }
                     }
 
-                    /**
-                     * Alias for calling [addContent] with
-                     * `Content.ofBetaResponseTextBlock(betaResponseTextBlock)`.
-                     */
-                    fun addContent(betaResponseTextBlock: Content.BetaResponseTextBlock) =
-                        addContent(Content.ofBetaResponseTextBlock(betaResponseTextBlock))
+                    /** Alias for calling [addContent] with `Content.ofText(text)`. */
+                    fun addContent(text: Content.Text) = addContent(Content.ofText(text))
+
+                    /** Alias for calling [addContent] with `Content.ofToolUse(toolUse)`. */
+                    fun addContent(toolUse: Content.ToolUse) =
+                        addContent(Content.ofToolUse(toolUse))
+
+                    /** Alias for calling [addContent] with `Content.ofThinking(thinking)`. */
+                    fun addContent(thinking: Content.Thinking) =
+                        addContent(Content.ofThinking(thinking))
 
                     /**
                      * Alias for calling [addContent] with
-                     * `Content.ofBetaResponseToolUseBlock(betaResponseToolUseBlock)`.
+                     * `Content.ofRedactedThinking(redactedThinking)`.
                      */
-                    fun addContent(betaResponseToolUseBlock: Content.BetaResponseToolUseBlock) =
-                        addContent(Content.ofBetaResponseToolUseBlock(betaResponseToolUseBlock))
-
-                    /**
-                     * Alias for calling [addContent] with
-                     * `Content.ofBetaResponseThinkingBlock(betaResponseThinkingBlock)`.
-                     */
-                    fun addContent(betaResponseThinkingBlock: Content.BetaResponseThinkingBlock) =
-                        addContent(Content.ofBetaResponseThinkingBlock(betaResponseThinkingBlock))
-
-                    /**
-                     * Alias for calling [addContent] with
-                     * `Content.ofBetaResponseRedactedThinkingBlock(betaResponseRedactedThinkingBlock)`.
-                     */
-                    fun addContent(
-                        betaResponseRedactedThinkingBlock: Content.BetaResponseRedactedThinkingBlock
-                    ) =
-                        addContent(
-                            Content.ofBetaResponseRedactedThinkingBlock(
-                                betaResponseRedactedThinkingBlock
-                            )
-                        )
+                    fun addContent(redactedThinking: Content.RedactedThinking) =
+                        addContent(Content.ofRedactedThinking(redactedThinking))
 
                     /**
                      * Alias for calling [addContent] with the following:
                      * ```kotlin
-                     * Content.BetaResponseRedactedThinkingBlock.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Content.BetaResponseRedactedThinkingBlock.Type.REDACTED_THINKING)
+                     * Content.RedactedThinking.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Succeeded.Message.Content.RedactedThinking.Type.REDACTED_THINKING)
                      *     .data(data)
                      *     .build()
                      * ```
                      */
-                    fun addBetaResponseRedactedThinkingBlockContent(data: String) =
+                    fun addRedactedThinkingContent(data: String) =
                         addContent(
-                            Content.BetaResponseRedactedThinkingBlock.builder()
+                            Content.RedactedThinking.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Content
-                                        .BetaResponseRedactedThinkingBlock
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content
+                                        .RedactedThinking
                                         .Type
                                         .REDACTED_THINKING
                                 )
@@ -1322,63 +1295,47 @@ private constructor(
                 @JsonSerialize(using = Content.Serializer::class)
                 class Content
                 private constructor(
-                    private val betaResponseTextBlock: BetaResponseTextBlock? = null,
-                    private val betaResponseToolUseBlock: BetaResponseToolUseBlock? = null,
-                    private val betaResponseThinkingBlock: BetaResponseThinkingBlock? = null,
-                    private val betaResponseRedactedThinkingBlock:
-                        BetaResponseRedactedThinkingBlock? =
-                        null,
+                    private val text: Text? = null,
+                    private val toolUse: ToolUse? = null,
+                    private val thinking: Thinking? = null,
+                    private val redactedThinking: RedactedThinking? = null,
                     private val _json: JsonValue? = null,
                 ) {
 
-                    fun betaResponseTextBlock(): BetaResponseTextBlock? = betaResponseTextBlock
+                    fun text(): Text? = text
 
-                    fun betaResponseToolUseBlock(): BetaResponseToolUseBlock? =
-                        betaResponseToolUseBlock
+                    fun toolUse(): ToolUse? = toolUse
 
-                    fun betaResponseThinkingBlock(): BetaResponseThinkingBlock? =
-                        betaResponseThinkingBlock
+                    fun thinking(): Thinking? = thinking
 
-                    fun betaResponseRedactedThinkingBlock(): BetaResponseRedactedThinkingBlock? =
-                        betaResponseRedactedThinkingBlock
+                    fun redactedThinking(): RedactedThinking? = redactedThinking
 
-                    fun isBetaResponseTextBlock(): Boolean = betaResponseTextBlock != null
+                    fun isText(): Boolean = text != null
 
-                    fun isBetaResponseToolUseBlock(): Boolean = betaResponseToolUseBlock != null
+                    fun isToolUse(): Boolean = toolUse != null
 
-                    fun isBetaResponseThinkingBlock(): Boolean = betaResponseThinkingBlock != null
+                    fun isThinking(): Boolean = thinking != null
 
-                    fun isBetaResponseRedactedThinkingBlock(): Boolean =
-                        betaResponseRedactedThinkingBlock != null
+                    fun isRedactedThinking(): Boolean = redactedThinking != null
 
-                    fun asBetaResponseTextBlock(): BetaResponseTextBlock =
-                        betaResponseTextBlock.getOrThrow("betaResponseTextBlock")
+                    fun asText(): Text = text.getOrThrow("text")
 
-                    fun asBetaResponseToolUseBlock(): BetaResponseToolUseBlock =
-                        betaResponseToolUseBlock.getOrThrow("betaResponseToolUseBlock")
+                    fun asToolUse(): ToolUse = toolUse.getOrThrow("toolUse")
 
-                    fun asBetaResponseThinkingBlock(): BetaResponseThinkingBlock =
-                        betaResponseThinkingBlock.getOrThrow("betaResponseThinkingBlock")
+                    fun asThinking(): Thinking = thinking.getOrThrow("thinking")
 
-                    fun asBetaResponseRedactedThinkingBlock(): BetaResponseRedactedThinkingBlock =
-                        betaResponseRedactedThinkingBlock.getOrThrow(
-                            "betaResponseRedactedThinkingBlock"
-                        )
+                    fun asRedactedThinking(): RedactedThinking =
+                        redactedThinking.getOrThrow("redactedThinking")
 
                     fun _json(): JsonValue? = _json
 
                     fun <T> accept(visitor: Visitor<T>): T =
                         when {
-                            betaResponseTextBlock != null ->
-                                visitor.visitBetaResponseTextBlock(betaResponseTextBlock)
-                            betaResponseToolUseBlock != null ->
-                                visitor.visitBetaResponseToolUseBlock(betaResponseToolUseBlock)
-                            betaResponseThinkingBlock != null ->
-                                visitor.visitBetaResponseThinkingBlock(betaResponseThinkingBlock)
-                            betaResponseRedactedThinkingBlock != null ->
-                                visitor.visitBetaResponseRedactedThinkingBlock(
-                                    betaResponseRedactedThinkingBlock
-                                )
+                            text != null -> visitor.visitText(text)
+                            toolUse != null -> visitor.visitToolUse(toolUse)
+                            thinking != null -> visitor.visitThinking(thinking)
+                            redactedThinking != null ->
+                                visitor.visitRedactedThinking(redactedThinking)
                             else -> visitor.unknown(_json)
                         }
 
@@ -1391,29 +1348,22 @@ private constructor(
 
                         accept(
                             object : Visitor<Unit> {
-                                override fun visitBetaResponseTextBlock(
-                                    betaResponseTextBlock: BetaResponseTextBlock
-                                ) {
-                                    betaResponseTextBlock.validate()
+                                override fun visitText(text: Text) {
+                                    text.validate()
                                 }
 
-                                override fun visitBetaResponseToolUseBlock(
-                                    betaResponseToolUseBlock: BetaResponseToolUseBlock
-                                ) {
-                                    betaResponseToolUseBlock.validate()
+                                override fun visitToolUse(toolUse: ToolUse) {
+                                    toolUse.validate()
                                 }
 
-                                override fun visitBetaResponseThinkingBlock(
-                                    betaResponseThinkingBlock: BetaResponseThinkingBlock
-                                ) {
-                                    betaResponseThinkingBlock.validate()
+                                override fun visitThinking(thinking: Thinking) {
+                                    thinking.validate()
                                 }
 
-                                override fun visitBetaResponseRedactedThinkingBlock(
-                                    betaResponseRedactedThinkingBlock:
-                                        BetaResponseRedactedThinkingBlock
+                                override fun visitRedactedThinking(
+                                    redactedThinking: RedactedThinking
                                 ) {
-                                    betaResponseRedactedThinkingBlock.validate()
+                                    redactedThinking.validate()
                                 }
                             }
                         )
@@ -1437,22 +1387,15 @@ private constructor(
                     internal fun validity(): Int =
                         accept(
                             object : Visitor<Int> {
-                                override fun visitBetaResponseTextBlock(
-                                    betaResponseTextBlock: BetaResponseTextBlock
-                                ) = betaResponseTextBlock.validity()
+                                override fun visitText(text: Text) = text.validity()
 
-                                override fun visitBetaResponseToolUseBlock(
-                                    betaResponseToolUseBlock: BetaResponseToolUseBlock
-                                ) = betaResponseToolUseBlock.validity()
+                                override fun visitToolUse(toolUse: ToolUse) = toolUse.validity()
 
-                                override fun visitBetaResponseThinkingBlock(
-                                    betaResponseThinkingBlock: BetaResponseThinkingBlock
-                                ) = betaResponseThinkingBlock.validity()
+                                override fun visitThinking(thinking: Thinking) = thinking.validity()
 
-                                override fun visitBetaResponseRedactedThinkingBlock(
-                                    betaResponseRedactedThinkingBlock:
-                                        BetaResponseRedactedThinkingBlock
-                                ) = betaResponseRedactedThinkingBlock.validity()
+                                override fun visitRedactedThinking(
+                                    redactedThinking: RedactedThinking
+                                ) = redactedThinking.validity()
 
                                 override fun unknown(json: JsonValue?) = 0
                             }
@@ -1463,45 +1406,32 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is Content && betaResponseTextBlock == other.betaResponseTextBlock && betaResponseToolUseBlock == other.betaResponseToolUseBlock && betaResponseThinkingBlock == other.betaResponseThinkingBlock && betaResponseRedactedThinkingBlock == other.betaResponseRedactedThinkingBlock /* spotless:on */
+                        return /* spotless:off */ other is Content && text == other.text && toolUse == other.toolUse && thinking == other.thinking && redactedThinking == other.redactedThinking /* spotless:on */
                     }
 
-                    override fun hashCode(): Int = /* spotless:off */ Objects.hash(betaResponseTextBlock, betaResponseToolUseBlock, betaResponseThinkingBlock, betaResponseRedactedThinkingBlock) /* spotless:on */
+                    override fun hashCode(): Int = /* spotless:off */ Objects.hash(text, toolUse, thinking, redactedThinking) /* spotless:on */
 
                     override fun toString(): String =
                         when {
-                            betaResponseTextBlock != null ->
-                                "Content{betaResponseTextBlock=$betaResponseTextBlock}"
-                            betaResponseToolUseBlock != null ->
-                                "Content{betaResponseToolUseBlock=$betaResponseToolUseBlock}"
-                            betaResponseThinkingBlock != null ->
-                                "Content{betaResponseThinkingBlock=$betaResponseThinkingBlock}"
-                            betaResponseRedactedThinkingBlock != null ->
-                                "Content{betaResponseRedactedThinkingBlock=$betaResponseRedactedThinkingBlock}"
+                            text != null -> "Content{text=$text}"
+                            toolUse != null -> "Content{toolUse=$toolUse}"
+                            thinking != null -> "Content{thinking=$thinking}"
+                            redactedThinking != null ->
+                                "Content{redactedThinking=$redactedThinking}"
                             _json != null -> "Content{_unknown=$_json}"
                             else -> throw IllegalStateException("Invalid Content")
                         }
 
                     companion object {
 
-                        fun ofBetaResponseTextBlock(betaResponseTextBlock: BetaResponseTextBlock) =
-                            Content(betaResponseTextBlock = betaResponseTextBlock)
+                        fun ofText(text: Text) = Content(text = text)
 
-                        fun ofBetaResponseToolUseBlock(
-                            betaResponseToolUseBlock: BetaResponseToolUseBlock
-                        ) = Content(betaResponseToolUseBlock = betaResponseToolUseBlock)
+                        fun ofToolUse(toolUse: ToolUse) = Content(toolUse = toolUse)
 
-                        fun ofBetaResponseThinkingBlock(
-                            betaResponseThinkingBlock: BetaResponseThinkingBlock
-                        ) = Content(betaResponseThinkingBlock = betaResponseThinkingBlock)
+                        fun ofThinking(thinking: Thinking) = Content(thinking = thinking)
 
-                        fun ofBetaResponseRedactedThinkingBlock(
-                            betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-                        ) =
-                            Content(
-                                betaResponseRedactedThinkingBlock =
-                                    betaResponseRedactedThinkingBlock
-                            )
+                        fun ofRedactedThinking(redactedThinking: RedactedThinking) =
+                            Content(redactedThinking = redactedThinking)
                     }
 
                     /**
@@ -1510,21 +1440,13 @@ private constructor(
                      */
                     interface Visitor<out T> {
 
-                        fun visitBetaResponseTextBlock(
-                            betaResponseTextBlock: BetaResponseTextBlock
-                        ): T
+                        fun visitText(text: Text): T
 
-                        fun visitBetaResponseToolUseBlock(
-                            betaResponseToolUseBlock: BetaResponseToolUseBlock
-                        ): T
+                        fun visitToolUse(toolUse: ToolUse): T
 
-                        fun visitBetaResponseThinkingBlock(
-                            betaResponseThinkingBlock: BetaResponseThinkingBlock
-                        ): T
+                        fun visitThinking(thinking: Thinking): T
 
-                        fun visitBetaResponseRedactedThinkingBlock(
-                            betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-                        ): T
+                        fun visitRedactedThinking(redactedThinking: RedactedThinking): T
 
                         /**
                          * Maps an unknown variant of [Content] to a value of type [T].
@@ -1549,42 +1471,24 @@ private constructor(
 
                             when (type) {
                                 "text" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaResponseTextBlock>(),
-                                        )
-                                        ?.let { Content(betaResponseTextBlock = it, _json = json) }
-                                        ?: Content(_json = json)
+                                    return tryDeserialize(node, jacksonTypeRef<Text>())?.let {
+                                        Content(text = it, _json = json)
+                                    } ?: Content(_json = json)
                                 }
                                 "tool_use" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaResponseToolUseBlock>(),
-                                        )
-                                        ?.let {
-                                            Content(betaResponseToolUseBlock = it, _json = json)
-                                        } ?: Content(_json = json)
+                                    return tryDeserialize(node, jacksonTypeRef<ToolUse>())?.let {
+                                        Content(toolUse = it, _json = json)
+                                    } ?: Content(_json = json)
                                 }
                                 "thinking" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaResponseThinkingBlock>(),
-                                        )
-                                        ?.let {
-                                            Content(betaResponseThinkingBlock = it, _json = json)
-                                        } ?: Content(_json = json)
+                                    return tryDeserialize(node, jacksonTypeRef<Thinking>())?.let {
+                                        Content(thinking = it, _json = json)
+                                    } ?: Content(_json = json)
                                 }
                                 "redacted_thinking" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaResponseRedactedThinkingBlock>(),
-                                        )
-                                        ?.let {
-                                            Content(
-                                                betaResponseRedactedThinkingBlock = it,
-                                                _json = json,
-                                            )
-                                        } ?: Content(_json = json)
+                                    return tryDeserialize(node, jacksonTypeRef<RedactedThinking>())
+                                        ?.let { Content(redactedThinking = it, _json = json) }
+                                        ?: Content(_json = json)
                                 }
                             }
 
@@ -1600,21 +1504,18 @@ private constructor(
                             provider: SerializerProvider,
                         ) {
                             when {
-                                value.betaResponseTextBlock != null ->
-                                    generator.writeObject(value.betaResponseTextBlock)
-                                value.betaResponseToolUseBlock != null ->
-                                    generator.writeObject(value.betaResponseToolUseBlock)
-                                value.betaResponseThinkingBlock != null ->
-                                    generator.writeObject(value.betaResponseThinkingBlock)
-                                value.betaResponseRedactedThinkingBlock != null ->
-                                    generator.writeObject(value.betaResponseRedactedThinkingBlock)
+                                value.text != null -> generator.writeObject(value.text)
+                                value.toolUse != null -> generator.writeObject(value.toolUse)
+                                value.thinking != null -> generator.writeObject(value.thinking)
+                                value.redactedThinking != null ->
+                                    generator.writeObject(value.redactedThinking)
                                 value._json != null -> generator.writeObject(value._json)
                                 else -> throw IllegalStateException("Invalid Content")
                             }
                         }
                     }
 
-                    class BetaResponseTextBlock
+                    class Text
                     private constructor(
                         private val citations: JsonField<List<Citation>>,
                         private val text: JsonField<String>,
@@ -1703,8 +1604,7 @@ private constructor(
                         companion object {
 
                             /**
-                             * Returns a mutable builder for constructing an instance of
-                             * [BetaResponseTextBlock].
+                             * Returns a mutable builder for constructing an instance of [Text].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -1716,7 +1616,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaResponseTextBlock]. */
+                        /** A builder for [Text]. */
                         class Builder internal constructor() {
 
                             private var citations: JsonField<MutableList<Citation>>? = null
@@ -1725,15 +1625,12 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaResponseTextBlock: BetaResponseTextBlock) =
-                                apply {
-                                    citations =
-                                        betaResponseTextBlock.citations.map { it.toMutableList() }
-                                    text = betaResponseTextBlock.text
-                                    type = betaResponseTextBlock.type
-                                    additionalProperties =
-                                        betaResponseTextBlock.additionalProperties.toMutableMap()
-                                }
+                            internal fun from(text: Text) = apply {
+                                citations = text.citations.map { it.toMutableList() }
+                                this.text = text.text
+                                type = text.type
+                                additionalProperties = text.additionalProperties.toMutableMap()
+                            }
 
                             /**
                              * Citations supporting the text block.
@@ -1772,39 +1669,24 @@ private constructor(
 
                             /**
                              * Alias for calling [addCitation] with
-                             * `Citation.ofBetaResponseCharLocation(betaResponseCharLocation)`.
+                             * `Citation.ofCharLocation(charLocation)`.
                              */
-                            fun addCitation(
-                                betaResponseCharLocation: Citation.BetaResponseCharLocationCitation
-                            ) =
-                                addCitation(
-                                    Citation.ofBetaResponseCharLocation(betaResponseCharLocation)
-                                )
+                            fun addCitation(charLocation: Citation.CharLocation) =
+                                addCitation(Citation.ofCharLocation(charLocation))
 
                             /**
                              * Alias for calling [addCitation] with
-                             * `Citation.ofBetaResponsePageLocation(betaResponsePageLocation)`.
+                             * `Citation.ofPageLocation(pageLocation)`.
                              */
-                            fun addCitation(
-                                betaResponsePageLocation: Citation.BetaResponsePageLocationCitation
-                            ) =
-                                addCitation(
-                                    Citation.ofBetaResponsePageLocation(betaResponsePageLocation)
-                                )
+                            fun addCitation(pageLocation: Citation.PageLocation) =
+                                addCitation(Citation.ofPageLocation(pageLocation))
 
                             /**
                              * Alias for calling [addCitation] with
-                             * `Citation.ofBetaResponseContentBlockLocation(betaResponseContentBlockLocation)`.
+                             * `Citation.ofContentBlockLocation(contentBlockLocation)`.
                              */
-                            fun addCitation(
-                                betaResponseContentBlockLocation:
-                                    Citation.BetaResponseContentBlockLocationCitation
-                            ) =
-                                addCitation(
-                                    Citation.ofBetaResponseContentBlockLocation(
-                                        betaResponseContentBlockLocation
-                                    )
-                                )
+                            fun addCitation(contentBlockLocation: Citation.ContentBlockLocation) =
+                                addCitation(Citation.ofContentBlockLocation(contentBlockLocation))
 
                             fun text(text: String) = text(JsonField.of(text))
 
@@ -1851,7 +1733,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaResponseTextBlock].
+                             * Returns an immutable instance of [Text].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -1865,8 +1747,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaResponseTextBlock =
-                                BetaResponseTextBlock(
+                            fun build(): Text =
+                                Text(
                                     checkRequired("citations", citations).map { it.toImmutable() },
                                     checkRequired("text", text),
                                     checkRequired("type", type),
@@ -1876,7 +1758,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaResponseTextBlock = apply {
+                        fun validate(): Text = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -1910,65 +1792,41 @@ private constructor(
                         @JsonSerialize(using = Citation.Serializer::class)
                         class Citation
                         private constructor(
-                            private val betaResponseCharLocation:
-                                BetaResponseCharLocationCitation? =
-                                null,
-                            private val betaResponsePageLocation:
-                                BetaResponsePageLocationCitation? =
-                                null,
-                            private val betaResponseContentBlockLocation:
-                                BetaResponseContentBlockLocationCitation? =
-                                null,
+                            private val charLocation: CharLocation? = null,
+                            private val pageLocation: PageLocation? = null,
+                            private val contentBlockLocation: ContentBlockLocation? = null,
                             private val _json: JsonValue? = null,
                         ) {
 
-                            fun betaResponseCharLocation(): BetaResponseCharLocationCitation? =
-                                betaResponseCharLocation
+                            fun charLocation(): CharLocation? = charLocation
 
-                            fun betaResponsePageLocation(): BetaResponsePageLocationCitation? =
-                                betaResponsePageLocation
+                            fun pageLocation(): PageLocation? = pageLocation
 
-                            fun betaResponseContentBlockLocation():
-                                BetaResponseContentBlockLocationCitation? =
-                                betaResponseContentBlockLocation
+                            fun contentBlockLocation(): ContentBlockLocation? = contentBlockLocation
 
-                            fun isBetaResponseCharLocation(): Boolean =
-                                betaResponseCharLocation != null
+                            fun isCharLocation(): Boolean = charLocation != null
 
-                            fun isBetaResponsePageLocation(): Boolean =
-                                betaResponsePageLocation != null
+                            fun isPageLocation(): Boolean = pageLocation != null
 
-                            fun isBetaResponseContentBlockLocation(): Boolean =
-                                betaResponseContentBlockLocation != null
+                            fun isContentBlockLocation(): Boolean = contentBlockLocation != null
 
-                            fun asBetaResponseCharLocation(): BetaResponseCharLocationCitation =
-                                betaResponseCharLocation.getOrThrow("betaResponseCharLocation")
+                            fun asCharLocation(): CharLocation =
+                                charLocation.getOrThrow("charLocation")
 
-                            fun asBetaResponsePageLocation(): BetaResponsePageLocationCitation =
-                                betaResponsePageLocation.getOrThrow("betaResponsePageLocation")
+                            fun asPageLocation(): PageLocation =
+                                pageLocation.getOrThrow("pageLocation")
 
-                            fun asBetaResponseContentBlockLocation():
-                                BetaResponseContentBlockLocationCitation =
-                                betaResponseContentBlockLocation.getOrThrow(
-                                    "betaResponseContentBlockLocation"
-                                )
+                            fun asContentBlockLocation(): ContentBlockLocation =
+                                contentBlockLocation.getOrThrow("contentBlockLocation")
 
                             fun _json(): JsonValue? = _json
 
                             fun <T> accept(visitor: Visitor<T>): T =
                                 when {
-                                    betaResponseCharLocation != null ->
-                                        visitor.visitBetaResponseCharLocation(
-                                            betaResponseCharLocation
-                                        )
-                                    betaResponsePageLocation != null ->
-                                        visitor.visitBetaResponsePageLocation(
-                                            betaResponsePageLocation
-                                        )
-                                    betaResponseContentBlockLocation != null ->
-                                        visitor.visitBetaResponseContentBlockLocation(
-                                            betaResponseContentBlockLocation
-                                        )
+                                    charLocation != null -> visitor.visitCharLocation(charLocation)
+                                    pageLocation != null -> visitor.visitPageLocation(pageLocation)
+                                    contentBlockLocation != null ->
+                                        visitor.visitContentBlockLocation(contentBlockLocation)
                                     else -> visitor.unknown(_json)
                                 }
 
@@ -1981,25 +1839,18 @@ private constructor(
 
                                 accept(
                                     object : Visitor<Unit> {
-                                        override fun visitBetaResponseCharLocation(
-                                            betaResponseCharLocation:
-                                                BetaResponseCharLocationCitation
-                                        ) {
-                                            betaResponseCharLocation.validate()
+                                        override fun visitCharLocation(charLocation: CharLocation) {
+                                            charLocation.validate()
                                         }
 
-                                        override fun visitBetaResponsePageLocation(
-                                            betaResponsePageLocation:
-                                                BetaResponsePageLocationCitation
-                                        ) {
-                                            betaResponsePageLocation.validate()
+                                        override fun visitPageLocation(pageLocation: PageLocation) {
+                                            pageLocation.validate()
                                         }
 
-                                        override fun visitBetaResponseContentBlockLocation(
-                                            betaResponseContentBlockLocation:
-                                                BetaResponseContentBlockLocationCitation
+                                        override fun visitContentBlockLocation(
+                                            contentBlockLocation: ContentBlockLocation
                                         ) {
-                                            betaResponseContentBlockLocation.validate()
+                                            contentBlockLocation.validate()
                                         }
                                     }
                                 )
@@ -2023,20 +1874,15 @@ private constructor(
                             internal fun validity(): Int =
                                 accept(
                                     object : Visitor<Int> {
-                                        override fun visitBetaResponseCharLocation(
-                                            betaResponseCharLocation:
-                                                BetaResponseCharLocationCitation
-                                        ) = betaResponseCharLocation.validity()
+                                        override fun visitCharLocation(charLocation: CharLocation) =
+                                            charLocation.validity()
 
-                                        override fun visitBetaResponsePageLocation(
-                                            betaResponsePageLocation:
-                                                BetaResponsePageLocationCitation
-                                        ) = betaResponsePageLocation.validity()
+                                        override fun visitPageLocation(pageLocation: PageLocation) =
+                                            pageLocation.validity()
 
-                                        override fun visitBetaResponseContentBlockLocation(
-                                            betaResponseContentBlockLocation:
-                                                BetaResponseContentBlockLocationCitation
-                                        ) = betaResponseContentBlockLocation.validity()
+                                        override fun visitContentBlockLocation(
+                                            contentBlockLocation: ContentBlockLocation
+                                        ) = contentBlockLocation.validity()
 
                                         override fun unknown(json: JsonValue?) = 0
                                     }
@@ -2047,41 +1893,32 @@ private constructor(
                                     return true
                                 }
 
-                                return /* spotless:off */ other is Citation && betaResponseCharLocation == other.betaResponseCharLocation && betaResponsePageLocation == other.betaResponsePageLocation && betaResponseContentBlockLocation == other.betaResponseContentBlockLocation /* spotless:on */
+                                return /* spotless:off */ other is Citation && charLocation == other.charLocation && pageLocation == other.pageLocation && contentBlockLocation == other.contentBlockLocation /* spotless:on */
                             }
 
-                            override fun hashCode(): Int = /* spotless:off */ Objects.hash(betaResponseCharLocation, betaResponsePageLocation, betaResponseContentBlockLocation) /* spotless:on */
+                            override fun hashCode(): Int = /* spotless:off */ Objects.hash(charLocation, pageLocation, contentBlockLocation) /* spotless:on */
 
                             override fun toString(): String =
                                 when {
-                                    betaResponseCharLocation != null ->
-                                        "Citation{betaResponseCharLocation=$betaResponseCharLocation}"
-                                    betaResponsePageLocation != null ->
-                                        "Citation{betaResponsePageLocation=$betaResponsePageLocation}"
-                                    betaResponseContentBlockLocation != null ->
-                                        "Citation{betaResponseContentBlockLocation=$betaResponseContentBlockLocation}"
+                                    charLocation != null -> "Citation{charLocation=$charLocation}"
+                                    pageLocation != null -> "Citation{pageLocation=$pageLocation}"
+                                    contentBlockLocation != null ->
+                                        "Citation{contentBlockLocation=$contentBlockLocation}"
                                     _json != null -> "Citation{_unknown=$_json}"
                                     else -> throw IllegalStateException("Invalid Citation")
                                 }
 
                             companion object {
 
-                                fun ofBetaResponseCharLocation(
-                                    betaResponseCharLocation: BetaResponseCharLocationCitation
-                                ) = Citation(betaResponseCharLocation = betaResponseCharLocation)
+                                fun ofCharLocation(charLocation: CharLocation) =
+                                    Citation(charLocation = charLocation)
 
-                                fun ofBetaResponsePageLocation(
-                                    betaResponsePageLocation: BetaResponsePageLocationCitation
-                                ) = Citation(betaResponsePageLocation = betaResponsePageLocation)
+                                fun ofPageLocation(pageLocation: PageLocation) =
+                                    Citation(pageLocation = pageLocation)
 
-                                fun ofBetaResponseContentBlockLocation(
-                                    betaResponseContentBlockLocation:
-                                        BetaResponseContentBlockLocationCitation
-                                ) =
-                                    Citation(
-                                        betaResponseContentBlockLocation =
-                                            betaResponseContentBlockLocation
-                                    )
+                                fun ofContentBlockLocation(
+                                    contentBlockLocation: ContentBlockLocation
+                                ) = Citation(contentBlockLocation = contentBlockLocation)
                             }
 
                             /**
@@ -2090,17 +1927,12 @@ private constructor(
                              */
                             interface Visitor<out T> {
 
-                                fun visitBetaResponseCharLocation(
-                                    betaResponseCharLocation: BetaResponseCharLocationCitation
-                                ): T
+                                fun visitCharLocation(charLocation: CharLocation): T
 
-                                fun visitBetaResponsePageLocation(
-                                    betaResponsePageLocation: BetaResponsePageLocationCitation
-                                ): T
+                                fun visitPageLocation(pageLocation: PageLocation): T
 
-                                fun visitBetaResponseContentBlockLocation(
-                                    betaResponseContentBlockLocation:
-                                        BetaResponseContentBlockLocationCitation
+                                fun visitContentBlockLocation(
+                                    contentBlockLocation: ContentBlockLocation
                                 ): T
 
                                 /**
@@ -2129,41 +1961,27 @@ private constructor(
                                         "char_location" -> {
                                             return tryDeserialize(
                                                     node,
-                                                    jacksonTypeRef<
-                                                        BetaResponseCharLocationCitation
-                                                    >(),
+                                                    jacksonTypeRef<CharLocation>(),
                                                 )
-                                                ?.let {
-                                                    Citation(
-                                                        betaResponseCharLocation = it,
-                                                        _json = json,
-                                                    )
-                                                } ?: Citation(_json = json)
+                                                ?.let { Citation(charLocation = it, _json = json) }
+                                                ?: Citation(_json = json)
                                         }
                                         "page_location" -> {
                                             return tryDeserialize(
                                                     node,
-                                                    jacksonTypeRef<
-                                                        BetaResponsePageLocationCitation
-                                                    >(),
+                                                    jacksonTypeRef<PageLocation>(),
                                                 )
-                                                ?.let {
-                                                    Citation(
-                                                        betaResponsePageLocation = it,
-                                                        _json = json,
-                                                    )
-                                                } ?: Citation(_json = json)
+                                                ?.let { Citation(pageLocation = it, _json = json) }
+                                                ?: Citation(_json = json)
                                         }
                                         "content_block_location" -> {
                                             return tryDeserialize(
                                                     node,
-                                                    jacksonTypeRef<
-                                                        BetaResponseContentBlockLocationCitation
-                                                    >(),
+                                                    jacksonTypeRef<ContentBlockLocation>(),
                                                 )
                                                 ?.let {
                                                     Citation(
-                                                        betaResponseContentBlockLocation = it,
+                                                        contentBlockLocation = it,
                                                         _json = json,
                                                     )
                                                 } ?: Citation(_json = json)
@@ -2182,21 +2000,19 @@ private constructor(
                                     provider: SerializerProvider,
                                 ) {
                                     when {
-                                        value.betaResponseCharLocation != null ->
-                                            generator.writeObject(value.betaResponseCharLocation)
-                                        value.betaResponsePageLocation != null ->
-                                            generator.writeObject(value.betaResponsePageLocation)
-                                        value.betaResponseContentBlockLocation != null ->
-                                            generator.writeObject(
-                                                value.betaResponseContentBlockLocation
-                                            )
+                                        value.charLocation != null ->
+                                            generator.writeObject(value.charLocation)
+                                        value.pageLocation != null ->
+                                            generator.writeObject(value.pageLocation)
+                                        value.contentBlockLocation != null ->
+                                            generator.writeObject(value.contentBlockLocation)
                                         value._json != null -> generator.writeObject(value._json)
                                         else -> throw IllegalStateException("Invalid Citation")
                                     }
                                 }
                             }
 
-                            class BetaResponseCharLocationCitation
+                            class CharLocation
                             private constructor(
                                 private val citedText: JsonField<String>,
                                 private val documentIndex: JsonField<Long>,
@@ -2359,7 +2175,7 @@ private constructor(
 
                                     /**
                                      * Returns a mutable builder for constructing an instance of
-                                     * [BetaResponseCharLocationCitation].
+                                     * [CharLocation].
                                      *
                                      * The following fields are required:
                                      * ```kotlin
@@ -2374,7 +2190,7 @@ private constructor(
                                     fun builder() = Builder()
                                 }
 
-                                /** A builder for [BetaResponseCharLocationCitation]. */
+                                /** A builder for [CharLocation]. */
                                 class Builder internal constructor() {
 
                                     private var citedText: JsonField<String>? = null
@@ -2387,22 +2203,15 @@ private constructor(
                                         MutableMap<String, JsonValue> =
                                         mutableMapOf()
 
-                                    internal fun from(
-                                        betaResponseCharLocationCitation:
-                                            BetaResponseCharLocationCitation
-                                    ) = apply {
-                                        citedText = betaResponseCharLocationCitation.citedText
-                                        documentIndex =
-                                            betaResponseCharLocationCitation.documentIndex
-                                        documentTitle =
-                                            betaResponseCharLocationCitation.documentTitle
-                                        endCharIndex = betaResponseCharLocationCitation.endCharIndex
-                                        startCharIndex =
-                                            betaResponseCharLocationCitation.startCharIndex
-                                        type = betaResponseCharLocationCitation.type
+                                    internal fun from(charLocation: CharLocation) = apply {
+                                        citedText = charLocation.citedText
+                                        documentIndex = charLocation.documentIndex
+                                        documentTitle = charLocation.documentTitle
+                                        endCharIndex = charLocation.endCharIndex
+                                        startCharIndex = charLocation.startCharIndex
+                                        type = charLocation.type
                                         additionalProperties =
-                                            betaResponseCharLocationCitation.additionalProperties
-                                                .toMutableMap()
+                                            charLocation.additionalProperties.toMutableMap()
                                     }
 
                                     fun citedText(citedText: String) =
@@ -2517,8 +2326,7 @@ private constructor(
                                     }
 
                                     /**
-                                     * Returns an immutable instance of
-                                     * [BetaResponseCharLocationCitation].
+                                     * Returns an immutable instance of [CharLocation].
                                      *
                                      * Further updates to this [Builder] will not mutate the
                                      * returned instance.
@@ -2535,8 +2343,8 @@ private constructor(
                                      *
                                      * @throws IllegalStateException if any required field is unset.
                                      */
-                                    fun build(): BetaResponseCharLocationCitation =
-                                        BetaResponseCharLocationCitation(
+                                    fun build(): CharLocation =
+                                        CharLocation(
                                             checkRequired("citedText", citedText),
                                             checkRequired("documentIndex", documentIndex),
                                             checkRequired("documentTitle", documentTitle),
@@ -2549,7 +2357,7 @@ private constructor(
 
                                 private var validated: Boolean = false
 
-                                fun validate(): BetaResponseCharLocationCitation = apply {
+                                fun validate(): CharLocation = apply {
                                     if (validated) {
                                         return@apply
                                     }
@@ -2729,7 +2537,7 @@ private constructor(
                                         return true
                                     }
 
-                                    return /* spotless:off */ other is BetaResponseCharLocationCitation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endCharIndex == other.endCharIndex && startCharIndex == other.startCharIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                                    return /* spotless:off */ other is CharLocation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endCharIndex == other.endCharIndex && startCharIndex == other.startCharIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                                 }
 
                                 /* spotless:off */
@@ -2739,10 +2547,10 @@ private constructor(
                                 override fun hashCode(): Int = hashCode
 
                                 override fun toString() =
-                                    "BetaResponseCharLocationCitation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endCharIndex=$endCharIndex, startCharIndex=$startCharIndex, type=$type, additionalProperties=$additionalProperties}"
+                                    "CharLocation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endCharIndex=$endCharIndex, startCharIndex=$startCharIndex, type=$type, additionalProperties=$additionalProperties}"
                             }
 
-                            class BetaResponsePageLocationCitation
+                            class PageLocation
                             private constructor(
                                 private val citedText: JsonField<String>,
                                 private val documentIndex: JsonField<Long>,
@@ -2905,7 +2713,7 @@ private constructor(
 
                                     /**
                                      * Returns a mutable builder for constructing an instance of
-                                     * [BetaResponsePageLocationCitation].
+                                     * [PageLocation].
                                      *
                                      * The following fields are required:
                                      * ```kotlin
@@ -2920,7 +2728,7 @@ private constructor(
                                     fun builder() = Builder()
                                 }
 
-                                /** A builder for [BetaResponsePageLocationCitation]. */
+                                /** A builder for [PageLocation]. */
                                 class Builder internal constructor() {
 
                                     private var citedText: JsonField<String>? = null
@@ -2933,23 +2741,15 @@ private constructor(
                                         MutableMap<String, JsonValue> =
                                         mutableMapOf()
 
-                                    internal fun from(
-                                        betaResponsePageLocationCitation:
-                                            BetaResponsePageLocationCitation
-                                    ) = apply {
-                                        citedText = betaResponsePageLocationCitation.citedText
-                                        documentIndex =
-                                            betaResponsePageLocationCitation.documentIndex
-                                        documentTitle =
-                                            betaResponsePageLocationCitation.documentTitle
-                                        endPageNumber =
-                                            betaResponsePageLocationCitation.endPageNumber
-                                        startPageNumber =
-                                            betaResponsePageLocationCitation.startPageNumber
-                                        type = betaResponsePageLocationCitation.type
+                                    internal fun from(pageLocation: PageLocation) = apply {
+                                        citedText = pageLocation.citedText
+                                        documentIndex = pageLocation.documentIndex
+                                        documentTitle = pageLocation.documentTitle
+                                        endPageNumber = pageLocation.endPageNumber
+                                        startPageNumber = pageLocation.startPageNumber
+                                        type = pageLocation.type
                                         additionalProperties =
-                                            betaResponsePageLocationCitation.additionalProperties
-                                                .toMutableMap()
+                                            pageLocation.additionalProperties.toMutableMap()
                                     }
 
                                     fun citedText(citedText: String) =
@@ -3064,8 +2864,7 @@ private constructor(
                                     }
 
                                     /**
-                                     * Returns an immutable instance of
-                                     * [BetaResponsePageLocationCitation].
+                                     * Returns an immutable instance of [PageLocation].
                                      *
                                      * Further updates to this [Builder] will not mutate the
                                      * returned instance.
@@ -3082,8 +2881,8 @@ private constructor(
                                      *
                                      * @throws IllegalStateException if any required field is unset.
                                      */
-                                    fun build(): BetaResponsePageLocationCitation =
-                                        BetaResponsePageLocationCitation(
+                                    fun build(): PageLocation =
+                                        PageLocation(
                                             checkRequired("citedText", citedText),
                                             checkRequired("documentIndex", documentIndex),
                                             checkRequired("documentTitle", documentTitle),
@@ -3096,7 +2895,7 @@ private constructor(
 
                                 private var validated: Boolean = false
 
-                                fun validate(): BetaResponsePageLocationCitation = apply {
+                                fun validate(): PageLocation = apply {
                                     if (validated) {
                                         return@apply
                                     }
@@ -3276,7 +3075,7 @@ private constructor(
                                         return true
                                     }
 
-                                    return /* spotless:off */ other is BetaResponsePageLocationCitation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endPageNumber == other.endPageNumber && startPageNumber == other.startPageNumber && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                                    return /* spotless:off */ other is PageLocation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endPageNumber == other.endPageNumber && startPageNumber == other.startPageNumber && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                                 }
 
                                 /* spotless:off */
@@ -3286,10 +3085,10 @@ private constructor(
                                 override fun hashCode(): Int = hashCode
 
                                 override fun toString() =
-                                    "BetaResponsePageLocationCitation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endPageNumber=$endPageNumber, startPageNumber=$startPageNumber, type=$type, additionalProperties=$additionalProperties}"
+                                    "PageLocation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endPageNumber=$endPageNumber, startPageNumber=$startPageNumber, type=$type, additionalProperties=$additionalProperties}"
                             }
 
-                            class BetaResponseContentBlockLocationCitation
+                            class ContentBlockLocation
                             private constructor(
                                 private val citedText: JsonField<String>,
                                 private val documentIndex: JsonField<Long>,
@@ -3452,7 +3251,7 @@ private constructor(
 
                                     /**
                                      * Returns a mutable builder for constructing an instance of
-                                     * [BetaResponseContentBlockLocationCitation].
+                                     * [ContentBlockLocation].
                                      *
                                      * The following fields are required:
                                      * ```kotlin
@@ -3467,7 +3266,7 @@ private constructor(
                                     fun builder() = Builder()
                                 }
 
-                                /** A builder for [BetaResponseContentBlockLocationCitation]. */
+                                /** A builder for [ContentBlockLocation]. */
                                 class Builder internal constructor() {
 
                                     private var citedText: JsonField<String>? = null
@@ -3480,26 +3279,18 @@ private constructor(
                                         MutableMap<String, JsonValue> =
                                         mutableMapOf()
 
-                                    internal fun from(
-                                        betaResponseContentBlockLocationCitation:
-                                            BetaResponseContentBlockLocationCitation
-                                    ) = apply {
-                                        citedText =
-                                            betaResponseContentBlockLocationCitation.citedText
-                                        documentIndex =
-                                            betaResponseContentBlockLocationCitation.documentIndex
-                                        documentTitle =
-                                            betaResponseContentBlockLocationCitation.documentTitle
-                                        endBlockIndex =
-                                            betaResponseContentBlockLocationCitation.endBlockIndex
-                                        startBlockIndex =
-                                            betaResponseContentBlockLocationCitation.startBlockIndex
-                                        type = betaResponseContentBlockLocationCitation.type
-                                        additionalProperties =
-                                            betaResponseContentBlockLocationCitation
-                                                .additionalProperties
-                                                .toMutableMap()
-                                    }
+                                    internal fun from(contentBlockLocation: ContentBlockLocation) =
+                                        apply {
+                                            citedText = contentBlockLocation.citedText
+                                            documentIndex = contentBlockLocation.documentIndex
+                                            documentTitle = contentBlockLocation.documentTitle
+                                            endBlockIndex = contentBlockLocation.endBlockIndex
+                                            startBlockIndex = contentBlockLocation.startBlockIndex
+                                            type = contentBlockLocation.type
+                                            additionalProperties =
+                                                contentBlockLocation.additionalProperties
+                                                    .toMutableMap()
+                                        }
 
                                     fun citedText(citedText: String) =
                                         citedText(JsonField.of(citedText))
@@ -3613,8 +3404,7 @@ private constructor(
                                     }
 
                                     /**
-                                     * Returns an immutable instance of
-                                     * [BetaResponseContentBlockLocationCitation].
+                                     * Returns an immutable instance of [ContentBlockLocation].
                                      *
                                      * Further updates to this [Builder] will not mutate the
                                      * returned instance.
@@ -3631,8 +3421,8 @@ private constructor(
                                      *
                                      * @throws IllegalStateException if any required field is unset.
                                      */
-                                    fun build(): BetaResponseContentBlockLocationCitation =
-                                        BetaResponseContentBlockLocationCitation(
+                                    fun build(): ContentBlockLocation =
+                                        ContentBlockLocation(
                                             checkRequired("citedText", citedText),
                                             checkRequired("documentIndex", documentIndex),
                                             checkRequired("documentTitle", documentTitle),
@@ -3645,7 +3435,7 @@ private constructor(
 
                                 private var validated: Boolean = false
 
-                                fun validate(): BetaResponseContentBlockLocationCitation = apply {
+                                fun validate(): ContentBlockLocation = apply {
                                     if (validated) {
                                         return@apply
                                     }
@@ -3825,7 +3615,7 @@ private constructor(
                                         return true
                                     }
 
-                                    return /* spotless:off */ other is BetaResponseContentBlockLocationCitation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endBlockIndex == other.endBlockIndex && startBlockIndex == other.startBlockIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                                    return /* spotless:off */ other is ContentBlockLocation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endBlockIndex == other.endBlockIndex && startBlockIndex == other.startBlockIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                                 }
 
                                 /* spotless:off */
@@ -3835,7 +3625,7 @@ private constructor(
                                 override fun hashCode(): Int = hashCode
 
                                 override fun toString() =
-                                    "BetaResponseContentBlockLocationCitation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endBlockIndex=$endBlockIndex, startBlockIndex=$startBlockIndex, type=$type, additionalProperties=$additionalProperties}"
+                                    "ContentBlockLocation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endBlockIndex=$endBlockIndex, startBlockIndex=$startBlockIndex, type=$type, additionalProperties=$additionalProperties}"
                             }
                         }
 
@@ -3973,7 +3763,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaResponseTextBlock && citations == other.citations && text == other.text && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is Text && citations == other.citations && text == other.text && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -3983,10 +3773,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaResponseTextBlock{citations=$citations, text=$text, type=$type, additionalProperties=$additionalProperties}"
+                            "Text{citations=$citations, text=$text, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaResponseToolUseBlock
+                    class ToolUse
                     private constructor(
                         private val id: JsonField<String>,
                         private val input: JsonValue,
@@ -4073,8 +3863,7 @@ private constructor(
                         companion object {
 
                             /**
-                             * Returns a mutable builder for constructing an instance of
-                             * [BetaResponseToolUseBlock].
+                             * Returns a mutable builder for constructing an instance of [ToolUse].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -4087,7 +3876,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaResponseToolUseBlock]. */
+                        /** A builder for [ToolUse]. */
                         class Builder internal constructor() {
 
                             private var id: JsonField<String>? = null
@@ -4097,15 +3886,13 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaResponseToolUseBlock: BetaResponseToolUseBlock) =
-                                apply {
-                                    id = betaResponseToolUseBlock.id
-                                    input = betaResponseToolUseBlock.input
-                                    name = betaResponseToolUseBlock.name
-                                    type = betaResponseToolUseBlock.type
-                                    additionalProperties =
-                                        betaResponseToolUseBlock.additionalProperties.toMutableMap()
-                                }
+                            internal fun from(toolUse: ToolUse) = apply {
+                                id = toolUse.id
+                                input = toolUse.input
+                                name = toolUse.name
+                                type = toolUse.type
+                                additionalProperties = toolUse.additionalProperties.toMutableMap()
+                            }
 
                             fun id(id: String) = id(JsonField.of(id))
 
@@ -4165,7 +3952,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaResponseToolUseBlock].
+                             * Returns an immutable instance of [ToolUse].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -4180,8 +3967,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaResponseToolUseBlock =
-                                BetaResponseToolUseBlock(
+                            fun build(): ToolUse =
+                                ToolUse(
                                     checkRequired("id", id),
                                     checkRequired("input", input),
                                     checkRequired("name", name),
@@ -4192,7 +3979,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaResponseToolUseBlock = apply {
+                        fun validate(): ToolUse = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -4356,7 +4143,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaResponseToolUseBlock && id == other.id && input == other.input && name == other.name && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is ToolUse && id == other.id && input == other.input && name == other.name && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -4366,10 +4153,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaResponseToolUseBlock{id=$id, input=$input, name=$name, type=$type, additionalProperties=$additionalProperties}"
+                            "ToolUse{id=$id, input=$input, name=$name, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaResponseThinkingBlock
+                    class Thinking
                     private constructor(
                         private val signature: JsonField<String>,
                         private val thinking: JsonField<String>,
@@ -4454,8 +4241,7 @@ private constructor(
                         companion object {
 
                             /**
-                             * Returns a mutable builder for constructing an instance of
-                             * [BetaResponseThinkingBlock].
+                             * Returns a mutable builder for constructing an instance of [Thinking].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -4467,7 +4253,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaResponseThinkingBlock]. */
+                        /** A builder for [Thinking]. */
                         class Builder internal constructor() {
 
                             private var signature: JsonField<String>? = null
@@ -4476,14 +4262,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(
-                                betaResponseThinkingBlock: BetaResponseThinkingBlock
-                            ) = apply {
-                                signature = betaResponseThinkingBlock.signature
-                                thinking = betaResponseThinkingBlock.thinking
-                                type = betaResponseThinkingBlock.type
-                                additionalProperties =
-                                    betaResponseThinkingBlock.additionalProperties.toMutableMap()
+                            internal fun from(thinking: Thinking) = apply {
+                                signature = thinking.signature
+                                this.thinking = thinking.thinking
+                                type = thinking.type
+                                additionalProperties = thinking.additionalProperties.toMutableMap()
                             }
 
                             fun signature(signature: String) = signature(JsonField.of(signature))
@@ -4546,7 +4329,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaResponseThinkingBlock].
+                             * Returns an immutable instance of [Thinking].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -4560,8 +4343,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaResponseThinkingBlock =
-                                BetaResponseThinkingBlock(
+                            fun build(): Thinking =
+                                Thinking(
                                     checkRequired("signature", signature),
                                     checkRequired("thinking", thinking),
                                     checkRequired("type", type),
@@ -4571,7 +4354,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaResponseThinkingBlock = apply {
+                        fun validate(): Thinking = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -4735,7 +4518,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaResponseThinkingBlock && signature == other.signature && thinking == other.thinking && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is Thinking && signature == other.signature && thinking == other.thinking && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -4745,10 +4528,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaResponseThinkingBlock{signature=$signature, thinking=$thinking, type=$type, additionalProperties=$additionalProperties}"
+                            "Thinking{signature=$signature, thinking=$thinking, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaResponseRedactedThinkingBlock
+                    class RedactedThinking
                     private constructor(
                         private val data: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -4811,7 +4594,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaResponseRedactedThinkingBlock].
+                             * [RedactedThinking].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -4822,7 +4605,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaResponseRedactedThinkingBlock]. */
+                        /** A builder for [RedactedThinking]. */
                         class Builder internal constructor() {
 
                             private var data: JsonField<String>? = null
@@ -4830,14 +4613,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(
-                                betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-                            ) = apply {
-                                data = betaResponseRedactedThinkingBlock.data
-                                type = betaResponseRedactedThinkingBlock.type
+                            internal fun from(redactedThinking: RedactedThinking) = apply {
+                                data = redactedThinking.data
+                                type = redactedThinking.type
                                 additionalProperties =
-                                    betaResponseRedactedThinkingBlock.additionalProperties
-                                        .toMutableMap()
+                                    redactedThinking.additionalProperties.toMutableMap()
                             }
 
                             fun data(data: String) = data(JsonField.of(data))
@@ -4885,7 +4665,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaResponseRedactedThinkingBlock].
+                             * Returns an immutable instance of [RedactedThinking].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -4898,8 +4678,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaResponseRedactedThinkingBlock =
-                                BetaResponseRedactedThinkingBlock(
+                            fun build(): RedactedThinking =
+                                RedactedThinking(
                                     checkRequired("data", data),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -4908,7 +4688,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaResponseRedactedThinkingBlock = apply {
+                        fun validate(): RedactedThinking = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -5070,7 +4850,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaResponseRedactedThinkingBlock && data == other.data && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is RedactedThinking && data == other.data && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -5080,7 +4860,7 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaResponseRedactedThinkingBlock{data=$data, type=$type, additionalProperties=$additionalProperties}"
+                            "RedactedThinking{data=$data, type=$type, additionalProperties=$additionalProperties}"
                     }
                 }
 
@@ -5992,7 +5772,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaSucceededResult && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Succeeded && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -6002,10 +5782,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaSucceededResult{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                "Succeeded{message=$message, type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class BetaErroredResult
+        class Errored
         private constructor(
             private val error: JsonField<Error>,
             private val type: JsonField<Type>,
@@ -6061,7 +5841,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [BetaErroredResult].
+                 * Returns a mutable builder for constructing an instance of [Errored].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -6072,17 +5852,17 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaErroredResult]. */
+            /** A builder for [Errored]. */
             class Builder internal constructor() {
 
                 private var error: JsonField<Error>? = null
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaErroredResult: BetaErroredResult) = apply {
-                    error = betaErroredResult.error
-                    type = betaErroredResult.type
-                    additionalProperties = betaErroredResult.additionalProperties.toMutableMap()
+                internal fun from(errored: Errored) = apply {
+                    error = errored.error
+                    type = errored.type
+                    additionalProperties = errored.additionalProperties.toMutableMap()
                 }
 
                 fun error(error: Error) = error(JsonField.of(error))
@@ -6130,7 +5910,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaErroredResult].
+                 * Returns an immutable instance of [Errored].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -6142,8 +5922,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaErroredResult =
-                    BetaErroredResult(
+                fun build(): Errored =
+                    Errored(
                         checkRequired("error", error),
                         checkRequired("type", type),
                         additionalProperties.toMutableMap(),
@@ -6152,7 +5932,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): BetaErroredResult = apply {
+            fun validate(): Errored = apply {
                 if (validated) {
                     return@apply
                 }
@@ -6275,28 +6055,26 @@ private constructor(
                     fun error(error: JsonField<InnerError>) = apply { this.error = error }
 
                     /**
-                     * Alias for calling [error] with
-                     * `InnerError.ofBetaInvalidRequest(betaInvalidRequest)`.
+                     * Alias for calling [error] with `InnerError.ofInvalidRequest(invalidRequest)`.
                      */
-                    fun error(betaInvalidRequest: InnerError.BetaInvalidRequestError) =
-                        error(InnerError.ofBetaInvalidRequest(betaInvalidRequest))
+                    fun error(invalidRequest: InnerError.InvalidRequestError) =
+                        error(InnerError.ofInvalidRequest(invalidRequest))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaInvalidRequestError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaInvalidRequestError.Type.INVALID_REQUEST_ERROR)
+                     * InnerError.InvalidRequestError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.InvalidRequestError.Type.INVALID_REQUEST_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaInvalidRequestError(message: String) =
+                    fun invalidRequestError(message: String) =
                         error(
-                            InnerError.BetaInvalidRequestError.builder()
+                            InnerError.InvalidRequestError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaInvalidRequestError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .InvalidRequestError
                                         .Type
                                         .INVALID_REQUEST_ERROR
                                 )
@@ -6305,28 +6083,26 @@ private constructor(
                         )
 
                     /**
-                     * Alias for calling [error] with
-                     * `InnerError.ofBetaAuthentication(betaAuthentication)`.
+                     * Alias for calling [error] with `InnerError.ofAuthentication(authentication)`.
                      */
-                    fun error(betaAuthentication: InnerError.BetaAuthenticationError) =
-                        error(InnerError.ofBetaAuthentication(betaAuthentication))
+                    fun error(authentication: InnerError.AuthenticationError) =
+                        error(InnerError.ofAuthentication(authentication))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaAuthenticationError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaAuthenticationError.Type.AUTHENTICATION_ERROR)
+                     * InnerError.AuthenticationError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.AuthenticationError.Type.AUTHENTICATION_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaAuthenticationError(message: String) =
+                    fun authenticationError(message: String) =
                         error(
-                            InnerError.BetaAuthenticationError.builder()
+                            InnerError.AuthenticationError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaAuthenticationError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .AuthenticationError
                                         .Type
                                         .AUTHENTICATION_ERROR
                                 )
@@ -6334,26 +6110,25 @@ private constructor(
                                 .build()
                         )
 
-                    /** Alias for calling [error] with `InnerError.ofBetaBilling(betaBilling)`. */
-                    fun error(betaBilling: InnerError.BetaBillingError) =
-                        error(InnerError.ofBetaBilling(betaBilling))
+                    /** Alias for calling [error] with `InnerError.ofBilling(billing)`. */
+                    fun error(billing: InnerError.BillingError) =
+                        error(InnerError.ofBilling(billing))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaBillingError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaBillingError.Type.BILLING_ERROR)
+                     * InnerError.BillingError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.BillingError.Type.BILLING_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaBillingError(message: String) =
+                    fun billingError(message: String) =
                         error(
-                            InnerError.BetaBillingError.builder()
+                            InnerError.BillingError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaBillingError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .BillingError
                                         .Type
                                         .BILLING_ERROR
                                 )
@@ -6361,28 +6136,25 @@ private constructor(
                                 .build()
                         )
 
-                    /**
-                     * Alias for calling [error] with `InnerError.ofBetaPermission(betaPermission)`.
-                     */
-                    fun error(betaPermission: InnerError.BetaPermissionError) =
-                        error(InnerError.ofBetaPermission(betaPermission))
+                    /** Alias for calling [error] with `InnerError.ofPermission(permission)`. */
+                    fun error(permission: InnerError.PermissionError) =
+                        error(InnerError.ofPermission(permission))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaPermissionError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaPermissionError.Type.PERMISSION_ERROR)
+                     * InnerError.PermissionError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.PermissionError.Type.PERMISSION_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaPermissionError(message: String) =
+                    fun permissionError(message: String) =
                         error(
-                            InnerError.BetaPermissionError.builder()
+                            InnerError.PermissionError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaPermissionError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .PermissionError
                                         .Type
                                         .PERMISSION_ERROR
                                 )
@@ -6390,26 +6162,25 @@ private constructor(
                                 .build()
                         )
 
-                    /** Alias for calling [error] with `InnerError.ofBetaNotFound(betaNotFound)`. */
-                    fun error(betaNotFound: InnerError.BetaNotFoundError) =
-                        error(InnerError.ofBetaNotFound(betaNotFound))
+                    /** Alias for calling [error] with `InnerError.ofNotFound(notFound)`. */
+                    fun error(notFound: InnerError.NotFoundError) =
+                        error(InnerError.ofNotFound(notFound))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaNotFoundError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaNotFoundError.Type.NOT_FOUND_ERROR)
+                     * InnerError.NotFoundError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.NotFoundError.Type.NOT_FOUND_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaNotFoundError(message: String) =
+                    fun notFoundError(message: String) =
                         error(
-                            InnerError.BetaNotFoundError.builder()
+                            InnerError.NotFoundError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaNotFoundError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .NotFoundError
                                         .Type
                                         .NOT_FOUND_ERROR
                                 )
@@ -6417,28 +6188,25 @@ private constructor(
                                 .build()
                         )
 
-                    /**
-                     * Alias for calling [error] with `InnerError.ofBetaRateLimit(betaRateLimit)`.
-                     */
-                    fun error(betaRateLimit: InnerError.BetaRateLimitError) =
-                        error(InnerError.ofBetaRateLimit(betaRateLimit))
+                    /** Alias for calling [error] with `InnerError.ofRateLimit(rateLimit)`. */
+                    fun error(rateLimit: InnerError.RateLimitError) =
+                        error(InnerError.ofRateLimit(rateLimit))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaRateLimitError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaRateLimitError.Type.RATE_LIMIT_ERROR)
+                     * InnerError.RateLimitError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.RateLimitError.Type.RATE_LIMIT_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaRateLimitError(message: String) =
+                    fun rateLimitError(message: String) =
                         error(
-                            InnerError.BetaRateLimitError.builder()
+                            InnerError.RateLimitError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaRateLimitError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .RateLimitError
                                         .Type
                                         .RATE_LIMIT_ERROR
                                 )
@@ -6446,29 +6214,25 @@ private constructor(
                                 .build()
                         )
 
-                    /**
-                     * Alias for calling [error] with
-                     * `InnerError.ofBetaGatewayTimeout(betaGatewayTimeout)`.
-                     */
-                    fun error(betaGatewayTimeout: InnerError.BetaGatewayTimeoutError) =
-                        error(InnerError.ofBetaGatewayTimeout(betaGatewayTimeout))
+                    /** Alias for calling [error] with `InnerError.ofTimeout(timeout)`. */
+                    fun error(timeout: InnerError.TimeoutError) =
+                        error(InnerError.ofTimeout(timeout))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaGatewayTimeoutError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaGatewayTimeoutError.Type.TIMEOUT_ERROR)
+                     * InnerError.TimeoutError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.TimeoutError.Type.TIMEOUT_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaGatewayTimeoutError(message: String) =
+                    fun timeoutError(message: String) =
                         error(
-                            InnerError.BetaGatewayTimeoutError.builder()
+                            InnerError.TimeoutError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaGatewayTimeoutError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .TimeoutError
                                         .Type
                                         .TIMEOUT_ERROR
                                 )
@@ -6476,26 +6240,24 @@ private constructor(
                                 .build()
                         )
 
-                    /** Alias for calling [error] with `InnerError.ofBetaApi(betaApi)`. */
-                    fun error(betaApi: InnerError.BetaApiError) =
-                        error(InnerError.ofBetaApi(betaApi))
+                    /** Alias for calling [error] with `InnerError.ofApi(api)`. */
+                    fun error(api: InnerError.ApiError) = error(InnerError.ofApi(api))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaApiError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaApiError.Type.API_ERROR)
+                     * InnerError.ApiError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.ApiError.Type.API_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaApiError(message: String) =
+                    fun apiError(message: String) =
                         error(
-                            InnerError.BetaApiError.builder()
+                            InnerError.ApiError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaApiError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .ApiError
                                         .Type
                                         .API_ERROR
                                 )
@@ -6503,28 +6265,25 @@ private constructor(
                                 .build()
                         )
 
-                    /**
-                     * Alias for calling [error] with `InnerError.ofBetaOverloaded(betaOverloaded)`.
-                     */
-                    fun error(betaOverloaded: InnerError.BetaOverloadedError) =
-                        error(InnerError.ofBetaOverloaded(betaOverloaded))
+                    /** Alias for calling [error] with `InnerError.ofOverloaded(overloaded)`. */
+                    fun error(overloaded: InnerError.OverloadedError) =
+                        error(InnerError.ofOverloaded(overloaded))
 
                     /**
                      * Alias for calling [error] with the following:
                      * ```kotlin
-                     * InnerError.BetaOverloadedError.builder()
-                     *     .type(BatchResultsBetaResponse.Result.BetaErroredResult.Error.InnerError.BetaOverloadedError.Type.OVERLOADED_ERROR)
+                     * InnerError.OverloadedError.builder()
+                     *     .type(BatchResultsBetaResponse.Result.Errored.Error.InnerError.OverloadedError.Type.OVERLOADED_ERROR)
                      *     .message(message)
                      *     .build()
                      * ```
                      */
-                    fun betaOverloadedError(message: String) =
+                    fun overloadedError(message: String) =
                         error(
-                            InnerError.BetaOverloadedError.builder()
+                            InnerError.OverloadedError.builder()
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaErroredResult.Error
-                                        .InnerError
-                                        .BetaOverloadedError
+                                    BatchResultsBetaResponse.Result.Errored.Error.InnerError
+                                        .OverloadedError
                                         .Type
                                         .OVERLOADED_ERROR
                                 )
@@ -6619,95 +6378,87 @@ private constructor(
                 @JsonSerialize(using = InnerError.Serializer::class)
                 class InnerError
                 private constructor(
-                    private val betaInvalidRequest: BetaInvalidRequestError? = null,
-                    private val betaAuthentication: BetaAuthenticationError? = null,
-                    private val betaBilling: BetaBillingError? = null,
-                    private val betaPermission: BetaPermissionError? = null,
-                    private val betaNotFound: BetaNotFoundError? = null,
-                    private val betaRateLimit: BetaRateLimitError? = null,
-                    private val betaGatewayTimeout: BetaGatewayTimeoutError? = null,
-                    private val betaApi: BetaApiError? = null,
-                    private val betaOverloaded: BetaOverloadedError? = null,
+                    private val invalidRequest: InvalidRequestError? = null,
+                    private val authentication: AuthenticationError? = null,
+                    private val billing: BillingError? = null,
+                    private val permission: PermissionError? = null,
+                    private val notFound: NotFoundError? = null,
+                    private val rateLimit: RateLimitError? = null,
+                    private val timeout: TimeoutError? = null,
+                    private val api: ApiError? = null,
+                    private val overloaded: OverloadedError? = null,
                     private val _json: JsonValue? = null,
                 ) {
 
-                    fun betaInvalidRequest(): BetaInvalidRequestError? = betaInvalidRequest
+                    fun invalidRequest(): InvalidRequestError? = invalidRequest
 
-                    fun betaAuthentication(): BetaAuthenticationError? = betaAuthentication
+                    fun authentication(): AuthenticationError? = authentication
 
-                    fun betaBilling(): BetaBillingError? = betaBilling
+                    fun billing(): BillingError? = billing
 
-                    fun betaPermission(): BetaPermissionError? = betaPermission
+                    fun permission(): PermissionError? = permission
 
-                    fun betaNotFound(): BetaNotFoundError? = betaNotFound
+                    fun notFound(): NotFoundError? = notFound
 
-                    fun betaRateLimit(): BetaRateLimitError? = betaRateLimit
+                    fun rateLimit(): RateLimitError? = rateLimit
 
-                    fun betaGatewayTimeout(): BetaGatewayTimeoutError? = betaGatewayTimeout
+                    fun timeout(): TimeoutError? = timeout
 
-                    fun betaApi(): BetaApiError? = betaApi
+                    fun api(): ApiError? = api
 
-                    fun betaOverloaded(): BetaOverloadedError? = betaOverloaded
+                    fun overloaded(): OverloadedError? = overloaded
 
-                    fun isBetaInvalidRequest(): Boolean = betaInvalidRequest != null
+                    fun isInvalidRequest(): Boolean = invalidRequest != null
 
-                    fun isBetaAuthentication(): Boolean = betaAuthentication != null
+                    fun isAuthentication(): Boolean = authentication != null
 
-                    fun isBetaBilling(): Boolean = betaBilling != null
+                    fun isBilling(): Boolean = billing != null
 
-                    fun isBetaPermission(): Boolean = betaPermission != null
+                    fun isPermission(): Boolean = permission != null
 
-                    fun isBetaNotFound(): Boolean = betaNotFound != null
+                    fun isNotFound(): Boolean = notFound != null
 
-                    fun isBetaRateLimit(): Boolean = betaRateLimit != null
+                    fun isRateLimit(): Boolean = rateLimit != null
 
-                    fun isBetaGatewayTimeout(): Boolean = betaGatewayTimeout != null
+                    fun isTimeout(): Boolean = timeout != null
 
-                    fun isBetaApi(): Boolean = betaApi != null
+                    fun isApi(): Boolean = api != null
 
-                    fun isBetaOverloaded(): Boolean = betaOverloaded != null
+                    fun isOverloaded(): Boolean = overloaded != null
 
-                    fun asBetaInvalidRequest(): BetaInvalidRequestError =
-                        betaInvalidRequest.getOrThrow("betaInvalidRequest")
+                    fun asInvalidRequest(): InvalidRequestError =
+                        invalidRequest.getOrThrow("invalidRequest")
 
-                    fun asBetaAuthentication(): BetaAuthenticationError =
-                        betaAuthentication.getOrThrow("betaAuthentication")
+                    fun asAuthentication(): AuthenticationError =
+                        authentication.getOrThrow("authentication")
 
-                    fun asBetaBilling(): BetaBillingError = betaBilling.getOrThrow("betaBilling")
+                    fun asBilling(): BillingError = billing.getOrThrow("billing")
 
-                    fun asBetaPermission(): BetaPermissionError =
-                        betaPermission.getOrThrow("betaPermission")
+                    fun asPermission(): PermissionError = permission.getOrThrow("permission")
 
-                    fun asBetaNotFound(): BetaNotFoundError =
-                        betaNotFound.getOrThrow("betaNotFound")
+                    fun asNotFound(): NotFoundError = notFound.getOrThrow("notFound")
 
-                    fun asBetaRateLimit(): BetaRateLimitError =
-                        betaRateLimit.getOrThrow("betaRateLimit")
+                    fun asRateLimit(): RateLimitError = rateLimit.getOrThrow("rateLimit")
 
-                    fun asBetaGatewayTimeout(): BetaGatewayTimeoutError =
-                        betaGatewayTimeout.getOrThrow("betaGatewayTimeout")
+                    fun asTimeout(): TimeoutError = timeout.getOrThrow("timeout")
 
-                    fun asBetaApi(): BetaApiError = betaApi.getOrThrow("betaApi")
+                    fun asApi(): ApiError = api.getOrThrow("api")
 
-                    fun asBetaOverloaded(): BetaOverloadedError =
-                        betaOverloaded.getOrThrow("betaOverloaded")
+                    fun asOverloaded(): OverloadedError = overloaded.getOrThrow("overloaded")
 
                     fun _json(): JsonValue? = _json
 
                     fun <T> accept(visitor: Visitor<T>): T =
                         when {
-                            betaInvalidRequest != null ->
-                                visitor.visitBetaInvalidRequest(betaInvalidRequest)
-                            betaAuthentication != null ->
-                                visitor.visitBetaAuthentication(betaAuthentication)
-                            betaBilling != null -> visitor.visitBetaBilling(betaBilling)
-                            betaPermission != null -> visitor.visitBetaPermission(betaPermission)
-                            betaNotFound != null -> visitor.visitBetaNotFound(betaNotFound)
-                            betaRateLimit != null -> visitor.visitBetaRateLimit(betaRateLimit)
-                            betaGatewayTimeout != null ->
-                                visitor.visitBetaGatewayTimeout(betaGatewayTimeout)
-                            betaApi != null -> visitor.visitBetaApi(betaApi)
-                            betaOverloaded != null -> visitor.visitBetaOverloaded(betaOverloaded)
+                            invalidRequest != null -> visitor.visitInvalidRequest(invalidRequest)
+                            authentication != null -> visitor.visitAuthentication(authentication)
+                            billing != null -> visitor.visitBilling(billing)
+                            permission != null -> visitor.visitPermission(permission)
+                            notFound != null -> visitor.visitNotFound(notFound)
+                            rateLimit != null -> visitor.visitRateLimit(rateLimit)
+                            timeout != null -> visitor.visitTimeout(timeout)
+                            api != null -> visitor.visitApi(api)
+                            overloaded != null -> visitor.visitOverloaded(overloaded)
                             else -> visitor.unknown(_json)
                         }
 
@@ -6720,50 +6471,44 @@ private constructor(
 
                         accept(
                             object : Visitor<Unit> {
-                                override fun visitBetaInvalidRequest(
-                                    betaInvalidRequest: BetaInvalidRequestError
+                                override fun visitInvalidRequest(
+                                    invalidRequest: InvalidRequestError
                                 ) {
-                                    betaInvalidRequest.validate()
+                                    invalidRequest.validate()
                                 }
 
-                                override fun visitBetaAuthentication(
-                                    betaAuthentication: BetaAuthenticationError
+                                override fun visitAuthentication(
+                                    authentication: AuthenticationError
                                 ) {
-                                    betaAuthentication.validate()
+                                    authentication.validate()
                                 }
 
-                                override fun visitBetaBilling(betaBilling: BetaBillingError) {
-                                    betaBilling.validate()
+                                override fun visitBilling(billing: BillingError) {
+                                    billing.validate()
                                 }
 
-                                override fun visitBetaPermission(
-                                    betaPermission: BetaPermissionError
-                                ) {
-                                    betaPermission.validate()
+                                override fun visitPermission(permission: PermissionError) {
+                                    permission.validate()
                                 }
 
-                                override fun visitBetaNotFound(betaNotFound: BetaNotFoundError) {
-                                    betaNotFound.validate()
+                                override fun visitNotFound(notFound: NotFoundError) {
+                                    notFound.validate()
                                 }
 
-                                override fun visitBetaRateLimit(betaRateLimit: BetaRateLimitError) {
-                                    betaRateLimit.validate()
+                                override fun visitRateLimit(rateLimit: RateLimitError) {
+                                    rateLimit.validate()
                                 }
 
-                                override fun visitBetaGatewayTimeout(
-                                    betaGatewayTimeout: BetaGatewayTimeoutError
-                                ) {
-                                    betaGatewayTimeout.validate()
+                                override fun visitTimeout(timeout: TimeoutError) {
+                                    timeout.validate()
                                 }
 
-                                override fun visitBetaApi(betaApi: BetaApiError) {
-                                    betaApi.validate()
+                                override fun visitApi(api: ApiError) {
+                                    api.validate()
                                 }
 
-                                override fun visitBetaOverloaded(
-                                    betaOverloaded: BetaOverloadedError
-                                ) {
-                                    betaOverloaded.validate()
+                                override fun visitOverloaded(overloaded: OverloadedError) {
+                                    overloaded.validate()
                                 }
                             }
                         )
@@ -6787,37 +6532,33 @@ private constructor(
                     internal fun validity(): Int =
                         accept(
                             object : Visitor<Int> {
-                                override fun visitBetaInvalidRequest(
-                                    betaInvalidRequest: BetaInvalidRequestError
-                                ) = betaInvalidRequest.validity()
+                                override fun visitInvalidRequest(
+                                    invalidRequest: InvalidRequestError
+                                ) = invalidRequest.validity()
 
-                                override fun visitBetaAuthentication(
-                                    betaAuthentication: BetaAuthenticationError
-                                ) = betaAuthentication.validity()
+                                override fun visitAuthentication(
+                                    authentication: AuthenticationError
+                                ) = authentication.validity()
 
-                                override fun visitBetaBilling(betaBilling: BetaBillingError) =
-                                    betaBilling.validity()
+                                override fun visitBilling(billing: BillingError) =
+                                    billing.validity()
 
-                                override fun visitBetaPermission(
-                                    betaPermission: BetaPermissionError
-                                ) = betaPermission.validity()
+                                override fun visitPermission(permission: PermissionError) =
+                                    permission.validity()
 
-                                override fun visitBetaNotFound(betaNotFound: BetaNotFoundError) =
-                                    betaNotFound.validity()
+                                override fun visitNotFound(notFound: NotFoundError) =
+                                    notFound.validity()
 
-                                override fun visitBetaRateLimit(betaRateLimit: BetaRateLimitError) =
-                                    betaRateLimit.validity()
+                                override fun visitRateLimit(rateLimit: RateLimitError) =
+                                    rateLimit.validity()
 
-                                override fun visitBetaGatewayTimeout(
-                                    betaGatewayTimeout: BetaGatewayTimeoutError
-                                ) = betaGatewayTimeout.validity()
+                                override fun visitTimeout(timeout: TimeoutError) =
+                                    timeout.validity()
 
-                                override fun visitBetaApi(betaApi: BetaApiError) =
-                                    betaApi.validity()
+                                override fun visitApi(api: ApiError) = api.validity()
 
-                                override fun visitBetaOverloaded(
-                                    betaOverloaded: BetaOverloadedError
-                                ) = betaOverloaded.validity()
+                                override fun visitOverloaded(overloaded: OverloadedError) =
+                                    overloaded.validity()
 
                                 override fun unknown(json: JsonValue?) = 0
                             }
@@ -6828,56 +6569,50 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is InnerError && betaInvalidRequest == other.betaInvalidRequest && betaAuthentication == other.betaAuthentication && betaBilling == other.betaBilling && betaPermission == other.betaPermission && betaNotFound == other.betaNotFound && betaRateLimit == other.betaRateLimit && betaGatewayTimeout == other.betaGatewayTimeout && betaApi == other.betaApi && betaOverloaded == other.betaOverloaded /* spotless:on */
+                        return /* spotless:off */ other is InnerError && invalidRequest == other.invalidRequest && authentication == other.authentication && billing == other.billing && permission == other.permission && notFound == other.notFound && rateLimit == other.rateLimit && timeout == other.timeout && api == other.api && overloaded == other.overloaded /* spotless:on */
                     }
 
-                    override fun hashCode(): Int = /* spotless:off */ Objects.hash(betaInvalidRequest, betaAuthentication, betaBilling, betaPermission, betaNotFound, betaRateLimit, betaGatewayTimeout, betaApi, betaOverloaded) /* spotless:on */
+                    override fun hashCode(): Int = /* spotless:off */ Objects.hash(invalidRequest, authentication, billing, permission, notFound, rateLimit, timeout, api, overloaded) /* spotless:on */
 
                     override fun toString(): String =
                         when {
-                            betaInvalidRequest != null ->
-                                "InnerError{betaInvalidRequest=$betaInvalidRequest}"
-                            betaAuthentication != null ->
-                                "InnerError{betaAuthentication=$betaAuthentication}"
-                            betaBilling != null -> "InnerError{betaBilling=$betaBilling}"
-                            betaPermission != null -> "InnerError{betaPermission=$betaPermission}"
-                            betaNotFound != null -> "InnerError{betaNotFound=$betaNotFound}"
-                            betaRateLimit != null -> "InnerError{betaRateLimit=$betaRateLimit}"
-                            betaGatewayTimeout != null ->
-                                "InnerError{betaGatewayTimeout=$betaGatewayTimeout}"
-                            betaApi != null -> "InnerError{betaApi=$betaApi}"
-                            betaOverloaded != null -> "InnerError{betaOverloaded=$betaOverloaded}"
+                            invalidRequest != null -> "InnerError{invalidRequest=$invalidRequest}"
+                            authentication != null -> "InnerError{authentication=$authentication}"
+                            billing != null -> "InnerError{billing=$billing}"
+                            permission != null -> "InnerError{permission=$permission}"
+                            notFound != null -> "InnerError{notFound=$notFound}"
+                            rateLimit != null -> "InnerError{rateLimit=$rateLimit}"
+                            timeout != null -> "InnerError{timeout=$timeout}"
+                            api != null -> "InnerError{api=$api}"
+                            overloaded != null -> "InnerError{overloaded=$overloaded}"
                             _json != null -> "InnerError{_unknown=$_json}"
                             else -> throw IllegalStateException("Invalid InnerError")
                         }
 
                     companion object {
 
-                        fun ofBetaInvalidRequest(betaInvalidRequest: BetaInvalidRequestError) =
-                            InnerError(betaInvalidRequest = betaInvalidRequest)
+                        fun ofInvalidRequest(invalidRequest: InvalidRequestError) =
+                            InnerError(invalidRequest = invalidRequest)
 
-                        fun ofBetaAuthentication(betaAuthentication: BetaAuthenticationError) =
-                            InnerError(betaAuthentication = betaAuthentication)
+                        fun ofAuthentication(authentication: AuthenticationError) =
+                            InnerError(authentication = authentication)
 
-                        fun ofBetaBilling(betaBilling: BetaBillingError) =
-                            InnerError(betaBilling = betaBilling)
+                        fun ofBilling(billing: BillingError) = InnerError(billing = billing)
 
-                        fun ofBetaPermission(betaPermission: BetaPermissionError) =
-                            InnerError(betaPermission = betaPermission)
+                        fun ofPermission(permission: PermissionError) =
+                            InnerError(permission = permission)
 
-                        fun ofBetaNotFound(betaNotFound: BetaNotFoundError) =
-                            InnerError(betaNotFound = betaNotFound)
+                        fun ofNotFound(notFound: NotFoundError) = InnerError(notFound = notFound)
 
-                        fun ofBetaRateLimit(betaRateLimit: BetaRateLimitError) =
-                            InnerError(betaRateLimit = betaRateLimit)
+                        fun ofRateLimit(rateLimit: RateLimitError) =
+                            InnerError(rateLimit = rateLimit)
 
-                        fun ofBetaGatewayTimeout(betaGatewayTimeout: BetaGatewayTimeoutError) =
-                            InnerError(betaGatewayTimeout = betaGatewayTimeout)
+                        fun ofTimeout(timeout: TimeoutError) = InnerError(timeout = timeout)
 
-                        fun ofBetaApi(betaApi: BetaApiError) = InnerError(betaApi = betaApi)
+                        fun ofApi(api: ApiError) = InnerError(api = api)
 
-                        fun ofBetaOverloaded(betaOverloaded: BetaOverloadedError) =
-                            InnerError(betaOverloaded = betaOverloaded)
+                        fun ofOverloaded(overloaded: OverloadedError) =
+                            InnerError(overloaded = overloaded)
                     }
 
                     /**
@@ -6886,23 +6621,23 @@ private constructor(
                      */
                     interface Visitor<out T> {
 
-                        fun visitBetaInvalidRequest(betaInvalidRequest: BetaInvalidRequestError): T
+                        fun visitInvalidRequest(invalidRequest: InvalidRequestError): T
 
-                        fun visitBetaAuthentication(betaAuthentication: BetaAuthenticationError): T
+                        fun visitAuthentication(authentication: AuthenticationError): T
 
-                        fun visitBetaBilling(betaBilling: BetaBillingError): T
+                        fun visitBilling(billing: BillingError): T
 
-                        fun visitBetaPermission(betaPermission: BetaPermissionError): T
+                        fun visitPermission(permission: PermissionError): T
 
-                        fun visitBetaNotFound(betaNotFound: BetaNotFoundError): T
+                        fun visitNotFound(notFound: NotFoundError): T
 
-                        fun visitBetaRateLimit(betaRateLimit: BetaRateLimitError): T
+                        fun visitRateLimit(rateLimit: RateLimitError): T
 
-                        fun visitBetaGatewayTimeout(betaGatewayTimeout: BetaGatewayTimeoutError): T
+                        fun visitTimeout(timeout: TimeoutError): T
 
-                        fun visitBetaApi(betaApi: BetaApiError): T
+                        fun visitApi(api: ApiError): T
 
-                        fun visitBetaOverloaded(betaOverloaded: BetaOverloadedError): T
+                        fun visitOverloaded(overloaded: OverloadedError): T
 
                         /**
                          * Maps an unknown variant of [InnerError] to a value of type [T].
@@ -6929,64 +6664,52 @@ private constructor(
                                 "invalid_request_error" -> {
                                     return tryDeserialize(
                                             node,
-                                            jacksonTypeRef<BetaInvalidRequestError>(),
+                                            jacksonTypeRef<InvalidRequestError>(),
                                         )
-                                        ?.let { InnerError(betaInvalidRequest = it, _json = json) }
+                                        ?.let { InnerError(invalidRequest = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "authentication_error" -> {
                                     return tryDeserialize(
                                             node,
-                                            jacksonTypeRef<BetaAuthenticationError>(),
+                                            jacksonTypeRef<AuthenticationError>(),
                                         )
-                                        ?.let { InnerError(betaAuthentication = it, _json = json) }
+                                        ?.let { InnerError(authentication = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "billing_error" -> {
-                                    return tryDeserialize(node, jacksonTypeRef<BetaBillingError>())
-                                        ?.let { InnerError(betaBilling = it, _json = json) }
+                                    return tryDeserialize(node, jacksonTypeRef<BillingError>())
+                                        ?.let { InnerError(billing = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "permission_error" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaPermissionError>(),
-                                        )
-                                        ?.let { InnerError(betaPermission = it, _json = json) }
+                                    return tryDeserialize(node, jacksonTypeRef<PermissionError>())
+                                        ?.let { InnerError(permission = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "not_found_error" -> {
-                                    return tryDeserialize(node, jacksonTypeRef<BetaNotFoundError>())
-                                        ?.let { InnerError(betaNotFound = it, _json = json) }
+                                    return tryDeserialize(node, jacksonTypeRef<NotFoundError>())
+                                        ?.let { InnerError(notFound = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "rate_limit_error" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaRateLimitError>(),
-                                        )
-                                        ?.let { InnerError(betaRateLimit = it, _json = json) }
+                                    return tryDeserialize(node, jacksonTypeRef<RateLimitError>())
+                                        ?.let { InnerError(rateLimit = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "timeout_error" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaGatewayTimeoutError>(),
-                                        )
-                                        ?.let { InnerError(betaGatewayTimeout = it, _json = json) }
+                                    return tryDeserialize(node, jacksonTypeRef<TimeoutError>())
+                                        ?.let { InnerError(timeout = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                                 "api_error" -> {
-                                    return tryDeserialize(node, jacksonTypeRef<BetaApiError>())
-                                        ?.let { InnerError(betaApi = it, _json = json) }
-                                        ?: InnerError(_json = json)
+                                    return tryDeserialize(node, jacksonTypeRef<ApiError>())?.let {
+                                        InnerError(api = it, _json = json)
+                                    } ?: InnerError(_json = json)
                                 }
                                 "overloaded_error" -> {
-                                    return tryDeserialize(
-                                            node,
-                                            jacksonTypeRef<BetaOverloadedError>(),
-                                        )
-                                        ?.let { InnerError(betaOverloaded = it, _json = json) }
+                                    return tryDeserialize(node, jacksonTypeRef<OverloadedError>())
+                                        ?.let { InnerError(overloaded = it, _json = json) }
                                         ?: InnerError(_json = json)
                                 }
                             }
@@ -7003,30 +6726,24 @@ private constructor(
                             provider: SerializerProvider,
                         ) {
                             when {
-                                value.betaInvalidRequest != null ->
-                                    generator.writeObject(value.betaInvalidRequest)
-                                value.betaAuthentication != null ->
-                                    generator.writeObject(value.betaAuthentication)
-                                value.betaBilling != null ->
-                                    generator.writeObject(value.betaBilling)
-                                value.betaPermission != null ->
-                                    generator.writeObject(value.betaPermission)
-                                value.betaNotFound != null ->
-                                    generator.writeObject(value.betaNotFound)
-                                value.betaRateLimit != null ->
-                                    generator.writeObject(value.betaRateLimit)
-                                value.betaGatewayTimeout != null ->
-                                    generator.writeObject(value.betaGatewayTimeout)
-                                value.betaApi != null -> generator.writeObject(value.betaApi)
-                                value.betaOverloaded != null ->
-                                    generator.writeObject(value.betaOverloaded)
+                                value.invalidRequest != null ->
+                                    generator.writeObject(value.invalidRequest)
+                                value.authentication != null ->
+                                    generator.writeObject(value.authentication)
+                                value.billing != null -> generator.writeObject(value.billing)
+                                value.permission != null -> generator.writeObject(value.permission)
+                                value.notFound != null -> generator.writeObject(value.notFound)
+                                value.rateLimit != null -> generator.writeObject(value.rateLimit)
+                                value.timeout != null -> generator.writeObject(value.timeout)
+                                value.api != null -> generator.writeObject(value.api)
+                                value.overloaded != null -> generator.writeObject(value.overloaded)
                                 value._json != null -> generator.writeObject(value._json)
                                 else -> throw IllegalStateException("Invalid InnerError")
                             }
                         }
                     }
 
-                    class BetaInvalidRequestError
+                    class InvalidRequestError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -7091,7 +6808,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaInvalidRequestError].
+                             * [InvalidRequestError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -7102,7 +6819,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaInvalidRequestError]. */
+                        /** A builder for [InvalidRequestError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -7110,13 +6827,12 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaInvalidRequestError: BetaInvalidRequestError) =
-                                apply {
-                                    message = betaInvalidRequestError.message
-                                    type = betaInvalidRequestError.type
-                                    additionalProperties =
-                                        betaInvalidRequestError.additionalProperties.toMutableMap()
-                                }
+                            internal fun from(invalidRequestError: InvalidRequestError) = apply {
+                                message = invalidRequestError.message
+                                type = invalidRequestError.type
+                                additionalProperties =
+                                    invalidRequestError.additionalProperties.toMutableMap()
+                            }
 
                             fun message(message: String) = message(JsonField.of(message))
 
@@ -7165,7 +6881,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaInvalidRequestError].
+                             * Returns an immutable instance of [InvalidRequestError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -7178,8 +6894,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaInvalidRequestError =
-                                BetaInvalidRequestError(
+                            fun build(): InvalidRequestError =
+                                InvalidRequestError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -7188,7 +6904,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaInvalidRequestError = apply {
+                        fun validate(): InvalidRequestError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -7350,7 +7066,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaInvalidRequestError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is InvalidRequestError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -7360,10 +7076,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaInvalidRequestError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "InvalidRequestError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaAuthenticationError
+                    class AuthenticationError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -7428,7 +7144,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaAuthenticationError].
+                             * [AuthenticationError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -7439,7 +7155,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaAuthenticationError]. */
+                        /** A builder for [AuthenticationError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -7447,13 +7163,12 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaAuthenticationError: BetaAuthenticationError) =
-                                apply {
-                                    message = betaAuthenticationError.message
-                                    type = betaAuthenticationError.type
-                                    additionalProperties =
-                                        betaAuthenticationError.additionalProperties.toMutableMap()
-                                }
+                            internal fun from(authenticationError: AuthenticationError) = apply {
+                                message = authenticationError.message
+                                type = authenticationError.type
+                                additionalProperties =
+                                    authenticationError.additionalProperties.toMutableMap()
+                            }
 
                             fun message(message: String) = message(JsonField.of(message))
 
@@ -7502,7 +7217,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaAuthenticationError].
+                             * Returns an immutable instance of [AuthenticationError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -7515,8 +7230,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaAuthenticationError =
-                                BetaAuthenticationError(
+                            fun build(): AuthenticationError =
+                                AuthenticationError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -7525,7 +7240,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaAuthenticationError = apply {
+                        fun validate(): AuthenticationError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -7687,7 +7402,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaAuthenticationError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is AuthenticationError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -7697,10 +7412,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaAuthenticationError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "AuthenticationError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaBillingError
+                    class BillingError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -7765,7 +7480,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaBillingError].
+                             * [BillingError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -7776,7 +7491,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaBillingError]. */
+                        /** A builder for [BillingError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -7784,11 +7499,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaBillingError: BetaBillingError) = apply {
-                                message = betaBillingError.message
-                                type = betaBillingError.type
+                            internal fun from(billingError: BillingError) = apply {
+                                message = billingError.message
+                                type = billingError.type
                                 additionalProperties =
-                                    betaBillingError.additionalProperties.toMutableMap()
+                                    billingError.additionalProperties.toMutableMap()
                             }
 
                             fun message(message: String) = message(JsonField.of(message))
@@ -7838,7 +7553,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaBillingError].
+                             * Returns an immutable instance of [BillingError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -7851,8 +7566,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaBillingError =
-                                BetaBillingError(
+                            fun build(): BillingError =
+                                BillingError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -7861,7 +7576,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaBillingError = apply {
+                        fun validate(): BillingError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -8023,7 +7738,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaBillingError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is BillingError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -8033,10 +7748,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaBillingError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "BillingError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaPermissionError
+                    class PermissionError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -8101,7 +7816,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaPermissionError].
+                             * [PermissionError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -8112,7 +7827,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaPermissionError]. */
+                        /** A builder for [PermissionError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -8120,11 +7835,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaPermissionError: BetaPermissionError) = apply {
-                                message = betaPermissionError.message
-                                type = betaPermissionError.type
+                            internal fun from(permissionError: PermissionError) = apply {
+                                message = permissionError.message
+                                type = permissionError.type
                                 additionalProperties =
-                                    betaPermissionError.additionalProperties.toMutableMap()
+                                    permissionError.additionalProperties.toMutableMap()
                             }
 
                             fun message(message: String) = message(JsonField.of(message))
@@ -8174,7 +7889,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaPermissionError].
+                             * Returns an immutable instance of [PermissionError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -8187,8 +7902,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaPermissionError =
-                                BetaPermissionError(
+                            fun build(): PermissionError =
+                                PermissionError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -8197,7 +7912,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaPermissionError = apply {
+                        fun validate(): PermissionError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -8359,7 +8074,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaPermissionError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is PermissionError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -8369,10 +8084,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaPermissionError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "PermissionError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaNotFoundError
+                    class NotFoundError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -8437,7 +8152,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaNotFoundError].
+                             * [NotFoundError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -8448,7 +8163,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaNotFoundError]. */
+                        /** A builder for [NotFoundError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -8456,11 +8171,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaNotFoundError: BetaNotFoundError) = apply {
-                                message = betaNotFoundError.message
-                                type = betaNotFoundError.type
+                            internal fun from(notFoundError: NotFoundError) = apply {
+                                message = notFoundError.message
+                                type = notFoundError.type
                                 additionalProperties =
-                                    betaNotFoundError.additionalProperties.toMutableMap()
+                                    notFoundError.additionalProperties.toMutableMap()
                             }
 
                             fun message(message: String) = message(JsonField.of(message))
@@ -8510,7 +8225,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaNotFoundError].
+                             * Returns an immutable instance of [NotFoundError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -8523,8 +8238,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaNotFoundError =
-                                BetaNotFoundError(
+                            fun build(): NotFoundError =
+                                NotFoundError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -8533,7 +8248,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaNotFoundError = apply {
+                        fun validate(): NotFoundError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -8695,7 +8410,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaNotFoundError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is NotFoundError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -8705,10 +8420,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaNotFoundError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "NotFoundError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaRateLimitError
+                    class RateLimitError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -8773,7 +8488,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaRateLimitError].
+                             * [RateLimitError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -8784,7 +8499,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaRateLimitError]. */
+                        /** A builder for [RateLimitError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -8792,11 +8507,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaRateLimitError: BetaRateLimitError) = apply {
-                                message = betaRateLimitError.message
-                                type = betaRateLimitError.type
+                            internal fun from(rateLimitError: RateLimitError) = apply {
+                                message = rateLimitError.message
+                                type = rateLimitError.type
                                 additionalProperties =
-                                    betaRateLimitError.additionalProperties.toMutableMap()
+                                    rateLimitError.additionalProperties.toMutableMap()
                             }
 
                             fun message(message: String) = message(JsonField.of(message))
@@ -8846,7 +8561,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaRateLimitError].
+                             * Returns an immutable instance of [RateLimitError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -8859,8 +8574,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaRateLimitError =
-                                BetaRateLimitError(
+                            fun build(): RateLimitError =
+                                RateLimitError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -8869,7 +8584,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaRateLimitError = apply {
+                        fun validate(): RateLimitError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -9031,7 +8746,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaRateLimitError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is RateLimitError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -9041,10 +8756,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaRateLimitError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "RateLimitError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaGatewayTimeoutError
+                    class TimeoutError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -9109,7 +8824,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaGatewayTimeoutError].
+                             * [TimeoutError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -9120,7 +8835,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaGatewayTimeoutError]. */
+                        /** A builder for [TimeoutError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -9128,13 +8843,12 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaGatewayTimeoutError: BetaGatewayTimeoutError) =
-                                apply {
-                                    message = betaGatewayTimeoutError.message
-                                    type = betaGatewayTimeoutError.type
-                                    additionalProperties =
-                                        betaGatewayTimeoutError.additionalProperties.toMutableMap()
-                                }
+                            internal fun from(timeoutError: TimeoutError) = apply {
+                                message = timeoutError.message
+                                type = timeoutError.type
+                                additionalProperties =
+                                    timeoutError.additionalProperties.toMutableMap()
+                            }
 
                             fun message(message: String) = message(JsonField.of(message))
 
@@ -9183,7 +8897,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaGatewayTimeoutError].
+                             * Returns an immutable instance of [TimeoutError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -9196,8 +8910,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaGatewayTimeoutError =
-                                BetaGatewayTimeoutError(
+                            fun build(): TimeoutError =
+                                TimeoutError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -9206,7 +8920,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaGatewayTimeoutError = apply {
+                        fun validate(): TimeoutError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -9368,7 +9082,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaGatewayTimeoutError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is TimeoutError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -9378,10 +9092,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaGatewayTimeoutError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "TimeoutError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaApiError
+                    class ApiError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -9445,8 +9159,7 @@ private constructor(
                         companion object {
 
                             /**
-                             * Returns a mutable builder for constructing an instance of
-                             * [BetaApiError].
+                             * Returns a mutable builder for constructing an instance of [ApiError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -9457,7 +9170,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaApiError]. */
+                        /** A builder for [ApiError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -9465,11 +9178,10 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaApiError: BetaApiError) = apply {
-                                message = betaApiError.message
-                                type = betaApiError.type
-                                additionalProperties =
-                                    betaApiError.additionalProperties.toMutableMap()
+                            internal fun from(apiError: ApiError) = apply {
+                                message = apiError.message
+                                type = apiError.type
+                                additionalProperties = apiError.additionalProperties.toMutableMap()
                             }
 
                             fun message(message: String) = message(JsonField.of(message))
@@ -9519,7 +9231,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaApiError].
+                             * Returns an immutable instance of [ApiError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -9532,8 +9244,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaApiError =
-                                BetaApiError(
+                            fun build(): ApiError =
+                                ApiError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -9542,7 +9254,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaApiError = apply {
+                        fun validate(): ApiError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -9704,7 +9416,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaApiError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is ApiError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -9714,10 +9426,10 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaApiError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "ApiError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
 
-                    class BetaOverloadedError
+                    class OverloadedError
                     private constructor(
                         private val message: JsonField<String>,
                         private val type: JsonField<Type>,
@@ -9782,7 +9494,7 @@ private constructor(
 
                             /**
                              * Returns a mutable builder for constructing an instance of
-                             * [BetaOverloadedError].
+                             * [OverloadedError].
                              *
                              * The following fields are required:
                              * ```kotlin
@@ -9793,7 +9505,7 @@ private constructor(
                             fun builder() = Builder()
                         }
 
-                        /** A builder for [BetaOverloadedError]. */
+                        /** A builder for [OverloadedError]. */
                         class Builder internal constructor() {
 
                             private var message: JsonField<String>? = null
@@ -9801,11 +9513,11 @@ private constructor(
                             private var additionalProperties: MutableMap<String, JsonValue> =
                                 mutableMapOf()
 
-                            internal fun from(betaOverloadedError: BetaOverloadedError) = apply {
-                                message = betaOverloadedError.message
-                                type = betaOverloadedError.type
+                            internal fun from(overloadedError: OverloadedError) = apply {
+                                message = overloadedError.message
+                                type = overloadedError.type
                                 additionalProperties =
-                                    betaOverloadedError.additionalProperties.toMutableMap()
+                                    overloadedError.additionalProperties.toMutableMap()
                             }
 
                             fun message(message: String) = message(JsonField.of(message))
@@ -9855,7 +9567,7 @@ private constructor(
                             }
 
                             /**
-                             * Returns an immutable instance of [BetaOverloadedError].
+                             * Returns an immutable instance of [OverloadedError].
                              *
                              * Further updates to this [Builder] will not mutate the returned
                              * instance.
@@ -9868,8 +9580,8 @@ private constructor(
                              *
                              * @throws IllegalStateException if any required field is unset.
                              */
-                            fun build(): BetaOverloadedError =
-                                BetaOverloadedError(
+                            fun build(): OverloadedError =
+                                OverloadedError(
                                     checkRequired("message", message),
                                     checkRequired("type", type),
                                     additionalProperties.toMutableMap(),
@@ -9878,7 +9590,7 @@ private constructor(
 
                         private var validated: Boolean = false
 
-                        fun validate(): BetaOverloadedError = apply {
+                        fun validate(): OverloadedError = apply {
                             if (validated) {
                                 return@apply
                             }
@@ -10040,7 +9752,7 @@ private constructor(
                                 return true
                             }
 
-                            return /* spotless:off */ other is BetaOverloadedError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                            return /* spotless:off */ other is OverloadedError && message == other.message && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                         }
 
                         /* spotless:off */
@@ -10050,7 +9762,7 @@ private constructor(
                         override fun hashCode(): Int = hashCode
 
                         override fun toString() =
-                            "BetaOverloadedError{message=$message, type=$type, additionalProperties=$additionalProperties}"
+                            "OverloadedError{message=$message, type=$type, additionalProperties=$additionalProperties}"
                     }
                 }
 
@@ -10324,7 +10036,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaErroredResult && error == other.error && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Errored && error == other.error && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -10334,10 +10046,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaErroredResult{error=$error, type=$type, additionalProperties=$additionalProperties}"
+                "Errored{error=$error, type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class BetaCanceledResult
+        class Canceled
         private constructor(
             private val type: JsonField<Type>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -10377,7 +10089,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [BetaCanceledResult].
+                 * Returns a mutable builder for constructing an instance of [Canceled].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -10387,15 +10099,15 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaCanceledResult]. */
+            /** A builder for [Canceled]. */
             class Builder internal constructor() {
 
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaCanceledResult: BetaCanceledResult) = apply {
-                    type = betaCanceledResult.type
-                    additionalProperties = betaCanceledResult.additionalProperties.toMutableMap()
+                internal fun from(canceled: Canceled) = apply {
+                    type = canceled.type
+                    additionalProperties = canceled.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -10432,7 +10144,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaCanceledResult].
+                 * Returns an immutable instance of [Canceled].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -10443,16 +10155,13 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaCanceledResult =
-                    BetaCanceledResult(
-                        checkRequired("type", type),
-                        additionalProperties.toMutableMap(),
-                    )
+                fun build(): Canceled =
+                    Canceled(checkRequired("type", type), additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
 
-            fun validate(): BetaCanceledResult = apply {
+            fun validate(): Canceled = apply {
                 if (validated) {
                     return@apply
                 }
@@ -10604,7 +10313,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaCanceledResult && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Canceled && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -10614,10 +10323,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaCanceledResult{type=$type, additionalProperties=$additionalProperties}"
+                "Canceled{type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class BetaExpiredResult
+        class Expired
         private constructor(
             private val type: JsonField<Type>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -10657,7 +10366,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [BetaExpiredResult].
+                 * Returns a mutable builder for constructing an instance of [Expired].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -10667,15 +10376,15 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaExpiredResult]. */
+            /** A builder for [Expired]. */
             class Builder internal constructor() {
 
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaExpiredResult: BetaExpiredResult) = apply {
-                    type = betaExpiredResult.type
-                    additionalProperties = betaExpiredResult.additionalProperties.toMutableMap()
+                internal fun from(expired: Expired) = apply {
+                    type = expired.type
+                    additionalProperties = expired.additionalProperties.toMutableMap()
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -10712,7 +10421,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaExpiredResult].
+                 * Returns an immutable instance of [Expired].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -10723,16 +10432,13 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaExpiredResult =
-                    BetaExpiredResult(
-                        checkRequired("type", type),
-                        additionalProperties.toMutableMap(),
-                    )
+                fun build(): Expired =
+                    Expired(checkRequired("type", type), additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
 
-            fun validate(): BetaExpiredResult = apply {
+            fun validate(): Expired = apply {
                 if (validated) {
                     return@apply
                 }
@@ -10884,7 +10590,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaExpiredResult && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Expired && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -10894,7 +10600,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaExpiredResult{type=$type, additionalProperties=$additionalProperties}"
+                "Expired{type=$type, additionalProperties=$additionalProperties}"
         }
     }
 

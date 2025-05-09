@@ -75,8 +75,7 @@ internal class ServiceParamsTest {
                                     .build()
                             )
                             .addCitation(
-                                MessageCreateParams.System.RequestTextBlock.Citation
-                                    .RequestCharLocationCitation
+                                MessageCreateParams.System.RequestTextBlock.Citation.CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -85,7 +84,7 @@ internal class ServiceParamsTest {
                                     .startCharIndex(0L)
                                     .type(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -95,10 +94,10 @@ internal class ServiceParamsTest {
                     )
                 )
                 .temperature(1.0)
-                .configEnabledThinking(1024L)
+                .enabledThinking(1024L)
                 .toolChoice(
-                    MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                        .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                    MessageCreateParams.ToolChoice.Auto.builder()
+                        .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
