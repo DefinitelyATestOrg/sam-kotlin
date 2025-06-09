@@ -40,7 +40,7 @@ internal class MessageCountTokensBetaParamsTest {
                         )
                         .addCitation(
                             MessageCountTokensBetaParams.System.BetaRequestTextBlock.Citation
-                                .BetaRequestCharLocationCitation
+                                .CharLocation
                                 .builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
@@ -50,7 +50,7 @@ internal class MessageCountTokensBetaParamsTest {
                                 .type(
                                     MessageCountTokensBetaParams.System.BetaRequestTextBlock
                                         .Citation
-                                        .BetaRequestCharLocationCitation
+                                        .CharLocation
                                         .Type
                                         .CHAR_LOCATION
                                 )
@@ -59,10 +59,10 @@ internal class MessageCountTokensBetaParamsTest {
                         .build()
                 )
             )
-            .betaThinkingConfigEnabledThinking(1024L)
+            .enabledThinking(1024L)
             .toolChoice(
-                MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.builder()
-                    .type(MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                MessageCountTokensBetaParams.ToolChoice.Auto.builder()
+                    .type(MessageCountTokensBetaParams.ToolChoice.Auto.Type.AUTO)
                     .disableParallelToolUse(true)
                     .build()
             )
@@ -144,7 +144,7 @@ internal class MessageCountTokensBetaParamsTest {
                             )
                             .addCitation(
                                 MessageCountTokensBetaParams.System.BetaRequestTextBlock.Citation
-                                    .BetaRequestCharLocationCitation
+                                    .CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -154,7 +154,7 @@ internal class MessageCountTokensBetaParamsTest {
                                     .type(
                                         MessageCountTokensBetaParams.System.BetaRequestTextBlock
                                             .Citation
-                                            .BetaRequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -163,10 +163,10 @@ internal class MessageCountTokensBetaParamsTest {
                             .build()
                     )
                 )
-                .betaThinkingConfigEnabledThinking(1024L)
+                .enabledThinking(1024L)
                 .toolChoice(
-                    MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.builder()
-                        .type(MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                    MessageCountTokensBetaParams.ToolChoice.Auto.builder()
+                        .type(MessageCountTokensBetaParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -278,7 +278,7 @@ internal class MessageCountTokensBetaParamsTest {
                             )
                             .addCitation(
                                 MessageCountTokensBetaParams.System.BetaRequestTextBlock.Citation
-                                    .BetaRequestCharLocationCitation
+                                    .CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -288,7 +288,7 @@ internal class MessageCountTokensBetaParamsTest {
                                     .type(
                                         MessageCountTokensBetaParams.System.BetaRequestTextBlock
                                             .Citation
-                                            .BetaRequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -297,10 +297,10 @@ internal class MessageCountTokensBetaParamsTest {
                             .build()
                     )
                 )
-                .betaThinkingConfigEnabledThinking(1024L)
+                .enabledThinking(1024L)
                 .toolChoice(
-                    MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.builder()
-                        .type(MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                    MessageCountTokensBetaParams.ToolChoice.Auto.builder()
+                        .type(MessageCountTokensBetaParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -380,7 +380,7 @@ internal class MessageCountTokensBetaParamsTest {
                             )
                             .addCitation(
                                 MessageCountTokensBetaParams.System.BetaRequestTextBlock.Citation
-                                    .BetaRequestCharLocationCitation
+                                    .CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -390,7 +390,7 @@ internal class MessageCountTokensBetaParamsTest {
                                     .type(
                                         MessageCountTokensBetaParams.System.BetaRequestTextBlock
                                             .Citation
-                                            .BetaRequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -402,21 +402,18 @@ internal class MessageCountTokensBetaParamsTest {
             )
         assertThat(body.thinking())
             .isEqualTo(
-                MessageCountTokensBetaParams.Thinking.ofBetaThinkingConfigEnabled(
-                    MessageCountTokensBetaParams.Thinking.BetaThinkingConfigEnabled.builder()
+                MessageCountTokensBetaParams.Thinking.ofEnabled(
+                    MessageCountTokensBetaParams.Thinking.Enabled.builder()
                         .budgetTokens(1024L)
-                        .type(
-                            MessageCountTokensBetaParams.Thinking.BetaThinkingConfigEnabled.Type
-                                .ENABLED
-                        )
+                        .type(MessageCountTokensBetaParams.Thinking.Enabled.Type.ENABLED)
                         .build()
                 )
             )
         assertThat(body.toolChoice())
             .isEqualTo(
-                MessageCountTokensBetaParams.ToolChoice.ofBetaToolChoiceAuto(
-                    MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.builder()
-                        .type(MessageCountTokensBetaParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                MessageCountTokensBetaParams.ToolChoice.ofAuto(
+                    MessageCountTokensBetaParams.ToolChoice.Auto.builder()
+                        .type(MessageCountTokensBetaParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )

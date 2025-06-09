@@ -48,7 +48,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                         )
                         .addCitation(
                             MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
-                                .BetaRequestCharLocationCitation
+                                .CharLocation
                                 .builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
@@ -58,7 +58,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                                 .type(
                                     MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                         .Citation
-                                        .BetaRequestCharLocationCitation
+                                        .CharLocation
                                         .Type
                                         .CHAR_LOCATION
                                 )
@@ -68,10 +68,10 @@ internal class MessagesBetaTrueCreateParamsTest {
                 )
             )
             .temperature(1.0)
-            .betaThinkingConfigEnabledThinking(1024L)
+            .enabledThinking(1024L)
             .toolChoice(
-                MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.builder()
-                    .type(MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                    .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                     .disableParallelToolUse(true)
                     .build()
             )
@@ -163,7 +163,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                             )
                             .addCitation(
                                 MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
-                                    .BetaRequestCharLocationCitation
+                                    .CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -173,7 +173,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                                     .type(
                                         MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                             .Citation
-                                            .BetaRequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -183,10 +183,10 @@ internal class MessagesBetaTrueCreateParamsTest {
                     )
                 )
                 .temperature(1.0)
-                .betaThinkingConfigEnabledThinking(1024L)
+                .enabledThinking(1024L)
                 .toolChoice(
-                    MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.builder()
-                        .type(MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                    MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                        .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -309,7 +309,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                             )
                             .addCitation(
                                 MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
-                                    .BetaRequestCharLocationCitation
+                                    .CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -319,7 +319,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                                     .type(
                                         MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                             .Citation
-                                            .BetaRequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -329,10 +329,10 @@ internal class MessagesBetaTrueCreateParamsTest {
                     )
                 )
                 .temperature(1.0)
-                .betaThinkingConfigEnabledThinking(1024L)
+                .enabledThinking(1024L)
                 .toolChoice(
-                    MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.builder()
-                        .type(MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                    MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                        .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -423,7 +423,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                             )
                             .addCitation(
                                 MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
-                                    .BetaRequestCharLocationCitation
+                                    .CharLocation
                                     .builder()
                                     .citedText("cited_text")
                                     .documentIndex(0L)
@@ -433,7 +433,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                                     .type(
                                         MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                             .Citation
-                                            .BetaRequestCharLocationCitation
+                                            .CharLocation
                                             .Type
                                             .CHAR_LOCATION
                                     )
@@ -446,21 +446,18 @@ internal class MessagesBetaTrueCreateParamsTest {
         assertThat(body.temperature()).isEqualTo(1.0)
         assertThat(body.thinking())
             .isEqualTo(
-                MessagesBetaTrueCreateParams.Thinking.ofBetaThinkingConfigEnabled(
-                    MessagesBetaTrueCreateParams.Thinking.BetaThinkingConfigEnabled.builder()
+                MessagesBetaTrueCreateParams.Thinking.ofEnabled(
+                    MessagesBetaTrueCreateParams.Thinking.Enabled.builder()
                         .budgetTokens(1024L)
-                        .type(
-                            MessagesBetaTrueCreateParams.Thinking.BetaThinkingConfigEnabled.Type
-                                .ENABLED
-                        )
+                        .type(MessagesBetaTrueCreateParams.Thinking.Enabled.Type.ENABLED)
                         .build()
                 )
             )
         assertThat(body.toolChoice())
             .isEqualTo(
-                MessagesBetaTrueCreateParams.ToolChoice.ofBetaToolChoiceAuto(
-                    MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.builder()
-                        .type(MessagesBetaTrueCreateParams.ToolChoice.BetaToolChoiceAuto.Type.AUTO)
+                MessagesBetaTrueCreateParams.ToolChoice.ofAuto(
+                    MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                        .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )

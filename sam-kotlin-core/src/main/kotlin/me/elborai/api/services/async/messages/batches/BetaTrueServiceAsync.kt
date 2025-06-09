@@ -25,9 +25,24 @@ interface BetaTrueServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun retrieve(
+        messageBatchId: String,
+        params: BetaTrueRetrieveParams = BetaTrueRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BetaTrueRetrieveResponse =
+        retrieve(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
         params: BetaTrueRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BetaTrueRetrieveResponse
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
+        messageBatchId: String,
+        requestOptions: RequestOptions,
+    ): BetaTrueRetrieveResponse =
+        retrieve(messageBatchId, BetaTrueRetrieveParams.none(), requestOptions)
 
     /**
      * Delete a Message Batch.
@@ -39,9 +54,23 @@ interface BetaTrueServiceAsync {
      * [user guide](/en/docs/build-with-claude/batch-processing)
      */
     suspend fun delete(
+        messageBatchId: String,
+        params: BetaTrueDeleteParams = BetaTrueDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BetaTrueDeleteResponse =
+        delete(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+    /** @see [delete] */
+    suspend fun delete(
         params: BetaTrueDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BetaTrueDeleteResponse
+
+    /** @see [delete] */
+    suspend fun delete(
+        messageBatchId: String,
+        requestOptions: RequestOptions,
+    ): BetaTrueDeleteResponse = delete(messageBatchId, BetaTrueDeleteParams.none(), requestOptions)
 
     /**
      * A view of [BetaTrueServiceAsync] that provides access to raw HTTP responses for each method.
@@ -54,9 +83,26 @@ interface BetaTrueServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
+            messageBatchId: String,
+            params: BetaTrueRetrieveParams = BetaTrueRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BetaTrueRetrieveResponse> =
+            retrieve(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
             params: BetaTrueRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BetaTrueRetrieveResponse>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
+            messageBatchId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BetaTrueRetrieveResponse> =
+            retrieve(messageBatchId, BetaTrueRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `delete
@@ -65,8 +111,25 @@ interface BetaTrueServiceAsync {
          */
         @MustBeClosed
         suspend fun delete(
+            messageBatchId: String,
+            params: BetaTrueDeleteParams = BetaTrueDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BetaTrueDeleteResponse> =
+            delete(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
             params: BetaTrueDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BetaTrueDeleteResponse>
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
+            messageBatchId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BetaTrueDeleteResponse> =
+            delete(messageBatchId, BetaTrueDeleteParams.none(), requestOptions)
     }
 }

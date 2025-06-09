@@ -14,19 +14,15 @@ internal class BatchResultsBetaResponseTest {
         val batchResultsBetaResponse =
             BatchResultsBetaResponse.builder()
                 .customId("my-custom-id-1")
-                .betaSucceededResult(
-                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message.builder()
+                .succeededResult(
+                    BatchResultsBetaResponse.Result.Succeeded.Message.builder()
                         .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                         .addContent(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Content
-                                .BetaResponseTextBlock
-                                .builder()
+                            BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text.builder()
                                 .addCitation(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Content
-                                        .BetaResponseTextBlock
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
                                         .Citation
-                                        .BetaResponseCharLocationCitation
+                                        .CharLocation
                                         .builder()
                                         .citedText("cited_text")
                                         .documentIndex(0L)
@@ -34,12 +30,11 @@ internal class BatchResultsBetaResponseTest {
                                         .endCharIndex(0L)
                                         .startCharIndex(0L)
                                         .type(
-                                            BatchResultsBetaResponse.Result.BetaSucceededResult
-                                                .Message
+                                            BatchResultsBetaResponse.Result.Succeeded.Message
                                                 .Content
-                                                .BetaResponseTextBlock
+                                                .Text
                                                 .Citation
-                                                .BetaResponseCharLocationCitation
+                                                .CharLocation
                                                 .Type
                                                 .CHAR_LOCATION
                                         )
@@ -47,30 +42,21 @@ internal class BatchResultsBetaResponseTest {
                                 )
                                 .text("Hi! My name is Claude.")
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Content
-                                        .BetaResponseTextBlock
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
                                         .Type
                                         .TEXT
                                 )
                                 .build()
                         )
                         .model("claude-3-7-sonnet-20250219")
-                        .role(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Role
-                                .ASSISTANT
-                        )
+                        .role(BatchResultsBetaResponse.Result.Succeeded.Message.Role.ASSISTANT)
                         .stopReason(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.StopReason
-                                .END_TURN
+                            BatchResultsBetaResponse.Result.Succeeded.Message.StopReason.END_TURN
                         )
                         .stopSequence(null)
-                        .type(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Type.MESSAGE
-                        )
+                        .type(BatchResultsBetaResponse.Result.Succeeded.Message.Type.MESSAGE)
                         .usage(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Usage
-                                .builder()
+                            BatchResultsBetaResponse.Result.Succeeded.Message.Usage.builder()
                                 .cacheCreationInputTokens(2051L)
                                 .cacheReadInputTokens(2051L)
                                 .inputTokens(2095L)
@@ -84,23 +70,20 @@ internal class BatchResultsBetaResponseTest {
         assertThat(batchResultsBetaResponse.customId()).isEqualTo("my-custom-id-1")
         assertThat(batchResultsBetaResponse.result())
             .isEqualTo(
-                BatchResultsBetaResponse.Result.ofBetaSucceeded(
-                    BatchResultsBetaResponse.Result.BetaSucceededResult.builder()
+                BatchResultsBetaResponse.Result.ofSucceeded(
+                    BatchResultsBetaResponse.Result.Succeeded.builder()
                         .message(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.builder()
+                            BatchResultsBetaResponse.Result.Succeeded.Message.builder()
                                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                                 .addContent(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Content
-                                        .BetaResponseTextBlock
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
                                         .builder()
                                         .addCitation(
-                                            BatchResultsBetaResponse.Result.BetaSucceededResult
-                                                .Message
+                                            BatchResultsBetaResponse.Result.Succeeded.Message
                                                 .Content
-                                                .BetaResponseTextBlock
+                                                .Text
                                                 .Citation
-                                                .BetaResponseCharLocationCitation
+                                                .CharLocation
                                                 .builder()
                                                 .citedText("cited_text")
                                                 .documentIndex(0L)
@@ -108,13 +91,12 @@ internal class BatchResultsBetaResponseTest {
                                                 .endCharIndex(0L)
                                                 .startCharIndex(0L)
                                                 .type(
-                                                    BatchResultsBetaResponse.Result
-                                                        .BetaSucceededResult
+                                                    BatchResultsBetaResponse.Result.Succeeded
                                                         .Message
                                                         .Content
-                                                        .BetaResponseTextBlock
+                                                        .Text
                                                         .Citation
-                                                        .BetaResponseCharLocationCitation
+                                                        .CharLocation
                                                         .Type
                                                         .CHAR_LOCATION
                                                 )
@@ -122,10 +104,9 @@ internal class BatchResultsBetaResponseTest {
                                         )
                                         .text("Hi! My name is Claude.")
                                         .type(
-                                            BatchResultsBetaResponse.Result.BetaSucceededResult
-                                                .Message
+                                            BatchResultsBetaResponse.Result.Succeeded.Message
                                                 .Content
-                                                .BetaResponseTextBlock
+                                                .Text
                                                 .Type
                                                 .TEXT
                                         )
@@ -133,22 +114,18 @@ internal class BatchResultsBetaResponseTest {
                                 )
                                 .model("claude-3-7-sonnet-20250219")
                                 .role(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Role
-                                        .ASSISTANT
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Role.ASSISTANT
                                 )
                                 .stopReason(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .StopReason
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.StopReason
                                         .END_TURN
                                 )
                                 .stopSequence(null)
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Type
-                                        .MESSAGE
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Type.MESSAGE
                                 )
                                 .usage(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Usage
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Usage
                                         .builder()
                                         .cacheCreationInputTokens(2051L)
                                         .cacheReadInputTokens(2051L)
@@ -158,7 +135,7 @@ internal class BatchResultsBetaResponseTest {
                                 )
                                 .build()
                         )
-                        .type(BatchResultsBetaResponse.Result.BetaSucceededResult.Type.SUCCEEDED)
+                        .type(BatchResultsBetaResponse.Result.Succeeded.Type.SUCCEEDED)
                         .build()
                 )
             )
@@ -170,19 +147,15 @@ internal class BatchResultsBetaResponseTest {
         val batchResultsBetaResponse =
             BatchResultsBetaResponse.builder()
                 .customId("my-custom-id-1")
-                .betaSucceededResult(
-                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message.builder()
+                .succeededResult(
+                    BatchResultsBetaResponse.Result.Succeeded.Message.builder()
                         .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                         .addContent(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Content
-                                .BetaResponseTextBlock
-                                .builder()
+                            BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text.builder()
                                 .addCitation(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Content
-                                        .BetaResponseTextBlock
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
                                         .Citation
-                                        .BetaResponseCharLocationCitation
+                                        .CharLocation
                                         .builder()
                                         .citedText("cited_text")
                                         .documentIndex(0L)
@@ -190,12 +163,11 @@ internal class BatchResultsBetaResponseTest {
                                         .endCharIndex(0L)
                                         .startCharIndex(0L)
                                         .type(
-                                            BatchResultsBetaResponse.Result.BetaSucceededResult
-                                                .Message
+                                            BatchResultsBetaResponse.Result.Succeeded.Message
                                                 .Content
-                                                .BetaResponseTextBlock
+                                                .Text
                                                 .Citation
-                                                .BetaResponseCharLocationCitation
+                                                .CharLocation
                                                 .Type
                                                 .CHAR_LOCATION
                                         )
@@ -203,30 +175,21 @@ internal class BatchResultsBetaResponseTest {
                                 )
                                 .text("Hi! My name is Claude.")
                                 .type(
-                                    BatchResultsBetaResponse.Result.BetaSucceededResult.Message
-                                        .Content
-                                        .BetaResponseTextBlock
+                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
                                         .Type
                                         .TEXT
                                 )
                                 .build()
                         )
                         .model("claude-3-7-sonnet-20250219")
-                        .role(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Role
-                                .ASSISTANT
-                        )
+                        .role(BatchResultsBetaResponse.Result.Succeeded.Message.Role.ASSISTANT)
                         .stopReason(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.StopReason
-                                .END_TURN
+                            BatchResultsBetaResponse.Result.Succeeded.Message.StopReason.END_TURN
                         )
                         .stopSequence(null)
-                        .type(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Type.MESSAGE
-                        )
+                        .type(BatchResultsBetaResponse.Result.Succeeded.Message.Type.MESSAGE)
                         .usage(
-                            BatchResultsBetaResponse.Result.BetaSucceededResult.Message.Usage
-                                .builder()
+                            BatchResultsBetaResponse.Result.Succeeded.Message.Usage.builder()
                                 .cacheCreationInputTokens(2051L)
                                 .cacheReadInputTokens(2051L)
                                 .inputTokens(2095L)

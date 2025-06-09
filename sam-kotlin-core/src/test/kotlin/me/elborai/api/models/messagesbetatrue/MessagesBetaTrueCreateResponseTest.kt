@@ -15,10 +15,9 @@ internal class MessagesBetaTrueCreateResponseTest {
             MessagesBetaTrueCreateResponse.builder()
                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                 .addContent(
-                    MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.builder()
+                    MessagesBetaTrueCreateResponse.Content.Text.builder()
                         .addCitation(
-                            MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.Citation
-                                .BetaResponseCharLocationCitation
+                            MessagesBetaTrueCreateResponse.Content.Text.Citation.CharLocation
                                 .builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
@@ -26,18 +25,15 @@ internal class MessagesBetaTrueCreateResponseTest {
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
                                 .type(
-                                    MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock
-                                        .Citation
-                                        .BetaResponseCharLocationCitation
+                                    MessagesBetaTrueCreateResponse.Content.Text.Citation
+                                        .CharLocation
                                         .Type
                                         .CHAR_LOCATION
                                 )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(
-                            MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.Type.TEXT
-                        )
+                        .type(MessagesBetaTrueCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")
@@ -58,11 +54,10 @@ internal class MessagesBetaTrueCreateResponseTest {
         assertThat(messagesBetaTrueCreateResponse.id()).isEqualTo("msg_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(messagesBetaTrueCreateResponse.content())
             .containsExactly(
-                MessagesBetaTrueCreateResponse.Content.ofBetaResponseTextBlock(
-                    MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.builder()
+                MessagesBetaTrueCreateResponse.Content.ofText(
+                    MessagesBetaTrueCreateResponse.Content.Text.builder()
                         .addCitation(
-                            MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.Citation
-                                .BetaResponseCharLocationCitation
+                            MessagesBetaTrueCreateResponse.Content.Text.Citation.CharLocation
                                 .builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
@@ -70,18 +65,15 @@ internal class MessagesBetaTrueCreateResponseTest {
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
                                 .type(
-                                    MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock
-                                        .Citation
-                                        .BetaResponseCharLocationCitation
+                                    MessagesBetaTrueCreateResponse.Content.Text.Citation
+                                        .CharLocation
                                         .Type
                                         .CHAR_LOCATION
                                 )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(
-                            MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.Type.TEXT
-                        )
+                        .type(MessagesBetaTrueCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
             )
@@ -111,10 +103,9 @@ internal class MessagesBetaTrueCreateResponseTest {
             MessagesBetaTrueCreateResponse.builder()
                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                 .addContent(
-                    MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.builder()
+                    MessagesBetaTrueCreateResponse.Content.Text.builder()
                         .addCitation(
-                            MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.Citation
-                                .BetaResponseCharLocationCitation
+                            MessagesBetaTrueCreateResponse.Content.Text.Citation.CharLocation
                                 .builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
@@ -122,18 +113,15 @@ internal class MessagesBetaTrueCreateResponseTest {
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
                                 .type(
-                                    MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock
-                                        .Citation
-                                        .BetaResponseCharLocationCitation
+                                    MessagesBetaTrueCreateResponse.Content.Text.Citation
+                                        .CharLocation
                                         .Type
                                         .CHAR_LOCATION
                                 )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(
-                            MessagesBetaTrueCreateResponse.Content.BetaResponseTextBlock.Type.TEXT
-                        )
+                        .type(MessagesBetaTrueCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")

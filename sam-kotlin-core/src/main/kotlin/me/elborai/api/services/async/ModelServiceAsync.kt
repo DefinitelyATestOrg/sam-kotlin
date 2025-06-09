@@ -26,9 +26,20 @@ interface ModelServiceAsync {
      * resolve a model alias to a model ID.
      */
     suspend fun retrieve(
+        modelId: String,
+        params: ModelRetrieveParams = ModelRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ModelRetrieveResponse = retrieve(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
         params: ModelRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveResponse
+
+    /** @see [retrieve] */
+    suspend fun retrieve(modelId: String, requestOptions: RequestOptions): ModelRetrieveResponse =
+        retrieve(modelId, ModelRetrieveParams.none(), requestOptions)
 
     /**
      * List available models.
@@ -52,9 +63,24 @@ interface ModelServiceAsync {
      * resolve a model alias to a model ID.
      */
     suspend fun retrieveBeta(
+        modelId: String,
+        params: ModelRetrieveBetaParams = ModelRetrieveBetaParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ModelRetrieveBetaResponse =
+        retrieveBeta(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+    /** @see [retrieveBeta] */
+    suspend fun retrieveBeta(
         params: ModelRetrieveBetaParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveBetaResponse
+
+    /** @see [retrieveBeta] */
+    suspend fun retrieveBeta(
+        modelId: String,
+        requestOptions: RequestOptions,
+    ): ModelRetrieveBetaResponse =
+        retrieveBeta(modelId, ModelRetrieveBetaParams.none(), requestOptions)
 
     /** A view of [ModelServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -65,9 +91,26 @@ interface ModelServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
+            modelId: String,
+            params: ModelRetrieveParams = ModelRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ModelRetrieveResponse> =
+            retrieve(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
             params: ModelRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelRetrieveResponse>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
+            modelId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ModelRetrieveResponse> =
+            retrieve(modelId, ModelRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/models`, but is otherwise the same as
@@ -90,8 +133,25 @@ interface ModelServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieveBeta(
+            modelId: String,
+            params: ModelRetrieveBetaParams = ModelRetrieveBetaParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ModelRetrieveBetaResponse> =
+            retrieveBeta(params.toBuilder().modelId(modelId).build(), requestOptions)
+
+        /** @see [retrieveBeta] */
+        @MustBeClosed
+        suspend fun retrieveBeta(
             params: ModelRetrieveBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelRetrieveBetaResponse>
+
+        /** @see [retrieveBeta] */
+        @MustBeClosed
+        suspend fun retrieveBeta(
+            modelId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ModelRetrieveBetaResponse> =
+            retrieveBeta(modelId, ModelRetrieveBetaParams.none(), requestOptions)
     }
 }

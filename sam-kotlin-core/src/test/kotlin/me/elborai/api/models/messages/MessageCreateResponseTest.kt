@@ -15,26 +15,22 @@ internal class MessageCreateResponseTest {
             MessageCreateResponse.builder()
                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                 .addContent(
-                    MessageCreateResponse.Content.ResponseTextBlock.builder()
+                    MessageCreateResponse.Content.Text.builder()
                         .addCitation(
-                            MessageCreateResponse.Content.ResponseTextBlock.Citation
-                                .ResponseCharLocationCitation
-                                .builder()
+                            MessageCreateResponse.Content.Text.Citation.CharLocation.builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
                                 .type(
-                                    MessageCreateResponse.Content.ResponseTextBlock.Citation
-                                        .ResponseCharLocationCitation
-                                        .Type
+                                    MessageCreateResponse.Content.Text.Citation.CharLocation.Type
                                         .CHAR_LOCATION
                                 )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessageCreateResponse.Content.ResponseTextBlock.Type.TEXT)
+                        .type(MessageCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")
@@ -55,27 +51,23 @@ internal class MessageCreateResponseTest {
         assertThat(messageCreateResponse.id()).isEqualTo("msg_013Zva2CMHLNnXjNJJKqJ2EF")
         assertThat(messageCreateResponse.content())
             .containsExactly(
-                MessageCreateResponse.Content.ofResponseTextBlock(
-                    MessageCreateResponse.Content.ResponseTextBlock.builder()
+                MessageCreateResponse.Content.ofText(
+                    MessageCreateResponse.Content.Text.builder()
                         .addCitation(
-                            MessageCreateResponse.Content.ResponseTextBlock.Citation
-                                .ResponseCharLocationCitation
-                                .builder()
+                            MessageCreateResponse.Content.Text.Citation.CharLocation.builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
                                 .type(
-                                    MessageCreateResponse.Content.ResponseTextBlock.Citation
-                                        .ResponseCharLocationCitation
-                                        .Type
+                                    MessageCreateResponse.Content.Text.Citation.CharLocation.Type
                                         .CHAR_LOCATION
                                 )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessageCreateResponse.Content.ResponseTextBlock.Type.TEXT)
+                        .type(MessageCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
             )
@@ -103,26 +95,22 @@ internal class MessageCreateResponseTest {
             MessageCreateResponse.builder()
                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                 .addContent(
-                    MessageCreateResponse.Content.ResponseTextBlock.builder()
+                    MessageCreateResponse.Content.Text.builder()
                         .addCitation(
-                            MessageCreateResponse.Content.ResponseTextBlock.Citation
-                                .ResponseCharLocationCitation
-                                .builder()
+                            MessageCreateResponse.Content.Text.Citation.CharLocation.builder()
                                 .citedText("cited_text")
                                 .documentIndex(0L)
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
                                 .type(
-                                    MessageCreateResponse.Content.ResponseTextBlock.Citation
-                                        .ResponseCharLocationCitation
-                                        .Type
+                                    MessageCreateResponse.Content.Text.Citation.CharLocation.Type
                                         .CHAR_LOCATION
                                 )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessageCreateResponse.Content.ResponseTextBlock.Type.TEXT)
+                        .type(MessageCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")

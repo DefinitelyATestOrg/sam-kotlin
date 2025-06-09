@@ -368,53 +368,33 @@ private constructor(
                 }
         }
 
-        /**
-         * Alias for calling [addContent] with
-         * `Content.ofBetaResponseTextBlock(betaResponseTextBlock)`.
-         */
-        fun addContent(betaResponseTextBlock: Content.BetaResponseTextBlock) =
-            addContent(Content.ofBetaResponseTextBlock(betaResponseTextBlock))
+        /** Alias for calling [addContent] with `Content.ofText(text)`. */
+        fun addContent(text: Content.Text) = addContent(Content.ofText(text))
 
-        /**
-         * Alias for calling [addContent] with
-         * `Content.ofBetaResponseToolUseBlock(betaResponseToolUseBlock)`.
-         */
-        fun addContent(betaResponseToolUseBlock: Content.BetaResponseToolUseBlock) =
-            addContent(Content.ofBetaResponseToolUseBlock(betaResponseToolUseBlock))
+        /** Alias for calling [addContent] with `Content.ofToolUse(toolUse)`. */
+        fun addContent(toolUse: Content.ToolUse) = addContent(Content.ofToolUse(toolUse))
 
-        /**
-         * Alias for calling [addContent] with
-         * `Content.ofBetaResponseThinkingBlock(betaResponseThinkingBlock)`.
-         */
-        fun addContent(betaResponseThinkingBlock: Content.BetaResponseThinkingBlock) =
-            addContent(Content.ofBetaResponseThinkingBlock(betaResponseThinkingBlock))
+        /** Alias for calling [addContent] with `Content.ofThinking(thinking)`. */
+        fun addContent(thinking: Content.Thinking) = addContent(Content.ofThinking(thinking))
 
-        /**
-         * Alias for calling [addContent] with
-         * `Content.ofBetaResponseRedactedThinkingBlock(betaResponseRedactedThinkingBlock)`.
-         */
-        fun addContent(
-            betaResponseRedactedThinkingBlock: Content.BetaResponseRedactedThinkingBlock
-        ) =
-            addContent(
-                Content.ofBetaResponseRedactedThinkingBlock(betaResponseRedactedThinkingBlock)
-            )
+        /** Alias for calling [addContent] with `Content.ofRedactedThinking(redactedThinking)`. */
+        fun addContent(redactedThinking: Content.RedactedThinking) =
+            addContent(Content.ofRedactedThinking(redactedThinking))
 
         /**
          * Alias for calling [addContent] with the following:
          * ```kotlin
-         * Content.BetaResponseRedactedThinkingBlock.builder()
-         *     .type(MessagesBetaTrueCreateResponse.Content.BetaResponseRedactedThinkingBlock.Type.REDACTED_THINKING)
+         * Content.RedactedThinking.builder()
+         *     .type(MessagesBetaTrueCreateResponse.Content.RedactedThinking.Type.REDACTED_THINKING)
          *     .data(data)
          *     .build()
          * ```
          */
-        fun addBetaResponseRedactedThinkingBlockContent(data: String) =
+        fun addRedactedThinkingContent(data: String) =
             addContent(
-                Content.BetaResponseRedactedThinkingBlock.builder()
+                Content.RedactedThinking.builder()
                     .type(
-                        MessagesBetaTrueCreateResponse.Content.BetaResponseRedactedThinkingBlock
-                            .Type
+                        MessagesBetaTrueCreateResponse.Content.RedactedThinking.Type
                             .REDACTED_THINKING
                     )
                     .data(data)
@@ -627,57 +607,45 @@ private constructor(
     @JsonSerialize(using = Content.Serializer::class)
     class Content
     private constructor(
-        private val betaResponseTextBlock: BetaResponseTextBlock? = null,
-        private val betaResponseToolUseBlock: BetaResponseToolUseBlock? = null,
-        private val betaResponseThinkingBlock: BetaResponseThinkingBlock? = null,
-        private val betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock? = null,
+        private val text: Text? = null,
+        private val toolUse: ToolUse? = null,
+        private val thinking: Thinking? = null,
+        private val redactedThinking: RedactedThinking? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun betaResponseTextBlock(): BetaResponseTextBlock? = betaResponseTextBlock
+        fun text(): Text? = text
 
-        fun betaResponseToolUseBlock(): BetaResponseToolUseBlock? = betaResponseToolUseBlock
+        fun toolUse(): ToolUse? = toolUse
 
-        fun betaResponseThinkingBlock(): BetaResponseThinkingBlock? = betaResponseThinkingBlock
+        fun thinking(): Thinking? = thinking
 
-        fun betaResponseRedactedThinkingBlock(): BetaResponseRedactedThinkingBlock? =
-            betaResponseRedactedThinkingBlock
+        fun redactedThinking(): RedactedThinking? = redactedThinking
 
-        fun isBetaResponseTextBlock(): Boolean = betaResponseTextBlock != null
+        fun isText(): Boolean = text != null
 
-        fun isBetaResponseToolUseBlock(): Boolean = betaResponseToolUseBlock != null
+        fun isToolUse(): Boolean = toolUse != null
 
-        fun isBetaResponseThinkingBlock(): Boolean = betaResponseThinkingBlock != null
+        fun isThinking(): Boolean = thinking != null
 
-        fun isBetaResponseRedactedThinkingBlock(): Boolean =
-            betaResponseRedactedThinkingBlock != null
+        fun isRedactedThinking(): Boolean = redactedThinking != null
 
-        fun asBetaResponseTextBlock(): BetaResponseTextBlock =
-            betaResponseTextBlock.getOrThrow("betaResponseTextBlock")
+        fun asText(): Text = text.getOrThrow("text")
 
-        fun asBetaResponseToolUseBlock(): BetaResponseToolUseBlock =
-            betaResponseToolUseBlock.getOrThrow("betaResponseToolUseBlock")
+        fun asToolUse(): ToolUse = toolUse.getOrThrow("toolUse")
 
-        fun asBetaResponseThinkingBlock(): BetaResponseThinkingBlock =
-            betaResponseThinkingBlock.getOrThrow("betaResponseThinkingBlock")
+        fun asThinking(): Thinking = thinking.getOrThrow("thinking")
 
-        fun asBetaResponseRedactedThinkingBlock(): BetaResponseRedactedThinkingBlock =
-            betaResponseRedactedThinkingBlock.getOrThrow("betaResponseRedactedThinkingBlock")
+        fun asRedactedThinking(): RedactedThinking = redactedThinking.getOrThrow("redactedThinking")
 
         fun _json(): JsonValue? = _json
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                betaResponseTextBlock != null ->
-                    visitor.visitBetaResponseTextBlock(betaResponseTextBlock)
-                betaResponseToolUseBlock != null ->
-                    visitor.visitBetaResponseToolUseBlock(betaResponseToolUseBlock)
-                betaResponseThinkingBlock != null ->
-                    visitor.visitBetaResponseThinkingBlock(betaResponseThinkingBlock)
-                betaResponseRedactedThinkingBlock != null ->
-                    visitor.visitBetaResponseRedactedThinkingBlock(
-                        betaResponseRedactedThinkingBlock
-                    )
+                text != null -> visitor.visitText(text)
+                toolUse != null -> visitor.visitToolUse(toolUse)
+                thinking != null -> visitor.visitThinking(thinking)
+                redactedThinking != null -> visitor.visitRedactedThinking(redactedThinking)
                 else -> visitor.unknown(_json)
             }
 
@@ -690,28 +658,20 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitBetaResponseTextBlock(
-                        betaResponseTextBlock: BetaResponseTextBlock
-                    ) {
-                        betaResponseTextBlock.validate()
+                    override fun visitText(text: Text) {
+                        text.validate()
                     }
 
-                    override fun visitBetaResponseToolUseBlock(
-                        betaResponseToolUseBlock: BetaResponseToolUseBlock
-                    ) {
-                        betaResponseToolUseBlock.validate()
+                    override fun visitToolUse(toolUse: ToolUse) {
+                        toolUse.validate()
                     }
 
-                    override fun visitBetaResponseThinkingBlock(
-                        betaResponseThinkingBlock: BetaResponseThinkingBlock
-                    ) {
-                        betaResponseThinkingBlock.validate()
+                    override fun visitThinking(thinking: Thinking) {
+                        thinking.validate()
                     }
 
-                    override fun visitBetaResponseRedactedThinkingBlock(
-                        betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-                    ) {
-                        betaResponseRedactedThinkingBlock.validate()
+                    override fun visitRedactedThinking(redactedThinking: RedactedThinking) {
+                        redactedThinking.validate()
                     }
                 }
             )
@@ -735,21 +695,14 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitBetaResponseTextBlock(
-                        betaResponseTextBlock: BetaResponseTextBlock
-                    ) = betaResponseTextBlock.validity()
+                    override fun visitText(text: Text) = text.validity()
 
-                    override fun visitBetaResponseToolUseBlock(
-                        betaResponseToolUseBlock: BetaResponseToolUseBlock
-                    ) = betaResponseToolUseBlock.validity()
+                    override fun visitToolUse(toolUse: ToolUse) = toolUse.validity()
 
-                    override fun visitBetaResponseThinkingBlock(
-                        betaResponseThinkingBlock: BetaResponseThinkingBlock
-                    ) = betaResponseThinkingBlock.validity()
+                    override fun visitThinking(thinking: Thinking) = thinking.validity()
 
-                    override fun visitBetaResponseRedactedThinkingBlock(
-                        betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-                    ) = betaResponseRedactedThinkingBlock.validity()
+                    override fun visitRedactedThinking(redactedThinking: RedactedThinking) =
+                        redactedThinking.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -760,39 +713,31 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Content && betaResponseTextBlock == other.betaResponseTextBlock && betaResponseToolUseBlock == other.betaResponseToolUseBlock && betaResponseThinkingBlock == other.betaResponseThinkingBlock && betaResponseRedactedThinkingBlock == other.betaResponseRedactedThinkingBlock /* spotless:on */
+            return /* spotless:off */ other is Content && text == other.text && toolUse == other.toolUse && thinking == other.thinking && redactedThinking == other.redactedThinking /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(betaResponseTextBlock, betaResponseToolUseBlock, betaResponseThinkingBlock, betaResponseRedactedThinkingBlock) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(text, toolUse, thinking, redactedThinking) /* spotless:on */
 
         override fun toString(): String =
             when {
-                betaResponseTextBlock != null ->
-                    "Content{betaResponseTextBlock=$betaResponseTextBlock}"
-                betaResponseToolUseBlock != null ->
-                    "Content{betaResponseToolUseBlock=$betaResponseToolUseBlock}"
-                betaResponseThinkingBlock != null ->
-                    "Content{betaResponseThinkingBlock=$betaResponseThinkingBlock}"
-                betaResponseRedactedThinkingBlock != null ->
-                    "Content{betaResponseRedactedThinkingBlock=$betaResponseRedactedThinkingBlock}"
+                text != null -> "Content{text=$text}"
+                toolUse != null -> "Content{toolUse=$toolUse}"
+                thinking != null -> "Content{thinking=$thinking}"
+                redactedThinking != null -> "Content{redactedThinking=$redactedThinking}"
                 _json != null -> "Content{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Content")
             }
 
         companion object {
 
-            fun ofBetaResponseTextBlock(betaResponseTextBlock: BetaResponseTextBlock) =
-                Content(betaResponseTextBlock = betaResponseTextBlock)
+            fun ofText(text: Text) = Content(text = text)
 
-            fun ofBetaResponseToolUseBlock(betaResponseToolUseBlock: BetaResponseToolUseBlock) =
-                Content(betaResponseToolUseBlock = betaResponseToolUseBlock)
+            fun ofToolUse(toolUse: ToolUse) = Content(toolUse = toolUse)
 
-            fun ofBetaResponseThinkingBlock(betaResponseThinkingBlock: BetaResponseThinkingBlock) =
-                Content(betaResponseThinkingBlock = betaResponseThinkingBlock)
+            fun ofThinking(thinking: Thinking) = Content(thinking = thinking)
 
-            fun ofBetaResponseRedactedThinkingBlock(
-                betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-            ) = Content(betaResponseRedactedThinkingBlock = betaResponseRedactedThinkingBlock)
+            fun ofRedactedThinking(redactedThinking: RedactedThinking) =
+                Content(redactedThinking = redactedThinking)
         }
 
         /**
@@ -800,17 +745,13 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            fun visitBetaResponseTextBlock(betaResponseTextBlock: BetaResponseTextBlock): T
+            fun visitText(text: Text): T
 
-            fun visitBetaResponseToolUseBlock(betaResponseToolUseBlock: BetaResponseToolUseBlock): T
+            fun visitToolUse(toolUse: ToolUse): T
 
-            fun visitBetaResponseThinkingBlock(
-                betaResponseThinkingBlock: BetaResponseThinkingBlock
-            ): T
+            fun visitThinking(thinking: Thinking): T
 
-            fun visitBetaResponseRedactedThinkingBlock(
-                betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-            ): T
+            fun visitRedactedThinking(redactedThinking: RedactedThinking): T
 
             /**
              * Maps an unknown variant of [Content] to a value of type [T].
@@ -835,27 +776,24 @@ private constructor(
 
                 when (type) {
                     "text" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaResponseTextBlock>())?.let {
-                            Content(betaResponseTextBlock = it, _json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Text>())?.let {
+                            Content(text = it, _json = json)
                         } ?: Content(_json = json)
                     }
                     "tool_use" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaResponseToolUseBlock>())
-                            ?.let { Content(betaResponseToolUseBlock = it, _json = json) }
-                            ?: Content(_json = json)
+                        return tryDeserialize(node, jacksonTypeRef<ToolUse>())?.let {
+                            Content(toolUse = it, _json = json)
+                        } ?: Content(_json = json)
                     }
                     "thinking" -> {
-                        return tryDeserialize(node, jacksonTypeRef<BetaResponseThinkingBlock>())
-                            ?.let { Content(betaResponseThinkingBlock = it, _json = json) }
-                            ?: Content(_json = json)
+                        return tryDeserialize(node, jacksonTypeRef<Thinking>())?.let {
+                            Content(thinking = it, _json = json)
+                        } ?: Content(_json = json)
                     }
                     "redacted_thinking" -> {
-                        return tryDeserialize(
-                                node,
-                                jacksonTypeRef<BetaResponseRedactedThinkingBlock>(),
-                            )
-                            ?.let { Content(betaResponseRedactedThinkingBlock = it, _json = json) }
-                            ?: Content(_json = json)
+                        return tryDeserialize(node, jacksonTypeRef<RedactedThinking>())?.let {
+                            Content(redactedThinking = it, _json = json)
+                        } ?: Content(_json = json)
                     }
                 }
 
@@ -871,21 +809,17 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.betaResponseTextBlock != null ->
-                        generator.writeObject(value.betaResponseTextBlock)
-                    value.betaResponseToolUseBlock != null ->
-                        generator.writeObject(value.betaResponseToolUseBlock)
-                    value.betaResponseThinkingBlock != null ->
-                        generator.writeObject(value.betaResponseThinkingBlock)
-                    value.betaResponseRedactedThinkingBlock != null ->
-                        generator.writeObject(value.betaResponseRedactedThinkingBlock)
+                    value.text != null -> generator.writeObject(value.text)
+                    value.toolUse != null -> generator.writeObject(value.toolUse)
+                    value.thinking != null -> generator.writeObject(value.thinking)
+                    value.redactedThinking != null -> generator.writeObject(value.redactedThinking)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Content")
                 }
             }
         }
 
-        class BetaResponseTextBlock
+        class Text
         private constructor(
             private val citations: JsonField<List<Citation>>,
             private val text: JsonField<String>,
@@ -967,8 +901,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [BetaResponseTextBlock].
+                 * Returns a mutable builder for constructing an instance of [Text].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -980,7 +913,7 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaResponseTextBlock]. */
+            /** A builder for [Text]. */
             class Builder internal constructor() {
 
                 private var citations: JsonField<MutableList<Citation>>? = null
@@ -988,11 +921,11 @@ private constructor(
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaResponseTextBlock: BetaResponseTextBlock) = apply {
-                    citations = betaResponseTextBlock.citations.map { it.toMutableList() }
-                    text = betaResponseTextBlock.text
-                    type = betaResponseTextBlock.type
-                    additionalProperties = betaResponseTextBlock.additionalProperties.toMutableMap()
+                internal fun from(text: Text) = apply {
+                    citations = text.citations.map { it.toMutableList() }
+                    this.text = text.text
+                    type = text.type
+                    additionalProperties = text.additionalProperties.toMutableMap()
                 }
 
                 /**
@@ -1028,35 +961,20 @@ private constructor(
                         }
                 }
 
-                /**
-                 * Alias for calling [addCitation] with
-                 * `Citation.ofBetaResponseCharLocation(betaResponseCharLocation)`.
-                 */
-                fun addCitation(
-                    betaResponseCharLocation: Citation.BetaResponseCharLocationCitation
-                ) = addCitation(Citation.ofBetaResponseCharLocation(betaResponseCharLocation))
+                /** Alias for calling [addCitation] with `Citation.ofCharLocation(charLocation)`. */
+                fun addCitation(charLocation: Citation.CharLocation) =
+                    addCitation(Citation.ofCharLocation(charLocation))
+
+                /** Alias for calling [addCitation] with `Citation.ofPageLocation(pageLocation)`. */
+                fun addCitation(pageLocation: Citation.PageLocation) =
+                    addCitation(Citation.ofPageLocation(pageLocation))
 
                 /**
                  * Alias for calling [addCitation] with
-                 * `Citation.ofBetaResponsePageLocation(betaResponsePageLocation)`.
+                 * `Citation.ofContentBlockLocation(contentBlockLocation)`.
                  */
-                fun addCitation(
-                    betaResponsePageLocation: Citation.BetaResponsePageLocationCitation
-                ) = addCitation(Citation.ofBetaResponsePageLocation(betaResponsePageLocation))
-
-                /**
-                 * Alias for calling [addCitation] with
-                 * `Citation.ofBetaResponseContentBlockLocation(betaResponseContentBlockLocation)`.
-                 */
-                fun addCitation(
-                    betaResponseContentBlockLocation:
-                        Citation.BetaResponseContentBlockLocationCitation
-                ) =
-                    addCitation(
-                        Citation.ofBetaResponseContentBlockLocation(
-                            betaResponseContentBlockLocation
-                        )
-                    )
+                fun addCitation(contentBlockLocation: Citation.ContentBlockLocation) =
+                    addCitation(Citation.ofContentBlockLocation(contentBlockLocation))
 
                 fun text(text: String) = text(JsonField.of(text))
 
@@ -1103,7 +1021,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaResponseTextBlock].
+                 * Returns an immutable instance of [Text].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -1116,8 +1034,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaResponseTextBlock =
-                    BetaResponseTextBlock(
+                fun build(): Text =
+                    Text(
                         checkRequired("citations", citations).map { it.toImmutable() },
                         checkRequired("text", text),
                         checkRequired("type", type),
@@ -1127,7 +1045,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): BetaResponseTextBlock = apply {
+            fun validate(): Text = apply {
                 if (validated) {
                     return@apply
                 }
@@ -1161,51 +1079,39 @@ private constructor(
             @JsonSerialize(using = Citation.Serializer::class)
             class Citation
             private constructor(
-                private val betaResponseCharLocation: BetaResponseCharLocationCitation? = null,
-                private val betaResponsePageLocation: BetaResponsePageLocationCitation? = null,
-                private val betaResponseContentBlockLocation:
-                    BetaResponseContentBlockLocationCitation? =
-                    null,
+                private val charLocation: CharLocation? = null,
+                private val pageLocation: PageLocation? = null,
+                private val contentBlockLocation: ContentBlockLocation? = null,
                 private val _json: JsonValue? = null,
             ) {
 
-                fun betaResponseCharLocation(): BetaResponseCharLocationCitation? =
-                    betaResponseCharLocation
+                fun charLocation(): CharLocation? = charLocation
 
-                fun betaResponsePageLocation(): BetaResponsePageLocationCitation? =
-                    betaResponsePageLocation
+                fun pageLocation(): PageLocation? = pageLocation
 
-                fun betaResponseContentBlockLocation(): BetaResponseContentBlockLocationCitation? =
-                    betaResponseContentBlockLocation
+                fun contentBlockLocation(): ContentBlockLocation? = contentBlockLocation
 
-                fun isBetaResponseCharLocation(): Boolean = betaResponseCharLocation != null
+                fun isCharLocation(): Boolean = charLocation != null
 
-                fun isBetaResponsePageLocation(): Boolean = betaResponsePageLocation != null
+                fun isPageLocation(): Boolean = pageLocation != null
 
-                fun isBetaResponseContentBlockLocation(): Boolean =
-                    betaResponseContentBlockLocation != null
+                fun isContentBlockLocation(): Boolean = contentBlockLocation != null
 
-                fun asBetaResponseCharLocation(): BetaResponseCharLocationCitation =
-                    betaResponseCharLocation.getOrThrow("betaResponseCharLocation")
+                fun asCharLocation(): CharLocation = charLocation.getOrThrow("charLocation")
 
-                fun asBetaResponsePageLocation(): BetaResponsePageLocationCitation =
-                    betaResponsePageLocation.getOrThrow("betaResponsePageLocation")
+                fun asPageLocation(): PageLocation = pageLocation.getOrThrow("pageLocation")
 
-                fun asBetaResponseContentBlockLocation(): BetaResponseContentBlockLocationCitation =
-                    betaResponseContentBlockLocation.getOrThrow("betaResponseContentBlockLocation")
+                fun asContentBlockLocation(): ContentBlockLocation =
+                    contentBlockLocation.getOrThrow("contentBlockLocation")
 
                 fun _json(): JsonValue? = _json
 
                 fun <T> accept(visitor: Visitor<T>): T =
                     when {
-                        betaResponseCharLocation != null ->
-                            visitor.visitBetaResponseCharLocation(betaResponseCharLocation)
-                        betaResponsePageLocation != null ->
-                            visitor.visitBetaResponsePageLocation(betaResponsePageLocation)
-                        betaResponseContentBlockLocation != null ->
-                            visitor.visitBetaResponseContentBlockLocation(
-                                betaResponseContentBlockLocation
-                            )
+                        charLocation != null -> visitor.visitCharLocation(charLocation)
+                        pageLocation != null -> visitor.visitPageLocation(pageLocation)
+                        contentBlockLocation != null ->
+                            visitor.visitContentBlockLocation(contentBlockLocation)
                         else -> visitor.unknown(_json)
                     }
 
@@ -1218,23 +1124,18 @@ private constructor(
 
                     accept(
                         object : Visitor<Unit> {
-                            override fun visitBetaResponseCharLocation(
-                                betaResponseCharLocation: BetaResponseCharLocationCitation
-                            ) {
-                                betaResponseCharLocation.validate()
+                            override fun visitCharLocation(charLocation: CharLocation) {
+                                charLocation.validate()
                             }
 
-                            override fun visitBetaResponsePageLocation(
-                                betaResponsePageLocation: BetaResponsePageLocationCitation
-                            ) {
-                                betaResponsePageLocation.validate()
+                            override fun visitPageLocation(pageLocation: PageLocation) {
+                                pageLocation.validate()
                             }
 
-                            override fun visitBetaResponseContentBlockLocation(
-                                betaResponseContentBlockLocation:
-                                    BetaResponseContentBlockLocationCitation
+                            override fun visitContentBlockLocation(
+                                contentBlockLocation: ContentBlockLocation
                             ) {
-                                betaResponseContentBlockLocation.validate()
+                                contentBlockLocation.validate()
                             }
                         }
                     )
@@ -1258,18 +1159,15 @@ private constructor(
                 internal fun validity(): Int =
                     accept(
                         object : Visitor<Int> {
-                            override fun visitBetaResponseCharLocation(
-                                betaResponseCharLocation: BetaResponseCharLocationCitation
-                            ) = betaResponseCharLocation.validity()
+                            override fun visitCharLocation(charLocation: CharLocation) =
+                                charLocation.validity()
 
-                            override fun visitBetaResponsePageLocation(
-                                betaResponsePageLocation: BetaResponsePageLocationCitation
-                            ) = betaResponsePageLocation.validity()
+                            override fun visitPageLocation(pageLocation: PageLocation) =
+                                pageLocation.validity()
 
-                            override fun visitBetaResponseContentBlockLocation(
-                                betaResponseContentBlockLocation:
-                                    BetaResponseContentBlockLocationCitation
-                            ) = betaResponseContentBlockLocation.validity()
+                            override fun visitContentBlockLocation(
+                                contentBlockLocation: ContentBlockLocation
+                            ) = contentBlockLocation.validity()
 
                             override fun unknown(json: JsonValue?) = 0
                         }
@@ -1280,39 +1178,31 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Citation && betaResponseCharLocation == other.betaResponseCharLocation && betaResponsePageLocation == other.betaResponsePageLocation && betaResponseContentBlockLocation == other.betaResponseContentBlockLocation /* spotless:on */
+                    return /* spotless:off */ other is Citation && charLocation == other.charLocation && pageLocation == other.pageLocation && contentBlockLocation == other.contentBlockLocation /* spotless:on */
                 }
 
-                override fun hashCode(): Int = /* spotless:off */ Objects.hash(betaResponseCharLocation, betaResponsePageLocation, betaResponseContentBlockLocation) /* spotless:on */
+                override fun hashCode(): Int = /* spotless:off */ Objects.hash(charLocation, pageLocation, contentBlockLocation) /* spotless:on */
 
                 override fun toString(): String =
                     when {
-                        betaResponseCharLocation != null ->
-                            "Citation{betaResponseCharLocation=$betaResponseCharLocation}"
-                        betaResponsePageLocation != null ->
-                            "Citation{betaResponsePageLocation=$betaResponsePageLocation}"
-                        betaResponseContentBlockLocation != null ->
-                            "Citation{betaResponseContentBlockLocation=$betaResponseContentBlockLocation}"
+                        charLocation != null -> "Citation{charLocation=$charLocation}"
+                        pageLocation != null -> "Citation{pageLocation=$pageLocation}"
+                        contentBlockLocation != null ->
+                            "Citation{contentBlockLocation=$contentBlockLocation}"
                         _json != null -> "Citation{_unknown=$_json}"
                         else -> throw IllegalStateException("Invalid Citation")
                     }
 
                 companion object {
 
-                    fun ofBetaResponseCharLocation(
-                        betaResponseCharLocation: BetaResponseCharLocationCitation
-                    ) = Citation(betaResponseCharLocation = betaResponseCharLocation)
+                    fun ofCharLocation(charLocation: CharLocation) =
+                        Citation(charLocation = charLocation)
 
-                    fun ofBetaResponsePageLocation(
-                        betaResponsePageLocation: BetaResponsePageLocationCitation
-                    ) = Citation(betaResponsePageLocation = betaResponsePageLocation)
+                    fun ofPageLocation(pageLocation: PageLocation) =
+                        Citation(pageLocation = pageLocation)
 
-                    fun ofBetaResponseContentBlockLocation(
-                        betaResponseContentBlockLocation: BetaResponseContentBlockLocationCitation
-                    ) =
-                        Citation(
-                            betaResponseContentBlockLocation = betaResponseContentBlockLocation
-                        )
+                    fun ofContentBlockLocation(contentBlockLocation: ContentBlockLocation) =
+                        Citation(contentBlockLocation = contentBlockLocation)
                 }
 
                 /**
@@ -1321,17 +1211,11 @@ private constructor(
                  */
                 interface Visitor<out T> {
 
-                    fun visitBetaResponseCharLocation(
-                        betaResponseCharLocation: BetaResponseCharLocationCitation
-                    ): T
+                    fun visitCharLocation(charLocation: CharLocation): T
 
-                    fun visitBetaResponsePageLocation(
-                        betaResponsePageLocation: BetaResponsePageLocationCitation
-                    ): T
+                    fun visitPageLocation(pageLocation: PageLocation): T
 
-                    fun visitBetaResponseContentBlockLocation(
-                        betaResponseContentBlockLocation: BetaResponseContentBlockLocationCitation
-                    ): T
+                    fun visitContentBlockLocation(contentBlockLocation: ContentBlockLocation): T
 
                     /**
                      * Maps an unknown variant of [Citation] to a value of type [T].
@@ -1356,32 +1240,19 @@ private constructor(
 
                         when (type) {
                             "char_location" -> {
-                                return tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<BetaResponseCharLocationCitation>(),
-                                    )
-                                    ?.let { Citation(betaResponseCharLocation = it, _json = json) }
-                                    ?: Citation(_json = json)
+                                return tryDeserialize(node, jacksonTypeRef<CharLocation>())?.let {
+                                    Citation(charLocation = it, _json = json)
+                                } ?: Citation(_json = json)
                             }
                             "page_location" -> {
-                                return tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<BetaResponsePageLocationCitation>(),
-                                    )
-                                    ?.let { Citation(betaResponsePageLocation = it, _json = json) }
-                                    ?: Citation(_json = json)
+                                return tryDeserialize(node, jacksonTypeRef<PageLocation>())?.let {
+                                    Citation(pageLocation = it, _json = json)
+                                } ?: Citation(_json = json)
                             }
                             "content_block_location" -> {
-                                return tryDeserialize(
-                                        node,
-                                        jacksonTypeRef<BetaResponseContentBlockLocationCitation>(),
-                                    )
-                                    ?.let {
-                                        Citation(
-                                            betaResponseContentBlockLocation = it,
-                                            _json = json,
-                                        )
-                                    } ?: Citation(_json = json)
+                                return tryDeserialize(node, jacksonTypeRef<ContentBlockLocation>())
+                                    ?.let { Citation(contentBlockLocation = it, _json = json) }
+                                    ?: Citation(_json = json)
                             }
                         }
 
@@ -1397,19 +1268,17 @@ private constructor(
                         provider: SerializerProvider,
                     ) {
                         when {
-                            value.betaResponseCharLocation != null ->
-                                generator.writeObject(value.betaResponseCharLocation)
-                            value.betaResponsePageLocation != null ->
-                                generator.writeObject(value.betaResponsePageLocation)
-                            value.betaResponseContentBlockLocation != null ->
-                                generator.writeObject(value.betaResponseContentBlockLocation)
+                            value.charLocation != null -> generator.writeObject(value.charLocation)
+                            value.pageLocation != null -> generator.writeObject(value.pageLocation)
+                            value.contentBlockLocation != null ->
+                                generator.writeObject(value.contentBlockLocation)
                             value._json != null -> generator.writeObject(value._json)
                             else -> throw IllegalStateException("Invalid Citation")
                         }
                     }
                 }
 
-                class BetaResponseCharLocationCitation
+                class CharLocation
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -1564,8 +1433,7 @@ private constructor(
                     companion object {
 
                         /**
-                         * Returns a mutable builder for constructing an instance of
-                         * [BetaResponseCharLocationCitation].
+                         * Returns a mutable builder for constructing an instance of [CharLocation].
                          *
                          * The following fields are required:
                          * ```kotlin
@@ -1580,7 +1448,7 @@ private constructor(
                         fun builder() = Builder()
                     }
 
-                    /** A builder for [BetaResponseCharLocationCitation]. */
+                    /** A builder for [CharLocation]. */
                     class Builder internal constructor() {
 
                         private var citedText: JsonField<String>? = null
@@ -1592,17 +1460,14 @@ private constructor(
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
-                        internal fun from(
-                            betaResponseCharLocationCitation: BetaResponseCharLocationCitation
-                        ) = apply {
-                            citedText = betaResponseCharLocationCitation.citedText
-                            documentIndex = betaResponseCharLocationCitation.documentIndex
-                            documentTitle = betaResponseCharLocationCitation.documentTitle
-                            endCharIndex = betaResponseCharLocationCitation.endCharIndex
-                            startCharIndex = betaResponseCharLocationCitation.startCharIndex
-                            type = betaResponseCharLocationCitation.type
-                            additionalProperties =
-                                betaResponseCharLocationCitation.additionalProperties.toMutableMap()
+                        internal fun from(charLocation: CharLocation) = apply {
+                            citedText = charLocation.citedText
+                            documentIndex = charLocation.documentIndex
+                            documentTitle = charLocation.documentTitle
+                            endCharIndex = charLocation.endCharIndex
+                            startCharIndex = charLocation.startCharIndex
+                            type = charLocation.type
+                            additionalProperties = charLocation.additionalProperties.toMutableMap()
                         }
 
                         fun citedText(citedText: String) = citedText(JsonField.of(citedText))
@@ -1708,7 +1573,7 @@ private constructor(
                         }
 
                         /**
-                         * Returns an immutable instance of [BetaResponseCharLocationCitation].
+                         * Returns an immutable instance of [CharLocation].
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          *
@@ -1724,8 +1589,8 @@ private constructor(
                          *
                          * @throws IllegalStateException if any required field is unset.
                          */
-                        fun build(): BetaResponseCharLocationCitation =
-                            BetaResponseCharLocationCitation(
+                        fun build(): CharLocation =
+                            CharLocation(
                                 checkRequired("citedText", citedText),
                                 checkRequired("documentIndex", documentIndex),
                                 checkRequired("documentTitle", documentTitle),
@@ -1738,7 +1603,7 @@ private constructor(
 
                     private var validated: Boolean = false
 
-                    fun validate(): BetaResponseCharLocationCitation = apply {
+                    fun validate(): CharLocation = apply {
                         if (validated) {
                             return@apply
                         }
@@ -1906,7 +1771,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is BetaResponseCharLocationCitation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endCharIndex == other.endCharIndex && startCharIndex == other.startCharIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is CharLocation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endCharIndex == other.endCharIndex && startCharIndex == other.startCharIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
@@ -1916,10 +1781,10 @@ private constructor(
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "BetaResponseCharLocationCitation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endCharIndex=$endCharIndex, startCharIndex=$startCharIndex, type=$type, additionalProperties=$additionalProperties}"
+                        "CharLocation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endCharIndex=$endCharIndex, startCharIndex=$startCharIndex, type=$type, additionalProperties=$additionalProperties}"
                 }
 
-                class BetaResponsePageLocationCitation
+                class PageLocation
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -2074,8 +1939,7 @@ private constructor(
                     companion object {
 
                         /**
-                         * Returns a mutable builder for constructing an instance of
-                         * [BetaResponsePageLocationCitation].
+                         * Returns a mutable builder for constructing an instance of [PageLocation].
                          *
                          * The following fields are required:
                          * ```kotlin
@@ -2090,7 +1954,7 @@ private constructor(
                         fun builder() = Builder()
                     }
 
-                    /** A builder for [BetaResponsePageLocationCitation]. */
+                    /** A builder for [PageLocation]. */
                     class Builder internal constructor() {
 
                         private var citedText: JsonField<String>? = null
@@ -2102,17 +1966,14 @@ private constructor(
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
-                        internal fun from(
-                            betaResponsePageLocationCitation: BetaResponsePageLocationCitation
-                        ) = apply {
-                            citedText = betaResponsePageLocationCitation.citedText
-                            documentIndex = betaResponsePageLocationCitation.documentIndex
-                            documentTitle = betaResponsePageLocationCitation.documentTitle
-                            endPageNumber = betaResponsePageLocationCitation.endPageNumber
-                            startPageNumber = betaResponsePageLocationCitation.startPageNumber
-                            type = betaResponsePageLocationCitation.type
-                            additionalProperties =
-                                betaResponsePageLocationCitation.additionalProperties.toMutableMap()
+                        internal fun from(pageLocation: PageLocation) = apply {
+                            citedText = pageLocation.citedText
+                            documentIndex = pageLocation.documentIndex
+                            documentTitle = pageLocation.documentTitle
+                            endPageNumber = pageLocation.endPageNumber
+                            startPageNumber = pageLocation.startPageNumber
+                            type = pageLocation.type
+                            additionalProperties = pageLocation.additionalProperties.toMutableMap()
                         }
 
                         fun citedText(citedText: String) = citedText(JsonField.of(citedText))
@@ -2218,7 +2079,7 @@ private constructor(
                         }
 
                         /**
-                         * Returns an immutable instance of [BetaResponsePageLocationCitation].
+                         * Returns an immutable instance of [PageLocation].
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          *
@@ -2234,8 +2095,8 @@ private constructor(
                          *
                          * @throws IllegalStateException if any required field is unset.
                          */
-                        fun build(): BetaResponsePageLocationCitation =
-                            BetaResponsePageLocationCitation(
+                        fun build(): PageLocation =
+                            PageLocation(
                                 checkRequired("citedText", citedText),
                                 checkRequired("documentIndex", documentIndex),
                                 checkRequired("documentTitle", documentTitle),
@@ -2248,7 +2109,7 @@ private constructor(
 
                     private var validated: Boolean = false
 
-                    fun validate(): BetaResponsePageLocationCitation = apply {
+                    fun validate(): PageLocation = apply {
                         if (validated) {
                             return@apply
                         }
@@ -2416,7 +2277,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is BetaResponsePageLocationCitation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endPageNumber == other.endPageNumber && startPageNumber == other.startPageNumber && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is PageLocation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endPageNumber == other.endPageNumber && startPageNumber == other.startPageNumber && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
@@ -2426,10 +2287,10 @@ private constructor(
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "BetaResponsePageLocationCitation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endPageNumber=$endPageNumber, startPageNumber=$startPageNumber, type=$type, additionalProperties=$additionalProperties}"
+                        "PageLocation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endPageNumber=$endPageNumber, startPageNumber=$startPageNumber, type=$type, additionalProperties=$additionalProperties}"
                 }
 
-                class BetaResponseContentBlockLocationCitation
+                class ContentBlockLocation
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -2585,7 +2446,7 @@ private constructor(
 
                         /**
                          * Returns a mutable builder for constructing an instance of
-                         * [BetaResponseContentBlockLocationCitation].
+                         * [ContentBlockLocation].
                          *
                          * The following fields are required:
                          * ```kotlin
@@ -2600,7 +2461,7 @@ private constructor(
                         fun builder() = Builder()
                     }
 
-                    /** A builder for [BetaResponseContentBlockLocationCitation]. */
+                    /** A builder for [ContentBlockLocation]. */
                     class Builder internal constructor() {
 
                         private var citedText: JsonField<String>? = null
@@ -2612,20 +2473,15 @@ private constructor(
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
 
-                        internal fun from(
-                            betaResponseContentBlockLocationCitation:
-                                BetaResponseContentBlockLocationCitation
-                        ) = apply {
-                            citedText = betaResponseContentBlockLocationCitation.citedText
-                            documentIndex = betaResponseContentBlockLocationCitation.documentIndex
-                            documentTitle = betaResponseContentBlockLocationCitation.documentTitle
-                            endBlockIndex = betaResponseContentBlockLocationCitation.endBlockIndex
-                            startBlockIndex =
-                                betaResponseContentBlockLocationCitation.startBlockIndex
-                            type = betaResponseContentBlockLocationCitation.type
+                        internal fun from(contentBlockLocation: ContentBlockLocation) = apply {
+                            citedText = contentBlockLocation.citedText
+                            documentIndex = contentBlockLocation.documentIndex
+                            documentTitle = contentBlockLocation.documentTitle
+                            endBlockIndex = contentBlockLocation.endBlockIndex
+                            startBlockIndex = contentBlockLocation.startBlockIndex
+                            type = contentBlockLocation.type
                             additionalProperties =
-                                betaResponseContentBlockLocationCitation.additionalProperties
-                                    .toMutableMap()
+                                contentBlockLocation.additionalProperties.toMutableMap()
                         }
 
                         fun citedText(citedText: String) = citedText(JsonField.of(citedText))
@@ -2731,8 +2587,7 @@ private constructor(
                         }
 
                         /**
-                         * Returns an immutable instance of
-                         * [BetaResponseContentBlockLocationCitation].
+                         * Returns an immutable instance of [ContentBlockLocation].
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          *
@@ -2748,8 +2603,8 @@ private constructor(
                          *
                          * @throws IllegalStateException if any required field is unset.
                          */
-                        fun build(): BetaResponseContentBlockLocationCitation =
-                            BetaResponseContentBlockLocationCitation(
+                        fun build(): ContentBlockLocation =
+                            ContentBlockLocation(
                                 checkRequired("citedText", citedText),
                                 checkRequired("documentIndex", documentIndex),
                                 checkRequired("documentTitle", documentTitle),
@@ -2762,7 +2617,7 @@ private constructor(
 
                     private var validated: Boolean = false
 
-                    fun validate(): BetaResponseContentBlockLocationCitation = apply {
+                    fun validate(): ContentBlockLocation = apply {
                         if (validated) {
                             return@apply
                         }
@@ -2930,7 +2785,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is BetaResponseContentBlockLocationCitation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endBlockIndex == other.endBlockIndex && startBlockIndex == other.startBlockIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is ContentBlockLocation && citedText == other.citedText && documentIndex == other.documentIndex && documentTitle == other.documentTitle && endBlockIndex == other.endBlockIndex && startBlockIndex == other.startBlockIndex && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
@@ -2940,7 +2795,7 @@ private constructor(
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "BetaResponseContentBlockLocationCitation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endBlockIndex=$endBlockIndex, startBlockIndex=$startBlockIndex, type=$type, additionalProperties=$additionalProperties}"
+                        "ContentBlockLocation{citedText=$citedText, documentIndex=$documentIndex, documentTitle=$documentTitle, endBlockIndex=$endBlockIndex, startBlockIndex=$startBlockIndex, type=$type, additionalProperties=$additionalProperties}"
                 }
             }
 
@@ -3071,7 +2926,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaResponseTextBlock && citations == other.citations && text == other.text && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Text && citations == other.citations && text == other.text && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -3081,10 +2936,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaResponseTextBlock{citations=$citations, text=$text, type=$type, additionalProperties=$additionalProperties}"
+                "Text{citations=$citations, text=$text, type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class BetaResponseToolUseBlock
+        class ToolUse
         private constructor(
             private val id: JsonField<String>,
             private val input: JsonValue,
@@ -3160,8 +3015,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [BetaResponseToolUseBlock].
+                 * Returns a mutable builder for constructing an instance of [ToolUse].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -3174,7 +3028,7 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaResponseToolUseBlock]. */
+            /** A builder for [ToolUse]. */
             class Builder internal constructor() {
 
                 private var id: JsonField<String>? = null
@@ -3183,13 +3037,12 @@ private constructor(
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaResponseToolUseBlock: BetaResponseToolUseBlock) = apply {
-                    id = betaResponseToolUseBlock.id
-                    input = betaResponseToolUseBlock.input
-                    name = betaResponseToolUseBlock.name
-                    type = betaResponseToolUseBlock.type
-                    additionalProperties =
-                        betaResponseToolUseBlock.additionalProperties.toMutableMap()
+                internal fun from(toolUse: ToolUse) = apply {
+                    id = toolUse.id
+                    input = toolUse.input
+                    name = toolUse.name
+                    type = toolUse.type
+                    additionalProperties = toolUse.additionalProperties.toMutableMap()
                 }
 
                 fun id(id: String) = id(JsonField.of(id))
@@ -3250,7 +3103,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaResponseToolUseBlock].
+                 * Returns an immutable instance of [ToolUse].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -3264,8 +3117,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaResponseToolUseBlock =
-                    BetaResponseToolUseBlock(
+                fun build(): ToolUse =
+                    ToolUse(
                         checkRequired("id", id),
                         checkRequired("input", input),
                         checkRequired("name", name),
@@ -3276,7 +3129,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): BetaResponseToolUseBlock = apply {
+            fun validate(): ToolUse = apply {
                 if (validated) {
                     return@apply
                 }
@@ -3433,7 +3286,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaResponseToolUseBlock && id == other.id && input == other.input && name == other.name && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ToolUse && id == other.id && input == other.input && name == other.name && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -3443,10 +3296,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaResponseToolUseBlock{id=$id, input=$input, name=$name, type=$type, additionalProperties=$additionalProperties}"
+                "ToolUse{id=$id, input=$input, name=$name, type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class BetaResponseThinkingBlock
+        class Thinking
         private constructor(
             private val signature: JsonField<String>,
             private val thinking: JsonField<String>,
@@ -3526,8 +3379,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [BetaResponseThinkingBlock].
+                 * Returns a mutable builder for constructing an instance of [Thinking].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -3539,7 +3391,7 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaResponseThinkingBlock]. */
+            /** A builder for [Thinking]. */
             class Builder internal constructor() {
 
                 private var signature: JsonField<String>? = null
@@ -3547,12 +3399,11 @@ private constructor(
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(betaResponseThinkingBlock: BetaResponseThinkingBlock) = apply {
-                    signature = betaResponseThinkingBlock.signature
-                    thinking = betaResponseThinkingBlock.thinking
-                    type = betaResponseThinkingBlock.type
-                    additionalProperties =
-                        betaResponseThinkingBlock.additionalProperties.toMutableMap()
+                internal fun from(thinking: Thinking) = apply {
+                    signature = thinking.signature
+                    this.thinking = thinking.thinking
+                    type = thinking.type
+                    additionalProperties = thinking.additionalProperties.toMutableMap()
                 }
 
                 fun signature(signature: String) = signature(JsonField.of(signature))
@@ -3611,7 +3462,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaResponseThinkingBlock].
+                 * Returns an immutable instance of [Thinking].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -3624,8 +3475,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaResponseThinkingBlock =
-                    BetaResponseThinkingBlock(
+                fun build(): Thinking =
+                    Thinking(
                         checkRequired("signature", signature),
                         checkRequired("thinking", thinking),
                         checkRequired("type", type),
@@ -3635,7 +3486,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): BetaResponseThinkingBlock = apply {
+            fun validate(): Thinking = apply {
                 if (validated) {
                     return@apply
                 }
@@ -3792,7 +3643,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaResponseThinkingBlock && signature == other.signature && thinking == other.thinking && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Thinking && signature == other.signature && thinking == other.thinking && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -3802,10 +3653,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaResponseThinkingBlock{signature=$signature, thinking=$thinking, type=$type, additionalProperties=$additionalProperties}"
+                "Thinking{signature=$signature, thinking=$thinking, type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class BetaResponseRedactedThinkingBlock
+        class RedactedThinking
         private constructor(
             private val data: JsonField<String>,
             private val type: JsonField<Type>,
@@ -3861,8 +3712,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [BetaResponseRedactedThinkingBlock].
+                 * Returns a mutable builder for constructing an instance of [RedactedThinking].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -3873,20 +3723,17 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [BetaResponseRedactedThinkingBlock]. */
+            /** A builder for [RedactedThinking]. */
             class Builder internal constructor() {
 
                 private var data: JsonField<String>? = null
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(
-                    betaResponseRedactedThinkingBlock: BetaResponseRedactedThinkingBlock
-                ) = apply {
-                    data = betaResponseRedactedThinkingBlock.data
-                    type = betaResponseRedactedThinkingBlock.type
-                    additionalProperties =
-                        betaResponseRedactedThinkingBlock.additionalProperties.toMutableMap()
+                internal fun from(redactedThinking: RedactedThinking) = apply {
+                    data = redactedThinking.data
+                    type = redactedThinking.type
+                    additionalProperties = redactedThinking.additionalProperties.toMutableMap()
                 }
 
                 fun data(data: String) = data(JsonField.of(data))
@@ -3934,7 +3781,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [BetaResponseRedactedThinkingBlock].
+                 * Returns an immutable instance of [RedactedThinking].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -3946,8 +3793,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): BetaResponseRedactedThinkingBlock =
-                    BetaResponseRedactedThinkingBlock(
+                fun build(): RedactedThinking =
+                    RedactedThinking(
                         checkRequired("data", data),
                         checkRequired("type", type),
                         additionalProperties.toMutableMap(),
@@ -3956,7 +3803,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): BetaResponseRedactedThinkingBlock = apply {
+            fun validate(): RedactedThinking = apply {
                 if (validated) {
                     return@apply
                 }
@@ -4110,7 +3957,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is BetaResponseRedactedThinkingBlock && data == other.data && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is RedactedThinking && data == other.data && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -4120,7 +3967,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BetaResponseRedactedThinkingBlock{data=$data, type=$type, additionalProperties=$additionalProperties}"
+                "RedactedThinking{data=$data, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 

@@ -108,7 +108,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -117,7 +117,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -127,10 +127,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -235,7 +235,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -244,7 +244,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -254,10 +254,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -362,7 +362,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -371,7 +371,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -381,10 +381,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -489,7 +489,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -498,7 +498,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -508,10 +508,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -616,7 +616,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -625,7 +625,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -635,10 +635,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -743,7 +743,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -752,7 +752,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -762,10 +762,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -870,7 +870,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -879,7 +879,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -889,10 +889,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -997,7 +997,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -1006,7 +1006,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -1016,10 +1016,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1122,7 +1122,7 @@ internal class ErrorHandlingTest {
                                     )
                                     .addCitation(
                                         MessageCreateParams.System.RequestTextBlock.Citation
-                                            .RequestCharLocationCitation
+                                            .CharLocation
                                             .builder()
                                             .citedText("cited_text")
                                             .documentIndex(0L)
@@ -1131,7 +1131,7 @@ internal class ErrorHandlingTest {
                                             .startCharIndex(0L)
                                             .type(
                                                 MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .Type
                                                     .CHAR_LOCATION
                                             )
@@ -1141,10 +1141,10 @@ internal class ErrorHandlingTest {
                             )
                         )
                         .temperature(1.0)
-                        .configEnabledThinking(1024L)
+                        .enabledThinking(1024L)
                         .toolChoice(
-                            MessageCreateParams.ToolChoice.ToolChoiceAuto.builder()
-                                .type(MessageCreateParams.ToolChoice.ToolChoiceAuto.Type.AUTO)
+                            MessageCreateParams.ToolChoice.Auto.builder()
+                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )

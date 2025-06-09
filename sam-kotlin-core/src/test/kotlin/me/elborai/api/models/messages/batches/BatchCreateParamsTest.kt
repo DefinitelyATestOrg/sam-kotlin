@@ -61,7 +61,7 @@ internal class BatchCreateParamsTest {
                                         .addCitation(
                                             BatchCreateParams.Request.Params.System.RequestTextBlock
                                                 .Citation
-                                                .RequestCharLocationCitation
+                                                .CharLocation
                                                 .builder()
                                                 .citedText("cited_text")
                                                 .documentIndex(0L)
@@ -72,7 +72,7 @@ internal class BatchCreateParamsTest {
                                                     BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .Citation
-                                                        .RequestCharLocationCitation
+                                                        .CharLocation
                                                         .Type
                                                         .CHAR_LOCATION
                                                 )
@@ -82,13 +82,11 @@ internal class BatchCreateParamsTest {
                                 )
                             )
                             .temperature(1.0)
-                            .configEnabledThinking(1024L)
+                            .enabledThinking(1024L)
                             .toolChoice(
-                                BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto.builder()
+                                BatchCreateParams.Request.Params.ToolChoice.Auto.builder()
                                     .type(
-                                        BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto
-                                            .Type
-                                            .AUTO
+                                        BatchCreateParams.Request.Params.ToolChoice.Auto.Type.AUTO
                                     )
                                     .disableParallelToolUse(true)
                                     .build()
@@ -204,7 +202,7 @@ internal class BatchCreateParamsTest {
                                                 BatchCreateParams.Request.Params.System
                                                     .RequestTextBlock
                                                     .Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .builder()
                                                     .citedText("cited_text")
                                                     .documentIndex(0L)
@@ -215,7 +213,7 @@ internal class BatchCreateParamsTest {
                                                         BatchCreateParams.Request.Params.System
                                                             .RequestTextBlock
                                                             .Citation
-                                                            .RequestCharLocationCitation
+                                                            .CharLocation
                                                             .Type
                                                             .CHAR_LOCATION
                                                     )
@@ -225,14 +223,11 @@ internal class BatchCreateParamsTest {
                                     )
                                 )
                                 .temperature(1.0)
-                                .configEnabledThinking(1024L)
+                                .enabledThinking(1024L)
                                 .toolChoice(
-                                    BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto
-                                        .builder()
+                                    BatchCreateParams.Request.Params.ToolChoice.Auto.builder()
                                         .type(
-                                            BatchCreateParams.Request.Params.ToolChoice
-                                                .ToolChoiceAuto
-                                                .Type
+                                            BatchCreateParams.Request.Params.ToolChoice.Auto.Type
                                                 .AUTO
                                         )
                                         .disableParallelToolUse(true)
@@ -390,7 +385,7 @@ internal class BatchCreateParamsTest {
                                                 BatchCreateParams.Request.Params.System
                                                     .RequestTextBlock
                                                     .Citation
-                                                    .RequestCharLocationCitation
+                                                    .CharLocation
                                                     .builder()
                                                     .citedText("cited_text")
                                                     .documentIndex(0L)
@@ -401,7 +396,7 @@ internal class BatchCreateParamsTest {
                                                         BatchCreateParams.Request.Params.System
                                                             .RequestTextBlock
                                                             .Citation
-                                                            .RequestCharLocationCitation
+                                                            .CharLocation
                                                             .Type
                                                             .CHAR_LOCATION
                                                     )
@@ -411,14 +406,11 @@ internal class BatchCreateParamsTest {
                                     )
                                 )
                                 .temperature(1.0)
-                                .configEnabledThinking(1024L)
+                                .enabledThinking(1024L)
                                 .toolChoice(
-                                    BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto
-                                        .builder()
+                                    BatchCreateParams.Request.Params.ToolChoice.Auto.builder()
                                         .type(
-                                            BatchCreateParams.Request.Params.ToolChoice
-                                                .ToolChoiceAuto
-                                                .Type
+                                            BatchCreateParams.Request.Params.ToolChoice.Auto.Type
                                                 .AUTO
                                         )
                                         .disableParallelToolUse(true)
@@ -529,7 +521,7 @@ internal class BatchCreateParamsTest {
                                         .addCitation(
                                             BatchCreateParams.Request.Params.System.RequestTextBlock
                                                 .Citation
-                                                .RequestCharLocationCitation
+                                                .CharLocation
                                                 .builder()
                                                 .citedText("cited_text")
                                                 .documentIndex(0L)
@@ -540,7 +532,7 @@ internal class BatchCreateParamsTest {
                                                     BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .Citation
-                                                        .RequestCharLocationCitation
+                                                        .CharLocation
                                                         .Type
                                                         .CHAR_LOCATION
                                                 )
@@ -550,13 +542,11 @@ internal class BatchCreateParamsTest {
                                 )
                             )
                             .temperature(1.0)
-                            .configEnabledThinking(1024L)
+                            .enabledThinking(1024L)
                             .toolChoice(
-                                BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto.builder()
+                                BatchCreateParams.Request.Params.ToolChoice.Auto.builder()
                                     .type(
-                                        BatchCreateParams.Request.Params.ToolChoice.ToolChoiceAuto
-                                            .Type
-                                            .AUTO
+                                        BatchCreateParams.Request.Params.ToolChoice.Auto.Type.AUTO
                                     )
                                     .disableParallelToolUse(true)
                                     .build()

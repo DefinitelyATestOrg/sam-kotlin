@@ -15,17 +15,14 @@ internal class BatchResultsResponseTest {
             BatchResultsResponse.builder()
                 .customId("my-custom-id-1")
                 .succeededResult(
-                    BatchResultsResponse.Result.SucceededResult.Message.builder()
+                    BatchResultsResponse.Result.Succeeded.Message.builder()
                         .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                         .addContent(
-                            BatchResultsResponse.Result.SucceededResult.Message.Content
-                                .ResponseTextBlock
-                                .builder()
+                            BatchResultsResponse.Result.Succeeded.Message.Content.Text.builder()
                                 .addCitation(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Content
-                                        .ResponseTextBlock
+                                    BatchResultsResponse.Result.Succeeded.Message.Content.Text
                                         .Citation
-                                        .ResponseCharLocationCitation
+                                        .CharLocation
                                         .builder()
                                         .citedText("cited_text")
                                         .documentIndex(0L)
@@ -33,11 +30,10 @@ internal class BatchResultsResponseTest {
                                         .endCharIndex(0L)
                                         .startCharIndex(0L)
                                         .type(
-                                            BatchResultsResponse.Result.SucceededResult.Message
-                                                .Content
-                                                .ResponseTextBlock
+                                            BatchResultsResponse.Result.Succeeded.Message.Content
+                                                .Text
                                                 .Citation
-                                                .ResponseCharLocationCitation
+                                                .CharLocation
                                                 .Type
                                                 .CHAR_LOCATION
                                         )
@@ -45,22 +41,20 @@ internal class BatchResultsResponseTest {
                                 )
                                 .text("Hi! My name is Claude.")
                                 .type(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Content
-                                        .ResponseTextBlock
-                                        .Type
+                                    BatchResultsResponse.Result.Succeeded.Message.Content.Text.Type
                                         .TEXT
                                 )
                                 .build()
                         )
                         .model("claude-3-7-sonnet-20250219")
-                        .role(BatchResultsResponse.Result.SucceededResult.Message.Role.ASSISTANT)
+                        .role(BatchResultsResponse.Result.Succeeded.Message.Role.ASSISTANT)
                         .stopReason(
-                            BatchResultsResponse.Result.SucceededResult.Message.StopReason.END_TURN
+                            BatchResultsResponse.Result.Succeeded.Message.StopReason.END_TURN
                         )
                         .stopSequence(null)
-                        .type(BatchResultsResponse.Result.SucceededResult.Message.Type.MESSAGE)
+                        .type(BatchResultsResponse.Result.Succeeded.Message.Type.MESSAGE)
                         .usage(
-                            BatchResultsResponse.Result.SucceededResult.Message.Usage.builder()
+                            BatchResultsResponse.Result.Succeeded.Message.Usage.builder()
                                 .cacheCreationInputTokens(2051L)
                                 .cacheReadInputTokens(2051L)
                                 .inputTokens(2095L)
@@ -75,20 +69,18 @@ internal class BatchResultsResponseTest {
         assertThat(batchResultsResponse.result())
             .isEqualTo(
                 BatchResultsResponse.Result.ofSucceeded(
-                    BatchResultsResponse.Result.SucceededResult.builder()
+                    BatchResultsResponse.Result.Succeeded.builder()
                         .message(
-                            BatchResultsResponse.Result.SucceededResult.Message.builder()
+                            BatchResultsResponse.Result.Succeeded.Message.builder()
                                 .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                                 .addContent(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Content
-                                        .ResponseTextBlock
+                                    BatchResultsResponse.Result.Succeeded.Message.Content.Text
                                         .builder()
                                         .addCitation(
-                                            BatchResultsResponse.Result.SucceededResult.Message
-                                                .Content
-                                                .ResponseTextBlock
+                                            BatchResultsResponse.Result.Succeeded.Message.Content
+                                                .Text
                                                 .Citation
-                                                .ResponseCharLocationCitation
+                                                .CharLocation
                                                 .builder()
                                                 .citedText("cited_text")
                                                 .documentIndex(0L)
@@ -96,12 +88,11 @@ internal class BatchResultsResponseTest {
                                                 .endCharIndex(0L)
                                                 .startCharIndex(0L)
                                                 .type(
-                                                    BatchResultsResponse.Result.SucceededResult
-                                                        .Message
+                                                    BatchResultsResponse.Result.Succeeded.Message
                                                         .Content
-                                                        .ResponseTextBlock
+                                                        .Text
                                                         .Citation
-                                                        .ResponseCharLocationCitation
+                                                        .CharLocation
                                                         .Type
                                                         .CHAR_LOCATION
                                                 )
@@ -109,30 +100,23 @@ internal class BatchResultsResponseTest {
                                         )
                                         .text("Hi! My name is Claude.")
                                         .type(
-                                            BatchResultsResponse.Result.SucceededResult.Message
-                                                .Content
-                                                .ResponseTextBlock
+                                            BatchResultsResponse.Result.Succeeded.Message.Content
+                                                .Text
                                                 .Type
                                                 .TEXT
                                         )
                                         .build()
                                 )
                                 .model("claude-3-7-sonnet-20250219")
-                                .role(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Role
-                                        .ASSISTANT
-                                )
+                                .role(BatchResultsResponse.Result.Succeeded.Message.Role.ASSISTANT)
                                 .stopReason(
-                                    BatchResultsResponse.Result.SucceededResult.Message.StopReason
+                                    BatchResultsResponse.Result.Succeeded.Message.StopReason
                                         .END_TURN
                                 )
                                 .stopSequence(null)
-                                .type(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Type.MESSAGE
-                                )
+                                .type(BatchResultsResponse.Result.Succeeded.Message.Type.MESSAGE)
                                 .usage(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Usage
-                                        .builder()
+                                    BatchResultsResponse.Result.Succeeded.Message.Usage.builder()
                                         .cacheCreationInputTokens(2051L)
                                         .cacheReadInputTokens(2051L)
                                         .inputTokens(2095L)
@@ -141,7 +125,7 @@ internal class BatchResultsResponseTest {
                                 )
                                 .build()
                         )
-                        .type(BatchResultsResponse.Result.SucceededResult.Type.SUCCEEDED)
+                        .type(BatchResultsResponse.Result.Succeeded.Type.SUCCEEDED)
                         .build()
                 )
             )
@@ -154,17 +138,14 @@ internal class BatchResultsResponseTest {
             BatchResultsResponse.builder()
                 .customId("my-custom-id-1")
                 .succeededResult(
-                    BatchResultsResponse.Result.SucceededResult.Message.builder()
+                    BatchResultsResponse.Result.Succeeded.Message.builder()
                         .id("msg_013Zva2CMHLNnXjNJJKqJ2EF")
                         .addContent(
-                            BatchResultsResponse.Result.SucceededResult.Message.Content
-                                .ResponseTextBlock
-                                .builder()
+                            BatchResultsResponse.Result.Succeeded.Message.Content.Text.builder()
                                 .addCitation(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Content
-                                        .ResponseTextBlock
+                                    BatchResultsResponse.Result.Succeeded.Message.Content.Text
                                         .Citation
-                                        .ResponseCharLocationCitation
+                                        .CharLocation
                                         .builder()
                                         .citedText("cited_text")
                                         .documentIndex(0L)
@@ -172,11 +153,10 @@ internal class BatchResultsResponseTest {
                                         .endCharIndex(0L)
                                         .startCharIndex(0L)
                                         .type(
-                                            BatchResultsResponse.Result.SucceededResult.Message
-                                                .Content
-                                                .ResponseTextBlock
+                                            BatchResultsResponse.Result.Succeeded.Message.Content
+                                                .Text
                                                 .Citation
-                                                .ResponseCharLocationCitation
+                                                .CharLocation
                                                 .Type
                                                 .CHAR_LOCATION
                                         )
@@ -184,22 +164,20 @@ internal class BatchResultsResponseTest {
                                 )
                                 .text("Hi! My name is Claude.")
                                 .type(
-                                    BatchResultsResponse.Result.SucceededResult.Message.Content
-                                        .ResponseTextBlock
-                                        .Type
+                                    BatchResultsResponse.Result.Succeeded.Message.Content.Text.Type
                                         .TEXT
                                 )
                                 .build()
                         )
                         .model("claude-3-7-sonnet-20250219")
-                        .role(BatchResultsResponse.Result.SucceededResult.Message.Role.ASSISTANT)
+                        .role(BatchResultsResponse.Result.Succeeded.Message.Role.ASSISTANT)
                         .stopReason(
-                            BatchResultsResponse.Result.SucceededResult.Message.StopReason.END_TURN
+                            BatchResultsResponse.Result.Succeeded.Message.StopReason.END_TURN
                         )
                         .stopSequence(null)
-                        .type(BatchResultsResponse.Result.SucceededResult.Message.Type.MESSAGE)
+                        .type(BatchResultsResponse.Result.Succeeded.Message.Type.MESSAGE)
                         .usage(
-                            BatchResultsResponse.Result.SucceededResult.Message.Usage.builder()
+                            BatchResultsResponse.Result.Succeeded.Message.Usage.builder()
                                 .cacheCreationInputTokens(2051L)
                                 .cacheReadInputTokens(2051L)
                                 .inputTokens(2095L)
