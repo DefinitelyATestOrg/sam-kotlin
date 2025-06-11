@@ -63,6 +63,7 @@ class BetaTrueServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batches", params._pathParam(0))
                     .putQueryParam("beta", "true")
                     .build()
@@ -94,6 +95,7 @@ class BetaTrueServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batches", params._pathParam(0))
                     .putQueryParam("beta", "true")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }

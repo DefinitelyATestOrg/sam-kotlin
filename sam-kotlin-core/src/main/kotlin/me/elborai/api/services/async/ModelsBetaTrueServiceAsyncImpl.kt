@@ -49,6 +49,7 @@ internal constructor(private val clientOptions: ClientOptions) : ModelsBetaTrueS
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "models")
                     .putQueryParam("beta", "true")
                     .build()

@@ -161,13 +161,7 @@ class SamOkHttpClientAsync private constructor() {
         fun build(): SamClientAsync =
             SamClientAsyncImpl(
                 clientOptions
-                    .httpClient(
-                        OkHttpClient.builder()
-                            .baseUrl(clientOptions.baseUrl())
-                            .timeout(timeout)
-                            .proxy(proxy)
-                            .build()
-                    )
+                    .httpClient(OkHttpClient.builder().timeout(timeout).proxy(proxy).build())
                     .build()
             )
     }
