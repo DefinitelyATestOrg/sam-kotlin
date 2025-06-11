@@ -50,6 +50,7 @@ class CompleteServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "complete")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
