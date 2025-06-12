@@ -3,6 +3,7 @@
 package me.elborai.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import me.elborai.api.core.ClientOptions
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.models.models.ModelListParams
@@ -18,6 +19,13 @@ interface ModelService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ModelService
 
     /**
      * Get a specific model.
@@ -81,6 +89,13 @@ interface ModelService {
 
     /** A view of [ModelService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ModelService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/models/{model_id}`, but is otherwise the same as

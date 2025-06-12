@@ -27,6 +27,11 @@ internal constructor(private val clientOptions: ClientOptions) : MessagesBetaTru
 
     override fun withRawResponse(): MessagesBetaTrueServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(
+        modifier: (ClientOptions.Builder) -> Unit
+    ): MessagesBetaTrueServiceAsync =
+        MessagesBetaTrueServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: MessagesBetaTrueCreateParams,
         requestOptions: RequestOptions,
@@ -38,6 +43,13 @@ internal constructor(private val clientOptions: ClientOptions) : MessagesBetaTru
         MessagesBetaTrueServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): MessagesBetaTrueServiceAsync.WithRawResponse =
+            MessagesBetaTrueServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<MessagesBetaTrueCreateResponse> =
             jsonHandler<MessagesBetaTrueCreateResponse>(clientOptions.jsonMapper)

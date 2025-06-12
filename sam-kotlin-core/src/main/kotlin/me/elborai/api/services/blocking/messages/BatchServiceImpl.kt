@@ -49,6 +49,9 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): BatchService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BatchService =
+        BatchServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun betaTrue(): BetaTrueService = betaTrue
 
     override fun create(
@@ -112,6 +115,11 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val betaTrue: BetaTrueService.WithRawResponse by lazy {
             BetaTrueServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): BatchService.WithRawResponse =
+            BatchServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         override fun betaTrue(): BetaTrueService.WithRawResponse = betaTrue
 

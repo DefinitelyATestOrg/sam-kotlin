@@ -12,6 +12,15 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): UserService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): UserService =
+        UserServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        UserService.WithRawResponse
+        UserService.WithRawResponse {
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): UserService.WithRawResponse =
+            UserServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+    }
 }

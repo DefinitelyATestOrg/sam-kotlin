@@ -13,6 +13,17 @@ class SamPlopPlopServiceImpl internal constructor(private val clientOptions: Cli
 
     override fun withRawResponse(): SamPlopPlopService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SamPlopPlopService =
+        SamPlopPlopServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        SamPlopPlopService.WithRawResponse
+        SamPlopPlopService.WithRawResponse {
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): SamPlopPlopService.WithRawResponse =
+            SamPlopPlopServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+    }
 }

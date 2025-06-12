@@ -31,6 +31,9 @@ class ModelServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): ModelServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ModelServiceAsync =
+        ModelServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: ModelRetrieveParams,
         requestOptions: RequestOptions,
@@ -56,6 +59,13 @@ class ModelServiceAsyncImpl internal constructor(private val clientOptions: Clie
         ModelServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ModelServiceAsync.WithRawResponse =
+            ModelServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val retrieveHandler: Handler<ModelRetrieveResponse> =
             jsonHandler<ModelRetrieveResponse>(clientOptions.jsonMapper)

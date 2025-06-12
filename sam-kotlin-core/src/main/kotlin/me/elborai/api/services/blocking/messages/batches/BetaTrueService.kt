@@ -3,6 +3,7 @@
 package me.elborai.api.services.blocking.messages.batches
 
 import com.google.errorprone.annotations.MustBeClosed
+import me.elborai.api.core.ClientOptions
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.models.messages.batches.betatrue.BetaTrueDeleteParams
@@ -16,6 +17,13 @@ interface BetaTrueService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BetaTrueService
 
     /**
      * This endpoint is idempotent and can be used to poll for Message Batch completion. To access
@@ -69,6 +77,13 @@ interface BetaTrueService {
 
     /** A view of [BetaTrueService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BetaTrueService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batches/{message_batch_id}?beta=true`,

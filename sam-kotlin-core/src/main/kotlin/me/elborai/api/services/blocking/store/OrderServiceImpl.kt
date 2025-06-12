@@ -13,6 +13,15 @@ class OrderServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): OrderService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): OrderService =
+        OrderServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        OrderService.WithRawResponse
+        OrderService.WithRawResponse {
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): OrderService.WithRawResponse =
+            OrderServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+    }
 }

@@ -31,6 +31,9 @@ class ModelServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): ModelService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ModelService =
+        ModelServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: ModelRetrieveParams,
         requestOptions: RequestOptions,
@@ -53,6 +56,11 @@ class ModelServiceImpl internal constructor(private val clientOptions: ClientOpt
         ModelService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ModelService.WithRawResponse =
+            ModelServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val retrieveHandler: Handler<ModelRetrieveResponse> =
             jsonHandler<ModelRetrieveResponse>(clientOptions.jsonMapper)

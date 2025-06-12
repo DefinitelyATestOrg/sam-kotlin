@@ -42,6 +42,9 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): BatchServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BatchServiceAsync =
+        BatchServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun betaTrue(): BetaTrueServiceAsync = betaTrue
 
     override suspend fun create(
@@ -94,6 +97,13 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val betaTrue: BetaTrueServiceAsync.WithRawResponse by lazy {
             BetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): BatchServiceAsync.WithRawResponse =
+            BatchServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun betaTrue(): BetaTrueServiceAsync.WithRawResponse = betaTrue
 

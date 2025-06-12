@@ -17,6 +17,9 @@ class StoreServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): StoreService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): StoreService =
+        StoreServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun orders(): OrderService = orders
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -25,6 +28,11 @@ class StoreServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val orders: OrderService.WithRawResponse by lazy {
             OrderServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): StoreService.WithRawResponse =
+            StoreServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         override fun orders(): OrderService.WithRawResponse = orders
     }

@@ -29,6 +29,11 @@ internal constructor(private val clientOptions: ClientOptions) : BatchesBetaTrue
 
     override fun withRawResponse(): BatchesBetaTrueServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(
+        modifier: (ClientOptions.Builder) -> Unit
+    ): BatchesBetaTrueServiceAsync =
+        BatchesBetaTrueServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: BatchesBetaTrueCreateParams,
         requestOptions: RequestOptions,
@@ -47,6 +52,13 @@ internal constructor(private val clientOptions: ClientOptions) : BatchesBetaTrue
         BatchesBetaTrueServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): BatchesBetaTrueServiceAsync.WithRawResponse =
+            BatchesBetaTrueServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<BatchesBetaTrueCreateResponse> =
             jsonHandler<BatchesBetaTrueCreateResponse>(clientOptions.jsonMapper)
