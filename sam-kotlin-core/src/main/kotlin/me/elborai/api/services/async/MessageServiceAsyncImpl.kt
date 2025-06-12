@@ -41,6 +41,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): MessageServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MessageServiceAsync =
+        MessageServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun batches(): BatchServiceAsync = batches
 
     override fun batchesBetaTrue(): BatchesBetaTrueServiceAsync = batchesBetaTrue
@@ -78,6 +81,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
         private val batchesBetaTrue: BatchesBetaTrueServiceAsync.WithRawResponse by lazy {
             BatchesBetaTrueServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): MessageServiceAsync.WithRawResponse =
+            MessageServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun batches(): BatchServiceAsync.WithRawResponse = batches
 

@@ -66,6 +66,9 @@ class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
 
     override fun withRawResponse(): SamClient.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SamClient =
+        SamClientImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun store(): StoreService = store
 
     override fun user(): UserService = user
@@ -118,6 +121,11 @@ class SamClientImpl(private val clientOptions: ClientOptions) : SamClient {
         private val samPlopPlop: SamPlopPlopService.WithRawResponse by lazy {
             SamPlopPlopServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): SamClient.WithRawResponse =
+            SamClientImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         override fun store(): StoreService.WithRawResponse = store
 

@@ -26,6 +26,9 @@ class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: 
 
     override fun withRawResponse(): ModelsBetaTrueService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ModelsBetaTrueService =
+        ModelsBetaTrueServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun list(
         params: ModelsBetaTrueListParams,
         requestOptions: RequestOptions,
@@ -37,6 +40,13 @@ class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: 
         ModelsBetaTrueService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ModelsBetaTrueService.WithRawResponse =
+            ModelsBetaTrueServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val listHandler: Handler<ModelsBetaTrueListResponse> =
             jsonHandler<ModelsBetaTrueListResponse>(clientOptions.jsonMapper)

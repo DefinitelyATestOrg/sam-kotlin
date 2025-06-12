@@ -17,6 +17,9 @@ class StoreServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): StoreServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): StoreServiceAsync =
+        StoreServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun orders(): OrderServiceAsync = orders
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -25,6 +28,13 @@ class StoreServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val orders: OrderServiceAsync.WithRawResponse by lazy {
             OrderServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): StoreServiceAsync.WithRawResponse =
+            StoreServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun orders(): OrderServiceAsync.WithRawResponse = orders
     }

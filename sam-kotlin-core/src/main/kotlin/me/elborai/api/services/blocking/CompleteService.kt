@@ -3,6 +3,7 @@
 package me.elborai.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import me.elborai.api.core.ClientOptions
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.models.complete.CompleteCreateParams
@@ -14,6 +15,13 @@ interface CompleteService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CompleteService
 
     /**
      * [Legacy] Create a Text Completion.
@@ -32,6 +40,13 @@ interface CompleteService {
 
     /** A view of [CompleteService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CompleteService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v1/complete`, but is otherwise the same as

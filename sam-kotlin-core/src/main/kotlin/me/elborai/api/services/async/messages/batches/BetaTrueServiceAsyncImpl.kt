@@ -30,6 +30,9 @@ class BetaTrueServiceAsyncImpl internal constructor(private val clientOptions: C
 
     override fun withRawResponse(): BetaTrueServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BetaTrueServiceAsync =
+        BetaTrueServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: BetaTrueRetrieveParams,
         requestOptions: RequestOptions,
@@ -48,6 +51,13 @@ class BetaTrueServiceAsyncImpl internal constructor(private val clientOptions: C
         BetaTrueServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): BetaTrueServiceAsync.WithRawResponse =
+            BetaTrueServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val retrieveHandler: Handler<BetaTrueRetrieveResponse> =
             jsonHandler<BetaTrueRetrieveResponse>(clientOptions.jsonMapper)

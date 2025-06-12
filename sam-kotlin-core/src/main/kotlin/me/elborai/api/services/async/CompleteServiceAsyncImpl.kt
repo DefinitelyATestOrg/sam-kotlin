@@ -27,6 +27,9 @@ class CompleteServiceAsyncImpl internal constructor(private val clientOptions: C
 
     override fun withRawResponse(): CompleteServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CompleteServiceAsync =
+        CompleteServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: CompleteCreateParams,
         requestOptions: RequestOptions,
@@ -38,6 +41,13 @@ class CompleteServiceAsyncImpl internal constructor(private val clientOptions: C
         CompleteServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CompleteServiceAsync.WithRawResponse =
+            CompleteServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<CompleteCreateResponse> =
             jsonHandler<CompleteCreateResponse>(clientOptions.jsonMapper)

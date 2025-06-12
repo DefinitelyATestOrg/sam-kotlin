@@ -41,6 +41,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): MessageService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MessageService =
+        MessageServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun batches(): BatchService = batches
 
     override fun batchesBetaTrue(): BatchesBetaTrueService = batchesBetaTrue
@@ -78,6 +81,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
         private val batchesBetaTrue: BatchesBetaTrueService.WithRawResponse by lazy {
             BatchesBetaTrueServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): MessageService.WithRawResponse =
+            MessageServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun batches(): BatchService.WithRawResponse = batches
 
