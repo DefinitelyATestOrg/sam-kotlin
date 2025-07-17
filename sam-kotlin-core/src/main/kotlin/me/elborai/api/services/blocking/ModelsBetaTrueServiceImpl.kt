@@ -3,13 +3,13 @@
 package me.elborai.api.services.blocking
 
 import me.elborai.api.core.ClientOptions
-import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.handlers.errorBodyHandler
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
-import me.elborai.api.core.handlers.withErrorHandler
 import me.elborai.api.core.http.HttpMethod
 import me.elborai.api.core.http.HttpRequest
+import me.elborai.api.core.http.HttpResponse
 import me.elborai.api.core.http.HttpResponse.Handler
 import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.parseable
@@ -39,7 +39,8 @@ class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ModelsBetaTrueService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -50,7 +51,6 @@ class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: 
 
         private val listHandler: Handler<ModelsBetaTrueListResponse> =
             jsonHandler<ModelsBetaTrueListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: ModelsBetaTrueListParams,
@@ -66,7 +66,7 @@ class ModelsBetaTrueServiceImpl internal constructor(private val clientOptions: 
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {

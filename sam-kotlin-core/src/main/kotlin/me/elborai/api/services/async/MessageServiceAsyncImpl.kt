@@ -3,13 +3,13 @@
 package me.elborai.api.services.async
 
 import me.elborai.api.core.ClientOptions
-import me.elborai.api.core.JsonValue
 import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.handlers.errorBodyHandler
 import me.elborai.api.core.handlers.errorHandler
 import me.elborai.api.core.handlers.jsonHandler
-import me.elborai.api.core.handlers.withErrorHandler
 import me.elborai.api.core.http.HttpMethod
 import me.elborai.api.core.http.HttpRequest
+import me.elborai.api.core.http.HttpResponse
 import me.elborai.api.core.http.HttpResponse.Handler
 import me.elborai.api.core.http.HttpResponseFor
 import me.elborai.api.core.http.json
@@ -72,7 +72,8 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MessageServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         private val batches: BatchServiceAsync.WithRawResponse by lazy {
             BatchServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -96,7 +97,6 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val createHandler: Handler<MessageCreateResponse> =
             jsonHandler<MessageCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun create(
             params: MessageCreateParams,
@@ -112,7 +112,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -125,7 +125,6 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val countTokensHandler: Handler<MessageCountTokensResponse> =
             jsonHandler<MessageCountTokensResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun countTokens(
             params: MessageCountTokensParams,
@@ -141,7 +140,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { countTokensHandler.handle(it) }
                     .also {
@@ -154,7 +153,6 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val countTokensBetaHandler: Handler<MessageCountTokensBetaResponse> =
             jsonHandler<MessageCountTokensBetaResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun countTokensBeta(
             params: MessageCountTokensBetaParams,
@@ -171,7 +169,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { countTokensBetaHandler.handle(it) }
                     .also {
