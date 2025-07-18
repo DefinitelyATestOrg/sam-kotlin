@@ -348,6 +348,27 @@ val client: SamClient = SamOkHttpClient.builder()
     .build()
 ```
 
+### HTTPS
+
+> [!NOTE]
+> Most applications should not call these methods, and instead use the system defaults. The defaults include
+> special optimizations that can be lost if the implementations are modified.
+
+To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
+
+```kotlin
+import me.elborai.api.client.SamClient
+import me.elborai.api.client.okhttp.SamOkHttpClient
+
+val client: SamClient = SamOkHttpClient.builder()
+    .fromEnv()
+    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.
+    .sslSocketFactory(yourSSLSocketFactory)
+    .trustManager(yourTrustManager)
+    .hostnameVerifier(yourHostnameVerifier)
+    .build()
+```
+
 ### Custom HTTP client
 
 The SDK consists of three artifacts:
