@@ -37,7 +37,6 @@ internal class BatchesBetaTrueListResponseTest {
                         .resultsUrl(
                             "https://api.anthropic.com/v1/messages/batches/msgbatch_013Zva2CMHLNnXjNJJKqJ2EF/results"
                         )
-                        .type(BatchesBetaTrueListResponse.Data.Type.MESSAGE_BATCH)
                         .build()
                 )
                 .firstId("first_id")
@@ -67,7 +66,6 @@ internal class BatchesBetaTrueListResponseTest {
                     .resultsUrl(
                         "https://api.anthropic.com/v1/messages/batches/msgbatch_013Zva2CMHLNnXjNJJKqJ2EF/results"
                     )
-                    .type(BatchesBetaTrueListResponse.Data.Type.MESSAGE_BATCH)
                     .build()
             )
         assertThat(batchesBetaTrueListResponse.firstId()).isEqualTo("first_id")
@@ -103,7 +101,6 @@ internal class BatchesBetaTrueListResponseTest {
                         .resultsUrl(
                             "https://api.anthropic.com/v1/messages/batches/msgbatch_013Zva2CMHLNnXjNJJKqJ2EF/results"
                         )
-                        .type(BatchesBetaTrueListResponse.Data.Type.MESSAGE_BATCH)
                         .build()
                 )
                 .firstId("first_id")

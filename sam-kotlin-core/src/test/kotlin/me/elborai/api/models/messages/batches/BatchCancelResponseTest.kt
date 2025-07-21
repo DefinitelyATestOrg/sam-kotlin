@@ -33,7 +33,6 @@ internal class BatchCancelResponseTest {
                 .resultsUrl(
                     "https://api.anthropic.com/v1/messages/batches/msgbatch_013Zva2CMHLNnXjNJJKqJ2EF/results"
                 )
-                .type(BatchCancelResponse.Type.MESSAGE_BATCH)
                 .build()
 
         assertThat(batchCancelResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
@@ -63,7 +62,6 @@ internal class BatchCancelResponseTest {
             .isEqualTo(
                 "https://api.anthropic.com/v1/messages/batches/msgbatch_013Zva2CMHLNnXjNJJKqJ2EF/results"
             )
-        assertThat(batchCancelResponse.type()).isEqualTo(BatchCancelResponse.Type.MESSAGE_BATCH)
     }
 
     @Test
@@ -90,7 +88,6 @@ internal class BatchCancelResponseTest {
                 .resultsUrl(
                     "https://api.anthropic.com/v1/messages/batches/msgbatch_013Zva2CMHLNnXjNJJKqJ2EF/results"
                 )
-                .type(BatchCancelResponse.Type.MESSAGE_BATCH)
                 .build()
 
         val roundtrippedBatchCancelResponse =

@@ -24,23 +24,14 @@ internal class MessagesBetaTrueCreateResponseTest {
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessagesBetaTrueCreateResponse.Content.Text.Citation
-                                        .CharLocation
-                                        .Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessagesBetaTrueCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")
-                .role(MessagesBetaTrueCreateResponse.Role.ASSISTANT)
                 .stopReason(MessagesBetaTrueCreateResponse.StopReason.END_TURN)
                 .stopSequence(null)
-                .type(MessagesBetaTrueCreateResponse.Type.MESSAGE)
                 .usage(
                     MessagesBetaTrueCreateResponse.Usage.builder()
                         .cacheCreationInputTokens(2051L)
@@ -64,27 +55,16 @@ internal class MessagesBetaTrueCreateResponseTest {
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessagesBetaTrueCreateResponse.Content.Text.Citation
-                                        .CharLocation
-                                        .Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessagesBetaTrueCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
             )
         assertThat(messagesBetaTrueCreateResponse.model()).isEqualTo("claude-3-7-sonnet-20250219")
-        assertThat(messagesBetaTrueCreateResponse.role())
-            .isEqualTo(MessagesBetaTrueCreateResponse.Role.ASSISTANT)
         assertThat(messagesBetaTrueCreateResponse.stopReason())
             .isEqualTo(MessagesBetaTrueCreateResponse.StopReason.END_TURN)
         assertThat(messagesBetaTrueCreateResponse.stopSequence()).isNull()
-        assertThat(messagesBetaTrueCreateResponse.type())
-            .isEqualTo(MessagesBetaTrueCreateResponse.Type.MESSAGE)
         assertThat(messagesBetaTrueCreateResponse.usage())
             .isEqualTo(
                 MessagesBetaTrueCreateResponse.Usage.builder()
@@ -112,23 +92,14 @@ internal class MessagesBetaTrueCreateResponseTest {
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessagesBetaTrueCreateResponse.Content.Text.Citation
-                                        .CharLocation
-                                        .Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessagesBetaTrueCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")
-                .role(MessagesBetaTrueCreateResponse.Role.ASSISTANT)
                 .stopReason(MessagesBetaTrueCreateResponse.StopReason.END_TURN)
                 .stopSequence(null)
-                .type(MessagesBetaTrueCreateResponse.Type.MESSAGE)
                 .usage(
                     MessagesBetaTrueCreateResponse.Usage.builder()
                         .cacheCreationInputTokens(2051L)

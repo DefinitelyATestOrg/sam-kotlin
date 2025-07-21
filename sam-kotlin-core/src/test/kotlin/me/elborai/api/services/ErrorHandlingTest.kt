@@ -94,16 +94,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -115,12 +108,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -130,7 +117,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -138,10 +124,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -165,10 +147,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -221,16 +199,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -242,12 +213,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -257,7 +222,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -265,10 +229,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -292,10 +252,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -348,16 +304,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -369,12 +318,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -384,7 +327,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -392,10 +334,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -419,10 +357,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -475,16 +409,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -496,12 +423,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -511,7 +432,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -519,10 +439,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -546,10 +462,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -602,16 +514,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -623,12 +528,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -638,7 +537,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -646,10 +544,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -673,10 +567,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -729,16 +619,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -750,12 +633,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -765,7 +642,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -773,10 +649,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -800,10 +672,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -856,16 +724,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -877,12 +738,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -892,7 +747,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -900,10 +754,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -927,10 +777,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -983,16 +829,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1004,12 +843,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1019,7 +852,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1027,10 +859,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1054,10 +882,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1110,16 +934,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1131,12 +948,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1146,7 +957,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1154,10 +964,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1181,10 +987,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1237,16 +1039,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1258,12 +1053,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1273,7 +1062,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1281,10 +1069,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1308,10 +1092,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1364,16 +1144,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1385,12 +1158,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1400,7 +1167,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1408,10 +1174,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1435,10 +1197,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1491,16 +1249,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1512,12 +1263,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1527,7 +1272,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1535,10 +1279,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1562,10 +1302,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1618,16 +1354,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1639,12 +1368,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1654,7 +1377,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1662,10 +1384,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1689,10 +1407,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1745,16 +1459,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1766,12 +1473,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1781,7 +1482,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1789,10 +1489,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1816,10 +1512,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1872,16 +1564,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -1893,12 +1578,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -1908,7 +1587,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -1916,10 +1594,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -1943,10 +1617,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -1999,16 +1669,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -2020,12 +1683,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -2035,7 +1692,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -2043,10 +1699,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -2070,10 +1722,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")
@@ -2124,16 +1772,9 @@ internal class ErrorHandlingTest {
                             listOf(
                                 MessageCreateParams.System.RequestTextBlock.builder()
                                     .text("Today's date is 2024-06-01.")
-                                    .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                                     .cacheControl(
                                         MessageCreateParams.System.RequestTextBlock.CacheControl
                                             .builder()
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .addCitation(
@@ -2145,12 +1786,6 @@ internal class ErrorHandlingTest {
                                             .documentTitle("x")
                                             .endCharIndex(0L)
                                             .startCharIndex(0L)
-                                            .type(
-                                                MessageCreateParams.System.RequestTextBlock.Citation
-                                                    .CharLocation
-                                                    .Type
-                                                    .CHAR_LOCATION
-                                            )
                                             .build()
                                     )
                                     .build()
@@ -2160,7 +1795,6 @@ internal class ErrorHandlingTest {
                         .enabledThinking(1024L)
                         .toolChoice(
                             MessageCreateParams.ToolChoice.Auto.builder()
-                                .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                                 .disableParallelToolUse(true)
                                 .build()
                         )
@@ -2168,10 +1802,6 @@ internal class ErrorHandlingTest {
                             MessageCreateParams.Tool.InnerTool.builder()
                                 .inputSchema(
                                     MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.InputSchema.Type
-                                                .OBJECT
-                                        )
                                         .properties(
                                             JsonValue.from(
                                                 mapOf(
@@ -2195,10 +1825,6 @@ internal class ErrorHandlingTest {
                                 .name("name")
                                 .cacheControl(
                                     MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                        .type(
-                                            MessageCreateParams.Tool.InnerTool.CacheControl.Type
-                                                .EPHEMERAL
-                                        )
                                         .build()
                                 )
                                 .description("Get the current weather in a given location")

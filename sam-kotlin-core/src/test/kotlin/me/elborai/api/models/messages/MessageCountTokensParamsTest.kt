@@ -26,14 +26,8 @@ internal class MessageCountTokensParamsTest {
                 listOf(
                     MessageCountTokensParams.System.RequestTextBlock.builder()
                         .text("Today's date is 2024-06-01.")
-                        .type(MessageCountTokensParams.System.RequestTextBlock.Type.TEXT)
                         .cacheControl(
                             MessageCountTokensParams.System.RequestTextBlock.CacheControl.builder()
-                                .type(
-                                    MessageCountTokensParams.System.RequestTextBlock.CacheControl
-                                        .Type
-                                        .EPHEMERAL
-                                )
                                 .build()
                         )
                         .addCitation(
@@ -44,12 +38,6 @@ internal class MessageCountTokensParamsTest {
                                 .documentTitle("x")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessageCountTokensParams.System.RequestTextBlock.Citation
-                                        .CharLocation
-                                        .Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .build()
@@ -58,7 +46,6 @@ internal class MessageCountTokensParamsTest {
             .enabledThinking(1024L)
             .toolChoice(
                 MessageCountTokensParams.ToolChoice.Auto.builder()
-                    .type(MessageCountTokensParams.ToolChoice.Auto.Type.AUTO)
                     .disableParallelToolUse(true)
                     .build()
             )
@@ -66,7 +53,6 @@ internal class MessageCountTokensParamsTest {
                 MessageCountTokensParams.Tool.InnerTool.builder()
                     .inputSchema(
                         MessageCountTokensParams.Tool.InnerTool.InputSchema.builder()
-                            .type(MessageCountTokensParams.Tool.InnerTool.InputSchema.Type.OBJECT)
                             .properties(
                                 JsonValue.from(
                                     mapOf(
@@ -89,11 +75,7 @@ internal class MessageCountTokensParamsTest {
                     )
                     .name("name")
                     .cacheControl(
-                        MessageCountTokensParams.Tool.InnerTool.CacheControl.builder()
-                            .type(
-                                MessageCountTokensParams.Tool.InnerTool.CacheControl.Type.EPHEMERAL
-                            )
-                            .build()
+                        MessageCountTokensParams.Tool.InnerTool.CacheControl.builder().build()
                     )
                     .description("Get the current weather in a given location")
                     .build()
@@ -119,16 +101,9 @@ internal class MessageCountTokensParamsTest {
                     listOf(
                         MessageCountTokensParams.System.RequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(MessageCountTokensParams.System.RequestTextBlock.Type.TEXT)
                             .cacheControl(
                                 MessageCountTokensParams.System.RequestTextBlock.CacheControl
                                     .builder()
-                                    .type(
-                                        MessageCountTokensParams.System.RequestTextBlock
-                                            .CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -140,12 +115,6 @@ internal class MessageCountTokensParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessageCountTokensParams.System.RequestTextBlock.Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -154,7 +123,6 @@ internal class MessageCountTokensParamsTest {
                 .enabledThinking(1024L)
                 .toolChoice(
                     MessageCountTokensParams.ToolChoice.Auto.builder()
-                        .type(MessageCountTokensParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -162,9 +130,6 @@ internal class MessageCountTokensParamsTest {
                     MessageCountTokensParams.Tool.InnerTool.builder()
                         .inputSchema(
                             MessageCountTokensParams.Tool.InnerTool.InputSchema.builder()
-                                .type(
-                                    MessageCountTokensParams.Tool.InnerTool.InputSchema.Type.OBJECT
-                                )
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -187,12 +152,7 @@ internal class MessageCountTokensParamsTest {
                         )
                         .name("name")
                         .cacheControl(
-                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder()
-                                .type(
-                                    MessageCountTokensParams.Tool.InnerTool.CacheControl.Type
-                                        .EPHEMERAL
-                                )
-                                .build()
+                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder().build()
                         )
                         .description("Get the current weather in a given location")
                         .build()
@@ -247,16 +207,9 @@ internal class MessageCountTokensParamsTest {
                     listOf(
                         MessageCountTokensParams.System.RequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(MessageCountTokensParams.System.RequestTextBlock.Type.TEXT)
                             .cacheControl(
                                 MessageCountTokensParams.System.RequestTextBlock.CacheControl
                                     .builder()
-                                    .type(
-                                        MessageCountTokensParams.System.RequestTextBlock
-                                            .CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -268,12 +221,6 @@ internal class MessageCountTokensParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessageCountTokensParams.System.RequestTextBlock.Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -282,7 +229,6 @@ internal class MessageCountTokensParamsTest {
                 .enabledThinking(1024L)
                 .toolChoice(
                     MessageCountTokensParams.ToolChoice.Auto.builder()
-                        .type(MessageCountTokensParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -290,9 +236,6 @@ internal class MessageCountTokensParamsTest {
                     MessageCountTokensParams.Tool.InnerTool.builder()
                         .inputSchema(
                             MessageCountTokensParams.Tool.InnerTool.InputSchema.builder()
-                                .type(
-                                    MessageCountTokensParams.Tool.InnerTool.InputSchema.Type.OBJECT
-                                )
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -315,12 +258,7 @@ internal class MessageCountTokensParamsTest {
                         )
                         .name("name")
                         .cacheControl(
-                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder()
-                                .type(
-                                    MessageCountTokensParams.Tool.InnerTool.CacheControl.Type
-                                        .EPHEMERAL
-                                )
-                                .build()
+                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder().build()
                         )
                         .description("Get the current weather in a given location")
                         .build()
@@ -343,16 +281,9 @@ internal class MessageCountTokensParamsTest {
                     listOf(
                         MessageCountTokensParams.System.RequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(MessageCountTokensParams.System.RequestTextBlock.Type.TEXT)
                             .cacheControl(
                                 MessageCountTokensParams.System.RequestTextBlock.CacheControl
                                     .builder()
-                                    .type(
-                                        MessageCountTokensParams.System.RequestTextBlock
-                                            .CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -364,12 +295,6 @@ internal class MessageCountTokensParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessageCountTokensParams.System.RequestTextBlock.Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -379,17 +304,13 @@ internal class MessageCountTokensParamsTest {
         assertThat(body.thinking())
             .isEqualTo(
                 MessageCountTokensParams.Thinking.ofEnabled(
-                    MessageCountTokensParams.Thinking.Enabled.builder()
-                        .budgetTokens(1024L)
-                        .type(MessageCountTokensParams.Thinking.Enabled.Type.ENABLED)
-                        .build()
+                    MessageCountTokensParams.Thinking.Enabled.builder().budgetTokens(1024L).build()
                 )
             )
         assertThat(body.toolChoice())
             .isEqualTo(
                 MessageCountTokensParams.ToolChoice.ofAuto(
                     MessageCountTokensParams.ToolChoice.Auto.builder()
-                        .type(MessageCountTokensParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -400,9 +321,6 @@ internal class MessageCountTokensParamsTest {
                     MessageCountTokensParams.Tool.InnerTool.builder()
                         .inputSchema(
                             MessageCountTokensParams.Tool.InnerTool.InputSchema.builder()
-                                .type(
-                                    MessageCountTokensParams.Tool.InnerTool.InputSchema.Type.OBJECT
-                                )
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -425,12 +343,7 @@ internal class MessageCountTokensParamsTest {
                         )
                         .name("name")
                         .cacheControl(
-                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder()
-                                .type(
-                                    MessageCountTokensParams.Tool.InnerTool.CacheControl.Type
-                                        .EPHEMERAL
-                                )
-                                .build()
+                            MessageCountTokensParams.Tool.InnerTool.CacheControl.builder().build()
                         )
                         .description("Get the current weather in a given location")
                         .build()

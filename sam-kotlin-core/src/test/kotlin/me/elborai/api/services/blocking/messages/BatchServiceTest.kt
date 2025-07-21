@@ -62,24 +62,11 @@ internal class BatchServiceTest {
                                             BatchCreateParams.Request.Params.System.RequestTextBlock
                                                 .builder()
                                                 .text("Today's date is 2024-06-01.")
-                                                .type(
-                                                    BatchCreateParams.Request.Params.System
-                                                        .RequestTextBlock
-                                                        .Type
-                                                        .TEXT
-                                                )
                                                 .cacheControl(
                                                     BatchCreateParams.Request.Params.System
                                                         .RequestTextBlock
                                                         .CacheControl
                                                         .builder()
-                                                        .type(
-                                                            BatchCreateParams.Request.Params.System
-                                                                .RequestTextBlock
-                                                                .CacheControl
-                                                                .Type
-                                                                .EPHEMERAL
-                                                        )
                                                         .build()
                                                 )
                                                 .addCitation(
@@ -93,14 +80,6 @@ internal class BatchServiceTest {
                                                         .documentTitle("x")
                                                         .endCharIndex(0L)
                                                         .startCharIndex(0L)
-                                                        .type(
-                                                            BatchCreateParams.Request.Params.System
-                                                                .RequestTextBlock
-                                                                .Citation
-                                                                .CharLocation
-                                                                .Type
-                                                                .CHAR_LOCATION
-                                                        )
                                                         .build()
                                                 )
                                                 .build()
@@ -110,11 +89,6 @@ internal class BatchServiceTest {
                                     .enabledThinking(1024L)
                                     .toolChoice(
                                         BatchCreateParams.Request.Params.ToolChoice.Auto.builder()
-                                            .type(
-                                                BatchCreateParams.Request.Params.ToolChoice.Auto
-                                                    .Type
-                                                    .AUTO
-                                            )
                                             .disableParallelToolUse(true)
                                             .build()
                                     )
@@ -124,13 +98,6 @@ internal class BatchServiceTest {
                                                 BatchCreateParams.Request.Params.Tool.InnerTool
                                                     .InputSchema
                                                     .builder()
-                                                    .type(
-                                                        BatchCreateParams.Request.Params.Tool
-                                                            .InnerTool
-                                                            .InputSchema
-                                                            .Type
-                                                            .OBJECT
-                                                    )
                                                     .properties(
                                                         JsonValue.from(
                                                             mapOf(
@@ -156,13 +123,6 @@ internal class BatchServiceTest {
                                                 BatchCreateParams.Request.Params.Tool.InnerTool
                                                     .CacheControl
                                                     .builder()
-                                                    .type(
-                                                        BatchCreateParams.Request.Params.Tool
-                                                            .InnerTool
-                                                            .CacheControl
-                                                            .Type
-                                                            .EPHEMERAL
-                                                    )
                                                     .build()
                                             )
                                             .description(

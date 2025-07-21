@@ -64,14 +64,8 @@ internal class ServiceParamsTest {
                     listOf(
                         MessageCreateParams.System.RequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(MessageCreateParams.System.RequestTextBlock.Type.TEXT)
                             .cacheControl(
                                 MessageCreateParams.System.RequestTextBlock.CacheControl.builder()
-                                    .type(
-                                        MessageCreateParams.System.RequestTextBlock.CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -82,12 +76,6 @@ internal class ServiceParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessageCreateParams.System.RequestTextBlock.Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -97,7 +85,6 @@ internal class ServiceParamsTest {
                 .enabledThinking(1024L)
                 .toolChoice(
                     MessageCreateParams.ToolChoice.Auto.builder()
-                        .type(MessageCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -105,7 +92,6 @@ internal class ServiceParamsTest {
                     MessageCreateParams.Tool.InnerTool.builder()
                         .inputSchema(
                             MessageCreateParams.Tool.InnerTool.InputSchema.builder()
-                                .type(MessageCreateParams.Tool.InnerTool.InputSchema.Type.OBJECT)
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -128,11 +114,7 @@ internal class ServiceParamsTest {
                         )
                         .name("name")
                         .cacheControl(
-                            MessageCreateParams.Tool.InnerTool.CacheControl.builder()
-                                .type(
-                                    MessageCreateParams.Tool.InnerTool.CacheControl.Type.EPHEMERAL
-                                )
-                                .build()
+                            MessageCreateParams.Tool.InnerTool.CacheControl.builder().build()
                         )
                         .description("Get the current weather in a given location")
                         .build()
