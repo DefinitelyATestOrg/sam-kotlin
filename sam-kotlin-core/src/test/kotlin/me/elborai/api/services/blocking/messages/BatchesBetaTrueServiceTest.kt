@@ -59,28 +59,12 @@ internal class BatchesBetaTrueServiceTest {
                                                 .BetaRequestTextBlock
                                                 .builder()
                                                 .text("Today's date is 2024-06-01.")
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params
-                                                        .System
-                                                        .BetaRequestTextBlock
-                                                        .Type
-                                                        .TEXT
-                                                )
                                                 .cacheControl(
                                                     BatchesBetaTrueCreateParams.Request.Params
                                                         .System
                                                         .BetaRequestTextBlock
                                                         .CacheControl
                                                         .builder()
-                                                        .type(
-                                                            BatchesBetaTrueCreateParams.Request
-                                                                .Params
-                                                                .System
-                                                                .BetaRequestTextBlock
-                                                                .CacheControl
-                                                                .Type
-                                                                .EPHEMERAL
-                                                        )
                                                         .build()
                                                 )
                                                 .addCitation(
@@ -95,16 +79,6 @@ internal class BatchesBetaTrueServiceTest {
                                                         .documentTitle("x")
                                                         .endCharIndex(0L)
                                                         .startCharIndex(0L)
-                                                        .type(
-                                                            BatchesBetaTrueCreateParams.Request
-                                                                .Params
-                                                                .System
-                                                                .BetaRequestTextBlock
-                                                                .Citation
-                                                                .CharLocation
-                                                                .Type
-                                                                .CHAR_LOCATION
-                                                        )
                                                         .build()
                                                 )
                                                 .build()
@@ -115,13 +89,6 @@ internal class BatchesBetaTrueServiceTest {
                                     .toolChoice(
                                         BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                             .builder()
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params
-                                                    .ToolChoice
-                                                    .Auto
-                                                    .Type
-                                                    .AUTO
-                                            )
                                             .disableParallelToolUse(true)
                                             .build()
                                     )
@@ -133,14 +100,6 @@ internal class BatchesBetaTrueServiceTest {
                                                     .BetaTool
                                                     .InputSchema
                                                     .builder()
-                                                    .type(
-                                                        BatchesBetaTrueCreateParams.Request.Params
-                                                            .Tool
-                                                            .BetaTool
-                                                            .InputSchema
-                                                            .Type
-                                                            .OBJECT
-                                                    )
                                                     .properties(
                                                         JsonValue.from(
                                                             mapOf(
@@ -167,14 +126,6 @@ internal class BatchesBetaTrueServiceTest {
                                                     .BetaTool
                                                     .CacheControl
                                                     .builder()
-                                                    .type(
-                                                        BatchesBetaTrueCreateParams.Request.Params
-                                                            .Tool
-                                                            .BetaTool
-                                                            .CacheControl
-                                                            .Type
-                                                            .EPHEMERAL
-                                                    )
                                                     .build()
                                             )
                                             .description(

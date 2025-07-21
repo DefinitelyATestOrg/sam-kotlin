@@ -12,24 +12,16 @@ internal class BatchDeleteResponseTest {
     @Test
     fun create() {
         val batchDeleteResponse =
-            BatchDeleteResponse.builder()
-                .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-                .type(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
-                .build()
+            BatchDeleteResponse.builder().id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF").build()
 
         assertThat(batchDeleteResponse.id()).isEqualTo("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-        assertThat(batchDeleteResponse.type())
-            .isEqualTo(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val batchDeleteResponse =
-            BatchDeleteResponse.builder()
-                .id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF")
-                .type(BatchDeleteResponse.Type.MESSAGE_BATCH_DELETED)
-                .build()
+            BatchDeleteResponse.builder().id("msgbatch_013Zva2CMHLNnXjNJJKqJ2EF").build()
 
         val roundtrippedBatchDeleteResponse =
             jsonMapper.readValue(

@@ -34,16 +34,9 @@ internal class MessagesBetaTrueCreateParamsTest {
                 listOf(
                     MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
                         .text("Today's date is 2024-06-01.")
-                        .type(MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Type.TEXT)
                         .cacheControl(
                             MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.CacheControl
                                 .builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                        .CacheControl
-                                        .Type
-                                        .EPHEMERAL
-                                )
                                 .build()
                         )
                         .addCitation(
@@ -55,13 +48,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                                 .documentTitle("x")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                        .Citation
-                                        .CharLocation
-                                        .Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .build()
@@ -71,7 +57,6 @@ internal class MessagesBetaTrueCreateParamsTest {
             .enabledThinking(1024L)
             .toolChoice(
                 MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
-                    .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                     .disableParallelToolUse(true)
                     .build()
             )
@@ -79,9 +64,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                 MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
                     .inputSchema(
                         MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
-                            .type(
-                                MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.Type.OBJECT
-                            )
                             .properties(
                                 JsonValue.from(
                                     mapOf(
@@ -104,12 +86,7 @@ internal class MessagesBetaTrueCreateParamsTest {
                     )
                     .name("name")
                     .cacheControl(
-                        MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
-                            .type(
-                                MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.Type
-                                    .EPHEMERAL
-                            )
-                            .build()
+                        MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder().build()
                     )
                     .description("Get the current weather in a given location")
                     .type(MessagesBetaTrueCreateParams.Tool.BetaTool.Type.CUSTOM)
@@ -146,19 +123,10 @@ internal class MessagesBetaTrueCreateParamsTest {
                     listOf(
                         MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(
-                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Type.TEXT
-                            )
                             .cacheControl(
                                 MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                     .CacheControl
                                     .builder()
-                                    .type(
-                                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                            .CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -170,13 +138,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                            .Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -186,7 +147,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                 .enabledThinking(1024L)
                 .toolChoice(
                     MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
-                        .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -194,10 +154,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                     MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
                         .inputSchema(
                             MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.Type
-                                        .OBJECT
-                                )
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -221,10 +177,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                         .name("name")
                         .cacheControl(
                             MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.Type
-                                        .EPHEMERAL
-                                )
                                 .build()
                         )
                         .description("Get the current weather in a given location")
@@ -292,19 +244,10 @@ internal class MessagesBetaTrueCreateParamsTest {
                     listOf(
                         MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(
-                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Type.TEXT
-                            )
                             .cacheControl(
                                 MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                     .CacheControl
                                     .builder()
-                                    .type(
-                                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                            .CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -316,13 +259,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                            .Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -332,7 +268,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                 .enabledThinking(1024L)
                 .toolChoice(
                     MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
-                        .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -340,10 +275,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                     MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
                         .inputSchema(
                             MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.Type
-                                        .OBJECT
-                                )
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -367,10 +298,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                         .name("name")
                         .cacheControl(
                             MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.Type
-                                        .EPHEMERAL
-                                )
                                 .build()
                         )
                         .description("Get the current weather in a given location")
@@ -406,19 +333,10 @@ internal class MessagesBetaTrueCreateParamsTest {
                     listOf(
                         MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
                             .text("Today's date is 2024-06-01.")
-                            .type(
-                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Type.TEXT
-                            )
                             .cacheControl(
                                 MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
                                     .CacheControl
                                     .builder()
-                                    .type(
-                                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                            .CacheControl
-                                            .Type
-                                            .EPHEMERAL
-                                    )
                                     .build()
                             )
                             .addCitation(
@@ -430,13 +348,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                                     .documentTitle("x")
                                     .endCharIndex(0L)
                                     .startCharIndex(0L)
-                                    .type(
-                                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
-                                            .Citation
-                                            .CharLocation
-                                            .Type
-                                            .CHAR_LOCATION
-                                    )
                                     .build()
                             )
                             .build()
@@ -449,7 +360,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                 MessagesBetaTrueCreateParams.Thinking.ofEnabled(
                     MessagesBetaTrueCreateParams.Thinking.Enabled.builder()
                         .budgetTokens(1024L)
-                        .type(MessagesBetaTrueCreateParams.Thinking.Enabled.Type.ENABLED)
                         .build()
                 )
             )
@@ -457,7 +367,6 @@ internal class MessagesBetaTrueCreateParamsTest {
             .isEqualTo(
                 MessagesBetaTrueCreateParams.ToolChoice.ofAuto(
                     MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
-                        .type(MessagesBetaTrueCreateParams.ToolChoice.Auto.Type.AUTO)
                         .disableParallelToolUse(true)
                         .build()
                 )
@@ -468,10 +377,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                     MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
                         .inputSchema(
                             MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.Type
-                                        .OBJECT
-                                )
                                 .properties(
                                     JsonValue.from(
                                         mapOf(
@@ -495,10 +400,6 @@ internal class MessagesBetaTrueCreateParamsTest {
                         .name("name")
                         .cacheControl(
                             MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
-                                .type(
-                                    MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.Type
-                                        .EPHEMERAL
-                                )
                                 .build()
                         )
                         .description("Get the current weather in a given location")

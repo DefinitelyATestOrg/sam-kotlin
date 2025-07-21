@@ -43,25 +43,11 @@ internal class BatchesBetaTrueCreateParamsTest {
                                         .BetaRequestTextBlock
                                         .builder()
                                         .text("Today's date is 2024-06-01.")
-                                        .type(
-                                            BatchesBetaTrueCreateParams.Request.Params.System
-                                                .BetaRequestTextBlock
-                                                .Type
-                                                .TEXT
-                                        )
                                         .cacheControl(
                                             BatchesBetaTrueCreateParams.Request.Params.System
                                                 .BetaRequestTextBlock
                                                 .CacheControl
                                                 .builder()
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params
-                                                        .System
-                                                        .BetaRequestTextBlock
-                                                        .CacheControl
-                                                        .Type
-                                                        .EPHEMERAL
-                                                )
                                                 .build()
                                         )
                                         .addCitation(
@@ -75,15 +61,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                 .documentTitle("x")
                                                 .endCharIndex(0L)
                                                 .startCharIndex(0L)
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params
-                                                        .System
-                                                        .BetaRequestTextBlock
-                                                        .Citation
-                                                        .CharLocation
-                                                        .Type
-                                                        .CHAR_LOCATION
-                                                )
                                                 .build()
                                         )
                                         .build()
@@ -93,11 +70,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                             .enabledThinking(1024L)
                             .toolChoice(
                                 BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto.builder()
-                                    .type(
-                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
-                                            .Type
-                                            .AUTO
-                                    )
                                     .disableParallelToolUse(true)
                                     .build()
                             )
@@ -107,13 +79,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                         BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                             .InputSchema
                                             .builder()
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                    .BetaTool
-                                                    .InputSchema
-                                                    .Type
-                                                    .OBJECT
-                                            )
                                             .properties(
                                                 JsonValue.from(
                                                     mapOf(
@@ -139,13 +104,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                         BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                             .CacheControl
                                             .builder()
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                    .BetaTool
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .description("Get the current weather in a given location")
@@ -201,25 +159,11 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             .BetaRequestTextBlock
                                             .builder()
                                             .text("Today's date is 2024-06-01.")
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params.System
-                                                    .BetaRequestTextBlock
-                                                    .Type
-                                                    .TEXT
-                                            )
                                             .cacheControl(
                                                 BatchesBetaTrueCreateParams.Request.Params.System
                                                     .BetaRequestTextBlock
                                                     .CacheControl
                                                     .builder()
-                                                    .type(
-                                                        BatchesBetaTrueCreateParams.Request.Params
-                                                            .System
-                                                            .BetaRequestTextBlock
-                                                            .CacheControl
-                                                            .Type
-                                                            .EPHEMERAL
-                                                    )
                                                     .build()
                                             )
                                             .addCitation(
@@ -233,15 +177,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                     .documentTitle("x")
                                                     .endCharIndex(0L)
                                                     .startCharIndex(0L)
-                                                    .type(
-                                                        BatchesBetaTrueCreateParams.Request.Params
-                                                            .System
-                                                            .BetaRequestTextBlock
-                                                            .Citation
-                                                            .CharLocation
-                                                            .Type
-                                                            .CHAR_LOCATION
-                                                    )
                                                     .build()
                                             )
                                             .build()
@@ -252,12 +187,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                 .toolChoice(
                                     BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                         .builder()
-                                        .type(
-                                            BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                                .Auto
-                                                .Type
-                                                .AUTO
-                                        )
                                         .disableParallelToolUse(true)
                                         .build()
                                 )
@@ -268,13 +197,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                                 .InputSchema
                                                 .builder()
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                        .BetaTool
-                                                        .InputSchema
-                                                        .Type
-                                                        .OBJECT
-                                                )
                                                 .properties(
                                                     JsonValue.from(
                                                         mapOf(
@@ -300,13 +222,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                                 .CacheControl
                                                 .builder()
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                        .BetaTool
-                                                        .CacheControl
-                                                        .Type
-                                                        .EPHEMERAL
-                                                )
                                                 .build()
                                         )
                                         .description("Get the current weather in a given location")
@@ -404,25 +319,11 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             .BetaRequestTextBlock
                                             .builder()
                                             .text("Today's date is 2024-06-01.")
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params.System
-                                                    .BetaRequestTextBlock
-                                                    .Type
-                                                    .TEXT
-                                            )
                                             .cacheControl(
                                                 BatchesBetaTrueCreateParams.Request.Params.System
                                                     .BetaRequestTextBlock
                                                     .CacheControl
                                                     .builder()
-                                                    .type(
-                                                        BatchesBetaTrueCreateParams.Request.Params
-                                                            .System
-                                                            .BetaRequestTextBlock
-                                                            .CacheControl
-                                                            .Type
-                                                            .EPHEMERAL
-                                                    )
                                                     .build()
                                             )
                                             .addCitation(
@@ -436,15 +337,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                     .documentTitle("x")
                                                     .endCharIndex(0L)
                                                     .startCharIndex(0L)
-                                                    .type(
-                                                        BatchesBetaTrueCreateParams.Request.Params
-                                                            .System
-                                                            .BetaRequestTextBlock
-                                                            .Citation
-                                                            .CharLocation
-                                                            .Type
-                                                            .CHAR_LOCATION
-                                                    )
                                                     .build()
                                             )
                                             .build()
@@ -455,12 +347,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                 .toolChoice(
                                     BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
                                         .builder()
-                                        .type(
-                                            BatchesBetaTrueCreateParams.Request.Params.ToolChoice
-                                                .Auto
-                                                .Type
-                                                .AUTO
-                                        )
                                         .disableParallelToolUse(true)
                                         .build()
                                 )
@@ -471,13 +357,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                                 .InputSchema
                                                 .builder()
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                        .BetaTool
-                                                        .InputSchema
-                                                        .Type
-                                                        .OBJECT
-                                                )
                                                 .properties(
                                                     JsonValue.from(
                                                         mapOf(
@@ -503,13 +382,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                             BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                                 .CacheControl
                                                 .builder()
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                        .BetaTool
-                                                        .CacheControl
-                                                        .Type
-                                                        .EPHEMERAL
-                                                )
                                                 .build()
                                         )
                                         .description("Get the current weather in a given location")
@@ -559,25 +431,11 @@ internal class BatchesBetaTrueCreateParamsTest {
                                         .BetaRequestTextBlock
                                         .builder()
                                         .text("Today's date is 2024-06-01.")
-                                        .type(
-                                            BatchesBetaTrueCreateParams.Request.Params.System
-                                                .BetaRequestTextBlock
-                                                .Type
-                                                .TEXT
-                                        )
                                         .cacheControl(
                                             BatchesBetaTrueCreateParams.Request.Params.System
                                                 .BetaRequestTextBlock
                                                 .CacheControl
                                                 .builder()
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params
-                                                        .System
-                                                        .BetaRequestTextBlock
-                                                        .CacheControl
-                                                        .Type
-                                                        .EPHEMERAL
-                                                )
                                                 .build()
                                         )
                                         .addCitation(
@@ -591,15 +449,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                                 .documentTitle("x")
                                                 .endCharIndex(0L)
                                                 .startCharIndex(0L)
-                                                .type(
-                                                    BatchesBetaTrueCreateParams.Request.Params
-                                                        .System
-                                                        .BetaRequestTextBlock
-                                                        .Citation
-                                                        .CharLocation
-                                                        .Type
-                                                        .CHAR_LOCATION
-                                                )
                                                 .build()
                                         )
                                         .build()
@@ -609,11 +458,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                             .enabledThinking(1024L)
                             .toolChoice(
                                 BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto.builder()
-                                    .type(
-                                        BatchesBetaTrueCreateParams.Request.Params.ToolChoice.Auto
-                                            .Type
-                                            .AUTO
-                                    )
                                     .disableParallelToolUse(true)
                                     .build()
                             )
@@ -623,13 +467,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                         BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                             .InputSchema
                                             .builder()
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                    .BetaTool
-                                                    .InputSchema
-                                                    .Type
-                                                    .OBJECT
-                                            )
                                             .properties(
                                                 JsonValue.from(
                                                     mapOf(
@@ -655,13 +492,6 @@ internal class BatchesBetaTrueCreateParamsTest {
                                         BatchesBetaTrueCreateParams.Request.Params.Tool.BetaTool
                                             .CacheControl
                                             .builder()
-                                            .type(
-                                                BatchesBetaTrueCreateParams.Request.Params.Tool
-                                                    .BetaTool
-                                                    .CacheControl
-                                                    .Type
-                                                    .EPHEMERAL
-                                            )
                                             .build()
                                     )
                                     .description("Get the current weather in a given location")

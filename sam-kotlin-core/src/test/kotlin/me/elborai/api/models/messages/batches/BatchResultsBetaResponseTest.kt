@@ -29,32 +29,16 @@ internal class BatchResultsBetaResponseTest {
                                         .documentTitle("document_title")
                                         .endCharIndex(0L)
                                         .startCharIndex(0L)
-                                        .type(
-                                            BatchResultsBetaResponse.Result.Succeeded.Message
-                                                .Content
-                                                .Text
-                                                .Citation
-                                                .CharLocation
-                                                .Type
-                                                .CHAR_LOCATION
-                                        )
                                         .build()
                                 )
                                 .text("Hi! My name is Claude.")
-                                .type(
-                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
-                                        .Type
-                                        .TEXT
-                                )
                                 .build()
                         )
                         .model("claude-3-7-sonnet-20250219")
-                        .role(BatchResultsBetaResponse.Result.Succeeded.Message.Role.ASSISTANT)
                         .stopReason(
                             BatchResultsBetaResponse.Result.Succeeded.Message.StopReason.END_TURN
                         )
                         .stopSequence(null)
-                        .type(BatchResultsBetaResponse.Result.Succeeded.Message.Type.MESSAGE)
                         .usage(
                             BatchResultsBetaResponse.Result.Succeeded.Message.Usage.builder()
                                 .cacheCreationInputTokens(2051L)
@@ -90,40 +74,17 @@ internal class BatchResultsBetaResponseTest {
                                                 .documentTitle("document_title")
                                                 .endCharIndex(0L)
                                                 .startCharIndex(0L)
-                                                .type(
-                                                    BatchResultsBetaResponse.Result.Succeeded
-                                                        .Message
-                                                        .Content
-                                                        .Text
-                                                        .Citation
-                                                        .CharLocation
-                                                        .Type
-                                                        .CHAR_LOCATION
-                                                )
                                                 .build()
                                         )
                                         .text("Hi! My name is Claude.")
-                                        .type(
-                                            BatchResultsBetaResponse.Result.Succeeded.Message
-                                                .Content
-                                                .Text
-                                                .Type
-                                                .TEXT
-                                        )
                                         .build()
                                 )
                                 .model("claude-3-7-sonnet-20250219")
-                                .role(
-                                    BatchResultsBetaResponse.Result.Succeeded.Message.Role.ASSISTANT
-                                )
                                 .stopReason(
                                     BatchResultsBetaResponse.Result.Succeeded.Message.StopReason
                                         .END_TURN
                                 )
                                 .stopSequence(null)
-                                .type(
-                                    BatchResultsBetaResponse.Result.Succeeded.Message.Type.MESSAGE
-                                )
                                 .usage(
                                     BatchResultsBetaResponse.Result.Succeeded.Message.Usage
                                         .builder()
@@ -135,7 +96,6 @@ internal class BatchResultsBetaResponseTest {
                                 )
                                 .build()
                         )
-                        .type(BatchResultsBetaResponse.Result.Succeeded.Type.SUCCEEDED)
                         .build()
                 )
             )
@@ -162,32 +122,16 @@ internal class BatchResultsBetaResponseTest {
                                         .documentTitle("document_title")
                                         .endCharIndex(0L)
                                         .startCharIndex(0L)
-                                        .type(
-                                            BatchResultsBetaResponse.Result.Succeeded.Message
-                                                .Content
-                                                .Text
-                                                .Citation
-                                                .CharLocation
-                                                .Type
-                                                .CHAR_LOCATION
-                                        )
                                         .build()
                                 )
                                 .text("Hi! My name is Claude.")
-                                .type(
-                                    BatchResultsBetaResponse.Result.Succeeded.Message.Content.Text
-                                        .Type
-                                        .TEXT
-                                )
                                 .build()
                         )
                         .model("claude-3-7-sonnet-20250219")
-                        .role(BatchResultsBetaResponse.Result.Succeeded.Message.Role.ASSISTANT)
                         .stopReason(
                             BatchResultsBetaResponse.Result.Succeeded.Message.StopReason.END_TURN
                         )
                         .stopSequence(null)
-                        .type(BatchResultsBetaResponse.Result.Succeeded.Message.Type.MESSAGE)
                         .usage(
                             BatchResultsBetaResponse.Result.Succeeded.Message.Usage.builder()
                                 .cacheCreationInputTokens(2051L)

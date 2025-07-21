@@ -23,21 +23,14 @@ internal class MessageCreateResponseTest {
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessageCreateResponse.Content.Text.Citation.CharLocation.Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessageCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")
-                .role(MessageCreateResponse.Role.ASSISTANT)
                 .stopReason(MessageCreateResponse.StopReason.END_TURN)
                 .stopSequence(null)
-                .type(MessageCreateResponse.Type.MESSAGE)
                 .usage(
                     MessageCreateResponse.Usage.builder()
                         .cacheCreationInputTokens(2051L)
@@ -60,23 +53,16 @@ internal class MessageCreateResponseTest {
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessageCreateResponse.Content.Text.Citation.CharLocation.Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessageCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
             )
         assertThat(messageCreateResponse.model()).isEqualTo("claude-3-7-sonnet-20250219")
-        assertThat(messageCreateResponse.role()).isEqualTo(MessageCreateResponse.Role.ASSISTANT)
         assertThat(messageCreateResponse.stopReason())
             .isEqualTo(MessageCreateResponse.StopReason.END_TURN)
         assertThat(messageCreateResponse.stopSequence()).isNull()
-        assertThat(messageCreateResponse.type()).isEqualTo(MessageCreateResponse.Type.MESSAGE)
         assertThat(messageCreateResponse.usage())
             .isEqualTo(
                 MessageCreateResponse.Usage.builder()
@@ -103,21 +89,14 @@ internal class MessageCreateResponseTest {
                                 .documentTitle("document_title")
                                 .endCharIndex(0L)
                                 .startCharIndex(0L)
-                                .type(
-                                    MessageCreateResponse.Content.Text.Citation.CharLocation.Type
-                                        .CHAR_LOCATION
-                                )
                                 .build()
                         )
                         .text("Hi! My name is Claude.")
-                        .type(MessageCreateResponse.Content.Text.Type.TEXT)
                         .build()
                 )
                 .model("claude-3-7-sonnet-20250219")
-                .role(MessageCreateResponse.Role.ASSISTANT)
                 .stopReason(MessageCreateResponse.StopReason.END_TURN)
                 .stopSequence(null)
-                .type(MessageCreateResponse.Type.MESSAGE)
                 .usage(
                     MessageCreateResponse.Usage.builder()
                         .cacheCreationInputTokens(2051L)

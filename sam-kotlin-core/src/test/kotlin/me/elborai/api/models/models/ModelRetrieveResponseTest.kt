@@ -17,14 +17,12 @@ internal class ModelRetrieveResponseTest {
                 .id("claude-3-7-sonnet-20250219")
                 .createdAt(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
                 .displayName("Claude 3.7 Sonnet")
-                .type(ModelRetrieveResponse.Type.MODEL)
                 .build()
 
         assertThat(modelRetrieveResponse.id()).isEqualTo("claude-3-7-sonnet-20250219")
         assertThat(modelRetrieveResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
         assertThat(modelRetrieveResponse.displayName()).isEqualTo("Claude 3.7 Sonnet")
-        assertThat(modelRetrieveResponse.type()).isEqualTo(ModelRetrieveResponse.Type.MODEL)
     }
 
     @Test
@@ -35,7 +33,6 @@ internal class ModelRetrieveResponseTest {
                 .id("claude-3-7-sonnet-20250219")
                 .createdAt(OffsetDateTime.parse("2025-02-19T00:00:00Z"))
                 .displayName("Claude 3.7 Sonnet")
-                .type(ModelRetrieveResponse.Type.MODEL)
                 .build()
 
         val roundtrippedModelRetrieveResponse =
