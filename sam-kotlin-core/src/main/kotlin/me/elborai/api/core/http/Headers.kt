@@ -1,6 +1,16 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package me.elborai.api.core.http
 
 import java.util.TreeMap
+import me.elborai.api.core.JsonArray
+import me.elborai.api.core.JsonBoolean
+import me.elborai.api.core.JsonMissing
+import me.elborai.api.core.JsonNull
+import me.elborai.api.core.JsonNumber
+import me.elborai.api.core.JsonObject
+import me.elborai.api.core.JsonString
+import me.elborai.api.core.JsonValue
 import me.elborai.api.core.toImmutable
 
 class Headers private constructor(private val map: Map<String, List<String>>, val size: Int) {
@@ -23,6 +33,19 @@ class Headers private constructor(private val map: Map<String, List<String>>, va
         private val map: MutableMap<String, MutableList<String>> =
             TreeMap(String.CASE_INSENSITIVE_ORDER)
         private var size: Int = 0
+
+        fun put(name: String, value: JsonValue): Builder = apply {
+            when (value) {
+                is JsonMissing,
+                is JsonNull -> {}
+                is JsonBoolean -> put(name, value.value.toString())
+                is JsonNumber -> put(name, value.value.toString())
+                is JsonString -> put(name, value.value)
+                is JsonArray -> value.values.forEach { put(name, it) }
+                is JsonObject ->
+                    value.values.forEach { (nestedName, value) -> put("$name.$nestedName", value) }
+            }
+        }
 
         fun put(name: String, value: String) = apply {
             map.getOrPut(name) { mutableListOf() }.add(value)
