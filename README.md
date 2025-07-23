@@ -98,7 +98,7 @@ import me.elborai.api.client.okhttp.SamOkHttpClient
 
 val client: SamClient = SamOkHttpClient.builder()
     // Configures using the `sam.apiKey` and `sam.baseUrl` system properties
-    Or configures using the `API_KEY` and `SAM_BASE_URL` environment variables
+    // Or configures using the `API_KEY` and `SAM_BASE_URL` environment variables
     .fromEnv()
     .apiKey("My API Key")
     .build()
