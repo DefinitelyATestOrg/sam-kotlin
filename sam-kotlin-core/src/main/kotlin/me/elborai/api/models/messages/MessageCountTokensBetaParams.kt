@@ -1985,7 +1985,11 @@ private constructor(
 
                 fun ofUnnamedSchemaWithArrayParent6s(
                     unnamedSchemaWithArrayParent6s: List<UnnamedSchemaWithArrayParent6>
-                ) = Content(unnamedSchemaWithArrayParent6s = unnamedSchemaWithArrayParent6s)
+                ) =
+                    Content(
+                        unnamedSchemaWithArrayParent6s =
+                            unnamedSchemaWithArrayParent6s.toImmutable()
+                    )
             }
 
             /**
@@ -6440,7 +6444,8 @@ private constructor(
                                 unnamedSchemaWithArrayParent7s: List<UnnamedSchemaWithArrayParent7>
                             ) =
                                 InnerContent(
-                                    unnamedSchemaWithArrayParent7s = unnamedSchemaWithArrayParent7s
+                                    unnamedSchemaWithArrayParent7s =
+                                        unnamedSchemaWithArrayParent7s.toImmutable()
                                 )
                         }
 
@@ -11587,7 +11592,7 @@ private constructor(
                                     ) =
                                         InnerInnerContent(
                                             unnamedSchemaWithArrayParent8s =
-                                                unnamedSchemaWithArrayParent8s
+                                                unnamedSchemaWithArrayParent8s.toImmutable()
                                         )
                                 }
 
@@ -16874,7 +16879,7 @@ private constructor(
             fun ofString(string: String) = System(string = string)
 
             fun ofBetaRequestTextBlocks(betaRequestTextBlocks: List<BetaRequestTextBlock>) =
-                System(betaRequestTextBlocks = betaRequestTextBlocks)
+                System(betaRequestTextBlocks = betaRequestTextBlocks.toImmutable())
         }
 
         /** An interface that defines how to map each variant of [System] to a value of type [T]. */
