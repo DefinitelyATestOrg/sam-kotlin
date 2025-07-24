@@ -39,13 +39,13 @@ interface BetaTrueServiceAsync {
     ): BetaTrueRetrieveResponse =
         retrieve(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: BetaTrueRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BetaTrueRetrieveResponse
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         messageBatchId: String,
         requestOptions: RequestOptions,
@@ -68,13 +68,13 @@ interface BetaTrueServiceAsync {
     ): BetaTrueDeleteResponse =
         delete(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: BetaTrueDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BetaTrueDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         messageBatchId: String,
         requestOptions: RequestOptions,
@@ -106,14 +106,14 @@ interface BetaTrueServiceAsync {
         ): HttpResponseFor<BetaTrueRetrieveResponse> =
             retrieve(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: BetaTrueRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BetaTrueRetrieveResponse>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             messageBatchId: String,
@@ -134,14 +134,14 @@ interface BetaTrueServiceAsync {
         ): HttpResponseFor<BetaTrueDeleteResponse> =
             delete(params.toBuilder().messageBatchId(messageBatchId).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: BetaTrueDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BetaTrueDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             messageBatchId: String,

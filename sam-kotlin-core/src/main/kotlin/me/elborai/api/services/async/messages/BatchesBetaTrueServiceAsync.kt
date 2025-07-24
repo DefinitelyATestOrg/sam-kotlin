@@ -52,7 +52,7 @@ interface BatchesBetaTrueServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BatchesBetaTrueListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): BatchesBetaTrueListResponse =
         list(BatchesBetaTrueListParams.none(), requestOptions)
 
@@ -91,7 +91,7 @@ interface BatchesBetaTrueServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BatchesBetaTrueListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(
             requestOptions: RequestOptions

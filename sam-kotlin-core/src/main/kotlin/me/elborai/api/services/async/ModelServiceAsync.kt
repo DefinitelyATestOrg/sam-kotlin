@@ -39,13 +39,13 @@ interface ModelServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveResponse = retrieve(params.toBuilder().modelId(modelId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: ModelRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveResponse
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(modelId: String, requestOptions: RequestOptions): ModelRetrieveResponse =
         retrieve(modelId, ModelRetrieveParams.none(), requestOptions)
 
@@ -60,7 +60,7 @@ interface ModelServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): ModelListResponse =
         list(ModelListParams.none(), requestOptions)
 
@@ -77,13 +77,13 @@ interface ModelServiceAsync {
     ): ModelRetrieveBetaResponse =
         retrieveBeta(params.toBuilder().modelId(modelId).build(), requestOptions)
 
-    /** @see [retrieveBeta] */
+    /** @see retrieveBeta */
     suspend fun retrieveBeta(
         params: ModelRetrieveBetaParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelRetrieveBetaResponse
 
-    /** @see [retrieveBeta] */
+    /** @see retrieveBeta */
     suspend fun retrieveBeta(
         modelId: String,
         requestOptions: RequestOptions,
@@ -114,14 +114,14 @@ interface ModelServiceAsync {
         ): HttpResponseFor<ModelRetrieveResponse> =
             retrieve(params.toBuilder().modelId(modelId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: ModelRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelRetrieveResponse>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             modelId: String,
@@ -139,7 +139,7 @@ interface ModelServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<ModelListResponse> =
             list(ModelListParams.none(), requestOptions)
@@ -156,14 +156,14 @@ interface ModelServiceAsync {
         ): HttpResponseFor<ModelRetrieveBetaResponse> =
             retrieveBeta(params.toBuilder().modelId(modelId).build(), requestOptions)
 
-        /** @see [retrieveBeta] */
+        /** @see retrieveBeta */
         @MustBeClosed
         suspend fun retrieveBeta(
             params: ModelRetrieveBetaParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelRetrieveBetaResponse>
 
-        /** @see [retrieveBeta] */
+        /** @see retrieveBeta */
         @MustBeClosed
         suspend fun retrieveBeta(
             modelId: String,

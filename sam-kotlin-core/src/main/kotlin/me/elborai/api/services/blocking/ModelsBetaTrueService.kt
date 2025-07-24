@@ -34,7 +34,7 @@ interface ModelsBetaTrueService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ModelsBetaTrueListResponse
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): ModelsBetaTrueListResponse =
         list(ModelsBetaTrueListParams.none(), requestOptions)
 
@@ -62,7 +62,7 @@ interface ModelsBetaTrueService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ModelsBetaTrueListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<ModelsBetaTrueListResponse> =
             list(ModelsBetaTrueListParams.none(), requestOptions)
