@@ -2217,7 +2217,8 @@ private constructor(
                             unnamedSchemaWithArrayParent12s: List<UnnamedSchemaWithArrayParent12>
                         ) =
                             Content(
-                                unnamedSchemaWithArrayParent12s = unnamedSchemaWithArrayParent12s
+                                unnamedSchemaWithArrayParent12s =
+                                    unnamedSchemaWithArrayParent12s.toImmutable()
                             )
                     }
 
@@ -6969,7 +6970,7 @@ private constructor(
                                     ) =
                                         InnerContent(
                                             unnamedSchemaWithArrayParent13s =
-                                                unnamedSchemaWithArrayParent13s
+                                                unnamedSchemaWithArrayParent13s.toImmutable()
                                         )
                                 }
 
@@ -12591,6 +12592,7 @@ private constructor(
                                                 InnerInnerContent(
                                                     unnamedSchemaWithArrayParent14s =
                                                         unnamedSchemaWithArrayParent14s
+                                                            .toImmutable()
                                                 )
                                         }
 
@@ -18641,7 +18643,7 @@ private constructor(
                     fun ofString(string: String) = System(string = string)
 
                     fun ofBetaRequestTextBlocks(betaRequestTextBlocks: List<BetaRequestTextBlock>) =
-                        System(betaRequestTextBlocks = betaRequestTextBlocks)
+                        System(betaRequestTextBlocks = betaRequestTextBlocks.toImmutable())
                 }
 
                 /**
