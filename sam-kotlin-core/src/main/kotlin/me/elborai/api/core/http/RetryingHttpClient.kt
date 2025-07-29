@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import me.elborai.api.core.RequestOptions
 import me.elborai.api.core.checkRequired
 import me.elborai.api.errors.SamIoException
+import me.elborai.api.errors.SamRetryableException
 
 class RetryingHttpClient
 private constructor(
@@ -159,9 +160,10 @@ private constructor(
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean =
-        // Only retry IOException and SamIoException, other exceptions are not intended to be
-        // retried.
-        throwable is IOException || throwable is SamIoException
+        // Only retry known retryable exceptions, other exceptions are not intended to be retried.
+        throwable is IOException ||
+            throwable is SamIoException ||
+            throwable is SamRetryableException
 
     private fun getRetryBackoffDuration(retries: Int, response: HttpResponse?): Duration {
         // About the Retry-After header:
