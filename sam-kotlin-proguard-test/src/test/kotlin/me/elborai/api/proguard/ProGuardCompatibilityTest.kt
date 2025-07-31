@@ -3,23 +3,34 @@
 package me.elborai.api.proguard
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.jvm.javaMethod
 import me.elborai.api.client.okhttp.SamOkHttpClient
 import me.elborai.api.core.jsonMapper
 import me.elborai.api.models.messages.MessageCreateResponse
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 internal class ProGuardCompatibilityTest {
 
     companion object {
 
-        @BeforeAll
         @JvmStatic
-        fun setUp() {
+        fun main(args: Array<String>) {
             // To debug that we're using the right JAR.
             val jarPath = this::class.java.getProtectionDomain().codeSource.location
             println("JAR being used: $jarPath")
+
+            // We have to manually run the test methods instead of using the JUnit runner because it
+            // seems impossible to get working with R8.
+            val test = ProGuardCompatibilityTest()
+            test::class
+                .memberFunctions
+                .asSequence()
+                .filter { function ->
+                    function.javaMethod?.isAnnotationPresent(Test::class.java) == true
+                }
+                .forEach { it.call(test) }
         }
     }
 
