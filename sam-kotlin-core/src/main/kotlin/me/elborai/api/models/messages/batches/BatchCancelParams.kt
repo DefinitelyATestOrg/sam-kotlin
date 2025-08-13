@@ -305,10 +305,26 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BatchCancelParams && messageBatchId == other.messageBatchId && anthropicBeta == other.anthropicBeta && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return other is BatchCancelParams &&
+            messageBatchId == other.messageBatchId &&
+            anthropicBeta == other.anthropicBeta &&
+            anthropicVersion == other.anthropicVersion &&
+            xApiKey == other.xApiKey &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(messageBatchId, anthropicBeta, anthropicVersion, xApiKey, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            messageBatchId,
+            anthropicBeta,
+            anthropicVersion,
+            xApiKey,
+            additionalHeaders,
+            additionalQueryParams,
+            additionalBodyProperties,
+        )
 
     override fun toString() =
         "BatchCancelParams{messageBatchId=$messageBatchId, anthropicBeta=$anthropicBeta, anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
