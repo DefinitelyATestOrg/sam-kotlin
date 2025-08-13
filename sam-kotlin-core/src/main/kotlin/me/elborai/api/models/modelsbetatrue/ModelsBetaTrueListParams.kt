@@ -282,10 +282,26 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ModelsBetaTrueListParams && afterId == other.afterId && beforeId == other.beforeId && limit == other.limit && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is ModelsBetaTrueListParams &&
+            afterId == other.afterId &&
+            beforeId == other.beforeId &&
+            limit == other.limit &&
+            anthropicVersion == other.anthropicVersion &&
+            xApiKey == other.xApiKey &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(afterId, beforeId, limit, anthropicVersion, xApiKey, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            afterId,
+            beforeId,
+            limit,
+            anthropicVersion,
+            xApiKey,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "ModelsBetaTrueListParams{afterId=$afterId, beforeId=$beforeId, limit=$limit, anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

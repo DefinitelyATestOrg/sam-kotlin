@@ -316,10 +316,28 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BatchListParams && afterId == other.afterId && beforeId == other.beforeId && limit == other.limit && anthropicBeta == other.anthropicBeta && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is BatchListParams &&
+            afterId == other.afterId &&
+            beforeId == other.beforeId &&
+            limit == other.limit &&
+            anthropicBeta == other.anthropicBeta &&
+            anthropicVersion == other.anthropicVersion &&
+            xApiKey == other.xApiKey &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(afterId, beforeId, limit, anthropicBeta, anthropicVersion, xApiKey, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            afterId,
+            beforeId,
+            limit,
+            anthropicBeta,
+            anthropicVersion,
+            xApiKey,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "BatchListParams{afterId=$afterId, beforeId=$beforeId, limit=$limit, anthropicBeta=$anthropicBeta, anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

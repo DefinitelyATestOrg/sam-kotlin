@@ -233,10 +233,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ModelRetrieveBetaParams && modelId == other.modelId && anthropicVersion == other.anthropicVersion && xApiKey == other.xApiKey && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is ModelRetrieveBetaParams &&
+            modelId == other.modelId &&
+            anthropicVersion == other.anthropicVersion &&
+            xApiKey == other.xApiKey &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(modelId, anthropicVersion, xApiKey, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(modelId, anthropicVersion, xApiKey, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "ModelRetrieveBetaParams{modelId=$modelId, anthropicVersion=$anthropicVersion, xApiKey=$xApiKey, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
