@@ -9,6 +9,7 @@ import java.time.Duration
 import kotlinx.coroutines.runBlocking
 import me.elborai.api.client.okhttp.OkHttpClient
 import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.Sleeper
 import me.elborai.api.errors.SamRetryableException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -289,11 +290,13 @@ internal class RetryingHttpClientTest {
                 .httpClient(failingHttpClient)
                 .maxRetries(2)
                 .sleeper(
-                    object : RetryingHttpClient.Sleeper {
+                    object : Sleeper {
 
                         override fun sleep(duration: Duration) {}
 
                         override suspend fun sleepAsync(duration: Duration) {}
+
+                        override fun close() {}
                     }
                 )
                 .build()
@@ -327,11 +330,13 @@ internal class RetryingHttpClientTest {
             .httpClient(httpClient)
             // Use a no-op `Sleeper` to make the test fast.
             .sleeper(
-                object : RetryingHttpClient.Sleeper {
+                object : Sleeper {
 
                     override fun sleep(duration: Duration) {}
 
                     override suspend fun sleepAsync(duration: Duration) {}
+
+                    override fun close() {}
                 }
             )
 
