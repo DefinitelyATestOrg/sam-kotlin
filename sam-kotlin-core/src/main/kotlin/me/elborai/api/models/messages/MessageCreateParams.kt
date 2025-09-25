@@ -1143,6 +1143,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val maxTokens: JsonField<Long>,
         private val messages: JsonField<List<Message>>,
@@ -2277,6 +2278,7 @@ private constructor(
     }
 
     class Message
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val content: JsonField<Content>,
         private val role: JsonField<Role>,
@@ -2983,6 +2985,7 @@ private constructor(
                 }
 
                 class Text
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val text: JsonField<String>,
                     private val type: JsonValue,
@@ -3276,6 +3279,7 @@ private constructor(
                             (citations.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
                     class CacheControl
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                     private constructor(
                         private val type: JsonValue,
                         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -3645,6 +3649,7 @@ private constructor(
                         }
 
                         class CharLocation
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val citedText: JsonField<String>,
                             private val documentIndex: JsonField<Long>,
@@ -4049,6 +4054,7 @@ private constructor(
                         }
 
                         class PageLocation
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val citedText: JsonField<String>,
                             private val documentIndex: JsonField<Long>,
@@ -4453,6 +4459,7 @@ private constructor(
                         }
 
                         class ContentBlockLocation
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val citedText: JsonField<String>,
                             private val documentIndex: JsonField<Long>,
@@ -4885,6 +4892,7 @@ private constructor(
                 }
 
                 class Image
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val source: JsonField<Source>,
                     private val type: JsonValue,
@@ -5288,6 +5296,7 @@ private constructor(
                         }
 
                         class Base64
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val data: JsonField<String>,
                             private val mediaType: JsonField<MediaType>,
@@ -5698,6 +5707,7 @@ private constructor(
                         }
 
                         class Url
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val type: JsonValue,
                             private val url: JsonField<String>,
@@ -5907,6 +5917,7 @@ private constructor(
                     }
 
                     class CacheControl
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                     private constructor(
                         private val type: JsonValue,
                         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -6083,6 +6094,7 @@ private constructor(
                 }
 
                 class ToolUse
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val id: JsonField<String>,
                     private val input: JsonValue,
@@ -6351,6 +6363,7 @@ private constructor(
                             (cacheControl.asKnown()?.validity() ?: 0)
 
                     class CacheControl
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                     private constructor(
                         private val type: JsonValue,
                         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -6529,6 +6542,7 @@ private constructor(
                 }
 
                 class ToolResult
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val toolUseId: JsonField<String>,
                     private val type: JsonValue,
@@ -6844,6 +6858,7 @@ private constructor(
                             (if (isError.asKnown() == null) 0 else 1)
 
                     class CacheControl
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                     private constructor(
                         private val type: JsonValue,
                         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -7411,6 +7426,7 @@ private constructor(
                             }
 
                             class Text
+                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                             private constructor(
                                 private val text: JsonField<String>,
                                 private val type: JsonValue,
@@ -7732,6 +7748,7 @@ private constructor(
                                         (citations.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
                                 class CacheControl
+                                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                 private constructor(
                                     private val type: JsonValue,
                                     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -8165,6 +8182,7 @@ private constructor(
                                     }
 
                                     class CharLocation
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val citedText: JsonField<String>,
                                         private val documentIndex: JsonField<Long>,
@@ -8609,6 +8627,7 @@ private constructor(
                                     }
 
                                     class PageLocation
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val citedText: JsonField<String>,
                                         private val documentIndex: JsonField<Long>,
@@ -9056,6 +9075,7 @@ private constructor(
                                     }
 
                                     class ContentBlockLocation
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val citedText: JsonField<String>,
                                         private val documentIndex: JsonField<Long>,
@@ -9544,6 +9564,7 @@ private constructor(
                             }
 
                             class Image
+                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                             private constructor(
                                 private val source: JsonField<Source>,
                                 private val type: JsonValue,
@@ -9990,6 +10011,7 @@ private constructor(
                                     }
 
                                     class Base64
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val data: JsonField<String>,
                                         private val mediaType: JsonField<MediaType>,
@@ -10440,6 +10462,7 @@ private constructor(
                                     }
 
                                     class Url
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val type: JsonValue,
                                         private val url: JsonField<String>,
@@ -10672,6 +10695,7 @@ private constructor(
                                 }
 
                                 class CacheControl
+                                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                 private constructor(
                                     private val type: JsonValue,
                                     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -10896,6 +10920,7 @@ private constructor(
                 }
 
                 class Document
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val source: JsonField<Source>,
                     private val type: JsonValue,
@@ -11525,6 +11550,7 @@ private constructor(
                         }
 
                         class Base64
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val data: JsonField<String>,
                             private val mediaType: JsonValue,
@@ -11784,6 +11810,7 @@ private constructor(
                         }
 
                         class Text
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val data: JsonField<String>,
                             private val mediaType: JsonValue,
@@ -12041,6 +12068,7 @@ private constructor(
                         }
 
                         class InnerContent
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val content: JsonField<InnerInnerContent>,
                             private val type: JsonValue,
@@ -12720,6 +12748,7 @@ private constructor(
                                     }
 
                                     class Text
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val text: JsonField<String>,
                                         private val type: JsonValue,
@@ -13076,6 +13105,7 @@ private constructor(
                                                 } ?: 0)
 
                                         class CacheControl
+                                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                         private constructor(
                                             private val type: JsonValue,
                                             private val additionalProperties:
@@ -13550,6 +13580,7 @@ private constructor(
                                             }
 
                                             class CharLocation
+                                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                             private constructor(
                                                 private val citedText: JsonField<String>,
                                                 private val documentIndex: JsonField<Long>,
@@ -14051,6 +14082,7 @@ private constructor(
                                             }
 
                                             class PageLocation
+                                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                             private constructor(
                                                 private val citedText: JsonField<String>,
                                                 private val documentIndex: JsonField<Long>,
@@ -14556,6 +14588,7 @@ private constructor(
                                             }
 
                                             class ContentBlockLocation
+                                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                             private constructor(
                                                 private val citedText: JsonField<String>,
                                                 private val documentIndex: JsonField<Long>,
@@ -15100,6 +15133,7 @@ private constructor(
                                     }
 
                                     class Image
+                                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                     private constructor(
                                         private val source: JsonField<InnerSource>,
                                         private val type: JsonValue,
@@ -15586,6 +15620,7 @@ private constructor(
                                             }
 
                                             class Base64
+                                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                             private constructor(
                                                 private val data: JsonField<String>,
                                                 private val mediaType: JsonField<MediaType>,
@@ -16068,6 +16103,7 @@ private constructor(
                                             }
 
                                             class Url
+                                            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                             private constructor(
                                                 private val type: JsonValue,
                                                 private val url: JsonField<String>,
@@ -16316,6 +16352,7 @@ private constructor(
                                         }
 
                                         class CacheControl
+                                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                                         private constructor(
                                             private val type: JsonValue,
                                             private val additionalProperties:
@@ -16551,6 +16588,7 @@ private constructor(
                         }
 
                         class Url
+                        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val type: JsonValue,
                             private val url: JsonField<String>,
@@ -16760,6 +16798,7 @@ private constructor(
                     }
 
                     class CacheControl
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                     private constructor(
                         private val type: JsonValue,
                         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -16914,6 +16953,7 @@ private constructor(
                     }
 
                     class Citations
+                    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                     private constructor(
                         private val enabled: JsonField<Boolean>,
                         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -17101,6 +17141,7 @@ private constructor(
                 }
 
                 class Thinking
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val signature: JsonField<String>,
                     private val thinking: JsonField<String>,
@@ -17349,6 +17390,7 @@ private constructor(
                 }
 
                 class RedactedThinking
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val data: JsonField<String>,
                     private val type: JsonValue,
@@ -17700,6 +17742,7 @@ private constructor(
 
     /** An object describing metadata about the request. */
     class Metadata
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val userId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -18029,6 +18072,7 @@ private constructor(
         }
 
         class RequestTextBlock
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val text: JsonField<String>,
             private val type: JsonValue,
@@ -18311,6 +18355,7 @@ private constructor(
                     (citations.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
             class CacheControl
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val type: JsonValue,
                 private val additionalProperties: MutableMap<String, JsonValue>,
@@ -18664,6 +18709,7 @@ private constructor(
                 }
 
                 class CharLocation
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -19057,6 +19103,7 @@ private constructor(
                 }
 
                 class PageLocation
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -19450,6 +19497,7 @@ private constructor(
                 }
 
                 class ContentBlockLocation
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -20054,6 +20102,7 @@ private constructor(
         }
 
         class Enabled
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val budgetTokens: JsonField<Long>,
             private val type: JsonValue,
@@ -20525,6 +20574,7 @@ private constructor(
 
         /** The model will automatically decide whether to use tools. */
         class Auto
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val type: JsonValue,
             private val disableParallelToolUse: JsonField<Boolean>,
@@ -20724,6 +20774,7 @@ private constructor(
 
         /** The model will use any available tools. */
         class Any
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val type: JsonValue,
             private val disableParallelToolUse: JsonField<Boolean>,
@@ -20923,6 +20974,7 @@ private constructor(
 
         /** The model will use the specified tool with `tool_choice.name`. */
         class Tool
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val name: JsonField<String>,
             private val type: JsonValue,
@@ -21376,6 +21428,7 @@ private constructor(
         }
 
         class InnerTool
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val inputSchema: JsonField<InputSchema>,
             private val name: JsonField<String>,
@@ -21676,6 +21729,7 @@ private constructor(
              * produce.
              */
             class InputSchema
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val type: JsonValue,
                 private val properties: JsonValue,
@@ -21837,6 +21891,7 @@ private constructor(
             }
 
             class CacheControl
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val type: JsonValue,
                 private val additionalProperties: MutableMap<String, JsonValue>,
@@ -22006,6 +22061,7 @@ private constructor(
         }
 
         class BashTool20250124
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val name: JsonValue,
             private val type: JsonValue,
@@ -22211,6 +22267,7 @@ private constructor(
                     (cacheControl.asKnown()?.validity() ?: 0)
 
             class CacheControl
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val type: JsonValue,
                 private val additionalProperties: MutableMap<String, JsonValue>,
@@ -22379,6 +22436,7 @@ private constructor(
         }
 
         class TextEditor20250124
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val name: JsonValue,
             private val type: JsonValue,
@@ -22591,6 +22649,7 @@ private constructor(
                     (cacheControl.asKnown()?.validity() ?: 0)
 
             class CacheControl
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val type: JsonValue,
                 private val additionalProperties: MutableMap<String, JsonValue>,

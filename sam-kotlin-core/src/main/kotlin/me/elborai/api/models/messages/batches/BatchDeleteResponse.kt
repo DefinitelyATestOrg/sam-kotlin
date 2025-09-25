@@ -16,6 +16,7 @@ import me.elborai.api.core.checkRequired
 import me.elborai.api.errors.SamInvalidDataException
 
 class BatchDeleteResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val type: JsonValue,

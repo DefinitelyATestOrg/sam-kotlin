@@ -18,6 +18,7 @@ import me.elborai.api.core.checkRequired
 import me.elborai.api.errors.SamInvalidDataException
 
 class BatchesBetaTrueCreateResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val archivedAt: JsonField<OffsetDateTime>,
@@ -729,6 +730,7 @@ private constructor(
      * the batch.
      */
     class RequestCounts
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val canceled: JsonField<Long>,
         private val errored: JsonField<Long>,
