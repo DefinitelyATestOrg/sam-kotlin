@@ -16,6 +16,7 @@ import me.elborai.api.core.checkRequired
 import me.elborai.api.errors.SamInvalidDataException
 
 class MessageCountTokensResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val inputTokens: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,

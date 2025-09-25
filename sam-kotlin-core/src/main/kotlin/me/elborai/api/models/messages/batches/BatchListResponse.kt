@@ -20,6 +20,7 @@ import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
 class BatchListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<Data>>,
     private val firstId: JsonField<String>,
@@ -274,6 +275,7 @@ private constructor(
             (if (lastId.asKnown() == null) 0 else 1)
 
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val archivedAt: JsonField<OffsetDateTime>,
@@ -1002,6 +1004,7 @@ private constructor(
          * requests in the batch.
          */
         class RequestCounts
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val canceled: JsonField<Long>,
             private val errored: JsonField<Long>,

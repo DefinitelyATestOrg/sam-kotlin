@@ -29,6 +29,7 @@ import me.elborai.api.core.toImmutable
 import me.elborai.api.errors.SamInvalidDataException
 
 class MessagesBetaTrueCreateResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val content: JsonField<List<Content>>,
@@ -807,6 +808,7 @@ private constructor(
         }
 
         class Text
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val citations: JsonField<List<Citation>>,
             private val text: JsonField<String>,
@@ -1272,6 +1274,7 @@ private constructor(
                 }
 
                 class CharLocation
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -1665,6 +1668,7 @@ private constructor(
                 }
 
                 class PageLocation
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -2058,6 +2062,7 @@ private constructor(
                 }
 
                 class ContentBlockLocation
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val citedText: JsonField<String>,
                     private val documentIndex: JsonField<Long>,
@@ -2478,6 +2483,7 @@ private constructor(
         }
 
         class ToolUse
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val input: JsonValue,
@@ -2723,6 +2729,7 @@ private constructor(
         }
 
         class Thinking
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val signature: JsonField<String>,
             private val thinking: JsonField<String>,
@@ -2964,6 +2971,7 @@ private constructor(
         }
 
         class RedactedThinking
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val data: JsonField<String>,
             private val type: JsonValue,
@@ -3327,6 +3335,7 @@ private constructor(
      * `cache_creation_input_tokens`, and `cache_read_input_tokens`.
      */
     class Usage
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val cacheCreationInputTokens: JsonField<Long>,
         private val cacheReadInputTokens: JsonField<Long>,
