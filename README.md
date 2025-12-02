@@ -262,13 +262,13 @@ The SDK uses the standard [OkHttp logging interceptor](https://github.com/square
 Enable logging by setting the `SAM_LOG` environment variable to `info`:
 
 ```sh
-$ export SAM_LOG=info
+export SAM_LOG=info
 ```
 
 Or to `debug` for more verbose logging:
 
 ```sh
-$ export SAM_LOG=debug
+export SAM_LOG=debug
 ```
 
 ## ProGuard and R8
