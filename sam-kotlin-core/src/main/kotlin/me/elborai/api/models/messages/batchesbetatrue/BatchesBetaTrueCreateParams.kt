@@ -2275,7 +2275,7 @@ private constructor(
                             return when (bestMatches.size) {
                                 // This can happen if what we're deserializing is completely
                                 // incompatible with all the possible variants (e.g. deserializing
-                                // from object).
+                                // from boolean).
                                 0 -> Content(_json = json)
                                 1 -> bestMatches.single()
                                 // If there's more than one match with the highest validity, then
@@ -7163,7 +7163,7 @@ private constructor(
                                         return when (bestMatches.size) {
                                             // This can happen if what we're deserializing is
                                             // completely incompatible with all the possible
-                                            // variants (e.g. deserializing from object).
+                                            // variants (e.g. deserializing from boolean).
                                             0 -> InnerContent(_json = json)
                                             1 -> bestMatches.single()
                                             // If there's more than one match with the highest
@@ -12944,7 +12944,7 @@ private constructor(
                                                     // This can happen if what we're deserializing
                                                     // is completely incompatible with all the
                                                     // possible variants (e.g. deserializing from
-                                                    // object).
+                                                    // boolean).
                                                     0 -> InnerInnerContent(_json = json)
                                                     1 -> bestMatches.single()
                                                     // If there's more than one match with the
@@ -19135,7 +19135,7 @@ private constructor(
                         return when (bestMatches.size) {
                             // This can happen if what we're deserializing is completely
                             // incompatible with all the possible variants (e.g. deserializing from
-                            // object).
+                            // boolean).
                             0 -> System(_json = json)
                             1 -> bestMatches.single()
                             // If there's more than one match with the highest validity, then use
