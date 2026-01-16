@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":sam-kotlin"))
+    implementation(project(":sam-kotlin-core"))
+    implementation(project(":sam-kotlin-client-okhttp"))
 }
 
 application {
