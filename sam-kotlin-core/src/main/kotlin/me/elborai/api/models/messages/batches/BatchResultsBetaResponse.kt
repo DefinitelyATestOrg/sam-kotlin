@@ -3320,6 +3320,13 @@ private constructor(
                          */
                         fun id(): String = id.getRequired("id")
 
+                        /**
+                         * This arbitrary value can be deserialized into a custom type using the
+                         * `convert` method:
+                         * ```kotlin
+                         * val myObject: MyClass = toolUse.input().convert(MyClass::class.java)
+                         * ```
+                         */
                         @JsonProperty("input") @ExcludeMissing fun _input(): JsonValue = input
 
                         /**
