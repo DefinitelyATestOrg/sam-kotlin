@@ -13,7 +13,6 @@ import me.elborai.api.models.messages.batches.BatchListParams
 import me.elborai.api.models.messages.batches.BatchResultsBetaParams
 import me.elborai.api.models.messages.batches.BatchResultsParams
 import me.elborai.api.models.messages.batches.BatchRetrieveParams
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -254,7 +253,6 @@ internal class BatchServiceTest {
         response.validate()
     }
 
-    @Disabled("Mock server doesn't support application/x-jsonl responses")
     @Test
     fun resultsStreaming() {
         val client =
@@ -279,7 +277,6 @@ internal class BatchServiceTest {
         }
     }
 
-    @Disabled("Mock server doesn't support application/x-jsonl responses")
     @Test
     fun resultsBetaStreaming() {
         val client =
