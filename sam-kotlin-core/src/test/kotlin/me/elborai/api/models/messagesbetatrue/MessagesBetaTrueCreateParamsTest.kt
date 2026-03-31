@@ -1,0 +1,440 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package me.elborai.api.models.messagesbetatrue
+
+import me.elborai.api.core.JsonValue
+import me.elborai.api.core.http.Headers
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+internal class MessagesBetaTrueCreateParamsTest {
+
+    @Test
+    fun create() {
+        MessagesBetaTrueCreateParams.builder()
+            .addAnthropicBeta("string")
+            .anthropicVersion("anthropic-version")
+            .xApiKey("x-api-key")
+            .maxTokens(1024L)
+            .addMessage(
+                MessagesBetaTrueCreateParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                    .build()
+            )
+            .model("claude-3-7-sonnet-20250219")
+            .metadata(
+                MessagesBetaTrueCreateParams.Metadata.builder()
+                    .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
+                    .build()
+            )
+            .addStopSequence("string")
+            .stream(true)
+            .systemOfBetaRequestTextBlocks(
+                listOf(
+                    MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
+                        .text("Today's date is 2024-06-01.")
+                        .cacheControl(
+                            MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.CacheControl
+                                .builder()
+                                .build()
+                        )
+                        .addCitation(
+                            MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
+                                .CharLocation
+                                .builder()
+                                .citedText("cited_text")
+                                .documentIndex(0L)
+                                .documentTitle("x")
+                                .endCharIndex(0L)
+                                .startCharIndex(0L)
+                                .build()
+                        )
+                        .build()
+                )
+            )
+            .temperature(1.0)
+            .enabledThinking(1024L)
+            .toolChoice(
+                MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                    .disableParallelToolUse(true)
+                    .build()
+            )
+            .addTool(
+                MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
+                    .inputSchema(
+                        MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
+                            .properties(
+                                JsonValue.from(
+                                    mapOf(
+                                        "location" to
+                                            mapOf(
+                                                "description" to
+                                                    "The city and state, e.g. San Francisco, CA",
+                                                "type" to "string",
+                                            ),
+                                        "unit" to
+                                            mapOf(
+                                                "description" to
+                                                    "Unit for the output - one of (celsius, fahrenheit)",
+                                                "type" to "string",
+                                            ),
+                                    )
+                                )
+                            )
+                            .build()
+                    )
+                    .name("name")
+                    .cacheControl(
+                        MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder().build()
+                    )
+                    .description("Get the current weather in a given location")
+                    .type(MessagesBetaTrueCreateParams.Tool.BetaTool.Type.CUSTOM)
+                    .build()
+            )
+            .topK(5L)
+            .topP(0.7)
+            .build()
+    }
+
+    @Test
+    fun headers() {
+        val params =
+            MessagesBetaTrueCreateParams.builder()
+                .addAnthropicBeta("string")
+                .anthropicVersion("anthropic-version")
+                .xApiKey("x-api-key")
+                .maxTokens(1024L)
+                .addMessage(
+                    MessagesBetaTrueCreateParams.Message.builder()
+                        .content("Hello, world")
+                        .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                        .build()
+                )
+                .model("claude-3-7-sonnet-20250219")
+                .metadata(
+                    MessagesBetaTrueCreateParams.Metadata.builder()
+                        .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
+                        .build()
+                )
+                .addStopSequence("string")
+                .stream(true)
+                .systemOfBetaRequestTextBlocks(
+                    listOf(
+                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
+                            .text("Today's date is 2024-06-01.")
+                            .cacheControl(
+                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
+                                    .CacheControl
+                                    .builder()
+                                    .build()
+                            )
+                            .addCitation(
+                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
+                                    .CharLocation
+                                    .builder()
+                                    .citedText("cited_text")
+                                    .documentIndex(0L)
+                                    .documentTitle("x")
+                                    .endCharIndex(0L)
+                                    .startCharIndex(0L)
+                                    .build()
+                            )
+                            .build()
+                    )
+                )
+                .temperature(1.0)
+                .enabledThinking(1024L)
+                .toolChoice(
+                    MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                        .disableParallelToolUse(true)
+                        .build()
+                )
+                .addTool(
+                    MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
+                        .inputSchema(
+                            MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
+                                .properties(
+                                    JsonValue.from(
+                                        mapOf(
+                                            "location" to
+                                                mapOf(
+                                                    "description" to
+                                                        "The city and state, e.g. San Francisco, CA",
+                                                    "type" to "string",
+                                                ),
+                                            "unit" to
+                                                mapOf(
+                                                    "description" to
+                                                        "Unit for the output - one of (celsius, fahrenheit)",
+                                                    "type" to "string",
+                                                ),
+                                        )
+                                    )
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .cacheControl(
+                            MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
+                                .build()
+                        )
+                        .description("Get the current weather in a given location")
+                        .type(MessagesBetaTrueCreateParams.Tool.BetaTool.Type.CUSTOM)
+                        .build()
+                )
+                .topK(5L)
+                .topP(0.7)
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("anthropic-beta", "string")
+                    .put("anthropic-version", "anthropic-version")
+                    .put("x-api-key", "x-api-key")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            MessagesBetaTrueCreateParams.builder()
+                .maxTokens(1024L)
+                .addMessage(
+                    MessagesBetaTrueCreateParams.Message.builder()
+                        .content("Hello, world")
+                        .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                        .build()
+                )
+                .model("claude-3-7-sonnet-20250219")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
+    fun body() {
+        val params =
+            MessagesBetaTrueCreateParams.builder()
+                .addAnthropicBeta("string")
+                .anthropicVersion("anthropic-version")
+                .xApiKey("x-api-key")
+                .maxTokens(1024L)
+                .addMessage(
+                    MessagesBetaTrueCreateParams.Message.builder()
+                        .content("Hello, world")
+                        .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                        .build()
+                )
+                .model("claude-3-7-sonnet-20250219")
+                .metadata(
+                    MessagesBetaTrueCreateParams.Metadata.builder()
+                        .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
+                        .build()
+                )
+                .addStopSequence("string")
+                .stream(true)
+                .systemOfBetaRequestTextBlocks(
+                    listOf(
+                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
+                            .text("Today's date is 2024-06-01.")
+                            .cacheControl(
+                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
+                                    .CacheControl
+                                    .builder()
+                                    .build()
+                            )
+                            .addCitation(
+                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
+                                    .CharLocation
+                                    .builder()
+                                    .citedText("cited_text")
+                                    .documentIndex(0L)
+                                    .documentTitle("x")
+                                    .endCharIndex(0L)
+                                    .startCharIndex(0L)
+                                    .build()
+                            )
+                            .build()
+                    )
+                )
+                .temperature(1.0)
+                .enabledThinking(1024L)
+                .toolChoice(
+                    MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                        .disableParallelToolUse(true)
+                        .build()
+                )
+                .addTool(
+                    MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
+                        .inputSchema(
+                            MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
+                                .properties(
+                                    JsonValue.from(
+                                        mapOf(
+                                            "location" to
+                                                mapOf(
+                                                    "description" to
+                                                        "The city and state, e.g. San Francisco, CA",
+                                                    "type" to "string",
+                                                ),
+                                            "unit" to
+                                                mapOf(
+                                                    "description" to
+                                                        "Unit for the output - one of (celsius, fahrenheit)",
+                                                    "type" to "string",
+                                                ),
+                                        )
+                                    )
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .cacheControl(
+                            MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
+                                .build()
+                        )
+                        .description("Get the current weather in a given location")
+                        .type(MessagesBetaTrueCreateParams.Tool.BetaTool.Type.CUSTOM)
+                        .build()
+                )
+                .topK(5L)
+                .topP(0.7)
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.maxTokens()).isEqualTo(1024L)
+        assertThat(body.messages())
+            .containsExactly(
+                MessagesBetaTrueCreateParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                    .build()
+            )
+        assertThat(body.model()).isEqualTo("claude-3-7-sonnet-20250219")
+        assertThat(body.metadata())
+            .isEqualTo(
+                MessagesBetaTrueCreateParams.Metadata.builder()
+                    .userId("13803d75-b4b5-4c3e-b2a2-6f21399b021b")
+                    .build()
+            )
+        assertThat(body.stopSequences()).containsExactly("string")
+        assertThat(body.stream()).isEqualTo(true)
+        assertThat(body.system())
+            .isEqualTo(
+                MessagesBetaTrueCreateParams.System.ofBetaRequestTextBlocks(
+                    listOf(
+                        MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.builder()
+                            .text("Today's date is 2024-06-01.")
+                            .cacheControl(
+                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock
+                                    .CacheControl
+                                    .builder()
+                                    .build()
+                            )
+                            .addCitation(
+                                MessagesBetaTrueCreateParams.System.BetaRequestTextBlock.Citation
+                                    .CharLocation
+                                    .builder()
+                                    .citedText("cited_text")
+                                    .documentIndex(0L)
+                                    .documentTitle("x")
+                                    .endCharIndex(0L)
+                                    .startCharIndex(0L)
+                                    .build()
+                            )
+                            .build()
+                    )
+                )
+            )
+        assertThat(body.temperature()).isEqualTo(1.0)
+        assertThat(body.thinking())
+            .isEqualTo(
+                MessagesBetaTrueCreateParams.Thinking.ofEnabled(
+                    MessagesBetaTrueCreateParams.Thinking.Enabled.builder()
+                        .budgetTokens(1024L)
+                        .build()
+                )
+            )
+        assertThat(body.toolChoice())
+            .isEqualTo(
+                MessagesBetaTrueCreateParams.ToolChoice.ofAuto(
+                    MessagesBetaTrueCreateParams.ToolChoice.Auto.builder()
+                        .disableParallelToolUse(true)
+                        .build()
+                )
+            )
+        assertThat(body.tools())
+            .containsExactly(
+                MessagesBetaTrueCreateParams.Tool.ofBeta(
+                    MessagesBetaTrueCreateParams.Tool.BetaTool.builder()
+                        .inputSchema(
+                            MessagesBetaTrueCreateParams.Tool.BetaTool.InputSchema.builder()
+                                .properties(
+                                    JsonValue.from(
+                                        mapOf(
+                                            "location" to
+                                                mapOf(
+                                                    "description" to
+                                                        "The city and state, e.g. San Francisco, CA",
+                                                    "type" to "string",
+                                                ),
+                                            "unit" to
+                                                mapOf(
+                                                    "description" to
+                                                        "Unit for the output - one of (celsius, fahrenheit)",
+                                                    "type" to "string",
+                                                ),
+                                        )
+                                    )
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .cacheControl(
+                            MessagesBetaTrueCreateParams.Tool.BetaTool.CacheControl.builder()
+                                .build()
+                        )
+                        .description("Get the current weather in a given location")
+                        .type(MessagesBetaTrueCreateParams.Tool.BetaTool.Type.CUSTOM)
+                        .build()
+                )
+            )
+        assertThat(body.topK()).isEqualTo(5L)
+        assertThat(body.topP()).isEqualTo(0.7)
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            MessagesBetaTrueCreateParams.builder()
+                .maxTokens(1024L)
+                .addMessage(
+                    MessagesBetaTrueCreateParams.Message.builder()
+                        .content("Hello, world")
+                        .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                        .build()
+                )
+                .model("claude-3-7-sonnet-20250219")
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.maxTokens()).isEqualTo(1024L)
+        assertThat(body.messages())
+            .containsExactly(
+                MessagesBetaTrueCreateParams.Message.builder()
+                    .content("Hello, world")
+                    .role(MessagesBetaTrueCreateParams.Message.Role.USER)
+                    .build()
+            )
+        assertThat(body.model()).isEqualTo("claude-3-7-sonnet-20250219")
+    }
+}

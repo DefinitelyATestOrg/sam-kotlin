@@ -1,12 +1,6 @@
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.get
-
 plugins {
     `maven-publish`
-    `signing`
+    signing
 }
 
 configure<PublishingExtension> {
@@ -15,8 +9,8 @@ configure<PublishingExtension> {
             from(components["java"])
 
             pom {
-                name.set("Swagger Petstore - OpenAPI 3.0")
-                description.set("This is a sample Pet Store Server based on the OpenAPI 3.0 specification. You\ncan find out more about Swagger at [http://swagger.io](http://swagger.io). In\nthe third iteration of the pet store, we've switched to the design first\napproach! You can now help us improve the API whether it's by making changes to\nthe definition itself or to the code. That way, with time, we can improve the\nAPI in general, and expose some of the new features in OAS3.\n\nSome useful links:\n\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)")
+                name.set("Sam API")
+                description.set("An SDK library for sam")
                 url.set("https://docs.sam.com")
 
                 licenses {
@@ -33,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/sam-kotlin.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/sam-kotlin.git")
-                    url.set("https://github.com/stainless-sdks/sam-kotlin")
+                    connection.set("scm:git:git://github.com/DefinitelyATestOrg/sam-kotlin.git")
+                    developerConnection.set("scm:git:git://github.com/DefinitelyATestOrg/sam-kotlin.git")
+                    url.set("https://github.com/DefinitelyATestOrg/sam-kotlin")
                 }
 
                 versionMapping {
@@ -43,6 +37,14 @@ configure<PublishingExtension> {
                         fromResolutionResult()
                     }
                 }
+            }
+        }
+    }
+    repositories {
+        if (project.hasProperty("publishLocal")) {
+            maven {
+                name = "LocalFileSystem"
+                url = uri("${rootProject.layout.buildDirectory.get()}/local-maven-repo")
             }
         }
     }

@@ -1,0 +1,82 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package me.elborai.api.services.blocking
+
+import me.elborai.api.core.ClientOptions
+import me.elborai.api.core.RequestOptions
+import me.elborai.api.core.handlers.errorBodyHandler
+import me.elborai.api.core.handlers.errorHandler
+import me.elborai.api.core.handlers.jsonHandler
+import me.elborai.api.core.http.HttpMethod
+import me.elborai.api.core.http.HttpRequest
+import me.elborai.api.core.http.HttpResponse
+import me.elborai.api.core.http.HttpResponse.Handler
+import me.elborai.api.core.http.HttpResponseFor
+import me.elborai.api.core.http.json
+import me.elborai.api.core.http.parseable
+import me.elborai.api.core.prepare
+import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateParams
+import me.elborai.api.models.messagesbetatrue.MessagesBetaTrueCreateResponse
+
+class MessagesBetaTrueServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    MessagesBetaTrueService {
+
+    private val withRawResponse: MessagesBetaTrueService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
+
+    override fun withRawResponse(): MessagesBetaTrueService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MessagesBetaTrueService =
+        MessagesBetaTrueServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun create(
+        params: MessagesBetaTrueCreateParams,
+        requestOptions: RequestOptions,
+    ): MessagesBetaTrueCreateResponse =
+        // post /v1/messages?beta=true
+        withRawResponse().create(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        MessagesBetaTrueService.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): MessagesBetaTrueService.WithRawResponse =
+            MessagesBetaTrueServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
+        private val createHandler: Handler<MessagesBetaTrueCreateResponse> =
+            jsonHandler<MessagesBetaTrueCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(
+            params: MessagesBetaTrueCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessagesBetaTrueCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "messages")
+                    .putQueryParam("beta", "true")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+    }
+}

@@ -1,6 +1,14 @@
 rootProject.name = "sam-kotlin-root"
 
-include("sam-kotlin")
-include("sam-kotlin-client-okhttp")
-include("sam-kotlin-core")
-include("sam-kotlin-example")
+val projectNames = rootDir.listFiles()
+    ?.asSequence()
+    .orEmpty()
+    .filter { file ->
+        file.isDirectory &&
+        file.name.startsWith("sam-kotlin") &&
+        file.listFiles()?.asSequence().orEmpty().any { it.name == "build.gradle.kts" }
+    }
+    .map { it.name }
+    .toList()
+println("projects: $projectNames")
+projectNames.forEach { include(it) }
